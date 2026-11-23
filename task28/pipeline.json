@@ -1,0 +1,66 @@
+{
+  "task": "task28",
+  "status": "DESIGN",
+  "domain": "physical-environmental-sciences",
+  "subdomain": "process-control-measurement-systems",
+  "objective": "anomaly-detection",
+  "stage": 2,
+  "stage_name": "design",
+  "updated": "2026-11-23",
+  "architecture": 1,
+  "loops": 0,
+  "doctrine": "throughout",
+  "call": "Flag four Barlavento SWRO trains for mandatory 2027 vessel overhaul (>= 400 projected anomalous hours under Standard SWRO-Q27): TR07 (1,291.9 h), TR06 (613.4 h), TR01 (514.8 h), and TR02 (506.3 h), totaling 2,926.4 overhaul hours (EUR 1,253.6k exposure); keep TR04 (318.8 h), TR03 (305.7 h), TR05 (271.0 h), and TR08 (266.4 h) on routine monitoring; plant-wide 2027 total 4,088.4 h (C1 boron 1,328.7 h, C2 scaling 1,652.7 h, C3 structural 1,106.9 h; Q3 1,766.5 h; EUR 1,750.8k total exposure; 2026 incumbent diagnostic discrepancy 120.8%).",
+  "stump": "Three independent observation-process stumps on three distinct axes: S1 (unit, support_effect) 4h/8h lab boron composite dispersion-autocovariance deconvolution opening TR01 (over-correction i.i.d. sqrt(m) flips TR04); S2 (when, asynchronous_measurement_covariance + non_additive_aggregation) variable-flow Lagrangian parcel alignment via unobserved DAF/DMF holdup volume V_eff opening TR02 (over-correction comonotonic pairing flips TR05); S3 (what, rival_process_by_state_dependence) 3-state CIP-invariant conditionally-dependent latent-class separation of structural faults from bio-fouling opening TR03 (over-correction raw uninverted D3 flips TR06).",
+  "draw": {
+    "answer_shape": "flagged-set",
+    "weight": "triage",
+    "depth_level": 5,
+    "world": "Barlavento Dessalinizacao Municipal (Algarve coast, Portugal): eight parallel SWRO desalination membrane trains (TR01..TR08) triaged for 2027 mandatory vessel overhaul under Standard SWRO-Q27 (400-hour threshold)."
+  },
+  "chain": "R1 reconciled 2026 multi-grain SWRO logs; R2 Matheron/Krige composite boron support deconvolution (C1 = 1,328.7 h); R3 Lagrangian cumulative-flow parcel alignment & V_eff recovery (C2 = 1,652.7 h); R4 3-state CIP-invariant conditionally-dependent latent-class inversion (C3 = 1,106.9 h); R5 native-unit physical falsification checks F1-F3 (golden 1.844 vs rivals 6.320 to 28.014); R6 uniform 2027 Operating Plan train/plant/overhaul/Q3 projections; R7 Schedule B EUR off-spec exposure & 2026 incumbent discrepancy rate; R8 final 2027 overhaul triage call & +/-20% forcing verification.",
+  "precut": {
+    "exit": 0,
+    "date": "2026-11-23",
+    "checks": "PASS  task28: 117 checks, 0 FAIL, 3 WARN (corelib level 5, voice-check PASS 0 FAIL 0 WARN)"
+  },
+  "duplicate_check": {
+    "heart": "",
+    "nearest": "guard.py check task28 on 2026-11-23: 0 BLOCK (4 answered WARNs: repeat.deliverables task26, 3 secondary skeleton.house_lesson); skeleton.py check: severity none across all builds and client library; skeleton.py closed: 0 of 4 lessons closed; nearest driver cosine 0.06 (task27)."
+  },
+  "effort": {
+    "quick": 13.0,
+    "careful": 16.0,
+    "thorough": 100.0,
+    "factorial": "corelib level 5 (seed 2801): S1 opens TR01 (worth 4.4x spread), S2 opens TR02 (15.4x), S3 opens TR03 (47.9x); S1/S2/S3 lost alone 26/26/34; fixed alone 23/23/19; reflex 13; rigorous 16; cutoff 24; generous 9; hedge 17; all 13 further cutoff/hedge settings WRONG; all 3 over-corrections WRONG; 20 variants 0 flips; 6 of 6 +/-20% forcing perturbations HOLD."
+  },
+  "leak": {
+    "leak_py": "",
+    "reader": ""
+  },
+  "judge": {
+    "verdict": "",
+    "disposition": "",
+    "report": ""
+  },
+  "runs": {
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "counterfactual_average": null,
+    "first_wrong_step": {
+      "run1": "",
+      "run2": ""
+    },
+    "triage": "",
+    "recorded": "",
+    "history": []
+  },
+  "resume": "/build task28 from 3",
+  "history": [
+    {
+      "date": "2026-11-23",
+      "event": "Stage 0-2 draw completed by stump-architect: Barlavento SWRO desalination plant (process-control-measurement-systems x anomaly-detection), core.py CORE PASS level 5 (seed 2801), card registered (0 BLOCK, severity none), prompt.txt voice-check PASS (0 FAIL, 0 WARN)."
+    }
+  ]
+}
