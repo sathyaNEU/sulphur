@@ -204,6 +204,12 @@ themselves; `economics` to `economics-econometrics`; `policy-education` to `poli
 - `sensor-calibration-measurement`: DQ
 - `hydrology-flood-frequency`: F
 - `emissions-inventory`: ETL, DD
+- `geostatistical-spatial-estimation`: DD, CE, AD, RC, F, OS, ETL, DQ
+- `inverse-problems-data-assimilation`: DD, CE, AD, RC, F, OS, ETL, DQ
+- `design-of-experiments`: EC, DD, CE, AD, RC, F, OS, ETL, DQ
+- `process-control-measurement-systems`: DD, CE, AD, RC, F, OS, ETL, DQ
+- `reliability-life-data`: DD, CE, AD, RC, F, OS, ETL, DQ
+- `geophysical-retrieval-remote-sensing`: DD, CE, AD, RC, F, OS, ETL, DQ
 
 ### Energy Systems & Utilities (`energy-systems-utilities`)
 
