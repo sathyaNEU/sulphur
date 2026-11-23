@@ -4,16 +4,17 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: reflex, physical, composite, triage, membrane, support, process, measurement, cutoff, diagnostics, independent, client, builds, lagrangian, alignment, cip-invariant, distinct, parcel, inversion, monitor, rigorous, seawater, hydraulic, deconvolution, variable-flow
+Stump terms swept: reflex, physical, standard, scaling, composite, triage, membrane, support, process, measurement, operating, structural, cutoff, diagnostics, independent, anomalous, client, builds, lagrangian, alignment, cip-invariant, distinct, parcel, inversion, monitor
 
 ## 3 answer figures in the pack (REVIEW 4)
+- **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 420 appears: ...eate Boron (> 0.50 mg/L, 1-hour basis) Clause 2.1 420 EUR/h Pretreatment-to-RO Scaling (parcel > 1.50 &...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 360 appears: ...Scaling (parcel > 1.50 & > 1.50 index) Clause 2.2 360 EUR/h Persistent Structural Membrane Fault Clause...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 540 appears: ...h Persistent Structural Membrane Fault Clause 2.3 540 EUR/h Total 2027 Schedule B exposure sums across...
-- **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 420 appears: ...eate Boron (> 0.50 mg/L, 1-hour basis) Clause 2.1 420 EUR/h Pretreatment-to-RO Scaling (parcel > 1.50 &...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: carries 24 of 35 distinctive words of the committed call: "Pull four Barlavento SWRO trains for mandatory 2027 vessel overhaul under Standard SWRO-Q27's 400-hour threshold: TR07 ("
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `swro_integrity_standard_q27.pdf`: 11 of 25 stump-paragraph terms appear (physical, composite, triage, membrane, support, process); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `lims_qa_certificate_2026.pdf`: 3 of 25 stump-paragraph terms appear (standard, composite, process); read whether the document names the move
+- **REVIEW** `swro_integrity_standard_q27.pdf`: 15 of 25 stump-paragraph terms appear (physical, standard, scaling, composite, triage, membrane); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -37,6 +38,7 @@ Stump terms swept: reflex, physical, composite, triage, membrane, support, proce
 ## 9 dates after the setting (clean)
 
 ## 11 prompt gate (clean)
+
 
 ## Solver's-eye read
 

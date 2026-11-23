@@ -73,6 +73,10 @@
     {
       "date": "2026-11-23",
       "event": "Stage 5 READY: final gates.py --full PASS (11/11, 0 FAIL) and audit_containers.py PASS (0 FAIL, 0 WARN)."
+    },
+    {
+      "date": "2026-11-23",
+      "event": "Prompt de-templating pass: tightened prompt.txt from 95 words (619 chars) to 61 words (368 chars) removing sub-metric enumeration, sequenced deliverables, closing document list, and formulaic terms while pinning all filing figures via SWRO-Q27 Annex C; voice-check.py PASS (0 FAIL, 0 WARN), precut.py PASS (117 checks, 0 FAIL), leak.py 0 LEAK."
     }
   ]
 }
