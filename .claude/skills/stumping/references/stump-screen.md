@@ -168,7 +168,12 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    sentence that names what the kept stumps share rescues a third of the rubric or less on the reflex route, or the
    stumps are one lesson however different their records (task3 arch 11's coater pair: "the certificates are
    test-day figures; the gas meters and the waste manifests show what each line did" rescued about 75 points
-   against a ceiling of 33).
+   against a ceiling of 33). Two recording effects on one instrument are two traps when each has its own recording
+   condition (its own covariate), its own fitted figure and its own member, no checked sample ships, and the sentence
+   that names their joint fit, handed to the reflex route at full strength, rescues a third of the rubric or less: a
+   sentence that names a method the data force while each effect's construction is still the run's to build does not
+   make the task routine (the client's one-fact exception, Holistic Audit v4 Part D; example 17 counts deadline
+   recording and interview length on one survey as two decisive steps).
 18. **No validation handle.** No shipped file lets a run score the stump's own quantity, or the target, under the
    members' instruments: a total that closes the loss, a pair that reads the ratio off, a slice that scores the
    chain, a confirming log that counts the cases. Where one exists the run fits the correction and checks it there
