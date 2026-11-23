@@ -65,14 +65,14 @@ KAPPA, LAMBDA, SIG_M, RHO_M, DBAR = 0.55, 1.00, 0.26, 0.25, 0.86
 # spend over the norm; the team's budget moves (first week, weeks, factor)
 SCALE = 2.0
 CH = {
-    "Meta iOS":         dict(ios=1, complete=0, mu=0.05,  nu=0.10, phi=-5.00, n=330, b0=1965, el=0.78, xs=0.35, plan=1.20, stretch=1.30),
+    "Meta iOS":         dict(ios=1, complete=0, mu=0.05,  nu=0.10, phi=-5.00, n=330, b0=2046, el=0.78, xs=0.35, plan=1.10, stretch=1.30),
     "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.00,  n=300, b0=1655, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
     "Snapchat iOS":     dict(ios=1, complete=0, mu=-0.15, nu=0.08, phi=0.80,  n=250, b0=1295, el=0.76, xs=0.35, plan=1.30, stretch=1.15),
     "Google iOS":       dict(ios=1, complete=0, mu=0.10,  nu=0.10, phi=-1.20, n=260, b0=2250, el=0.70, xs=0.30, plan=1.25, stretch=1.35),
-    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.40,  n=200, b0=1600, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
+    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.70,  n=200, b0=1600, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
     "Apple Search Ads": dict(ios=1, complete=1, mu=0.60,  nu=0.15, phi=-0.80, n=140, b0=1390, el=0.62, xs=0.30, plan=1.40, stretch=1.00),
-    "Google Android":   dict(ios=0, complete=1, mu=0.00,  nu=0.10, phi=0.30,  n=420, b0=5300, el=0.66, xs=0.30, plan=0.60, stretch=1.25),
-    "AppLovin Android": dict(ios=0, complete=1, mu=-0.55, nu=0.05, phi=1.10,  n=500, b0=3020, el=0.82, xs=0.30, plan=0.88, stretch=1.45),
+    "Google Android":   dict(ios=0, complete=1, mu=0.00,  nu=0.10, phi=0.55,  n=420, b0=5300, el=0.66, xs=0.30, plan=0.60, stretch=1.25),
+    "AppLovin Android": dict(ios=0, complete=1, mu=-0.55, nu=0.05, phi=1.10,  n=500, b0=3248, el=0.82, xs=0.30, plan=0.72, stretch=1.45),
 }
 ORGANIC = {"organic iOS": dict(ios=1, mu=0.25, nu=0.12, phi=1.00, n=380),
            "organic Android": dict(ios=0, mu=0.10, nu=0.12, phi=-0.80, n=700)}
@@ -1185,6 +1185,18 @@ def adding_up(O, v, how="golden", cells="fine", rcells="tier2"):
     return tot / float(S["pv"].sum())
 
 
+def pool_priced(O, v, cells="fine", **kw):
+    """the accounts with no channel priced by a fit of the second step's ratios (any of its ways), over what they
+    paid: the check every held way of fitting the ratios passes"""
+    S = s2_strata(O, v, cells)
+    T = S["T"]
+    r = s2_fit(O, v, cells, **kw)
+    tot = 0.0
+    for i in S["hidden"] + [S["org"]]:
+        tot += float((S["nc"][i].sum((0, 1)) * T["vc"][i] * np.asarray(r[i], float)).sum())
+    return tot / float(S["pv"].sum())
+
+
 def true_ratios(O, v, W, ios=True):
     """the world's own figure for each source: what its declined installs paid over what they would have paid at the
     value of its installs that allowed tracking (read with every account's source, which the files do not hold)"""
@@ -1504,6 +1516,24 @@ BESIDE += [("the first-48-hour values grouped by %s" % nm, dict(cells=k))
                          ("tp4", "their trial and purchase bits alone"),
                          ("tp8", "their trial and purchase bits with the sessions split in two"))]
 BESIDE += [("the value equation fitted on the mature weeks alone", dict(weeks_v=(0, MATURE)))]
+# the second step's fit on a finer grain of rows: each market-week's accounts split by the first-48-hour sessions they
+# carry (their four pairs, or the eight values). The ratios the value needs are the ones that price the accounts with no
+# channel at what they paid, and every way in the battery does (0.997 to 1.000, pool_priced). On the finer rows a
+# row's revenue per account differs several-fold from one sessions value to the next, so one over the accounts is no
+# longer one over the revenue a row is expected to bring: weighted that way the fit prices the pool at 1.027 (pairs)
+# and 1.030 (values) of what it paid, and unweighted at 0.990 and 0.990, and those four are refused by it (the pairs
+# unweighted would file TikTok iOS at 0.8999); weighted by the revenue the fit expects it prices the pool at 1.000 and
+# 0.999, and those two are held beside the battery for the ranges
+FINER = [("the ratios fitted on each market-week's accounts split by %s, %s" % (gn, wn), dict(rows=rk, **wk))
+         for rk, gn in (("market-week-pair", "pairs of first-48-hour sessions values"),
+                        ("market-week-bucket", "first-48-hour sessions value"))
+         for wn, wk in (("weighted by one over the accounts", {}), ("weighted by the revenue the fit expects",
+                                                                  dict(weight="fitted")),
+                        ("unweighted", dict(weight="none")))]
+POOL_TOL = 0.005                                                 # how far from what the pool paid a held fit may price it
+BESIDE += [w for w in FINER if w[1].get("weight") == "fitted"]
+
+
 # each step made the way a run was seen to make it: the billing records taken as they stand (both runs); the declined
 # installs valued by Response 1's mixture, a payers' gap per source with their revenue shifted by a quarter of it; the
 # plan's weekly spend read at full delivery in the fit's own prediction (Response 2)
@@ -1684,13 +1714,12 @@ def referee_s3(O, v, c="Google Android"):
 # --------------------------------------------------------------------------------------------------------------
 
 OWN = {"S1": "AppLovin Android", "S2": "Meta iOS", "S3": "Google iOS"}
-# every figure the answer blocks state: channel by channel, the return per euro at the plan's weekly spend (the
-# member's own figure) and, of the installs it bought in the year to 2 November 2025, what they paid in their first
-# twelve months per install and how many monthly payments they made per hundred installs, the three on one line; and
-# for the whole plan, the installs it buys in 2027 and what they pay in their first twelve months, on one line
-# the graded families (the author's addendum of 2026-11-23: figures that shadow the call): each channel's return at the
-# plan's spend, and the monthly payments per 100 installs of the installs of the year to 2 November 2025; the twelve-
-# month value per install is computed on every route and carried, never graded (it is free to a run that loses S3)
+# every figure the answer blocks state (the author's addendum of 2026-11-23: figures that shadow the call), in two
+# multi-faceted asks: for every channel, its return per euro at the plan's weekly spend (the member's own figure) and,
+# of the installs it bought in the year to 2 November 2025, how many payments on the monthly plan they made in their
+# first twelve months per hundred installs, the two on one line; and for the whole plan, the installs it buys in 2027
+# and the twelve-month net revenue they bring, the two on one line. The twelve-month value per install is computed on
+# every route and carried, never graded (it is free to a run that loses S3)
 FAMILIES = [("return ", "roas"), ("payments per 100 ", "pay100")]
 PLAN_FIGURES = (("installs the plan buys", 0), ("revenue the plan's installs bring", 1))
 # each stump's own figure, one decisive step's answer: it falls with that stump alone
@@ -1705,9 +1734,9 @@ def stated_id(fid):
 
 
 def sentence_of(fid):
-    """the line of the answer blocks a figure is stated on: one line per channel carries its two figures, and one
-    line carries the plan's two (the generated rubric makes one criterion of a line, all or nothing,
-    supplemental-stumping Part 1 rule 7)"""
+    """the line of the answer blocks a figure is stated on: one line per channel carries its two figures, its return
+    and its payments per hundred installs, and one line carries the plan's two (the generated rubric makes one
+    criterion of a line, all or nothing, supplemental-stumping Part 1 rule 7)"""
     fid = stated_id(fid)
     if fid in dict(PLAN_FIGURES):
         return "the plan"
@@ -2056,6 +2085,16 @@ def explore():
     print("referee:", r["slice"], "truth %.4g golden %.4g" % (r["truth"], r["golden"]), r["rivals"], r.get("other"))
     f = spec["falsification"]
     print("falsification: truth %.3f golden %.4f" % (f["truth"], f["golden"]), {k: round(x, 4) for k, x in f["rivals"].items()})
+    print("the pool priced by each way of fitting the second step's ratios, over what it paid (held within %.3f):" % POOL_TOL)
+    s2k = set(__import__("inspect").signature(s2_fit).parameters) - {"O", "v"}
+    for nm, kw in VARIANTS + FINER:
+        k2 = {a: b for a, b in kw.items() if a in s2k}
+        if not k2 or "org_pin" in k2:
+            continue
+        p = pool_priced(O, vg, **k2)
+        r = route(O, **kw)
+        print("    %-100s %.4f %s  TikTok iOS %.3f" % (nm[:100], p, "held" if abs(p - 1) <= POOL_TOL else "REFUSED",
+              r["TikTok iOS"]["roas"]))
     print("delivery pins:")
     for c, p in delivery_pins(O).items():
         print("    %-18s share %.3f  whole budget billed in %2d weeks  at share 1 the fit adds up to %.3f  best quarter %.3f"
