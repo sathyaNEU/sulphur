@@ -713,8 +713,9 @@ or named-assumption id). Then:
 - **The reflex route** sets every reflex right and every stump hurried. It is the careful but hurried pass: never a
   route that also gets a reflex wrong. Its answer must miss the call. It is the strongest route a run builds on the
   shipped fields, never the lattice's own weaker version: every field the pack names and every covariate one join,
-  group-by, filter or flag gives, fitted at full strength (`references/stump-screen.md` test 18), and the factorial
-  is run on it. task3 arch 11's valley core passed corelib at level 4 on five seeds with the lattice's reflex route,
+  group-by, filter or flag gives, fitted at full strength wherever a shipped file checks the correction and on every
+  mechanism of the world the rows carry, while an observation-process correction nothing shipped checks is priced on
+  the run routes (`references/stump-screen.md` tests 18 and 19), and the factorial is run on it. task3 arch 11's valley core passed corelib at level 4 on five seeds with the lattice's reflex route,
   and failed once the receptor regression a run builds on the stacks' CEMS (each stack's stored night mass at the
   breakup, fitted monitor by monitor) was the reflex route: one stump fixed alone on it reached the call.
 - **Necessary.** Each stump, dropped alone from the golden (everything else right), moves the call.
