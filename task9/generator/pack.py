@@ -174,8 +174,8 @@ def book(w, target):
             if t == 116:
                 v = int(w["merch"][f])
             else:
-                g = (1 + 0.6 * w["growth"][f]) ** ((t - 116) / 52.0)
-                v = int(round(w["merch"][f] * g * math.exp(r.normal(0, 0.006))))
+                g = (1.0 + 0.025 * ((116 - t) / 116.0)) * math.exp(r.normal(0, 0.008))
+                v = max(int(round(w["merch"][f] * g)), int(w["merch"][f]))
             rows.append((monday(t).isoformat(), CODE[f], v))
     df = pd.DataFrame(rows, columns=["snapshot_date", "model_family", "scored_merchants"])
     _csv(df, os.path.join(target, FILES["book"]))
@@ -184,7 +184,7 @@ def book(w, target):
 
 # -------------------------------------------------------------------------------------------- the manifests
 def _state(w, f, t):
-    """The production run's runtime image, warm start, precision and window at refresh t, as the scheduler ran it."""
+    """The production run's runtime image, warm start, precision, window and sample weighting as the scheduler ran it."""
     def on(name):
         r = w[name]
         a, b = r["revert"][f]
@@ -192,7 +192,8 @@ def _state(w, f, t):
     warm_live = t >= w["warm"]["eff"][f]
     return {"image": IMAGES["runtime"][1] if on("runtime") else IMAGES["runtime"][0],
             "warm_start": bool(w["is_warm"][f, t]), "precision": "bf16" if on("amp") else "fp32",
-            "window": int(w["window"][f]) if warm_live else 26}
+            "window": int(w["window"][f]) if warm_live else 26,
+            "sample_weights": "recency_decay" if warm_live else "uniform"}
 
 
 def manifests(w, keep, ids, target):
@@ -216,7 +217,8 @@ def manifests(w, keep, ids, target):
                    "model_id": mid, "parent_model_id": prev_model if st["warm_start"] else None,
                    "window_first_week": isow(t - W + 1), "window_last_week": isow(t),
                    "seed": int(r.integers(1, 2 ** 31)), "config_id": cfg[(f, t)], "runtime_image": st["image"],
-                   "options": {"warm_start": st["warm_start"], "precision": st["precision"], "feature_views": "live"}}
+                   "options": {"warm_start": st["warm_start"], "precision": st["precision"],
+                               "feature_views": "live", "sample_weights": st["sample_weights"]}}
             rec["train_rows" if st["image"] == IMAGES["runtime"][1] else "rows"] = n
             prod[(f, t)] = rec
             prev_model = mid
@@ -325,19 +327,10 @@ def warehouse(w, target):
 
 
 def release_groups(w):
-    """The feature groups each past release changed and each roadmap release will change, and the groups each family
-    reads (every group a release that touches it changes, and one or two more)."""
-    r = np.random.default_rng(C.SEED + 109)
-    past = [list(r.choice(GROUPS, int(r.integers(1, 4)), replace=False)) for _ in w["rel_weeks"]]
-    plan = [list(r.choice(GROUPS, int(r.integers(1, 4)), replace=False)) for _ in w["plan_weeks"]]
-    reads = []
-    for f in range(C.F):
-        s = set()
-        for gs, hit in zip(past + plan, list(w["rel_hits"][:, f]) + list(w["plan_hits"][:, f])):
-            if hit:
-                s.update(gs)
-        s.update(r.choice(GROUPS, int(r.integers(1, 3)), replace=False))
-        reads.append([g for g in GROUPS if g in s])
+    """Exact primary feature group changed by each past and roadmap release, and the groups each family reads."""
+    past = [[GROUPS[int(g)]] for g in w["rel_group"]]
+    plan = [[GROUPS[int(g)]] for g in w["plan_group"]]
+    reads = [[GROUPS[g] for g in range(C.G) if w["fam_reads"][f, g]] for f in range(C.F)]
     return past, plan, reads
 
 
@@ -363,7 +356,7 @@ def release_log(w, target):
     past = release_groups(w)[0]
     for k, t in enumerate(w["rel_weeks"]):
         d = monday(t)
-        rel = monday(t) - dt.timedelta(days=int(r.integers(2, 6)))
+        rel = monday(t) - dt.timedelta(days=int(r.integers(3, 7)))
         fams = ";".join(CODE[f] for f in range(C.F) if w["rel_hits"][k, f])
         g = ";".join(past[k])
         out.append((rid[k], rel.isoformat(), d.isoformat(), g, fams))
@@ -410,7 +403,7 @@ def distractors(w, prod, target):
             warm = w["is_warm"][f, t]
             out.append((CODE[f], monday(t).isoformat(), round(auc0[f] + 0.004 * warm + r.normal(0, 0.006), 4),
                         round(0.97 + r.normal(0, 0.035), 3), round(0.061 + r.normal(0, 0.004), 4),
-                        int(r.integers(380, 2600))))
+                        int(round(w["merch"][f] * r.uniform(0.14, 0.22)))))
     perf = pd.DataFrame(out, columns=["model_family", "score_date", "auc_90d_labels", "calibration_slope",
                                       "brier_score", "labelled_outcomes_scored"])
     _csv(perf, os.path.join(target, FILES["perf"]))
@@ -427,7 +420,8 @@ def distractors(w, prod, target):
         n = rec.get("rows", rec.get("train_rows"))
         sp = 0.62 if rec["options"]["precision"] == "bf16" else 1.0
         hrs = n / 1e5 * w["epochs"][f] * sp * math.exp(r.normal(0, 0.08))
-        out.append((rec["run_id"], rec["job_family"], rec["iso_week"], round(hrs, 2), round(14 + 0.9 * hrs, 1),
+        mem = max(12.0, 16.0 + 0.35 * hrs + (n / 1e5) * 4.2 + r.normal(0, 3.8))
+        out.append((rec["run_id"], rec["job_family"], rec["iso_week"], round(hrs, 2), round(mem, 1),
                     int(r.choice([1, 2, 4], p=[0.5, 0.35, 0.15]))))
     comp = pd.DataFrame(out, columns=["run_id", "job_family", "iso_week", "accelerator_hours", "peak_memory_gib",
                                       "nodes"])

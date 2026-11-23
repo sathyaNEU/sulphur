@@ -1,12 +1,11 @@
-"""task9 architecture 5: every owed figure computed from target/ alone (load.py, then the core's estimators on the
+"""task9 architecture 6: every owed figure computed from target/ alone (load.py, then core.py's estimators on the
 loaded record), the rivals the cut pack adds to the core's battery, figures.json and effort.json.
 
     python3 task9/generator/results.py      prints the golden and the bands
 """
-import copy
-import datetime as dt
-import io
 import contextlib
+import copy
+import io
 import json
 import math
 import os
@@ -22,7 +21,7 @@ import load as L  # noqa: E402
 TASK = os.path.dirname(HERE)
 NAMES = {"optimisation": "optimisation noise", "turnover": "training data", "retunes": "retunes",
          "releases": "feature releases", "labels": "label revisions"}
-ORDER = ("labels", "optimisation", "releases", "turnover", "retunes")   # the blocks' order: by band, then points
+ORDER = ("labels", "releases", "optimisation", "turnover", "retunes")
 BANDS = ("monitor", "a remediation plan", "escalation")
 
 
@@ -47,28 +46,19 @@ def with_d13(pk, d13):
 
 
 def snapshot_d13(pk):
-    """The record's mean-square change between its consecutive quarter-end snapshots only (the 2026 pairs)."""
     out = []
     for f in range(C.F):
-        v = []
-        for a, b in C.SPANS26:
-            d = pk.z[f][:, b] - pk.z[f][:, a]
-            v.append(np.nanmean(d ** 2))
-        out.append(np.mean(v))
+        v = [np.nanmean((pk.z[f][:, b] - pk.z[f][:, a]) ** 2) for a, b in C.SPANS26]
+        out.append(float(np.mean(v)))
     return np.array(out)
 
 
-def all_weeks_d13(pk):
-    return np.array([np.nanmean((pk.z[f][:, 13:] - pk.z[f][:, :-13]) ** 2) for f in range(C.F)])
-
-
 def single_runs(pk, kind):
-    """Retunes' or label revisions' points with each family's instrument runs taken one at a time (the k-th run)."""
     import pandas as pd
     t = os.path.join(TASK, "target")
     preg = pd.read_csv(os.path.join(t, "mrm_instrument_pair_register_2026.csv"))
     ps = pd.read_csv(os.path.join(t, "mrm_instrument_pair_scores_2026.csv"))
-    var = (ps["score_a"] - ps["score_b"]).groupby(ps["pair_id"]).agg(lambda x: float(np.var(x.to_numpy())))
+    var = (ps["score_b"] - ps["score_a"]).groupby(ps["pair_id"]).agg(lambda x: float(np.var(x.to_numpy())))
     codes = pk.w["codes"]
     per = {}
     for c, g in preg[preg["pair_kind"] == kind].sort_values("refresh_date").groupby("model_family"):
@@ -79,21 +69,7 @@ def single_runs(pk, kind):
     return [math.sqrt(float(sum(wt[f] * per[f][i] for f in range(C.F))) * scale) for i in range(k)]
 
 
-def cc3_rivals(pk, g):
-    """The pinned-views share on calendar 2027's Mondays (4 January to 27 December), and weighted by the book (a
-    share of retrains counts each family's weekly retrain once, so the book weighting is not the prompt's)."""
-    m = pk.models["loglin"]
-    wk = np.arange(C.Y27 + 1, C.Y27 + 53)
-    cc = np.array([C.lognormal_cdf(wk - (pk.w["fv_planned"][f] + m["slip"]), m["mu"][f], m["sg"]) * (1 - m["rev"])
-                   for f in range(C.F)])
-    wt = pk.w["merch"] / pk.w["merch"].sum()
-    return {"calendar 2027 weeks": 100.0 * float(cc.mean()),
-            "book weighted": 100.0 * float((wt * g["cov"][:, 1:].mean(1)).sum())}
-
-
 def at_start(pk, start):
-    """The record's gap curves, event counts and thirteen-week change rebuilt from other first weeks: where a family's
-    settled weeks begin is the analyst's choice, and the curve, the closure and the release count move with it."""
     q = copy.copy(pk)
     s = [int(x) for x in start]
     q.curves = [C.lag_curve(pk.w, pk.z, f, start=s[f])[0] for f in range(C.F)]
@@ -102,136 +78,140 @@ def at_start(pk, start):
     q.curves26 = [C.lag_curve(pk.w, pk.z, f, start=max(s[f], C.Y26))[0] for f in range(C.F)]
     q.d13 = np.array([c[C.H - 1] for c in q.curves])
     q.d1 = np.array([c[0] for c in q.curves])
+    q.dc_gold = q._data_curve(*q.rec["fam_log"])
     return q
 
 
 def plug_in(pk, model, weeks):
-    """Pinned views from the planned week plus the mean slip plus the family's median lag, less the reverted share."""
     w = pk.w
-    return np.array([(weeks >= w["fv_planned"][f] + model["slip"] + math.exp(model["mu"][f])) * (1 - model["rev"])
+    return np.array([(weeks >= w["fv_planned"][f] + model["slip"] + math.exp(model["mu"][f])) * (1.0 - model["rev"])
                      for f in range(C.F)], float)
 
 
-def integrated(pk, model, weeks):
-    w = pk.w
-    return np.array([C.lognormal_cdf(weeks - (w["fv_planned"][f] + model["slip"]), model["mu"][f], model["sg"]) *
-                     (1 - model["rev"]) for f in range(C.F)])
-
-
-def pair_mean_rms(pk, g):
-    """Feature releases read as the mean of the four 2027 pairs' root-mean-square changes (the reading the standard's
-    section 3.2 closes): each pair's book-weighted mean square from the roadmap releases that land in it."""
-    w = pk.w
+def recency_kernel_probes(pk):
+    """Alternative monotone recency kernels fitted to the 16 2026 bootstrap pairs per family (S2 determinism check)."""
+    w, inst = pk.w, pk.inst
     wt = w["merch"] / w["merch"].sum()
-    out = []
-    for a, b in C.SPANS27:
-        ms = 0.0
+    specs = [
+        ("exponential", lambda ages, g: g[:, None] ** ages[None, :], np.linspace(0.75, 1.0, 126)),
+        ("power-law (a=2)", lambda ages, g: (1.0 + ages[None, :] / g[:, None]) ** (-2.0), np.linspace(2.0, 100.0, 99)),
+        ("linear ramp", lambda ages, g: np.maximum(1.0 - ages[None, :] / g[:, None], 1e-4), np.linspace(6.0, 200.0, 98)),
+        ("truncated K-week", lambda ages, g: np.where(ages[None, :] < g[:, None], 1.0, 1e-4), np.arange(4, 105, 1, dtype=float)),
+        ("uniform (lam=1)", lambda ages, g: np.ones((len(g), len(ages))), np.array([1.0])),
+    ]
+    out = {}
+    for name, fn, grid in specs:
+        rmses, tur27 = [], np.zeros(C.F)
         for f in range(C.F):
-            hit = w["plan_weeks"][w["plan_hits"][:, f]]
-            hit = hit[(hit > a) & (hit <= b)]
-            ms += wt[f] * pk.inst["rel"][f] * float(np.sum(1 - g["cov"][f, hit - (C.Y27 - 1)]))
-        out.append(math.sqrt(ms))
-    return float(np.mean(out))
+            W = int(w["window"][f])
+            ages = np.arange(W - 1, -1, -1, dtype=float)
+            y = np.maximum(inst["boot_v"][f] - inst["rep"][f], 0.5)
+            bt = inst["boot_t"][f]
+            rows = w["rows"][f]
+            wk0 = w["wk0"]
+            N_mat = np.array([rows[wk0 + int(t) - W + 1:wk0 + int(t) + 1] for t in bt], float)
+            A_mat = fn(ages, grid)
+            den = A_mat @ N_mat.T
+            bf_all = 2.0 * ((A_mat ** 2) @ N_mat.T) / (den ** 2)
+            log_diff = np.log(y)[None, :] - np.log(bf_all)
+            log_c = np.mean(log_diff, axis=1)
+            sses = np.sum((log_diff - log_c[:, None]) ** 2, axis=1)
+            bi = int(np.argmin(sses))
+            rmses.append(math.sqrt(float(sses[bi]) / len(bt)))
+            c = math.exp(float(log_c[bi]))
+            a = A_mat[bi]
+            tfs = []
+            for t0, t1 in C.SPANS27:
+                n0 = rows[wk0 + t0 - W + 1:wk0 + t0 + 1]
+                n1 = rows[wk0 + t1 - W + 1:wk0 + t1 + 1]
+                p0 = (a * n0) / (a * n0).sum()
+                p1 = (a * n1) / (a * n1).sum()
+                h = t1 - t0
+                tf = float(np.sum((p0[:h] ** 2) / n0[:h]) + np.sum((p1[W - h:] ** 2) / n1[W - h:]) +
+                           np.sum(((p1[:W - h] - p0[h:]) ** 2) / n0[h:]))
+                tfs.append(tf)
+            tur27[f] = c * float(np.mean(tfs))
+        out[name] = {"log_rmse": float(np.mean(rmses)), "points": math.sqrt(float(wt @ tur27))}
+    return out
 
 
-START_RULES = ("the first warm retrain after the last cold one", "thirteen weeks after the last cold retrain, no floor",
-               "the last of the three past rollouts' first use", "2026 only")
+START_RULES = ("the first warm retrain after the last cold one",
+               "thirteen weeks after the last cold retrain, no floor",
+               "the last of the three past rollouts' first use",
+               "2026 only")
 
 
 def forks(pk):
-    """The rivals the determinism audit opened, run in the golden's own estimators: where the settled weeks start
-    (with each fit), the take-up as a plug-in median lag, calendar 2027's Mondays for the pinned-views share; and,
-    refused, own change with 2026's release movement taken from a total measured over other weeks."""
     w = pk.w
     last_use = np.array([max(int(w[n]["eff"][f]) for n in ("runtime", "warm", "amp")) for f in range(C.F)])
     starts = dict(zip(START_RULES, (w["last_cold"] + 1, w["last_cold"] + 13, last_use,
                                     np.maximum(np.array(pk.t0), C.Y26))))
-    admitted, mism = {}, {}
+    admitted = {}
     for k, s in starts.items():
         q = at_start(pk, s)
-        for fit in ("anch26", "anch20", "anch30", "flat"):
+        fits = ("anch25", "anch20") if k == "2026 only" else ("anch25", "anch20", "flat")
+        for fit in fits:
             admitted["settled weeks from %s, fit %s" % (k, fit)] = C.evaluate(q, fit=fit)
-        if k != "2026 only":
-            q.events = [C.events_in_span(w, f, max(int(s[f]), C.Y26), C.LAGS) for f in range(C.F)]
-            mism[k] = C.evaluate(q)["own_share"]
-    q = copy.copy(pk)
-    q.events = [C.events_in_span(w, f, max(pk.t0[f], C.Y26), C.LAGS) for f in range(C.F)]
-    mism["the settled weeks"] = C.evaluate(q)["own_share"]
-    wp, wc = np.arange(C.Y27 - 1, 182), np.arange(C.Y27 + 1, C.Y27 + 53)
-    cal, refused = {}, {}
-    for m in ("loglin", "linear", "groups", "own", "pooled", "norevert"):
-        e = C.evaluate(pk, cov=plug_in(pk, pk.models[m], wp))
-        c1 = 100.0 * float(integrated(pk, pk.models[m], wc).mean())
-        c2 = 100.0 * float(plug_in(pk, pk.models[m], wc).mean())
-        if m in ("pooled", "norevert"):
-            # one lag for every family is refused by the past rollouts' lags by custom components, and no reverts
-            # by the manifests' reverted weeks; the battery's own pooled and no-revert members keep the call
-            refused["take-up %s as a plug-in median lag" % m] = {"cc3": e["cc3"], "releases": e["points"]["releases"],
-                                                                "own_share": e["own_share"], "call": call_list(e)}
-            refused["calendar 2027's Mondays, take-up %s" % m] = {"cc3": c1}
-            refused["calendar 2027's Mondays, take-up %s as a plug-in" % m] = {"cc3": c2}
-            continue
-        admitted["take-up %s as a plug-in median lag" % m] = e
-        cal["calendar 2027's Mondays, take-up %s" % m] = c1
-        cal["calendar 2027's Mondays, take-up %s as a plug-in" % m] = c2
-    return admitted, cal, mism, refused
+    wp = np.arange(C.Y27 - 1, 182)
+    for m in ("loglin", "linear", "groups", "own"):
+        admitted["take-up %s as a plug-in median lag" % m] = C.evaluate(pk, cov=plug_in(pk, pk.models[m], wp))
+    return admitted
 
 
 def run(target=None, quiet=True):
     target = target or os.path.join(TASK, "target")
     pk = L.pack(target)
-    out = io.StringIO()
-    with contextlib.redirect_stdout(out):
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
         A = C.analyse(pk, None)
     g = A["gold"]
     wt = pk.w["merch"] / pk.w["merch"].sum()
-    bw = lambda v: float((wt * np.asarray(v)).sum())
+    bw = lambda v: float(wt @ np.asarray(v, float))
 
-    # the rivals the cut pack adds to the core's battery
     panel116 = np.array([np.sum(~np.isnan(pk.z[f][:, 116])) * 5.0 for f in range(C.F)])
-    extra = {"families weighted by the panel at the latest snapshot, times five": C.evaluate(with_weights(pk, panel116)),
-             "merchants' own change from the 2026 snapshot pairs only": C.evaluate(with_d13(pk, snapshot_d13(pk)))}
-    # ruled out by named data: before each family's settled weeks the manifests show cold restarts and the change
-    # calendar's three rollouts, model-side movement the 2026 sources as they stood do not hold
-    ruled = {"merchants' own change over every thirteen-week gap from July 2024":
-             C.evaluate(with_d13(pk, all_weeks_d13(pk)))}
-    pre_gap = np.array([np.nanmean((pk.z[f][:, 13:pk.t0[f]] - pk.z[f][:, :pk.t0[f] - 13]) ** 2) for f in range(C.F)])
-    mess = {}
-    for m in L.MESS:
-        mess[m] = C.evaluate(L.pack(target, mess=(m,)))
+    extra = {
+        "families weighted by the panel at the latest snapshot, times five": C.evaluate(with_weights(pk, panel116)),
+        "merchants' own change from the 2026 snapshot pairs only": C.evaluate(with_d13(pk, snapshot_d13(pk))),
+    }
+    mess_pks = {m: L.pack(target, mess=(m,)) for m in L.MESS}
+    mess = {m: C.evaluate(mpk) for m, mpk in mess_pks.items()}
     fam = A["fam"] + list(extra.values())
-    admitted, cal_cc3, mism, refused_takeup = forks(pk)
+    admitted = forks(pk)
     lat = A["lattice"]
     routes = A["routes"]
-    cut8 = C.evaluate(pk, S2="cut", cut_lag=8)
     free = A["free"]
-    refused_e = list(lat.values()) + list(routes.values()) + list(A["extra"].values()) + [
-        cut8, free, C.evaluate(pk, S2="over"), C.evaluate(pk, S2="over2"), C.evaluate(pk, S3="worst"),
-        C.evaluate(pk, S3="y2026"), C.evaluate(pk, S1="flat"), C.evaluate(pk, S1="single"),
-        C.evaluate(pk, weights="equal")]
-    # the readings the Holistic Audit v2's pins refuse (the endpoint by standard 1.4, the calendar's dates by the ask's
-    # actual use, releases left whole on pinned weeks by 1.5) left the lattice and the routes with S3; they stay in the
-    # capping set, so no band moves with the pins
-    refused_e += [C.evaluate(pk, **kw) for kw in (
-        dict(S2="hur"), dict(S3="hur"), dict(S1="hur", S2="hur"), dict(S1="hur", S3="hur"), dict(S2="hur", S3="hur"),
-        dict(S1="hur", S2="hur", S3="hur"), dict(S1="raw", S2="hur", S3="hur"), dict(S1="hur", S2="hur", S3="declared"),
-        dict(S1="square", S2="over", S3="over"), dict(S1="regress", S2="hur", S3="declared"),
-        dict(S1="hur", S2="hur", S3="y2026"))]
+    free_nosub = C.evaluate(pk, fit="free25", sub_data=False)
 
-    keys = ["points_" + s for s in C.SOURCES] + ["share_" + s for s in C.SOURCES] + ["cc3", "own_share",
-                                                                                   "fr_sched", "fr_removed"]
+    refused_e = (
+        list(lat.values()) + list(routes.values()) + list(A["extra"].values()) +
+        list(A["over"].values()) + [
+            free_nosub,
+            C.evaluate(pk, S1="linear2"),
+            C.evaluate(pk, S1="cut8"),
+            C.evaluate(pk, S2="raw"),
+            C.evaluate(pk, S2="unif_raw"),
+            C.evaluate(pk, S2="half_w"),
+            C.evaluate(pk, S3="all_same_rho"),
+            C.evaluate(pk, cov_mode="plan"),
+            C.evaluate(pk, cov_mode="declared"),
+            C.evaluate(pk, cov_mode="worst"),
+            C.evaluate(pk, weights="equal"),
+        ]
+    )
+
+    keys = (
+        ["points_" + s for s in C.SOURCES]
+        + ["tot_q1", "tot_q2", "tot_q3", "tot_q4", "tot_yr", "cc_pin"]
+        + ["share_" + s for s in C.SOURCES]
+        + ["own_share", "fr_sched", "fr_removed"]
+    )
     bands, adm_range = {}, {}
     for k in keys:
         vals = [e[k] for e in fam] + [g[k]] + [e[k] for e in admitted.values()]
-        if k == "cc3":
-            vals += list(cal_cc3.values())
         lo, hi = min(vals), max(vals)
         adm_range[k] = [lo, hi]
         bands[k] = [lo - 0.25 * (hi - lo), hi + 0.25 * (hi - lo)]
-        # an edge stops halfway to the nearest figure a refused route, a lost stump or a ruled-out probe files
         ref = [e[k] for e in refused_e]
-        if k == "own_share":
-            ref += list(mism.values())
         below, above = [v for v in ref if v < lo - 1e-9], [v for v in ref if v > hi + 1e-9]
         if below:
             bands[k][0] = max(bands[k][0], 0.5 * (max(below) + lo))
@@ -240,183 +220,220 @@ def run(target=None, quiet=True):
     for s, kind in (("retunes", "retune_shadow"), ("labels", "label_freeze")):
         sr = single_runs(pk, kind)
         bands["points_" + s] = [min(bands["points_" + s][0], min(sr)), max(bands["points_" + s][1], max(sr))]
-    bands["cc1"], bands["cc2"] = bands["points_turnover"], bands["points_optimisation"]
+    bands["cc1"] = bands["points_optimisation"]
+    bands["cc2"] = bands["points_turnover"]
+    bands["cc3"] = bands["points_releases"]
 
-    reflex = lat["S1+S2"]
+    reflex = lat["S1+S2+S3"]
     direct = routes["direct"]
+    rigorous = routes["rigorous"]
     fals = A["fals"]
 
-    # counts and bases for the Step-by-Step
-    raw = L.load(target, mess=("no_rekey",))[0]
+    # Clean record counts for Step-by-Step
+    import glob as _glob
     import pandas as pd
-    reg = pd.read_csv(os.path.join(target, "mrm_instrument_pair_register_2026.csv"))
-    nruns = sum(1 for _ in open(os.path.join(target, "training_scheduler_runs_2024_2026.jsonl")))
-    m = C.coverage_model(pk.w, "loglin")
+    raw_ms = int(mess_pks["no_rekey"].w["ms"].sum())
+    score_rows = int(sum(np.sum(~np.isnan(Z)) for Z in pk.z))
+    raw_score_rows = sum(sum(1 for _ in open(p)) - 1 for p in _glob.glob(os.path.join(target, "gms_monitoring_panel_scores_*.csv")))
+    manifest_lines = sum(1 for _ in open(os.path.join(target, "training_scheduler_runs_2024_2026.jsonl")))
+    seen_r, prod_r = set(), 0
+    for line in open(os.path.join(target, "training_scheduler_runs_2024_2026.jsonl")):
+        r = json.loads(line)
+        if r["run_id"] not in seen_r:
+            seen_r.add(r["run_id"])
+            if r["kind"] == "production":
+                prod_r += 1
+    preg = pd.read_csv(os.path.join(target, "mrm_instrument_pair_register_2026.csv"))
+    pairs_by_kind = {k: int(v) for k, v in preg["pair_kind"].value_counts().items()}
+
+    # Leave-one-rollout-out check for pinned views
     loo = {}
-    for name in ("runtime", "warm", "amp"):
-        mdl = C.coverage_model(pk.w, "loglin", leave=name)
-        r = pk.w[name]
-        obs, pred = [], []
+    for leave in ("runtime", "warm", "amp"):
+        m = C.coverage_model(pk.w, "loglin", leave=leave)
+        r = pk.w[leave]
+        rec_sh, mod_sh = [], []
         for f in range(C.F):
-            d = r["declared"][f]
-            span = np.arange(d, d + 39)
-            on = (span >= r["eff"][f]) & ~((span >= r["revert"][f, 0]) & (span < r["revert"][f, 1]))
-            obs.append(on.mean())
-            pred.append(float(np.mean(C.lognormal_cdf(span - d, mdl["mu"][f], mdl["sg"]) * (1 - mdl["rev"]))))
-        loo[name] = {"record": float(np.mean(obs)), "model": float(np.mean(pred))}
-    past = C.past_adoption(pk.w)
-    lags = np.array([r[5] - r[4] for r in past])
-    probe = {"thirteen of 52 weeks for every family": C.evaluate(pk, S1="flat")["points"]["turnover"],
-             "the rows that entered only": C.evaluate(pk, S1="single")["points"]["turnover"],
-             "every family counted once": C.evaluate(pk, weights="equal")["points"]["turnover"],
-             "2026's release level carried": C.evaluate(pk, S3="y2026")["points"]["releases"],
-             "each family's worst past lag": C.evaluate(pk, S3="worst")["points"]["releases"],
-             "line through gaps 8 to 26": cut8["points"]["optimisation"],
-             "unanchored fit": free["points"]["optimisation"],
-             "unanchored implied replicate": bw(free["A"] * (1 - free["phi"] ** 2)),
-             "a whole replicate pair a refit": C.evaluate(pk, S2="over2")["points"]["optimisation"],
-             "thirteen refits added up": C.evaluate(pk, S2="over")["points"]["optimisation"],
-             "the replicate pair read as the gap's whole noise": C.evaluate(pk, S2="hur")["points"]["optimisation"],
-             "feature releases on the calendar's planned weeks": C.evaluate(pk, S3="hur")["points"]["releases"],
-             "feature releases left whole on pinned views": C.evaluate(pk, S3="over")["points"]["releases"],
-             "feature releases as the mean of the four pairs' root-mean-square": pair_mean_rms(pk, g),
-             "merchants' own change as a share of the record's own movement":
-                 100.0 * g["own"] / float((pk.w["merch"] * pk.d13).sum() / pk.w["merch"].sum())}
+            p0 = int(r["planned"][f])
+            wks = np.arange(p0, p0 + 39)
+            a, b = r["revert"][f]
+            on = (wks >= r["eff"][f]) & ~((b > a) & (wks >= a) & (wks < b))
+            rec_sh.append(float(np.mean(on)))
+            mod_sh.append(float(np.mean(C.lognormal_cdf(wks - (p0 + m["slip"]), m["mu"][f], m["sg"]) * (1.0 - m["rev"]))))
+        loo[leave] = {"record": float(np.mean(rec_sh)), "model": float(np.mean(mod_sh))}
 
-    # the second determinism pass (2026-11-22): what refuses the full sums and the straight lines, by figure. Kept out
-    # of the band capping, so no band moves.
-    hh = np.arange(1, 27)
-    ic8 = np.array([np.polyfit(np.arange(8, 27), pk.curves[f][7:26], 1)[1] for f in range(C.F)])
-    fitted = [g["slope"][f] * hh + g["A"][f] * (1 - g["phi"][f] ** hh) for f in range(C.F)]
-    fit8 = np.array([max(np.polyfit(np.arange(8, 27), fitted[f][7:26], 1)[1], 0.0) for f in range(C.F)])
-    misfit = []
+    # Gap-curve bend & cold-era linearity diagnostics
+    ic8 = [float(np.polyfit(np.arange(8, 26), pk.curves[f][7:25], 1)[1]) for f in range(C.F)]
+    ic8_book = bw(ic8)
+    boot_mean_v = np.array([float(np.mean(v)) for v in pk.inst["boot_v"]])
+    boot_net_v = np.maximum(boot_mean_v - pk.inst["rep"], 0.0)
+    kernels = recency_kernel_probes(pk)
+
+    # S2 bootstrap log-RMSE comparison (golden exponential vs uniform vs lag-0)
+    rmse_rec, rmse_unif, rmse_lag0 = [], [], []
     for f in range(C.F):
-        D = pk.curves[f][:26]
-        wg = 1.0 / D ** 2
-        c0 = float(np.sum(wg * hh * D) / np.sum(wg * hh * hh))      # a persistence of 1: a line through the origin
-        misfit.append(float(np.sum(wg * (D - c0 * hh) ** 2)) / float(np.sum(wg * (D - fitted[f]) ** 2)))
-    bend = {"line_from_%d" % k: C.evaluate(pk, S2="cut", cut_lag=k)["points"]["optimisation"] for k in (1, 8, 20)}
-    bend.update({"intercept8_book": bw(ic8), "intercept8_min": float(ic8.min()),
-                 "fitted_line8": math.sqrt(bw(fit8)), "misfit_min": float(min(misfit)),
-                 "misfit_median": float(np.median(misfit)), "misfit_max": float(max(misfit))})
+        W = int(pk.w["window"][f])
+        y = np.maximum(pk.inst["boot_v"][f] - pk.inst["rep"][f], 0.5)
+        bt = pk.inst["boot_t"][f]
+        bf_r = np.array([C.boot_factor(pk.w["rows"][f], pk.w["wk0"], int(t), W, g["lam"][f]) for t in bt])
+        bf_u = np.array([C.boot_factor(pk.w["rows"][f], pk.w["wk0"], int(t), W, 1.0) for t in bt])
+        bf_0 = np.array([2.0 / pk.w["rows"][f][pk.w["wk0"] + int(t)] for t in bt])
+        for bf, acc in ((bf_r, rmse_rec), (bf_u, rmse_unif), (bf_0, rmse_lag0)):
+            c = float(np.mean(np.log(y) - np.log(bf)))
+            acc.append(math.sqrt(float(np.mean((np.log(y) - (c + np.log(bf))) ** 2))))
 
-    rel26 = pk.inst["rel"] * np.array([pk.events[f][C.H - 1, 1] for f in range(C.F)])
-    side26 = (reflex["opt13"] + reflex["tur"] + pk.inst["ret"] * C.H / 4.0 + pk.inst["lab"] * C.H + rel26)
-    unfloored = bw(pk.d13 - side26)
-    reflex_floor = {"families_floored": int(np.sum(pk.d13 - side26 < 0)), "model_side_2026": bw(side26),
-                    "own_share_unfloored": 100.0 * unfloored / (unfloored + sum(reflex["agg"].values()))}
-    allv = fam + list(admitted.values())
-    near = min(((abs(e["points"][s] - l), NAMES[s], e["points"][s], l) for e in allv for s in C.SOURCES
-                for l in C.LINES), key=lambda x: x[0])
-    d0 = dt.date(2024, 7, 1)
-    when = lambda t: "%d %s" % ((d0 + dt.timedelta(weeks=int(t))).day, (d0 + dt.timedelta(weeks=int(t))).strftime("%B %Y"))
+    # Calendar 2027 Mondays pinned share (closed by Standard 2.2 -- recorded as probe only!)
+    m_ll = pk.models["loglin"]
+    wk_cal = np.arange(C.Y27 + 1, C.Y27 + 53)
+    cc_cal = 100.0 * float(np.mean([
+        C.lognormal_cdf(wk_cal - (pk.w["fv_planned"][f] + m_ll["slip"]), m_ll["mu"][f], m_ll["sg"]) * (1.0 - m_ll["rev"])
+        for f in range(C.F)
+    ]))
+
     fig = {
         "call": call_list(g),
-        "points": {NAMES[s]: g["points"][s] for s in C.SOURCES},
-        "share": {NAMES[s]: g["share"][s] for s in C.SOURCES},
         "band_of": call_of(g),
-        "bands": {k: v for k, v in bands.items()},
-        "cc1": g["cc1"], "cc2": g["cc2"], "cc3": g["cc3"], "own_share": g["own_share"],
-        "fr_sched": g["fr_sched"], "fr_removed": g["fr_removed"],
+        "points": {NAMES[s]: g["points"][s] for s in C.SOURCES},
+        "agg": {NAMES[s]: g["agg"][s] for s in C.SOURCES},
+        "share": {NAMES[s]: g["share"][s] for s in C.SOURCES},
+        "tot_q": list(g["tot_q"]),
+        "tot_q1": g["tot_q1"], "tot_q2": g["tot_q2"], "tot_q3": g["tot_q3"], "tot_q4": g["tot_q4"],
+        "tot_yr": g["tot_yr"],
+        "cc1": g["cc1"], "cc2": g["cc2"], "cc3": g["cc3"],
+        "cc_pin": g["cc_pin"],
+        "own_share": g["own_share"],
+        "own_ms": g["own"],
+        "fr_sched": g["fr_sched"],
+        "fr_removed": g["fr_removed"],
         "fr26": 100.0 * bw(pk.fr26),
+        "bands": bands,
+        "adm_range": adm_range,
+        "variants": len(fam),
+        "battery_calls": all(call_list(e) == call_list(g) for e in fam + list(admitted.values())),
+        "battery_range": {NAMES[s]: [min(e["points"][s] for e in fam), max(e["points"][s] for e in fam)] for s in C.SOURCES},
+        "base": {
+            "panel_merchants": int(pk.w["ms"].sum()),
+            "panel_merchants_unmapped": int(raw_ms),
+            "score_rows": score_rows,
+            "raw_score_rows": raw_score_rows,
+            "manifest_lines": manifest_lines,
+            "manifest_runs": len(seen_r),
+            "production_runs": prod_r,
+            "pairs": int(len(preg)),
+            "pairs_by_kind": pairs_by_kind,
+            "book_sep26": int(pk.w["merch"].sum()),
+            "replicate": bw(pk.inst["rep"]),
+            "bootstrap": bw(boot_mean_v),
+            "bootstrap_net": bw(boot_net_v),
+            "retune": bw(pk.inst["ret"]),
+            "release": bw(pk.inst["rel"]),
+            "label": bw(pk.inst["lab"]),
+            "phi_fit": [float(g["phi"].min()), float(g["phi"].max())],
+            "lam_fit": [float(g["lam"].min()), float(g["lam"].max())],
+            "coh_same_mean": float(np.mean(pk.inst["rel_coh_same_pairs"])),
+            "coh_same_min": float(np.min(pk.inst["rel_coh_same_pairs"])),
+            "coh_same_n": int(len(pk.inst["rel_coh_same_pairs"])),
+            "coh_diff_mean": float(np.mean(pk.inst["rel_coh_diff_pairs"])),
+            "coh_diff_n": int(len(pk.inst["rel_coh_diff_pairs"])),
+            "cov_plan": 100.0 * float(np.mean(C.coverage_weeks(pk.w, "plan", pk.models["loglin"])[:, 1:])),
+            "cov_declared": 100.0 * float(np.mean(C.coverage_weeks(pk.w, "declared", pk.models["loglin"])[:, 1:])),
+            "cov_cal27": cc_cal,
+            "d1": pk.obs_d1,
+            "d13": bw(pk.d13),
+            "retunes_per_pair": C.H / 4.0,
+        },
+        "bend": {
+            "intercept8_book": ic8_book,
+            "intercept8_min": min(ic8),
+            "cold_min_weeks": int(pk.w["warm"]["eff"].min()),
+            "cold_max_weeks": int(pk.w["warm"]["eff"].max()),
+            "cold_curv_mean": float(np.mean(pk.cold_curv)),
+            "cold_curv_min": float(min(pk.cold_curv)),
+            "cold_curv_max": float(max(pk.cold_curv)),
+        },
+        "recency_diag": {
+            "log_rmse_exp": float(np.mean(rmse_rec)),
+            "log_rmse_unif": float(np.mean(rmse_unif)),
+            "log_rmse_lag0": float(np.mean(rmse_lag0)),
+            "unif_ratio": float(np.mean(rmse_unif) / np.mean(rmse_rec)),
+            "lag0_ratio": float(np.mean(rmse_lag0) / np.mean(rmse_rec)),
+            "kernels": kernels,
+        },
+        "falsification": {
+            "obs_d1": pk.obs_d1,
+            "obs_boot_contrast": pk.obs_boot_contrast,
+            "obs_rel_cov": pk.obs_rel_cov,
+            "golden_err": g["fals_err"],
+            "golden_parts": {"d1": g["pred_d1"], "boot_c": g["pred_bc"], "rel_cov": g["pred_rc"]},
+            "rivals": dict(fals["rivals"]),
+        },
+        "loo": loo,
         "reflex": {"points": {NAMES[s]: reflex["points"][s] for s in C.SOURCES},
-                   "share": {NAMES[s]: reflex["share"][s] for s in C.SOURCES}, "cc3": reflex["cc3"],
-                   "own_share": reflex["own_share"], "fr_sched": reflex["fr_sched"], "fr_removed": reflex["fr_removed"],
-                   "call": call_list(reflex), **reflex_floor},
-        "direct": {"points": {NAMES[s]: direct["points"][s] for s in C.SOURCES}, "cc3": direct["cc3"],
-                   "call": call_list(direct)},
-        "rigorous": {"points": {NAMES[s]: routes["rigorous"]["points"][s] for s in C.SOURCES},
-                     "cc3": routes["rigorous"]["cc3"]},
-        "lattice": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "call": call_list(e), "cc3": e["cc3"],
-                        "own_share": e["own_share"]} for k, e in lat.items()},
-        "routes": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "call": call_list(e)}
-                   for k, e in list(routes.items()) + list(A["extra"].items())},
+                   "tot_q": list(reflex["tot_q"]), "tot_yr": reflex["tot_yr"],
+                   "cc_pin": reflex["cc_pin"], "call": call_list(reflex)},
+        "direct": {"points": {NAMES[s]: direct["points"][s] for s in C.SOURCES},
+                   "tot_q": list(direct["tot_q"]), "tot_yr": direct["tot_yr"],
+                   "cc_pin": direct["cc_pin"], "call": call_list(direct)},
+        "rigorous": {"points": {NAMES[s]: rigorous["points"][s] for s in C.SOURCES},
+                     "tot_q": list(rigorous["tot_q"]), "tot_yr": rigorous["tot_yr"],
+                     "cc_pin": rigorous["cc_pin"], "call": call_list(rigorous)},
+        "lattice": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES},
+                        "tot_q": list(e["tot_q"]), "tot_yr": e["tot_yr"],
+                        "cc_pin": e["cc_pin"], "call": call_list(e)} for k, e in lat.items()},
         "over": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "call": call_list(e)}
                  for k, e in A["over"].items()},
-        "variants": len(fam), "variants_core": len(A["fam"]), "variants_all": len(fam) + len(admitted),
-        "fit_grid": [0.50, 0.985, 0.0025],
-        "battery_range": {NAMES[s]: [min(e["points"][s] for e in fam), max(e["points"][s] for e in fam)]
-                          for s in C.SOURCES},
-        "battery_cc3": [min(e["cc3"] for e in fam), max(e["cc3"] for e in fam)],
-        "battery_calls": sorted(set(tuple(call_list(e)) for e in fam)) == [tuple(call_list(g))],
-        "extra": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "own_share": e["own_share"],
-                      "cc3": e["cc3"], "fr_sched": e["fr_sched"], "fr_removed": e["fr_removed"],
-                      "call": call_list(e)} for k, e in extra.items()},
-        "cc3_rivals": cc3_rivals(pk, g),
-        "forks": {"admitted": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES},
-                                   "share": {NAMES[s]: e["share"][s] for s in C.SOURCES}, "own_share": e["own_share"],
-                                   "cc3": e["cc3"], "fr_sched": e["fr_sched"], "fr_removed": e["fr_removed"],
-                                   "call": call_list(e)} for k, e in admitted.items()},
-                  "calendar_cc3": cal_cc3, "own_share_mismatched_weeks": mism, "refused_takeup": refused_takeup,
-                  "admitted_range": adm_range,
-                  "calls_hold": all(call_list(e) == call_list(g) for e in admitted.values())},
-        # every take-up form the Step-by-Step names (the battery's and the refused plug-ins), its pinned-views share
-        "takeup_range": [adm_range["cc3"][0], max([adm_range["cc3"][1]] + [refused_takeup[k]["cc3"] for k in (
-            "take-up pooled as a plug-in median lag", "take-up norevert as a plug-in median lag")])],
-        "nearest_line": {"source": near[1], "points": near[2], "line": near[3], "gap": near[0]},
-        "settled_floor": {"week": 66, "date": when(66), "weeks": C.T - 66},
-        "assessment_weeks": {"first": when(C.Y27), "last": when(181), "refreshes": int(181 - C.Y27 + 1)},
-        "ruled": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "own_share": e["own_share"],
-                      "call": call_list(e)} for k, e in ruled.items()},
-        "pre_settled": {"d13_before": bw(pre_gap), "d13_settled": bw(pk.d13),
-                        "families_higher": int(np.sum(pre_gap > pk.d13)),
-                        "ratio_range": [float(np.min(pre_gap / pk.d13)), float(np.max(pre_gap / pk.d13))]},
-        "mess": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "own_share": e["own_share"],
-                     "cc3": e["cc3"], "fr_sched": e["fr_sched"], "fr_removed": e["fr_removed"],
-                     "share": {NAMES[s]: e["share"][s] for s in C.SOURCES}} for k, e in mess.items()},
-        "probe": probe,
-        "bend": bend,
-        "falsification": {"record": fals["truth"], "golden": fals["golden"], "rivals": fals["rivals"]},
-        "loo": loo,
-        "base": {
-            "panel_merchants": int(pk.w["ms"].sum()), "panel_merchants_unmapped": int(raw["ms"].sum()),
-            "score_rows": int(sum(int(np.sum(~np.isnan(Z))) for Z in pk.z)),
-            "manifest_lines": nruns, "manifest_runs": len({json.loads(x)["run_id"] for x in
-                                                           open(os.path.join(target, "training_scheduler_runs_2024_2026.jsonl"))}),
-            "families": C.F,
-            "production_runs": C.F * C.T,
-            "pairs": len(reg), "pairs_by_kind": {k: int(v) for k, v in reg["pair_kind"].value_counts().items()},
-            "long_window_families": int(np.sum(pk.w["window"] == 104)),
-            "replicate": bw(pk.inst["rep"]), "bootstrap_raw": bw(pk.inst["boot"]), "bootstrap_net": bw(g["face"]),
-            "d13": bw(pk.d13), "d1": bw(pk.d1),
-            "phi_fit": [float(min(g["phi"])), float(max(g["phi"]))],
-            "turned_share_2027": [float(x) for x in [min(g["tur"] / np.maximum(g["face"], 1e-9)),
-                                                    max(g["tur"] / np.maximum(g["face"], 1e-9))]],
-            "slip_mean": float(m["slip"]), "revert_share": float(m["rev"]),
-            "past_family_rollouts": len(past), "past_lag_median": float(np.median(lags)),
-            "past_lag_range": [int(lags.min()), int(lags.max())],
-            "lag_median_custom0": float(math.exp(m["mu"][int(np.argmin(pk.w["custom"]))])),
-            "lag_median_custom_max": float(math.exp(m["mu"][int(np.argmax(pk.w["custom"]))])),
-            "custom_max": int(pk.w["custom"].max()),
-            "releases_2026": int(np.sum(pk.w["rel_weeks"] >= C.Y26)), "releases_before": int(np.sum(pk.w["rel_weeks"] < C.Y26)),
-            "releases_2027": int(len(pk.w["plan_weeks"])),
-            "cov_plan": direct["cc3"], "cov_declared": routes["rigorous"]["cc3"],
+        "probe": {
+            "linear 13 refits (half pair)": lat["S1"]["points"]["optimisation"],
+            "full replicate pair per refit": C.evaluate(pk, S1="linear2")["points"]["optimisation"],
+            "single replicate pair (over)": A["over"]["S1"]["points"]["optimisation"],
+            "unanchored fit (sub data)": free["points"]["optimisation"],
+            "unanchored fit (raw curve)": free_nosub["points"]["optimisation"],
+            "unanchored raw implied rep": bw(free_nosub["A"] * (1.0 - free_nosub["phi"] ** 2)),
+            "uniform window turnover": lat["S2"]["points"]["turnover"],
+            "raw bootstrap face value": direct["points"]["turnover"],
+            "net bootstrap face value (over)": A["over"]["S2"]["points"]["turnover"],
+            "orthogonal releases (actual lag)": lat["S3"]["points"]["releases"],
+            "orthogonal releases (calendar plan)": direct["points"]["releases"],
+            "all releases aligned (over)": A["over"]["S3"]["points"]["releases"],
         },
+        "extra": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES},
+                      "tot_yr": e["tot_yr"], "cc_pin": e["cc_pin"], "call": call_list(e)}
+                  for k, e in extra.items()},
+        "mess": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES},
+                     "tot_q": list(e["tot_q"]), "tot_yr": e["tot_yr"],
+                     "cc_pin": e["cc_pin"], "call": call_list(e)} for k, e in mess.items()},
     }
-    E = effort(fig, g, A, pk, lat, routes, fam, extra, bands)
+    import writeup as WU
+    fig["stated"] = WU.stated(fig)
     fig["rubric"] = rubric(A["spec"])
-    import writeup
-    fig["stated"] = writeup.stated(fig)
     fig["rubric_stated"] = rubric(stated_spec(A["spec"], fig["stated"]))
     fig["panel_merchants"] = fig["base"]["panel_merchants"]
-    fig["weekly_check"] = fig["falsification"]["golden"]
+    fig["fals_check"] = fig["falsification"]["golden_err"]
     fig["cap"] = 12
     fig["windows"] = sorted(set(int(x) for x in pk.w["window"]))
-    fig["loo_pct"] = {k: [100 * v["record"], 100 * v["model"]] for k, v in fig["loo"].items()}
+    fig["loo_pct"] = {k: [100.0 * v["record"], 100.0 * v["model"]] for k, v in fig["loo"].items()}
     fig["lines"] = list(C.LINES)
+    E = effort(fig, g, A, pk, lat, routes, fam, extra, bands)
     return pk, A, fig, E
 
 
 def stated_spec(spec, S):
-    """The core's pricing spec with every figure's band set to the band the answer blocks state."""
     spec = copy.deepcopy(spec)
-    key = {"CC1 turnover alone, points": "points_turnover", "CC2 optimisation noise alone, points": "points_optimisation",
-           "CC3 share of 2027 retrains on pinned views": "cc3", "pinned views share, on its own ask line": "cc3",
-           "merchants' own share of all movement": "own_share", "2027 flip rate as scheduled": "fr_sched",
-           "2027 flip rate with the designated sources removed": "fr_removed"}
-    for s in C.SOURCES:
-        key["%s points, on its line" % s] = "points_" + s
-        key["share %s" % s] = "share_" + s
+    key = {
+        "CC1 optimisation noise alone, points": "points_optimisation",
+        "CC2 training data alone, points": "points_turnover",
+        "CC3 feature releases alone, points": "points_releases",
+        "optimisation points": "points_optimisation",
+        "turnover points": "points_turnover",
+        "releases points": "points_releases",
+        "labels points": "points_labels",
+        "retunes points": "points_retunes",
+        "Q1 combined model-side RMS": "tot_q1",
+        "Q2 combined model-side RMS": "tot_q2",
+        "Q3 combined model-side RMS": "tot_q3",
+        "Q4 combined model-side RMS": "tot_q4",
+        "2027 combined model-side RMS": "tot_yr",
+        "pinned views share": "cc_pin",
+    }
     for f in spec["figures"]:
         f["band"] = list(S[key[f["id"]]])
     return spec
@@ -430,7 +447,7 @@ def rubric(spec):
     txt = out.getvalue()
     got = {}
     for line in txt.splitlines():
-        if line.startswith("| ") and "| wrong |" in line or "| right |" in line:
+        if line.startswith("| ") and ("| wrong |" in line or "| right |" in line):
             parts = [p.strip() for p in line.strip("|").split("|")]
             if len(parts) == 3 and parts[2].isdigit():
                 got[parts[0]] = int(parts[2])
@@ -438,103 +455,111 @@ def rubric(spec):
 
 
 def effort(fig, g, A, pk, lat, routes, fam, extra, bands):
-    reflex = lat["S1+S2"]
+    reflex = lat["S1+S2+S3"]
     direct = routes["direct"]
-    pts = lambda e, s: e["points"][s]
-    tbl = lambda e: {NAMES[s]: round(e["share"][s], 2) for s in C.SOURCES}
-    share_bands = {NAMES[s]: bands["share_" + s] for s in C.SOURCES}
-    share_bands["merchants' own"] = bands["own_share"]
-    sh = lambda e: dict(tbl(e), **{"merchants' own": round(e["own_share"], 2)})
-    r9 = lambda e: {"tier changes 2027": round(e["fr_sched"], 2),
-                    "with the designated sources removed": round(e["fr_removed"], 2)}
-    r9_bands = {"tier changes 2027": bands["fr_sched"], "with the designated sources removed": bands["fr_removed"]}
-    r2 = lambda e: {"retunes points": round(e["points"]["retunes"], 3), "retunes share": round(e["share"]["retunes"], 2),
-                    "label revisions points": round(e["points"]["labels"], 3),
-                    "label revisions share": round(e["share"]["labels"], 2)}
-    r2_bands = {"retunes points": bands["points_retunes"], "retunes share": bands["share_retunes"],
-                "label revisions points": bands["points_labels"], "label revisions share": bands["share_labels"]}
-    r5 = lambda e: {"pinned views share": round(e["cc3"], 2), "feature releases": round(e["points"]["releases"], 3)}
+    rigorous = routes["rigorous"]
+    pts = lambda e, s: round(float(e["points"][s]), 3)
+    r1_gold = {"panel merchants": fig["base"]["panel_merchants"],
+               "retunes points": pts(g, "retunes"), "label revisions points": pts(g, "labels")}
+    r1_val = lambda e, m_cnt: {"panel merchants": m_cnt,
+                               "retunes points": pts(e, "retunes"), "label revisions points": pts(e, "labels")}
+    r1_bands = {"panel merchants": [fig["base"]["panel_merchants"]] * 2,
+                "retunes points": bands["points_retunes"], "label revisions points": bands["points_labels"]}
+    r7 = lambda e: {"Q1": round(e["tot_q1"], 3), "Q2": round(e["tot_q2"], 3)}
+    r7_bands = {"Q1": bands["tot_q1"], "Q2": bands["tot_q2"]}
+    r8 = lambda e: {"Q3": round(e["tot_q3"], 3), "Q4": round(e["tot_q4"], 3)}
+    r8_bands = {"Q3": bands["tot_q3"], "Q4": bands["tot_q4"]}
     fals = A["fals"]
     res = [
-        {"id": "R1", "name": "the panel on one merchant key and one family scheme", "graded_as": "Step-by-Step",
-         "figure": "panel_merchants", "depends": [], "independent": "",
-         "golden": fig["base"]["panel_merchants"], "band": [fig["base"]["panel_merchants"]] * 2,
-         "passes": {"quick": fig["base"]["panel_merchants_unmapped"], "careful": fig["base"]["panel_merchants"],
-                    "thorough": fig["base"]["panel_merchants"]}},
-        {"id": "R2", "name": "the retunes and label revisions lines: points and share", "graded_as": "Ask 1",
-         "figure": "r2", "depends": ["R1"], "independent": "the retune shadows and freeze pairs",
-         "golden": r2(g), "bands": r2_bands, "partly_share": 1.0,
-         "passes": {"quick": r2(direct), "careful": r2(reflex), "thorough": r2(g)},
-         "precedent": ["L11", "L63"]},
-        {"id": "R3", "name": "what training data alone moves a score between snapshots in 2027",
+        {"id": "R1", "name": "cleaned panel, manifests, instruments and forced baseline sources (retunes and labels)",
+         "graded_as": "Ask 1, Step-by-Step", "figure": "r1", "depends": [], "independent": "",
+         "golden": r1_gold, "bands": r1_bands, "partly_share": 1.0,
+         "passes": {"quick": r1_val(direct, fig["base"]["panel_merchants_unmapped"]),
+                    "careful": r1_val(rigorous, fig["base"]["panel_merchants"]),
+                    "thorough": r1_gold}},
+        {"id": "R2", "name": "what optimisation noise alone moves a score between snapshots (warm-start decay)",
          "graded_as": "Component 1, Ask 1", "figure": "cc1", "depends": ["R1"],
-         "independent": "the bootstrap pairs and the manifests' windows and rows",
+         "independent": "the warm-era change-by-gap curve anchored to replicate pairs, with cold-era linearity",
          "golden": g["cc1"], "band": bands["cc1"],
-         "passes": {"quick": pts(direct, "turnover"), "careful": pts(reflex, "turnover"), "thorough": g["cc1"]},
-         "precedent": ["L28", "L22", "N21"]},
-        {"id": "R4", "name": "what optimisation noise alone moves a score between snapshots",
+         "passes": {"quick": pts(direct, "optimisation"), "careful": pts(rigorous, "optimisation"), "thorough": g["cc1"]},
+         "precedent": ["L39", "L65", "N34"]},
+        {"id": "R3", "name": "what training data alone moves a score between snapshots (recency-weighted turnover)",
          "graded_as": "Component 2, Ask 1", "figure": "cc2", "depends": ["R1"],
-         "independent": "the change-by-gap curve and the replicate pairs",
+         "independent": "2026 weighted bootstrap pairs inverted against warehouse weekly labelled rows",
          "golden": g["cc2"], "band": bands["cc2"],
-         "passes": {"quick": pts(direct, "optimisation"), "careful": pts(reflex, "optimisation"), "thorough": g["cc2"]},
-         "precedent": ["L68", "N45", "L39"]},
-        {"id": "R5", "name": "the share of 2027's retrains on pinned views and what feature releases move",
-         "graded_as": "Ask 2, Ask 1", "figure": "r5", "depends": ["R1"],
-         "independent": "the manifests' runtime fields for the past rollouts",
-         "golden": r5(g), "bands": {"pinned views share": bands["cc3"], "feature releases": bands["points_releases"]},
-         "passes": {"quick": r5(direct), "careful": r5(reflex), "thorough": r5(g)},
-         "precedent": ["L46", "N03", "N22"]},
-        {"id": "R6", "name": "each route's model asked for the weekly score-change variance",
-         "graded_as": "Step-by-Step", "figure": "weekly_check", "depends": ["R3", "R4", "R5"],
-         "independent": "", "golden": fals["golden"], "band": [fals["truth"] - 1.0, fals["truth"] + 1.0],
-         "passes": {"quick": fals["rivals"]["both at face value"], "careful": fals["rivals"]["both at face value"],
+         "passes": {"quick": pts(direct, "turnover"), "careful": pts(rigorous, "turnover"), "thorough": g["cc2"]},
+         "precedent": ["L28", "L22", "N21"]},
+        {"id": "R4", "name": "what feature releases alone move a score between snapshots (within-group covariance)",
+         "graded_as": "Component 3, Ask 1", "figure": "cc3", "depends": ["R1"],
+         "independent": "paired 2026 release_shadow merchant vectors and past rollout manifests",
+         "golden": g["cc3"], "band": bands["cc3"],
+         "passes": {"quick": pts(direct, "releases"), "careful": pts(rigorous, "releases"), "thorough": g["cc3"]},
+         "precedent": ["N44", "L58", "L28"]},
+        {"id": "R5", "name": "share of 2027 assessment-year weekly retrains expected on pinned feature views",
+         "graded_as": "Ask 3", "figure": "cc_pin", "depends": ["R1"],
+         "independent": "past rollout lags from training scheduler manifests against change calendar",
+         "golden": g["cc_pin"], "band": bands["cc_pin"],
+         "passes": {"quick": direct["cc_pin"], "careful": rigorous["cc_pin"], "thorough": g["cc_pin"]}},
+        {"id": "R6", "name": "three-part 2026 internal-record variance discrepancy check",
+         "graded_as": "Step-by-Step", "figure": "fals_check", "depends": ["R2", "R3", "R4"],
+         "independent": "", "golden": fals["golden"], "band": [0.0, 1.5],
+         "passes": {"quick": fals["rivals"]["direct"], "careful": fals["rivals"]["rigorous (Response 1)"],
                     "thorough": fals["golden"]},
-         "precedent": ["L28"]},
-        {"id": "R7", "name": "each source's share and merchants' own share", "graded_as": "Ask 1",
-         "figure": "r7", "depends": ["R3", "R4", "R5"], "independent": "",
-         "golden": sh(g), "bands": share_bands, "partly_share": 0.5,
-         "passes": {"quick": sh(direct), "careful": sh(reflex), "thorough": sh(g)},
-         "precedent": ["N21", "L46"]},
-        {"id": "R8", "name": "each source's band for 2027", "graded_as": "Recommendation",
-         "figure": "call", "depends": ["R3", "R4", "R5"], "independent": "",
+         "precedent": ["L28", "N44"]},
+        {"id": "R7", "name": "H1 2027 combined model-side movement (Q1 and Q2 snapshot pairs)",
+         "graded_as": "Ask 2", "figure": "r7", "depends": ["R1", "R2", "R3", "R4"], "independent": "",
+         "golden": r7(g), "bands": r7_bands, "partly_share": 0.9,
+         "passes": {"quick": r7(direct), "careful": r7(rigorous), "thorough": r7(g)},
+         "precedent": ["L39", "L28", "N44"]},
+        {"id": "R8", "name": "H2 2027 combined model-side movement (Q3 and Q4 snapshot pairs)",
+         "graded_as": "Ask 2", "figure": "r8", "depends": ["R1", "R2", "R3", "R4"], "independent": "",
+         "golden": r8(g), "bands": r8_bands, "partly_share": 0.9,
+         "passes": {"quick": r8(direct), "careful": r8(rigorous), "thorough": r8(g)},
+         "precedent": ["L39", "L28", "N44"]},
+        {"id": "R9", "name": "full-year 2027 combined model-side movement",
+         "graded_as": "Ask 2", "figure": "tot_yr", "depends": ["R1", "R2", "R3", "R4"], "independent": "",
+         "golden": g["tot_yr"], "band": bands["tot_yr"],
+         "passes": {"quick": direct["tot_yr"], "careful": rigorous["tot_yr"], "thorough": g["tot_yr"]},
+         "precedent": ["L39", "L28", "N44"]},
+        {"id": "R10", "name": "each source's band for 2027", "graded_as": "Recommendation",
+         "figure": "call", "depends": ["R1", "R2", "R3", "R4"], "independent": "",
          "golden": call_list(g),
-         "passes": {"quick": call_list(direct), "careful": call_list(reflex), "thorough": call_list(g)},
-         "precedent": ["L63", "L11"]},
-        {"id": "R9", "name": "the merchants expected to change tier between snapshots in 2027", "graded_as": "Ask 3",
-         "figure": "r9", "depends": ["R3", "R4", "R5", "R8"], "independent": "",
-         "golden": r9(g), "bands": r9_bands, "partly_share": 1.0,
-         "passes": {"quick": r9(direct), "careful": r9(reflex), "thorough": r9(g)},
-         "precedent": ["L63", "L11"]},
+         "passes": {"quick": call_list(direct), "careful": call_list(rigorous), "thorough": call_list(g)},
+         "precedent": ["L39", "L28", "N44"]},
     ]
-    fig["r2"], fig["r5"], fig["r7"], fig["r9"] = r2(g), r5(g), sh(g), r9(g)
+    fig["r1"], fig["r7"], fig["r8"] = r1_gold, r7(g), r8(g)
     spec = A["spec"]
-    hints = [{"sentence": spec["stumps"][k]["said_out_loud"], "rescues": [r]} for k, r in
-             (("S1", "R3"), ("S2", "R4"))]
-    single = {"S1": lat["S1"], "S2": lat["S2"]}
-    alone = {"S1": lat["S2"], "S2": lat["S1"]}
+    hints = [{"sentence": spec["stumps"][k]["said_out_loud"], "rescues": [r]}
+             for k, r in (("S1", "R2"), ("S2", "R3"), ("S3", "R4"))]
+    alone_key = {"S1": "S2+S3", "S2": "S1+S3", "S3": "S1+S2"}
     moved = lambda e: [r["id"] for r in res[1:] if _moved(r, e, g, bands)]
-    fact = {"golden_answer": call_list(g), "reflex_route": {"answer": call_list(reflex)},
-            "judgments": [
-                {"id": k, "name": spec["stumps"][k]["said_out_loud"], "kind": "stump",
-                 "precedent": spec["stumps"][k]["precedents"],
-                 "dropped": {"answer": call_list(single[k]), "results_moved": moved(single[k])},
-                 "alone": {"answer": call_list(alone[k]), "results_rescued": [{"S1": "R3", "S2": "R4"}[k]]}}
-                for k in ("S1", "S2")] + [
-                {"id": "J4", "name": "each instrument's pair variance by family, book weighted", "kind": "reflex",
-                 "precedent": ["R20"]},
-                {"id": "J5", "name": "retunes and label revisions scaled by their counts between two snapshots",
-                 "kind": "reflex", "precedent": ["R20"]},
-                {"id": "J6", "name": "merchants' own change as the remainder of the record's thirteen-week movement",
-                 "kind": "reflex", "precedent": ["R93"]},
-                {"id": "J7", "name": "re-sent refreshes, re-keyed merchants and the two family code schemes resolved",
-                 "kind": "reflex", "precedent": ["R01"]}]}
-    forcing = {"kind": "set", "golden_answer": call_list(g),
-               "golden_family": [{"name": str(v) or "the golden", "answer": call_list(e)}
-                                 for v, e in zip(A["variants"], A["fam"])] +
-                                [{"name": k, "answer": call_list(e)} for k, e in extra.items()],
-               "shortcuts": [{"name": k, "answer": call_list(e)} for k, e in list(lat.items())
-                             if k != "golden"] + [{"name": k, "answer": call_list(e)} for k, e in routes.items()],
-               "perturbations": _perturb(g)}
+    fact = {
+        "golden_answer": call_list(g),
+        "reflex_route": {"answer": call_list(reflex)},
+        "judgments": [
+            {"id": k, "name": spec["stumps"][k]["said_out_loud"], "kind": "stump",
+             "precedent": spec["stumps"][k]["precedents"],
+             "dropped": {"answer": call_list(lat[k]), "results_moved": moved(lat[k])},
+             "alone": {"answer": call_list(lat[alone_key[k]]), "results_rescued": [{"S1": "R2", "S2": "R3", "S3": "R4"}[k]]}}
+            for k in ("S1", "S2", "S3")
+        ] + [
+            {"id": "J4", "name": "retunes and label revisions scaled by their snapshot-pair counts", "kind": "reflex",
+             "precedent": ["R20"]},
+            {"id": "J5", "name": "actual pinned-view adoption lag fitted from the three past platform rollouts", "kind": "reflex",
+             "precedent": ["R73"]},
+            {"id": "J6", "name": "re-sent refreshes, Tolka Pay re-keying and scheduler family code mapping resolved", "kind": "reflex",
+             "precedent": ["R01"]},
+        ],
+    }
+    forcing = {
+        "kind": "set", "golden_answer": call_list(g),
+        "golden_family": [{"name": str(v) or "the golden", "answer": call_list(e)}
+                          for v, e in zip(A["variants"], A["fam"])] +
+                         [{"name": k, "answer": call_list(e)} for k, e in extra.items()],
+        "shortcuts": [{"name": k, "answer": call_list(e)} for k, e in lat.items()] +
+                     [{"name": k, "answer": call_list(e)} for k, e in routes.items()],
+        "perturbations": _perturb(g),
+    }
     route_list = [{"name": "the golden", "answer": call_list(g), "golden": True}] + \
         [{"name": "stumps lost: " + k, "answer": call_list(e)} for k, e in lat.items()] + \
         [{"name": k, "answer": call_list(e)} for k, e in list(routes.items()) + list(A["extra"].items())]
@@ -543,14 +568,19 @@ def effort(fig, g, A, pk, lat, routes, fam, extra, bands):
 
 
 def _moved(r, e, g, bands):
-    if r["id"] == "R6":     # each single drop fails the check: S1 at 270.43, S2 at 50.92, S3 at the calendar's 1.000
+    if r["id"] == "R6":
         return True
-    if r["id"] == "R8":
+    if r["id"] == "R10":
         return call_list(e) != call_list(g)
-    key = {"R2": ["points_retunes", "share_retunes", "points_labels", "share_labels"],
-           "R3": ["points_turnover"], "R4": ["points_optimisation"], "R5": ["cc3", "points_releases"],
-           "R7": ["share_" + s for s in C.SOURCES] + ["own_share"],
-           "R9": ["fr_sched", "fr_removed"]}[r["id"]]
+    key = {
+        "R2": ["points_optimisation"],
+        "R3": ["points_turnover"],
+        "R4": ["points_releases"],
+        "R5": ["cc_pin"],
+        "R7": ["tot_q1", "tot_q2"],
+        "R8": ["tot_q3", "tot_q4"],
+        "R9": ["tot_yr"],
+    }[r["id"]]
     return any(not (bands[k][0] <= e[k] <= bands[k][1]) for k in key)
 
 
@@ -569,8 +599,7 @@ def _perturb(g):
 
 if __name__ == "__main__":
     pk, A, fig, E = run()
-    print(json.dumps({k: fig[k] for k in ("call", "points", "share", "cc3", "own_share", "fr_sched", "fr_removed",
-                                          "fr26", "variants", "battery_calls", "battery_range", "extra", "probe",
-                                          "falsification", "loo", "base", "rubric")}, indent=1, default=float))
-    print(json.dumps(fig["bands"], indent=0, default=float))
-    print(json.dumps(fig["mess"], indent=0, default=float))
+    print(json.dumps({k: fig[k] for k in ("call", "points", "tot_q", "tot_yr", "cc_pin",
+                                          "variants", "battery_calls", "probe", "falsification",
+                                          "bend", "recency_diag", "rubric", "rubric_stated")},
+                     indent=1, default=float))

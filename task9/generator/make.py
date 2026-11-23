@@ -15,7 +15,7 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts",
+WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".agents", "skills", "reduce-house-fixes", "scripts",
                        "writers")
 sys.path.insert(0, WRITERS)
 import postprocess  # noqa: E402

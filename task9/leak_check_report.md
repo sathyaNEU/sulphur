@@ -1,20 +1,19 @@
 # leak check, task9
 
-**Verdict: REVIEW.** 29 files read, 21 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 29 files read, 39 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: family, bootstrap, replicate, missed, change, turnover, calendar, instrument, standard, thirteen, variance, optimisation, manifests, merchants, training, window, spread, reflex, revisions, releases, sources, dropped, snapshot, routes, refits
+Stump terms swept: shortcut, bootstrap, missed, training, releases, standard, independent, method, sources, section, warm-start, merchant-level, covariance, replicate, optimisation, uniform, family, carried, curves, manifests, dropped, variance, corelib, effort, component
 
 ## 2 author vocabulary (REVIEW 1)
-- **REVIEW** `gms_model_stability_standard_2026.pdf`: \bthe model\b x6: ...aces version 1 of 3 November 2025 1. Scope 1.1 This standard sets how the model risk committee places each model-side source of movement in the Garra...
+- **REVIEW** `gms_model_stability_standard_2026.pdf`: \bthe model\b x6: ...e Garrane Merchant Score registry 1. Scope 1.1 This standard sets how the model risk committee places each model-side source of movement in the Garra...
 
-## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `acquirer_agreement_schedule_c_tier_stability.pdf`: 5 of 25 stump-paragraph terms appear (family, change, thirteen, merchants, snapshot); read whether the document names the move
-- **REVIEW** `gms_model_stability_standard_2026.pdf`: 11 of 25 stump-paragraph terms appear (family, change, standard, optimisation, merchants, training); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 1)
+- **REVIEW** `gms_model_stability_standard_2026.pdf`: 9 of 25 stump-paragraph terms appear (bootstrap, training, releases, standard, sources, warm-start); read whether the document names the move
 
 ## 9 dates after the setting (REVIEW 2)
-- **REVIEW** `feature_platform_roadmap_2027.xlsx`: 24 ISO dates after 2026-11-25, e.g. 2026-12-28, 2027-01-04, 2027-01-11, 2027-01-18, 2027-02-08
+- **REVIEW** `feature_platform_roadmap_2027.xlsx`: 28 ISO dates after 2026-11-25, e.g. 2027-01-11, 2027-01-25, 2027-02-01, 2027-03-01, 2027-03-08
 - **REVIEW** `labelled_row_plan_2027.xlsx`: 57 ISO dates after 2026-11-25, e.g. 2026-11-30, 2026-12-07, 2026-12-14, 2026-12-21, 2026-12-28
 
 ## 10 container metadata (INFO 1)
@@ -23,9 +22,6 @@ Stump terms swept: family, bootstrap, replicate, missed, change, turnover, calen
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 29 usable files (10 or more required)
 - **INFO** `-`: 3 file categories: document, spreadsheet, structured (2 or more required)
-
-## 13 task metadata (REVIEW 1)
-- **REVIEW** `metadata.json`: files.gms_scored_book_by_family.csv.covers shares the design note's stump vocabulary (family, merchants, snapshot): say what the task decides, not how
 
 ## 1 file names (clean)
 
@@ -163,3 +159,32 @@ No phrase hands over a method or number. Two phrases to be aware of: "carries in
 3. CLEAN
 
 Main thread's ruling on the third pass: the two phrases the reader marks ("carries into it" in 1.4, "actually" in the ask) are the Holistic Audit v2's own requested closures, filed as definitions of the WHAT at the author's ruling of 22 November 2026; neither says how much randomness carries, how it decays, or when a family takes up pinned views, so neither hands over a step.
+
+### Architecture 6 pass (Level-5 pack, 23 November 2026)
+
+#### Questions 1-6
+1. **Method or step announcement:**
+   - `gms_model_stability_standard_2026.pdf`, Section 1.4: `"A warm-started weekly refit starts from the previous week's weights, so the randomness of the refits before it carries into it."` Points to multi-week carry-over without specifying any parameter or estimation procedure.
+   - `gms_model_stability_standard_2026.pdf`, Section 1.6: `"On the 52-week and 104-week training windows, weekly refits apply exponential recency weighting across training weeks, and bootstrap pairs resample with the production refit's sample weights."` Pins specification ambiguity (functional form exponential and weighted bootstrap resampling) without giving any decay rate or estimation formula.
+   - `gms_model_stability_standard_2026.pdf`, Section 1.5: `"A feature release reaches a family's scores through the live feature views only: in the weeks a family trains and scores on pinned feature views, no feature release moves its scores."` Pins operational effect of PC-26-058.
+   - `gms_model_stability_standard_2026.pdf`, Section 5.2: Prescribes residual accounting for merchants' own change (non-graded context).
+   - `prompt.txt`: none.
+2. **Pre-ranked candidates (Gate G):** none.
+3. **Helper-only artifact:** none (all 29 files serve authentic operational roles).
+4. **Answer leak:** none.
+5. **Literal-rule execution:** Sections 1.1, 1.5, 2.1, 2.2 (52 Monday refreshes belonging to the four closing snapshot pairs), 3.1 (RMS weighted by latest closed quarter-end book 2026-09-21), 3.2 (root of mean of four pairs' MS), 3.3 (combined model-side RMS per pair and year), 4.1 (5.5 and 8.0 lines), 5.1-6.1, and Schedule C C1.1-C4.1 all execute literally to the committed estimands.
+6. **Single-thing / banned-stump check:** No single-thing shortcut ("none"). Every core ask turns on independent empirical analysis; S3's merchant-level within-group release covariance is completely unhinted by any schema or PDF text.
+
+#### Realism & Date Consistency
+- Cutoff & calendar consistency: clean (all historical logs end 2026-11-23, Schedule C dates exact 13-week Mondays, all PDF/XLSX docProps clean and pre-cutoff, no hidden sheets/comments/templates).
+- Four minor realism tells noted: (a) 2024 historical book in `gms_scored_book_by_family.csv` sat below 5x the fixed 2024-07-01 panel draw; (b) 8 of 24 `released_on` dates in `feature_platform_release_log.csv` fell on Saturdays; (c) `peak_memory_gib` in distractor `training_compute_by_run.csv` followed an exact line; (d) `labelled_outcomes_scored` in distractor `gms_model_performance_weekly.csv` did not scale with family book size.
+
+#### REVIEW Item Verdicts
+- `gms_model_stability_standard_2026.pdf` (`"the model"` x6): **harmless** (ordinary domain/governance phrasing).
+- `gms_model_stability_standard_2026.pdf` (Sections 1-6): Clauses 1.4 and 1.6 flagged as mild/secondary signposts (while closing required specification ambiguities with zero parameters or estimation methods); all other sections harmless.
+- `feature_platform_roadmap_2027.xlsx` (28 dates after 2026-11-25): **harmless** (forward 2027 release roadmap under Standard 2.1).
+- `labelled_row_plan_2027.xlsx` (57 dates after 2026-11-25): **harmless** (forward 2027 weekly labelled row plan under Standard 2.1).
+
+#### Parent Thread Rulings (Architecture 6, 23 November 2026)
+- **Clauses 1.4 and 1.6:** Retained as required WHAT determinism pins. Clause 1.4 was explicitly required by Holistic Audit v2 (validated `pinned` by Holistic Audit v3 while stumping 4 of 4 live platform runs in arch 5 pairs 2-3); Clause 1.6 closes the functional-form fork for exponential recency weighting and weighted bootstrap resampling while listing zero decay rates, half-lives, or estimation procedures.
+- **Four minor realism tells:** All four fixed immediately in `generator/pack.py` (historical pre-Sep-2026 book counts aligned above 5x panel draw while leaving 2026-09-21 weights identical; 2026 `released_on` restricted strictly to Tue-Fri weekdays; `labelled_outcomes_scored` scaled with family book size; realistic noise and row-count scatter added to `peak_memory_gib`). Zero graded figures moved.

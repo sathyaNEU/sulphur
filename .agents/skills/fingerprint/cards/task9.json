@@ -1,20 +1,20 @@
 {
   "task": "task9",
   "project": "sulfur",
-  "architecture": "v5 of the cleared slot (2026-11-22): Garrane Risk's weekly refreshed merchant scores, what each model-side source alone moves a score between quarter-end snapshots in 2027",
-  "drawn": "2026-11-22",
-  "slot_note": "redraw on 2026-11-22 of v4 (landed on the platform: one response filed the golden list, the other lost one group) in the same subdomain and analysis type (General Statistics & Data Science, interpretability; Root-Cause Analysis) with a new world, a new decision form and three new deciding lessons: the marketplace, the feature groups' degraded service and the ablation tests are gone; the core is three judgments on different axes about what a bootstrap of a training window, a replicate of one weekly refit and a change calendar's completion date can and cannot hold, proved in task9/generator/core.py at CORE PASS level 5",
+  "architecture": "v6 of the cleared slot (2026-11-23): Garrane Risk weekly refreshed merchant scores, 3-stump Level-5 upgrade (warm-start decay, recency-weighted training turnover, same-group feature-release merchant covariance)",
+  "drawn": "2026-11-23",
+  "slot_note": "Level-5 upgrade on 2026-11-23 of v5 (pair 3 scored 0.60/0.60, depth 4 concentrated on warm-start noise decay, with uniform training-window overlap solved by 4 of 4 responses and actual pinned-view adoption solved by both pair-3 responses). Keeps the proven Garrane Risk world and warm-start decay stump (S1), replaces solved uniform overlap with unfiled exponential recency weighting inverted from 2026 seasonal bootstrap variance swings (S2), and adds positive merchant-level cross-release covariance within feature groups measured from 2026 release_shadow vectors and carried to 2027 multi-phase roadmap sprints (S3), proved at CORE PASS level 5 with zero waivers.",
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "client_domain": "general-statistics-data-science",
   "client_subdomain": "Interpretability",
-  "niche": "a merchant-risk score vendor attributing the quarter-to-quarter movement of its weekly refreshed scores to five model-side sources (optimisation noise, training-window turnover, retunes, feature releases, label revisions) for the year ahead, when production scores carry every source at once and each instrument sees its source at the wrong unit: a bootstrap that resamples the whole training window, a replicate that reruns one weekly refit, a change calendar that dates a rollout by availability",
+  "niche": "a merchant-risk score vendor attributing quarter-to-quarter movement of its weekly refreshed scores across five model-side sources (optimisation noise, training data, retunes, feature releases, label revisions) for 2027, where warm-started refit noise decays across refits, 52/104-week training windows apply unfiled exponential recency weighting revealed by seasonal bootstrap variance swings, and multi-phase roadmap sprints on the same feature group carry positive cross-release merchant covariance measured from paired release-shadow vectors",
   "objective": "root-cause",
   "shape": "03",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "label revisions to escalation (9.99 points between quarter-end snapshots); optimisation noise (6.88), training-window turnover (6.61) and feature releases (6.65) to a remediation plan; retunes (4.47) on monitor; 55.0 per cent of 2027's weekly retrains on pinned feature views; 13.99 per cent of merchants changing tier between quarter-end snapshots in 2027 and 9.72 with the four designated sources removed (generator/core.py, seed 9505; the cut pack's figures.json once built)",
-  "answer_source": "generator/core.py on the world's arrays (seed 9505); submission.md and generator/figures.json once the pack is cut",
+  "answer": "label revisions to escalation (9.81 points); optimisation noise (6.83), training data (6.83) and feature releases (7.06) to remediation plans; retunes (4.29) on monitor; combined model-side movement Q1 16.88, Q2 17.06, Q3 15.50, Q4 14.67, 2027 year 16.06 points; 34.8 per cent of 2027 weekly retrains expected to run on pinned feature views (generator/core.py seed 9605; updated from figures.json once cut)",
+  "answer_source": "generator/core.py (seed 9605); submission.md and generator/figures.json once cut",
   "gap": [
     "objective",
     "time"
@@ -36,10 +36,10 @@
   "validated_decoy": false,
   "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "a careful but hurried run reads each source off its own instrument: the bootstrap pairs' spread as training-window turnover (15.7 points, escalation, where it is 6.6 and a remediation plan), the replicate pairs' spread as optimisation noise (3.6 points, monitor, where it is 6.9 and a plan) and the change calendar's completion dates for pinned feature views (feature releases 4.0 points, monitor, where they are 6.6 and a plan)",
+  "analyst_test": "a careful, rigorous run (literally matching live pair-3 Response 1) accumulates warm-start refit noise linearly (12.12 points, escalation vs 6.83 plan), applies uniform-window turnover (in+out)/(2N) when no decay rate is listed (3.65 points, monitor vs 6.83 plan), and sums unpinned releases orthogonally after checking scalar group MSE (4.62 points, monitor vs 7.06 plan), missing all three open sources and scoring 20 on the rubric",
   "domain_test": "every result is a quantity the statistics of model evaluation estimates: a variance component of prediction change at a stated gap, the variance of the difference between two estimators fitted on overlapping samples, the autocovariance of training noise across successive warm-started fits, and the attribution of prediction churn across its sources with the remainder shown; swap the nouns for a warehouse or a clinic and a replicate pair, a bootstrap of a training window, a warm start and a pinned feature view stop meaning anything",
   "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:variance-of-score-change-by-source-at-the-decision-gap-from-instruments-that-each-see-their-source-at-another-unit",
+  "layer2_pattern": "own:three-independent-variance-component-inversions-for-warm-start-decay-recency-weighted-turnover-and-within-group-release-covariance",
   "layer1": [
     "weekly score files re-sent after a late label load, the later file superseding the earlier",
     "merchant ids re-keyed at an acquirer migration, with a crosswalk",
@@ -92,12 +92,12 @@
   ],
   "opening_move": "constraint-first",
   "question_form": "where",
-  "driver": "A system's output moves between two decision dates through several sources at once and each source is placed in a band on what it alone moves the output over that gap, which no record holds: each source has an instrument that reruns one step of the process under a controlled change, but the instrument that redraws the whole input sample measures two unrelated samples where two consecutive decision-date states share all of it but the part that left and the part that entered, the instrument that reruns one step from a common parent measures one step's fresh deviation where every step inherits the last one's, so the quantity at the decision's gap is set by a persistence only the bend of the record's own change-by-gap curve shows, and a scheduled change that removes one source is dated complete when it is available while the record of past changes shows each unit took them up weeks to months later by its own complexity.",
-  "driver_concrete": "Garrane Risk places each of five model-side sources of merchant-score movement in a band for 2027 on the points it alone moves a score between quarter-end snapshots (under 5.5 monitor, 5.5 to under 8 a remediation plan, 8 or more escalation): bootstrap pairs resample a 52 or 104-week training window and put turnover at 15.7 points where two quarter-end models differ only by the thirteen weeks that left and entered (6.6); replicate pairs rerun one weekly refit from the same parent and put optimisation noise at 3.6 points where warm-started models a quarter apart differ by 6.9; the change calendar has 91 per cent of 2027's retrains on pinned feature views where the run manifests of three past rollouts support 55, which leaves feature releases at 6.6 points and not 4.0.",
-  "stump": "A careful but hurried analyst takes the bootstrap pairs' spread as what training-window turnover moves a score between two quarter-end snapshots (15.7 points and escalation, where it is 6.6 and a remediation plan), takes the replicate pairs' spread as what optimisation noise moves it (3.6 points and monitor, where it is 6.9 and a plan) and dates pinned feature views by the change calendar (feature releases 4.0 points and monitor, where they are 6.6 and a plan).",
-  "deep_chain": "(1) the weekly score panel, the run manifests, the instrument runs, the model registry, the change calendar, the release log and roadmap and the 2027 plans on one family scheme and one week calendar; (2) each instrument's figure by family, and retunes' and label revisions' movement from their shadow and freeze pairs; (3) training-window turnover from the per-row noise of the bootstrap pairs and the rows that leave and enter each 2027 span; (4) optimisation noise from the bend of the score-change variance by gap, tied to the replicate pairs; (5) the share of 2027's retrains on pinned feature views from the adoption record of three past rollouts, and feature releases on the roadmap's uncovered weeks; (6) each route's own model asked for the weekly score-change variance the record holds, and the adoption model checked by leaving one rollout out; (7) each source's share of model-side movement and merchants' own share of all movement; (8) the bands and the tier changes expected in 2027, with the designated sources removed",
-  "judgment": "a bootstrap spread that is the noise of two unrelated training windows where quarter-end models share all but thirteen weeks; a replicate spread that is one refit's fresh noise where warm-started models inherit it; a completion date that is an image's availability where families train on it weeks to months later",
-  "one_fact_test": "the strongest sentence (a bootstrap pair resamples the whole training window, while two quarter-end models share every week of it but the thirteen that left and the thirteen that entered) rescues S1 only, 1 of 3 judgments, and only once the per-row noise is taken net of the seeds and carried to each family's rows out and in, span by span: optimisation noise is still left on monitor and feature releases still left on monitor, and the route earns 23 of 100",
+  "driver": "A system moves between decision dates through five model-side sources and each source is placed in a band on what it alone moves an entity score over the decision gap: warm-started refits inherit prior randomness with unfiled persistence identified from the bend of the warm-era change-by-gap curve anchored to replicate pairs (while linear cold-era curves rule out entity mean reversion); rolling long windows apply unfiled exponential recency weighting whose decay rate is inverted from how repeated weighted-bootstrap variances swing against weekly labelled row volumes; and sequential multi-phase releases touching the same feature group move the same entities in the same direction, adding positive cross-release entity covariance measured from paired shadow vectors that scalar per-release variance checks and weekly panel regressions miss.",
+  "driver_concrete": "Garrane Risk places five model-side sources of Garrane Merchant Score movement for 2027 against lines of 5.5 and 8.0 points: warm-start refit noise decays across refits (6.83 points plan vs 12.12 linear carry escalation and 4.75 single-refit monitor); 52/104-week windows apply unfiled exponential recency weighting revealed by 16 seasonal 2026 bootstrap pairs per family (6.83 points plan vs 3.65 uniform overlap monitor and 9.04-10.21 raw bootstrap escalation); 2027 multi-phase feature-group sprints carry positive merchant-level within-group covariance measured from 141 same-group 2026 release-shadow pairs (7.06 points plan vs 4.70 orthogonal monitor and 11.10 fully aligned escalation).",
+  "stump": "A careful rigorous analyst accumulates warm-start noise linearly over thirteen refits (12.12 points, escalation vs 6.83 plan), uses uniform-window turnover (entering+leaving)/(2N) because no recency decay parameter is listed (3.65 points, monitor vs 6.83 plan), and treats unpinned releases as orthogonal after confirming flat scalar per-release MSE across groups (4.62-4.70 points, monitor vs 7.06 plan).",
+  "deep_chain": "(1) clean panel, manifests, instrument pairs, registry, calendar, release log, roadmap and 2027 plans on one family scheme and assessment-year calendar; (2) instrument baselines and forced sources (retunes 4.29, label revisions 9.81); (3) S1 warm-start noise persistence fitted from anchored warm-era gap curves with cold-era linearity proving non-mean-reverting merchant change (6.83); (4) S2 exponential recency decay inverted from seasonal swings across 16 2026 bootstrap pairs per family against warehouse weekly rows and carried to 2027 spans (6.83); (5) S3 pinned-view adoption lag from past rollouts (34.8%) combined with merchant-level within-group release covariance from 2026 release-shadow vectors across 2027 sprints (7.06); (6) 3-part native points-squared 2026 internal-record falsification check; (7) combined model-side RMS for Q1-Q4 and 2027 year; (8) 2027 source bands and committee deliverables.",
+  "judgment": "warm-start refit noise persistence estimated from the anchored gap-curve bend; unfiled exponential recency decay inverted from seasonal bootstrap variance swings against weekly rows; positive within-group cross-release merchant covariance measured from paired release-shadow vectors",
+  "one_fact_test": "Each one-sentence hint rescues only its own source (1 of 3 open sources and 1 of 3 critical components), adding at most +12 rubric points (32 of 100 vs 20 reflex, well under the 33.3 one-third ceiling), leaving the other two open sources and all combined quarter-pair figures wrong.",
   "strategy_label": "own",
   "mechanism_source": "design_note",
   "differentiation": {},
@@ -857,7 +857,7 @@
           "Gitte Ullrich",
           "Matthias Hertrampf",
           "Sofia Sorgatz",
-          "Hüseyin Siering",
+          "H\u00fcseyin Siering",
           "Detlev Lindau",
           "Isabelle Hamann",
           "Gunhild Scheibe",
@@ -865,8 +865,8 @@
           "Werner Zimmer",
           "Holger Kaul",
           "Egon Schacht",
-          "Charlotte Mülichen",
-          "Fredo Döring",
+          "Charlotte M\u00fclichen",
+          "Fredo D\u00f6ring",
           "Arne Bohlander",
           "Raimund Walter",
           "Danilo Mende",
@@ -1088,7 +1088,7 @@
       "deliverable set": "csv+xlsx"
     }
   ],
-  "notes": "v5 (2026-11-22): calibration form other stands for a falsification check on the members' own records (each route's model of how a source's variance grows with the gap is asked for the weekly score-change variance of 2026, which the production record holds) and a leave-one-rollout-out check of the adoption model; no file observes a stump's quantity. One new lesson key and two new move keys, each because no key on file was honest: inherited_noise_persistence (S2; filed next to the closed card on clustered outcomes, since its mechanism family is serial dependence, and answered in the note's Closed strategies line: nothing is an interval at a shared unit, the estimate is a variance component at a gap from a fitted persistence), unit_noise_carried_to_overlap_change (S1's move) and change_by_gap_curve_anchored_on_rerun (S2's move). The lessons are ordered by what each is worth on its own source (S1 9.1 points, S2 3.3, S3 2.7); each flips a different source and none decides alone.",
+  "notes": "v6 (2026-11-23): upgraded from v5 after pair 3 scored 0.60/0.60 (concentrated on noise decay, with uniform overlap solved 4/4). Now Level 5 with three genuinely independent, two-sided stumps on three axes (what/when/unit), zero corelib waivers, 3-part native points-squared 2026 falsification check (0.22 vs 5.0-28.3 rivals), cold-start linearity check closing mean-reversion without PDF hints, and assessment-year refresh definition in Standard 2.2 closing the ISO-vs-pair-year window fork.",
   "answer_shape": "bridge",
   "weight": "modeling",
   "chain_signature": [
@@ -1101,20 +1101,20 @@
     "decomposition-attribution",
     "synthesis"
   ],
-  "results": "R1 the score panel, manifests, instrument runs, registry, calendar, release log and plans on one family scheme and week calendar; R2 each instrument's figure by family, with retunes' and label revisions' movement; R3 training-window turnover from per-row noise on the rows that leave and enter each 2027 span; R4 optimisation noise from the score-change variance by gap, tied to the replicate pairs; R5 the share of 2027's retrains on pinned feature views and feature releases on the uncovered weeks; R6 each route's model called against the weekly score-change variance on record, the adoption model against a left-out rollout; R7 each source's share of model-side movement and merchants' own share; R8 the bands and the tier changes expected in 2027, with the designated sources removed",
+  "results": "R1 cleaned panel, manifests, instrument pairs, registry, calendar, release log and 2027 plans; R2 retunes (4.29) and label revisions (9.81); R3 S1 optimisation noise from anchored warm-era gap curve with cold-era linearity (6.83); R4 S2 training data from recency decay inverted from 2026 bootstrap variance swings (6.83); R5 S3 feature releases with actual pinned-view adoption (34.8%) and within-group release-shadow covariance (7.06); R6 3-part 2026 internal-record falsification check; R7 combined model-side RMS Q1-Q4 and 2027 year; R8 2027 bands.",
   "skeleton": {
     "decision_form": "banded_call_on_figure",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "turnover_not_stock_driver",
       "inherited_noise_persistence",
-      "scheduled_completion_slippage"
+      "recency_weighted_training_turnover",
+      "shared_group_event_covariance"
     ],
     "mechanisms": [
-      "quarter_end_models_share_all_training_weeks_but_thirteen",
-      "a_weekly_model_starts_from_last_weeks_weights_and_inherits_its_deviation",
-      "a_rollout_is_complete_when_its_image_is_available_not_when_families_train_on_it",
-      "a_feature_release_steps_scores_until_a_family_trains_on_pinned_views",
+      "a_weekly_model_inherits_prior_refit_randomness",
+      "long_training_windows_apply_unfiled_recency_decay",
+      "same_group_feature_releases_shift_merchants_together",
+      "a_feature_release_steps_scores_until_pinned_views",
       "a_retune_steps_scores_every_fourth_week"
     ],
     "detection": [
@@ -1123,8 +1123,9 @@
       "record_time_against_event_time"
     ],
     "moves": [
-      "unit_noise_carried_to_overlap_change",
       "change_by_gap_curve_anchored_on_rerun",
+      "recency_decay_inverted_from_seasonal_resamples",
+      "cross_event_unit_covariance_from_shadow_pairs",
       "empirical_completion_from_past_works",
       "variant_sweep_holds_call"
     ],

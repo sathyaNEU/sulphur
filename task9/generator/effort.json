@@ -2,99 +2,92 @@
  "results": [
   {
    "id": "R1",
-   "name": "the panel on one merchant key and one family scheme",
-   "graded_as": "Step-by-Step",
-   "figure": "panel_merchants",
+   "name": "cleaned panel, manifests, instruments and forced baseline sources (retunes and labels)",
+   "graded_as": "Ask 1, Step-by-Step",
+   "figure": "r1",
    "depends": [],
    "independent": "",
-   "golden": 29580,
-   "band": [
-    29580,
-    29580
-   ],
-   "passes": {
-    "quick": 34148,
-    "careful": 29580,
-    "thorough": 29580
-   }
-  },
-  {
-   "id": "R2",
-   "name": "the retunes and label revisions lines: points and share",
-   "graded_as": "Ask 1",
-   "figure": "r2",
-   "depends": [
-    "R1"
-   ],
-   "independent": "the retune shadows and freeze pairs",
    "golden": {
-    "retunes points": 4.472,
-    "retunes share": 7.84,
-    "label revisions points": 9.984,
-    "label revisions share": 39.07
+    "panel merchants": 25007,
+    "retunes points": 4.292,
+    "label revisions points": 9.815
    },
    "bands": {
-    "retunes points": [
-     4.412022456622747,
-     4.5198209670601415
+    "panel merchants": [
+     25007,
+     25007
     ],
-    "retunes share": [
-     7.439568464882022,
-     8.163321471067858
+    "retunes points": [
+     4.249116359227296,
+     4.3302509030391825
     ],
     "label revisions points": [
-     9.925123331443496,
-     10.045226606083903
-    ],
-    "label revisions share": [
-     37.083005128184936,
-     40.69059830601776
+     9.76257440382106,
+     9.897741902016834
     ]
    },
    "partly_share": 1.0,
    "passes": {
     "quick": {
-     "retunes points": 4.472,
-     "retunes share": 4.18,
-     "label revisions points": 9.984,
-     "label revisions share": 20.84
+     "panel merchants": 28854,
+     "retunes points": 4.292,
+     "label revisions points": 9.815
     },
     "careful": {
-     "retunes points": 4.472,
-     "retunes share": 4.05,
-     "label revisions points": 9.984,
-     "label revisions share": 20.18
+     "panel merchants": 25007,
+     "retunes points": 4.292,
+     "label revisions points": 9.815
     },
     "thorough": {
-     "retunes points": 4.472,
-     "retunes share": 7.84,
-     "label revisions points": 9.984,
-     "label revisions share": 39.07
+     "panel merchants": 25007,
+     "retunes points": 4.292,
+     "label revisions points": 9.815
     }
-   },
-   "precedent": [
-    "L11",
-    "L63"
-   ]
+   }
   },
   {
-   "id": "R3",
-   "name": "what training data alone moves a score between snapshots in 2027",
+   "id": "R2",
+   "name": "what optimisation noise alone moves a score between snapshots (warm-start decay)",
    "graded_as": "Component 1, Ask 1",
    "figure": "cc1",
    "depends": [
     "R1"
    ],
-   "independent": "the bootstrap pairs and the manifests' windows and rows",
-   "golden": 6.617260960157563,
+   "independent": "the warm-era change-by-gap curve anchored to replicate pairs, with cold-era linearity",
+   "golden": 6.860529390045479,
    "band": [
-    6.356879950494792,
-    7.4361077936611935
+    6.56790409983595,
+    7.243404994235463
    ],
    "passes": {
-    "quick": 16.121120508337732,
-    "careful": 15.7212478164861,
-    "thorough": 6.617260960157563
+    "quick": 12.126,
+    "careful": 12.126,
+    "thorough": 6.860529390045479
+   },
+   "precedent": [
+    "L39",
+    "L65",
+    "N34"
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "what training data alone moves a score between snapshots (recency-weighted turnover)",
+   "graded_as": "Component 2, Ask 1",
+   "figure": "cc2",
+   "depends": [
+    "R1"
+   ],
+   "independent": "2026 weighted bootstrap pairs inverted against warehouse weekly labelled rows",
+   "golden": 6.830074507779904,
+   "band": [
+    6.709776115164379,
+    6.86367943405925
+   ],
+   "passes": {
+    "quick": 10.215,
+    "careful": 3.651,
+    "thorough": 6.830074507779904
    },
    "precedent": [
     "L28",
@@ -104,183 +97,207 @@
   },
   {
    "id": "R4",
-   "name": "what optimisation noise alone moves a score between snapshots",
-   "graded_as": "Component 2, Ask 1",
-   "figure": "cc2",
+   "name": "what feature releases alone move a score between snapshots (within-group covariance)",
+   "graded_as": "Component 3, Ask 1",
+   "figure": "cc3",
    "depends": [
     "R1"
    ],
-   "independent": "the change-by-gap curve and the replicate pairs",
-   "golden": 6.888407287694035,
+   "independent": "paired 2026 release_shadow merchant vectors and past rollout manifests",
+   "golden": 7.059851104787964,
    "band": [
-    6.055648269423739,
-    7.392741364810243
+    6.846147492004384,
+    7.165094938990357
    ],
    "passes": {
-    "quick": 9.09746162346179,
-    "careful": 9.09746162346179,
-    "thorough": 6.888407287694035
+    "quick": 1.962,
+    "careful": 4.618,
+    "thorough": 7.059851104787964
    },
    "precedent": [
-    "L68",
-    "N45",
-    "L39"
-   ]
-  },
-  {
-   "id": "R5",
-   "name": "the share of 2027's retrains on pinned views and what feature releases move",
-   "graded_as": "Ask 2, Ask 1",
-   "figure": "r5",
-   "depends": [
-    "R1"
-   ],
-   "independent": "the manifests' runtime fields for the past rollouts",
-   "golden": {
-    "pinned views share": 55.01,
-    "feature releases": 6.651
-   },
-   "bands": {
-    "pinned views share": [
-     53.27841605224718,
-     59.94448585125808
-    ],
-    "feature releases": [
-     6.340455901316437,
-     6.837523809870893
-    ]
-   },
-   "passes": {
-    "quick": {
-     "pinned views share": 90.93,
-     "feature releases": 3.999
-    },
-    "careful": {
-     "pinned views share": 55.01,
-     "feature releases": 6.651
-    },
-    "thorough": {
-     "pinned views share": 55.01,
-     "feature releases": 6.651
-    }
-   },
-   "precedent": [
-    "L46",
-    "N03",
-    "N22"
-   ]
-  },
-  {
-   "id": "R6",
-   "name": "each route's model asked for the weekly score-change variance",
-   "graded_as": "Step-by-Step",
-   "figure": "weekly_check",
-   "depends": [
-    "R3",
-    "R4",
-    "R5"
-   ],
-   "independent": "",
-   "golden": 42.23151182489764,
-   "band": [
-    41.344827659997556,
-    43.344827659997556
-   ],
-   "passes": {
-    "quick": 279.0644640706357,
-    "careful": 279.0644640706357,
-    "thorough": 42.23151182489764
-   },
-   "precedent": [
+    "N44",
+    "L58",
     "L28"
    ]
   },
   {
+   "id": "R5",
+   "name": "share of 2027 assessment-year weekly retrains expected on pinned feature views",
+   "graded_as": "Ask 3",
+   "figure": "cc_pin",
+   "depends": [
+    "R1"
+   ],
+   "independent": "past rollout lags from training scheduler manifests against change calendar",
+   "golden": 34.825819044090665,
+   "band": [
+    32.46519678904119,
+    38.20407452600803
+   ],
+   "passes": {
+    "quick": 83.37912087912088,
+    "careful": 34.707702313403225,
+    "thorough": 34.825819044090665
+   }
+  },
+  {
+   "id": "R6",
+   "name": "three-part 2026 internal-record variance discrepancy check",
+   "graded_as": "Step-by-Step",
+   "figure": "fals_check",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": 0.5285645998121495,
+   "band": [
+    0.0,
+    1.5
+   ],
+   "passes": {
+    "quick": 27.843957216306723,
+    "careful": 28.52422786488268,
+    "thorough": 0.5285645998121495
+   },
+   "precedent": [
+    "L28",
+    "N44"
+   ]
+  },
+  {
    "id": "R7",
-   "name": "each source's share and merchants' own share",
-   "graded_as": "Ask 1",
+   "name": "H1 2027 combined model-side movement (Q1 and Q2 snapshot pairs)",
+   "graded_as": "Ask 2",
    "figure": "r7",
    "depends": [
+    "R1",
+    "R2",
     "R3",
-    "R4",
-    "R5"
+    "R4"
    ],
    "independent": "",
    "golden": {
-    "optimisation noise": 18.6,
-    "training data": 17.16,
-    "retunes": 7.84,
-    "feature releases": 17.34,
-    "label revisions": 39.07,
-    "merchants' own": 43.89
+    "Q1": 16.893,
+    "Q2": 17.069
    },
    "bands": {
-    "optimisation noise": [
-     15.392494117032317,
-     19.9805198861377
+    "Q1": [
+     16.76666124638509,
+     17.022888309673373
     ],
-    "training data": [
-     16.11110834599792,
-     21.326234641334015
-    ],
-    "retunes": [
-     7.439568464882022,
-     8.163321471067858
-    ],
-    "feature releases": [
-     16.30465971717262,
-     18.10092218182964
-    ],
-    "label revisions": [
-     37.083005128184936,
-     40.69059830601776
-    ],
-    "merchants' own": [
-     41.939096769828254,
-     46.65299015587746
+    "Q2": [
+     16.853943725050872,
+     17.189322797113558
     ]
    },
-   "partly_share": 0.5,
+   "partly_share": 0.9,
    "passes": {
     "quick": {
-     "optimisation noise": 17.3,
-     "training data": 54.33,
-     "retunes": 4.18,
-     "feature releases": 3.34,
-     "label revisions": 20.84,
-     "merchants' own": 4.09
+     "Q1": 19.521,
+     "Q2": 19.147
     },
     "careful": {
-     "optimisation noise": 16.76,
-     "training data": 50.05,
-     "retunes": 4.05,
-     "feature releases": 8.96,
-     "label revisions": 20.18,
-     "merchants' own": 4.81
+     "Q1": 17.509,
+     "Q2": 17.628
     },
     "thorough": {
-     "optimisation noise": 18.6,
-     "training data": 17.16,
-     "retunes": 7.84,
-     "feature releases": 17.34,
-     "label revisions": 39.07,
-     "merchants' own": 43.89
+     "Q1": 16.893,
+     "Q2": 17.069
     }
    },
    "precedent": [
-    "N21",
-    "L46"
+    "L39",
+    "L28",
+    "N44"
    ]
   },
   {
    "id": "R8",
+   "name": "H2 2027 combined model-side movement (Q3 and Q4 snapshot pairs)",
+   "graded_as": "Ask 2",
+   "figure": "r8",
+   "depends": [
+    "R1",
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "Q3": 15.519,
+    "Q4": 14.687
+   },
+   "bands": {
+    "Q3": [
+     15.225568230753488,
+     15.68136971274207
+    ],
+    "Q4": [
+     14.487468758471845,
+     14.896014898371655
+    ]
+   },
+   "partly_share": 0.9,
+   "passes": {
+    "quick": {
+     "Q3": 19.135,
+     "Q4": 19.135
+    },
+    "careful": {
+     "Q3": 17.062,
+     "Q4": 16.655
+    },
+    "thorough": {
+     "Q3": 15.519,
+     "Q4": 14.687
+    }
+   },
+   "precedent": [
+    "L39",
+    "L28",
+    "N44"
+   ]
+  },
+  {
+   "id": "R9",
+   "name": "full-year 2027 combined model-side movement",
+   "graded_as": "Ask 2",
+   "figure": "tot_yr",
+   "depends": [
+    "R1",
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": 16.0721647663513,
+   "band": [
+    15.874624393500262,
+    16.252338808349673
+   ],
+   "passes": {
+    "quick": 19.234915496754574,
+    "careful": 17.2178404602485,
+    "thorough": 16.0721647663513
+   },
+   "precedent": [
+    "L39",
+    "L28",
+    "N44"
+   ]
+  },
+  {
+   "id": "R10",
    "name": "each source's band for 2027",
    "graded_as": "Recommendation",
    "figure": "call",
    "depends": [
+    "R1",
+    "R2",
     "R3",
-    "R4",
-    "R5"
+    "R4"
    ],
    "independent": "",
    "golden": [
@@ -299,11 +316,11 @@
      "training data: escalation"
     ],
     "careful": [
-     "feature releases: a remediation plan",
+     "feature releases: monitor",
      "label revisions: escalation",
      "optimisation noise: escalation",
      "retunes: monitor",
-     "training data: escalation"
+     "training data: monitor"
     ],
     "thorough": [
      "feature releases: a remediation plan",
@@ -314,66 +331,27 @@
     ]
    },
    "precedent": [
-    "L63",
-    "L11"
-   ]
-  },
-  {
-   "id": "R9",
-   "name": "the merchants expected to change tier between snapshots in 2027",
-   "graded_as": "Ask 3",
-   "figure": "r9",
-   "depends": [
-    "R3",
-    "R4",
-    "R5",
-    "R8"
-   ],
-   "independent": "",
-   "golden": {
-    "tier changes 2027": 13.98,
-    "with the designated sources removed": 9.71
-   },
-   "bands": {
-    "tier changes 2027": [
-     13.72292791596465,
-     14.59505975988997
-    ],
-    "with the designated sources removed": [
-     9.490251169347024,
-     10.220943123317557
-    ]
-   },
-   "partly_share": 1.0,
-   "passes": {
-    "quick": {
-     "tier changes 2027": 13.71,
-     "with the designated sources removed": 4.69
-    },
-    "careful": {
-     "tier changes 2027": 14.1,
-     "with the designated sources removed": 4.06
-    },
-    "thorough": {
-     "tier changes 2027": 13.98,
-     "with the designated sources removed": 9.71
-    }
-   },
-   "precedent": [
-    "L63",
-    "L11"
+    "L39",
+    "L28",
+    "N44"
    ]
   }
  ],
  "hints": [
   {
-   "sentence": "A bootstrap pair resamples the whole training window, while two quarter-end models share every week of it but the thirteen that left and the thirteen that entered.",
+   "sentence": "Warm-started refit noise decays from refit to refit rather than accumulating linearly across thirteen weekly refits.",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "The 52-week and 104-week training windows apply exponential recency weighting whose decay rate is identified from seasonal swings in 2026 bootstrap variances.",
    "rescues": [
     "R3"
    ]
   },
   {
-   "sentence": "The randomness a warm-started refit carries decays from refit to refit, so thirteen refits' fresh draws do not add up in full between two snapshots.",
+   "sentence": "Sequential feature releases modifying the same feature group move the same merchants in the same direction, adding positive cross-release covariance.",
    "rescues": [
     "R4"
    ]
@@ -389,17 +367,56 @@
   ],
   "reflex_route": {
    "answer": [
-    "feature releases: a remediation plan",
+    "feature releases: monitor",
     "label revisions: escalation",
     "optimisation noise: escalation",
     "retunes: monitor",
-    "training data: escalation"
+    "training data: monitor"
    ]
   },
   "judgments": [
    {
     "id": "S1",
-    "name": "A bootstrap pair resamples the whole training window, while two quarter-end models share every week of it but the thirteen that left and the thirteen that entered.",
+    "name": "Warm-started refit noise decays from refit to refit rather than accumulating linearly across thirteen weekly refits.",
+    "kind": "stump",
+    "precedent": [
+     "L39",
+     "L65",
+     "N34"
+    ],
+    "dropped": {
+     "answer": [
+      "feature releases: a remediation plan",
+      "label revisions: escalation",
+      "optimisation noise: escalation",
+      "retunes: monitor",
+      "training data: a remediation plan"
+     ],
+     "results_moved": [
+      "R2",
+      "R6",
+      "R7",
+      "R8",
+      "R9",
+      "R10"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "feature releases: monitor",
+      "label revisions: escalation",
+      "optimisation noise: a remediation plan",
+      "retunes: monitor",
+      "training data: monitor"
+     ],
+     "results_rescued": [
+      "R2"
+     ]
+    }
+   },
+   {
+    "id": "S2",
+    "name": "The 52-week and 104-week training windows apply exponential recency weighting whose decay rate is identified from seasonal swings in 2026 bootstrap variances.",
     "kind": "stump",
     "precedent": [
      "L28",
@@ -412,20 +429,20 @@
       "label revisions: escalation",
       "optimisation noise: a remediation plan",
       "retunes: monitor",
-      "training data: escalation"
+      "training data: monitor"
      ],
      "results_moved": [
-      "R2",
       "R3",
       "R6",
       "R7",
       "R8",
-      "R9"
+      "R9",
+      "R10"
      ]
     },
     "alone": {
      "answer": [
-      "feature releases: a remediation plan",
+      "feature releases: monitor",
       "label revisions: escalation",
       "optimisation noise: escalation",
       "retunes: monitor",
@@ -437,38 +454,38 @@
     }
    },
    {
-    "id": "S2",
-    "name": "The randomness a warm-started refit carries decays from refit to refit, so thirteen refits' fresh draws do not add up in full between two snapshots.",
+    "id": "S3",
+    "name": "Sequential feature releases modifying the same feature group move the same merchants in the same direction, adding positive cross-release covariance.",
     "kind": "stump",
     "precedent": [
-     "L68",
-     "N45",
-     "L39"
+     "N44",
+     "L58",
+     "L28"
     ],
     "dropped": {
      "answer": [
-      "feature releases: a remediation plan",
+      "feature releases: monitor",
       "label revisions: escalation",
-      "optimisation noise: escalation",
+      "optimisation noise: a remediation plan",
       "retunes: monitor",
       "training data: a remediation plan"
      ],
      "results_moved": [
-      "R2",
       "R4",
       "R6",
       "R7",
       "R8",
-      "R9"
+      "R9",
+      "R10"
      ]
     },
     "alone": {
      "answer": [
       "feature releases: a remediation plan",
       "label revisions: escalation",
-      "optimisation noise: a remediation plan",
+      "optimisation noise: escalation",
       "retunes: monitor",
-      "training data: escalation"
+      "training data: monitor"
      ],
      "results_rescued": [
       "R4"
@@ -477,7 +494,7 @@
    },
    {
     "id": "J4",
-    "name": "each instrument's pair variance by family, book weighted",
+    "name": "retunes and label revisions scaled by their snapshot-pair counts",
     "kind": "reflex",
     "precedent": [
      "R20"
@@ -485,23 +502,15 @@
    },
    {
     "id": "J5",
-    "name": "retunes and label revisions scaled by their counts between two snapshots",
+    "name": "actual pinned-view adoption lag fitted from the three past platform rollouts",
     "kind": "reflex",
     "precedent": [
-     "R20"
+     "R73"
     ]
    },
    {
     "id": "J6",
-    "name": "merchants' own change as the remainder of the record's thirteen-week movement",
-    "kind": "reflex",
-    "precedent": [
-     "R93"
-    ]
-   },
-   {
-    "id": "J7",
-    "name": "re-sent refreshes, re-keyed merchants and the two family code schemes resolved",
+    "name": "re-sent refreshes, Tolka Pay re-keying and scheduler family code mapping resolved",
     "kind": "reflex",
     "precedent": [
      "R01"
@@ -540,7 +549,7 @@
     ]
    },
    {
-    "name": "{'fit': 'anch30'}",
+    "name": "{'fit': 'anch18'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -550,7 +559,7 @@
     ]
    },
    {
-    "name": "{'fit': 'events'}",
+    "name": "{'fit': 'y2026'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -560,7 +569,7 @@
     ]
    },
    {
-    "name": "{'fit': 'pooled'}",
+    "name": "{'fit': 'flat'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -570,7 +579,7 @@
     ]
    },
    {
-    "name": "{'turn': 'simple'}",
+    "name": "{'fit': 'from2'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -580,7 +589,57 @@
     ]
    },
    {
-    "name": "{'boot': 'last'}",
+    "name": "{'sub_data': False}",
+    "answer": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   {
+    "name": "{'rec_key': 'win_log'}",
+    "answer": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   {
+    "name": "{'rec_key': 'pool_log'}",
+    "answer": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   {
+    "name": "{'rec_key': 'fam_wls'}",
+    "answer": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   {
+    "name": "{'rec_key': 'fam_ols'}",
+    "answer": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   {
+    "name": "{'rel_coh': 'pooled'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -620,97 +679,7 @@
     ]
    },
    {
-    "name": "{'weights': 'plan'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'closure': 'slope'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'frmap': 'pooled'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'fit': 'anch20', 'adopt': 'linear', 'turn': 'simple'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'fit': 'events', 'adopt': 'groups', 'boot': 'last'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'fit': 'anch30', 'adopt': 'own', 'closure': 'slope'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'fit': 'pooled', 'weights': 'plan', 'turn': 'simple'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'fit': 'flat'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'fit': 'from2'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'fit': 'y2026'}",
+    "name": "{'adopt': 'pooled'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -730,7 +699,7 @@
     ]
    },
    {
-    "name": "{'fit': 'y2026', 'adopt': 'norevert', 'weights': 'plan'}",
+    "name": "{'weights': 'plan'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -740,7 +709,7 @@
     ]
    },
    {
-    "name": "{'turn': 'weeks'}",
+    "name": "{'fit': 'anch20', 'rec_key': 'win_log', 'rel_coh': 'pooled', 'adopt': 'linear'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -750,7 +719,7 @@
     ]
    },
    {
-    "name": "{'turn': 'recent'}",
+    "name": "{'fit': 'flat', 'rec_key': 'pool_log', 'adopt': 'groups', 'weights': 'plan'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -760,7 +729,7 @@
     ]
    },
    {
-    "name": "{'frmap': 'rescale'}",
+    "name": "{'sub_data': False, 'rec_key': 'fam_wls', 'adopt': 'own'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -770,87 +739,7 @@
     ]
    },
    {
-    "name": "{'adopt': 'pooled'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'turn': 'weeks', 'fit': 'events', 'frmap': 'rescale'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'turn': 'recent', 'adopt': 'pooled', 'fit': 'flat'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'frmap': 'rescale', 'adopt': 'linear', 'fit': 'anch30'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'frmap': 'normal'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'frmap': 'normal', 'fit': 'events', 'turn': 'weeks'}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'S2': 'cut', 'cut_lag': 12}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'S2': 'cut', 'cut_lag': 16}",
-    "answer": [
-     "feature releases: a remediation plan",
-     "label revisions: escalation",
-     "optimisation noise: a remediation plan",
-     "retunes: monitor",
-     "training data: a remediation plan"
-    ]
-   },
-   {
-    "name": "{'S2': 'cut', 'cut_lag': 14, 'turn': 'weeks', 'adopt': 'groups'}",
+    "name": "{'fit': 'from2', 'rec_key': 'fam_ols', 'rel_coh': 'pooled', 'adopt': 'norevert'}",
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
@@ -886,9 +775,9 @@
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
-     "optimisation noise: a remediation plan",
+     "optimisation noise: escalation",
      "retunes: monitor",
-     "training data: escalation"
+     "training data: a remediation plan"
     ]
    },
    {
@@ -896,7 +785,17 @@
     "answer": [
      "feature releases: a remediation plan",
      "label revisions: escalation",
-     "optimisation noise: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: monitor"
+    ]
+   },
+   {
+    "name": "S3",
+    "answer": [
+     "feature releases: monitor",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
      "retunes: monitor",
      "training data: a remediation plan"
     ]
@@ -908,7 +807,37 @@
      "label revisions: escalation",
      "optimisation noise: escalation",
      "retunes: monitor",
-     "training data: escalation"
+     "training data: monitor"
+    ]
+   },
+   {
+    "name": "S1+S3",
+    "answer": [
+     "feature releases: monitor",
+     "label revisions: escalation",
+     "optimisation noise: escalation",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   {
+    "name": "S2+S3",
+    "answer": [
+     "feature releases: monitor",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: monitor"
+    ]
+   },
+   {
+    "name": "S1+S2+S3",
+    "answer": [
+     "feature releases: monitor",
+     "label revisions: escalation",
+     "optimisation noise: escalation",
+     "retunes: monitor",
+     "training data: monitor"
     ]
    },
    {
@@ -928,17 +857,17 @@
      "label revisions: escalation",
      "optimisation noise: escalation",
      "retunes: monitor",
-     "training data: escalation"
+     "training data: monitor"
     ]
    },
    {
     "name": "generous",
     "answer": [
-     "feature releases: a remediation plan",
+     "feature releases: escalation",
      "label revisions: escalation",
      "optimisation noise: escalation",
      "retunes: monitor",
-     "training data: monitor"
+     "training data: escalation"
     ]
    },
    {
@@ -946,7 +875,7 @@
     "answer": [
      "feature releases: monitor",
      "label revisions: escalation",
-     "optimisation noise: monitor",
+     "optimisation noise: escalation",
      "retunes: monitor",
      "training data: monitor"
     ]
@@ -958,17 +887,17 @@
      "label revisions: escalation",
      "optimisation noise: escalation",
      "retunes: monitor",
-     "training data: escalation"
+     "training data: monitor"
     ]
    },
    {
     "name": "cutoff",
     "answer": [
-     "feature releases: a remediation plan",
+     "feature releases: monitor",
      "label revisions: escalation",
-     "optimisation noise: a remediation plan",
+     "optimisation noise: escalation",
      "retunes: monitor",
-     "training data: monitor"
+     "training data: escalation"
     ]
    }
   ],
@@ -1092,9 +1021,9 @@
    "answer": [
     "feature releases: a remediation plan",
     "label revisions: escalation",
-    "optimisation noise: a remediation plan",
+    "optimisation noise: escalation",
     "retunes: monitor",
-    "training data: escalation"
+    "training data: a remediation plan"
    ]
   },
   {
@@ -1102,7 +1031,17 @@
    "answer": [
     "feature releases: a remediation plan",
     "label revisions: escalation",
-    "optimisation noise: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  {
+   "name": "stumps lost: S3",
+   "answer": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
     "retunes: monitor",
     "training data: a remediation plan"
    ]
@@ -1114,7 +1053,37 @@
     "label revisions: escalation",
     "optimisation noise: escalation",
     "retunes: monitor",
-    "training data: escalation"
+    "training data: monitor"
+   ]
+  },
+  {
+   "name": "stumps lost: S1+S3",
+   "answer": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ]
+  },
+  {
+   "name": "stumps lost: S2+S3",
+   "answer": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  {
+   "name": "stumps lost: S1+S2+S3",
+   "answer": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: monitor"
    ]
   },
   {
@@ -1134,17 +1103,17 @@
     "label revisions: escalation",
     "optimisation noise: escalation",
     "retunes: monitor",
-    "training data: escalation"
+    "training data: monitor"
    ]
   },
   {
    "name": "generous",
    "answer": [
-    "feature releases: a remediation plan",
+    "feature releases: escalation",
     "label revisions: escalation",
     "optimisation noise: escalation",
     "retunes: monitor",
-    "training data: monitor"
+    "training data: escalation"
    ]
   },
   {
@@ -1152,7 +1121,7 @@
    "answer": [
     "feature releases: monitor",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: monitor"
    ]
@@ -1164,83 +1133,13 @@
     "label revisions: escalation",
     "optimisation noise: escalation",
     "retunes: monitor",
-    "training data: escalation"
+    "training data: monitor"
    ]
   },
   {
    "name": "cutoff",
    "answer": [
-    "feature releases: a remediation plan",
-    "label revisions: escalation",
-    "optimisation noise: a remediation plan",
-    "retunes: monitor",
-    "training data: monitor"
-   ]
-  },
-  {
-   "name": "cutoff:lags from 1",
-   "answer": [
-    "feature releases: a remediation plan",
-    "label revisions: escalation",
-    "optimisation noise: monitor",
-    "retunes: monitor",
-    "training data: monitor"
-   ]
-  },
-  {
-   "name": "cutoff:lags from 4",
-   "answer": [
-    "feature releases: a remediation plan",
-    "label revisions: escalation",
-    "optimisation noise: monitor",
-    "retunes: monitor",
-    "training data: monitor"
-   ]
-  },
-  {
-   "name": "cutoff:lags from 12",
-   "answer": [
-    "feature releases: a remediation plan",
-    "label revisions: escalation",
-    "optimisation noise: a remediation plan",
-    "retunes: monitor",
-    "training data: monitor"
-   ]
-  },
-  {
-   "name": "cutoff:lags from 16",
-   "answer": [
-    "feature releases: a remediation plan",
-    "label revisions: escalation",
-    "optimisation noise: a remediation plan",
-    "retunes: monitor",
-    "training data: monitor"
-   ]
-  },
-  {
-   "name": "cutoff:two components",
-   "answer": [
-    "feature releases: escalation",
-    "label revisions: escalation",
-    "optimisation noise: a remediation plan",
-    "retunes: monitor",
-    "training data: monitor"
-   ]
-  },
-  {
-   "name": "cutoff:four components",
-   "answer": [
-    "feature releases: a remediation plan",
-    "label revisions: escalation",
-    "optimisation noise: a remediation plan",
-    "retunes: monitor",
-    "training data: monitor"
-   ]
-  },
-  {
-   "name": "generous:rows out and rows in doubled",
-   "answer": [
-    "feature releases: a remediation plan",
+    "feature releases: monitor",
     "label revisions: escalation",
     "optimisation noise: escalation",
     "retunes: monitor",
@@ -1248,19 +1147,29 @@
    ]
   },
   {
-   "name": "generous:turnover cancels",
+   "name": "generous:all same rho",
    "answer": [
-    "feature releases: a remediation plan",
+    "feature releases: escalation",
     "label revisions: escalation",
     "optimisation noise: escalation",
     "retunes: monitor",
-    "training data: monitor"
+    "training data: escalation"
    ]
   },
   {
-   "name": "generous:a whole replicate pair a refit",
+   "name": "generous:plan dates with aligned releases",
    "answer": [
-    "feature releases: a remediation plan",
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  },
+  {
+   "name": "calibrated:free gap fit",
+   "answer": [
+    "feature releases: monitor",
     "label revisions: escalation",
     "optimisation noise: escalation",
     "retunes: monitor",
@@ -1272,13 +1181,33 @@
    "answer": [
     "feature releases: monitor",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: monitor"
    ]
   },
   {
-   "name": "calibrated:the families' variance on their bootstrap spread",
+   "name": "hedge:half window shortcut",
+   "answer": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ]
+  },
+  {
+   "name": "hedge:full replicate pair per refit",
+   "answer": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  {
+   "name": "cutoff:cut 2",
    "answer": [
     "feature releases: monitor",
     "label revisions: escalation",
@@ -1288,27 +1217,7 @@
    ]
   },
   {
-   "name": "hedge:2026's releases carried",
-   "answer": [
-    "feature releases: escalation",
-    "label revisions: escalation",
-    "optimisation noise: escalation",
-    "retunes: monitor",
-    "training data: escalation"
-   ]
-  },
-  {
-   "name": "hedge:a whole replicate pair a refit",
-   "answer": [
-    "feature releases: monitor",
-    "label revisions: escalation",
-    "optimisation noise: escalation",
-    "retunes: monitor",
-    "training data: escalation"
-   ]
-  },
-  {
-   "name": "hedge:the gap curve fitted free",
+   "name": "cutoff:cut 4",
    "answer": [
     "feature releases: monitor",
     "label revisions: escalation",

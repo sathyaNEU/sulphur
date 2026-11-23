@@ -1,7 +1,8 @@
-"""task9 architecture 5, the organisation's own workbooks and documents: the platform change calendar, the feature
+"""task9 architecture 6, the organisation's own workbooks and documents: the platform change calendar, the feature
 platform's 2027 roadmap, the data planning team's 2027 labelled-row plan, the model stability standard and the
-covenant's tier stability schedule. Documents file the WHAT (what a source's movement is, the bands, the shares, the
-covenant test, the tiers and the snapshot calendar) and never how anything is estimated."""
+covenant's tier stability schedule. Documents file the WHAT (what a source's movement is, the bands, the combined
+movement, the assessment-year refresh calendar, the training options, the tiers and the snapshot calendar) and never
+how anything is estimated."""
 import datetime as dt
 import os
 import sys
@@ -14,7 +15,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-WRITERS = os.path.join(HERE, "..", "..", ".claude", "skills", "reduce-house-fixes", "scripts", "writers")
+WRITERS = os.path.join(HERE, "..", "..", ".agents", "skills", "reduce-house-fixes", "scripts", "writers")
 sys.path.insert(0, WRITERS)
 import officepdf as O  # noqa: E402
 import postprocess  # noqa: E402
@@ -94,7 +95,7 @@ def roadmap(w, target):
         fams = ";".join(P.CODE[f] for f in range(C.F) if w["plan_hits"][k, f])
         ws.append(["FR-27-%02d" % (k + 1), d, q, g, fams, str(r.choice(["Shauneen Miley", "Cassie Gilbride"]))])
         ws.cell(row=ws.max_row, column=2).number_format = "dd/mm/yyyy"
-    _widths(ws, (11, 14, 8, 44, 64, 16))
+    _widths(ws, (11, 14, 8, 28, 64, 16))
     ws.freeze_panes = "A2"
     path = os.path.join(target, FILES["roadmap"])
     wb.save(path)
@@ -121,7 +122,7 @@ def plan(w, target):
     bk.append(["model_family", "scored_merchants_dec_2027"])
     _head(bk, 1)
     for f in fams:
-        bk.append([P.CODE[f], int(round(w["merch"][f] * (1 + w["growth"][f])))])
+        bk.append([P.CODE[f], int(round(w["merch"][f] * (1.0 + w["growth"][f])))])
         bk.cell(row=bk.max_row, column=2).number_format = "#,##0"
     _widths(bk, (14, 26))
     path = os.path.join(target, FILES["plan"])
@@ -168,17 +169,24 @@ STANDARD = [
         "1.4 A warm-started weekly refit starts from the previous week's weights, so the randomness of the refits "
         "before it carries into it.",
         "1.5 A feature release reaches a family's scores through the live feature views only: in the weeks a family "
-        "trains and scores on pinned feature views, no feature release moves its scores."]),
+        "trains and scores on pinned feature views, no feature release moves its scores.",
+        "1.6 On the 52-week and 104-week training windows, weekly refits apply exponential recency weighting across "
+        "training weeks, and bootstrap pairs resample with the production refit's sample weights."]),
     ("2. The assessment year", [
         "2.1 The assessment year's feature releases are the feature platform's roadmap for that year as filed with "
-        "the committee, and its labelled training rows are the data planning team's plan for that year as filed."]),
+        "the committee, and its labelled training rows are the data planning team's plan for that year as filed.",
+        "2.2 The weekly refreshes of an assessment year are the 52 Monday refreshes belonging to the four snapshot "
+        "pairs that close in that year."]),
     ("3. A source's movement", [
         "3.1 A source's movement is the root-mean-square change in a merchant's score between two consecutive "
         "quarter-end snapshots that the source alone produces, every scored merchant counted once and each model "
         "family weighted by its scored merchants at the latest quarter-end snapshot.",
         "3.2 For an assessment year it is the root of the mean of the source's expected mean-square changes over the "
         "four snapshot pairs that close in that year, the snapshots being those of the covenant schedule. It is stated "
-        "in score points."]),
+        "in score points.",
+        "3.3 Combined model-side movement for a quarter-end snapshot pair is the root-mean-square change in a "
+        "merchant's score across all five model-side sources together over that pair, book weighted; for the "
+        "assessment year it is the root of the mean of the four pairs' combined model-side mean-square movements."]),
     ("4. Bands", [
         "4.1 Each source is placed in one band on its movement for the assessment year:",
         [["Band", "Movement", "What it requires"],
@@ -248,18 +256,18 @@ def documents(target):
          [["Document", "Model stability standard, version 2"],
           ["Owner", "Iona Cairns, head of model risk"],
           ["Approved", "Julie-Anne Inglis, chief risk officer, 12 October 2026"],
-          ["Replaces", "version 1 of 3 November 2025"]],
-         STANDARD, "Iona Cairns", "Model stability standard", "%s, model stability standard, version 2" % ORG,
-         dt.datetime(2026, 10, 12, 15, 4, tzinfo=IST), dt.datetime(2026, 10, 12, 15, 4, tzinfo=IST),
-         {2: (40, 122), 3: (34, 56, 72)})
-    _pdf(target, "covenant", "Schedule C: tier stability",
-         [["Agreement", "Acquirer services agreement, Garrane Merchant Score"],
-          ["Schedule", "C, tier stability, as amended 19 January 2026"],
-          ["For Garrane Risk", "Richard McLeer, director of acquirer partnerships"],
-          ["In force", "from the snapshot of 22 December 2025"]],
-         COVENANT, "Richard McLeer", "Schedule C, tier stability", "Acquirer services agreement, Schedule C",
-         dt.datetime(2026, 9, 2, 10, 47, tzinfo=IST), dt.datetime(2026, 9, 2, 10, 51, tzinfo=IST),
-         {2: (30, 132), 3: (34, 56, 72)})
+          ["Applies to", "All model families in the Garrane Merchant Score registry"]],
+         STANDARD, "Iona Cairns", "Garrane Merchant Score stability standard",
+         "Garrane Risk, Model stability standard v2", dt.datetime(2026, 9, 28, 10, 15, tzinfo=IST),
+         dt.datetime(2026, 10, 12, 16, 22, 18, tzinfo=IST), {2: (36, 126), 3: (30, 50, 82)})
+    _pdf(target, "covenant", "Acquirer Services Agreement, Schedule C: Tier stability",
+         [["Schedule", "Schedule C (tier stability), as amended 19 January 2026"],
+          ["Parties", "Garrane Risk Limited and the Acquirer"],
+          ["In force", "From the snapshot of 22 December 2025"]],
+         COVENANT, "Ruth Tinney", "Schedule C, tier stability",
+         "Garrane Risk Limited, Acquirer Services Agreement, Schedule C",
+         dt.datetime(2025, 11, 14, 11, 30, tzinfo=GMT), dt.datetime(2026, 1, 19, 15, 4, 41, tzinfo=GMT),
+         {2: (36, 126)})
 
 
 def write_all(w, target):

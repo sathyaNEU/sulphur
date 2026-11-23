@@ -1,10 +1,10 @@
-"""task9 architecture 5: read target/ back into the core's inputs, using nothing but the shipped files.
+"""task9 architecture 6: read target/ back into core.py's inputs using nothing but the shipped files.
 
-The golden route runs on what this returns (core.Pack and core.evaluate on the loaded record), so every figure the
-blocks state is computed from the bundle. Every Layer 1 item is resolved here the way a careful analyst resolves it:
-re-sent refreshes (the later load supersedes), Tolka Pay's re-keyed merchants (the migration map), the registry's
-and the scheduler's family codes, the manifest's row count field renamed with the runtime image, duplicate manifest
-lines from retried jobs, ISO weeks against Monday dates. Switches named in MESS turn one resolution off (R2)."""
+Every Layer 1 item is resolved here the way a careful analyst resolves it: re-sent refreshes (the later load
+supersedes), Tolka Pay's re-keyed merchants (the migration map), registry vs scheduler family codes, the manifest's
+renamed row-count field, duplicate manifest lines from retried jobs, ISO weeks vs Monday dates.
+Also loads all 16 2026 bootstrap pairs per family (date, variance, window rows) and computes merchant-level pairwise
+same-group vs cross-group correlations across 2026 release_shadow vectors directly from mrm_instrument_pair_scores_2026.csv."""
 import datetime as dt
 import glob
 import json
@@ -15,9 +15,11 @@ import openpyxl
 import pandas as pd
 
 import core as C
+import pack as PK
 
 D0 = dt.date(2024, 7, 1)
 MESS = ("first_load", "no_rekey", "keep_dup_runs", "all_loads")
+GROUP_IDX = {g: i for i, g in enumerate(PK.GROUPS)}
 
 
 def week_of(d):
@@ -42,7 +44,7 @@ def _xlsx(path, sheet):
 def load(target, mess=()):
     w = {}
     reg = pd.read_csv(os.path.join(target, "gms_model_registry.csv"))
-    codes = list(reg["model_family"])                      # family f is the registry's row order (code order)
+    codes = list(reg["model_family"])                      # family f is registry code order
     F = len(codes)
     fi = {c: i for i, c in enumerate(codes)}
     sched = {s: fi[c] for c, s in zip(reg["model_family"], reg["scheduler_job_family"])}
@@ -50,15 +52,22 @@ def load(target, mess=()):
     w["custom"] = np.array([0 if pd.isna(x) or not str(x).strip() else len(str(x).split(";"))
                             for x in reg["custom_training_components"]])
     w["epochs"] = reg["epochs_per_refresh"].to_numpy()
+    fam_reads = np.zeros((F, C.G), bool)
+    for i, s in enumerate(reg["feature_groups_read"]):
+        for g in str(s).split(";"):
+            g = g.strip()
+            if g in GROUP_IDX:
+                fam_reads[i, GROUP_IDX[g]] = True
+    w["fam_reads"] = fam_reads
 
-    # the book at the latest quarter-end snapshot, and the plan's book
+    # book at latest quarter-end snapshot, and plan book
     bk = pd.read_csv(os.path.join(target, "gms_scored_book_by_family.csv"))
     last = bk[bk["snapshot_date"] == bk["snapshot_date"].max()].set_index("model_family")["scored_merchants"]
     w["merch"] = np.array([float(last[c]) for c in codes])
     pb = _xlsx(os.path.join(target, "labelled_row_plan_2027.xlsx"), "Book").set_index("model_family")
-    w["growth"] = np.array([pb.loc[c, "scored_merchants_dec_2027"] / w["merch"][i] - 1 for i, c in enumerate(codes)])
+    w["growth"] = np.array([pb.loc[c, "scored_merchants_dec_2027"] / w["merch"][i] - 1.0 for i, c in enumerate(codes)])
 
-    # labelled rows by week: the warehouse to the latest week, the plan after it
+    # labelled rows by week: warehouse to latest week, plan after it
     wr = pd.read_csv(os.path.join(target, "warehouse_labelled_rows_weekly.csv"))
     wr["t"] = wr["label_week"].map(week_of)
     pl = _xlsx(os.path.join(target, "labelled_row_plan_2027.xlsx"), "Labelled rows")
@@ -73,7 +82,7 @@ def load(target, mess=()):
         rows[fi[c], pl["t"].to_numpy(int) + pre] = pl[c].to_numpy(float)
     w["rows"], w["wk0"] = rows, pre
 
-    # the run manifests
+    # run manifests
     runs, seen = [], set()
     with open(os.path.join(target, "training_scheduler_runs_2024_2026.jsonl")) as fh:
         for line in fh:
@@ -95,7 +104,7 @@ def load(target, mess=()):
     w["window"] = np.array([int(np.bincount(win[f][win[f] > 26]).argmax()) for f in range(F)])
     w["last_cold"] = np.array([max(t for t in range(T) if P[(f, t)]["parent_model_id"] is None) for f in range(F)])
 
-    # the three past rollouts as the manifests show them, against the change calendar's planned and completed dates
+    # three past rollouts from manifests against change calendar
     cal = _xlsx(os.path.join(target, "platform_change_calendar.xlsx"), "Changes")
     tests = {"runtime": lambda r: r["runtime_image"].endswith("4.1.0"),
              "warm": lambda r: bool(r["options"]["warm_start"]),
@@ -119,18 +128,22 @@ def load(target, mess=()):
     pin = cal[cal["change"].str.startswith("Pinned feature views")].set_index("model_family")
     w["fv_planned"] = np.array([iso_to_t(pin.loc[x, "planned_week"]) for x in codes])
 
-    # retunes, releases and the roadmap
+    # retunes, releases and roadmap
     rt = pd.read_csv(os.path.join(target, "gms_retune_log.csv"))
     w["ret_off"] = np.array([int(np.bincount(rt[rt["model_family"] == c]["first_refresh"].map(week_of) % 4,
                                              minlength=4).argmax()) for c in codes])
     rl = pd.read_csv(os.path.join(target, "feature_platform_release_log.csv"))
     w["rel_weeks"] = rl["first_scored_refresh"].map(week_of).to_numpy()
-    w["rel_hits"] = np.array([[c in str(s).split(";") for c in codes] for s in rl["model_families_touched"]])
+    w["rel_group"] = np.array([GROUP_IDX[str(g).split(";")[0].strip()] for g in rl["feature_groups_changed"]], int)
+    w["rel_hits"] = np.array([[c in str(s).split(";") for c in codes] for s in rl["model_families_touched"]], bool)
+    rel_id_to_group = dict(zip(rl["release_id"], w["rel_group"]))
+
     rm = _xlsx(os.path.join(target, "feature_platform_roadmap_2027.xlsx"), "2027 roadmap")
     w["plan_weeks"] = rm["target_refresh"].map(week_of).to_numpy()
-    w["plan_hits"] = np.array([[c in str(s).split(";") for c in codes] for s in rm["model_families_touched"]])
+    w["plan_group"] = np.array([GROUP_IDX[str(g).split(";")[0].strip()] for g in rm["feature_groups"]], int)
+    w["plan_hits"] = np.array([[c in str(s).split(";") for c in codes] for s in rm["model_families_touched"]], bool)
 
-    # the monitoring panel, one row per merchant (Tolka Pay's old ids mapped to the new), NaN where not scored
+    # monitoring panel
     xw = pd.read_csv(os.path.join(target, "tolka_pay_merchant_id_migration.csv"))
     remap = dict(zip(xw["old_merchant_id"], xw["new_merchant_id"]))
     parts = [pd.read_csv(p, dtype={"merchant_id": str, "model_family": str, "load_id": str})
@@ -153,25 +166,67 @@ def load(target, mess=()):
         z.append(Z)
     w["ms"] = np.array([Z.shape[0] for Z in z])
 
-    # the instruments, from the pair files and the manifests' run records
+    # instruments from pair files and manifests
     preg = pd.read_csv(os.path.join(target, "mrm_instrument_pair_register_2026.csv"))
-    ps = pd.read_csv(os.path.join(target, "mrm_instrument_pair_scores_2026.csv"))
-    ps["d"] = ps["score_a"] - ps["score_b"]
+    ps = pd.read_csv(os.path.join(target, "mrm_instrument_pair_scores_2026.csv"),
+                     dtype={"pair_id": str, "merchant_id": str})
+    ps["d"] = ps["score_b"] - ps["score_a"]
     var = ps.groupby("pair_id")["d"].agg(lambda x: float(np.var(x.to_numpy())))
     R = {r["run_id"]: r for r in runs}
-    inst = {k: np.zeros(F) for k in ("rep", "boot", "boot_last", "boot_n", "boot_n_last", "ret", "rel", "lab")}
+    inst = {
+        "rep": np.zeros(F), "ret": np.zeros(F), "rel": np.zeros(F), "lab": np.zeros(F),
+        "boot_t": [None] * F, "boot_v": [None] * F, "boot_n": [None] * F,
+        "rel_coh_same": np.zeros(F), "rel_coh_diff": np.zeros(F),
+        "rel_cov_same": np.zeros(F), "rel_cov_diff": np.zeros(F),
+        "rel_coh_same_pairs": [], "rel_coh_diff_pairs": [],
+    }
     preg["t"] = preg["refresh_date"].map(week_of)
+
+    # Pre-index release_shadow merchant delta series for fast pairwise correlation by family
+    rel_pids = set(preg[preg["pair_kind"] == "release_shadow"]["pair_id"])
+    ps_rel = ps[ps["pair_id"].isin(rel_pids)]
+    rel_series = {pid: grp.set_index("merchant_id")["d"] for pid, grp in ps_rel.groupby("pair_id")}
+
     for c, g in preg.groupby("model_family"):
         f = fi[c]
         g = g.sort_values("t", kind="mergesort")
         for kind, key in (("replicate", "rep"), ("retune_shadow", "ret"), ("release_shadow", "rel"),
                           ("label_freeze", "lab")):
             inst[key][f] = float(np.mean([var[p] for p in g[g["pair_kind"] == kind]["pair_id"]]))
-        b = g[g["pair_kind"] == "bootstrap"]
-        bv = [var[p] for p in b["pair_id"]]
-        bn = [float(R[ra]["n"]) for ra in b["run_a"]]
-        inst["boot"][f], inst["boot_n"][f] = float(np.mean(bv)), float(np.mean(bn))
-        inst["boot_last"][f], inst["boot_n_last"][f] = bv[-1], bn[-1]
+        b = g[g["pair_kind"] == "bootstrap"].sort_values("t", kind="mergesort")
+        inst["boot_t"][f] = b["t"].to_numpy(int)
+        inst["boot_v"][f] = np.array([var[p] for p in b["pair_id"]], float)
+        inst["boot_n"][f] = np.array([float(R[ra]["n"]) for ra in b["run_a"]], float)
+
+        # S3: pairwise merchant-level correlation & covariance across 2026 release_shadow vectors
+        rl_g = g[g["pair_kind"] == "release_shadow"].sort_values("t", kind="mergesort")
+        vecs = []
+        for row in rl_g.itertuples(index=False):
+            ex_id = R[row.run_a]["excluded_release"]
+            grp_i = int(rel_id_to_group[ex_id])
+            vecs.append((grp_i, rel_series[row.pair_id]))
+        same_c, diff_c, same_cv, diff_cv = [], [], [], []
+        for i1 in range(len(vecs)):
+            g1, s1 = vecs[i1]
+            for i2 in range(i1 + 1, len(vecs)):
+                g2, s2 = vecs[i2]
+                common = s1.index.intersection(s2.index)
+                v1 = s1.loc[common].to_numpy(float)
+                v2 = s2.loc[common].to_numpy(float)
+                corr = float(np.corrcoef(v1, v2)[0, 1])
+                covv = float(np.cov(v1, v2, ddof=0)[0, 1])
+                if g1 == g2:
+                    same_c.append(corr)
+                    same_cv.append(covv)
+                else:
+                    diff_c.append(corr)
+                    diff_cv.append(covv)
+        inst["rel_coh_same"][f] = float(np.mean(same_c))
+        inst["rel_coh_diff"][f] = float(np.mean(diff_c))
+        inst["rel_cov_same"][f] = float(np.mean(same_cv))
+        inst["rel_cov_diff"][f] = float(np.mean(diff_cv))
+        inst["rel_coh_same_pairs"].extend(same_c)
+        inst["rel_coh_diff_pairs"].extend(diff_c)
     return w, z, inst
 
 
