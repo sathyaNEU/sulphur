@@ -149,7 +149,7 @@
    "commit": ""
   }
  ],
- "resume": "the author fixed the objective on 2026-11-23: Anomaly Detection & Diagnostics in Physical & Environmental Sciences (the subdomain is provisional; the card takes any key that serves anomaly-detection, environmental-monitoring-exceedance or one of 884a7ee's six). The tenth Opus 5.5 architect at max effort works a time-boxed round: at most three anomaly-detection worlds on paper (a closed card by its fix, test 0, the field's published method, realism), commits to the strongest, then measures everything else in core.py on corelib, re-dialing the world on a failing row; checkpoint at CORE PASS level 4 or 5 or after its fourth failing core iteration. Then the card, precut.py exit 0, prompt.txt and DESIGN at stage 2; a Fable re-read on or after 2026-11-27 before anything is uploaded; then /build task3 from 3. Ledger: ~/Documents/sulphur-task3-arch11-screen/ledger.md.",
+ "resume": "an eleventh Opus 5.5 architect at max effort (Fable at its limit until 2026-11-27 08:00 America/Detroit) draws anomaly detection in Physical & Environmental Sciences under the time box: at most three worlds on paper (a closed card by its fix, test 0, the field's published method, realism), one committed; iteration 1 prices every stump against its full-strength route before any tuning; the flagged set and the forward false-alarm rate must each move when a stump is lost; three core iterations at most, then a checkpoint (CORE PASS level 4 or 5, or the third failure). Work in ~/Documents/sulphur-task3-arch11-screen/a11/. Then the card, precut.py exit 0, prompt.txt and DESIGN at stage 2; a Fable re-read on or after 2026-11-27; then /build task3 from 3.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -285,6 +285,10 @@
   {
    "date": "2026-11-23",
    "event": "the author fixed the objective to anomaly detection and asked for efficiency after a day of screening; the tenth architect was redirected to a time-boxed round (three worlds on paper, one committed, everything else measured in core.py, a checkpoint at CORE PASS or the fourth failing iteration)"
+  },
+  {
+   "date": "2026-11-23",
+   "event": "the tenth architect's W1 (dark-sky curfew audit from VIIRS radiance) closed after four core iterations (ac8a47e): one stump is the calibration card's fix, the other its own strongest route, and the noise decided no flag; W2 and W3 died on paper; an eleventh architect starts with the strongest-route pricing in iteration 1 and a three-iteration cap"
   }
  ],
  "architectures": [
