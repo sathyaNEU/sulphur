@@ -4,18 +4,18 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: physical, reflex, overhaul, engineering, process, scaling, composite, support, standard, measurement, triage, operating, structural, swro-q, cutoff, independent, anomalous, protocol, client, builds, lagrangian, alignment, cip-invariant, distinct, parcel
+Stump terms swept: physical, reflex, overhaul, engineering, desalination, process, diagnostics, scaling, membrane, composite, support, standard, measurement, triage, operating, structural, swro-q, cutoff, independent, anomalous, excess, protocol, client, builds, lagrangian
 
 ## 3 answer figures in the pack (REVIEW 5)
 - **REVIEW** `mibel_iberian_power_spot_2026.csv`: golden figure 111.53 appears: ...IBEL,106.16,EUR/MWh 2026-11-11T21:00:00Z,PT_MIBEL,111.53,EUR/MWh 2026-11-11T22:00:00Z,PT_MIBEL,97.88,EUR/M...
-- **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 360 appears: ...ng (parcel > 1.50 & > 1.50; TMP drag) Clause 2.2 360 kWh/h Persistent Structural Membrane Fault (bypas...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 420 appears: .../L, 1-hour basis; 2nd-pass polishing) Clause 2.1 420 kWh/h Pretreatment-to-RO Scaling (parcel > 1.50 &...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 540 appears: ...Membrane Fault (bypass recirculation) Clause 2.3 540 kWh/h Total 2027 excess desalination energy burde...
+- **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 360 appears: ...ng (parcel > 1.50 & > 1.50; TMP drag) Clause 2.2 360 kWh/h Persistent Structural Membrane Fault (bypas...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: carries 37 of 43 distinctive words of the committed call: "Schedule four Barlavento SWRO trains for 2027 pressure-vessel overhaul under Engineering Protocol SWRO-Q27's 400-hour en"
 
 ## 4 design-note vocabulary (REVIEW 2)
 - **REVIEW** `lims_qa_certificate_2026.pdf`: 3 of 25 stump-paragraph terms appear (process, composite, standard); read whether the document names the move
-- **REVIEW** `swro_integrity_standard_q27.pdf`: 16 of 25 stump-paragraph terms appear (physical, overhaul, engineering, process, scaling, composite); read whether the document names the move
+- **REVIEW** `swro_integrity_standard_q27.pdf`: 19 of 25 stump-paragraph terms appear (physical, overhaul, engineering, desalination, process, diagnostics); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -25,8 +25,8 @@ Stump terms swept: physical, reflex, overhaul, engineering, process, scaling, co
 - **INFO** `-`: 3 file categories: document, spreadsheet, structured (2 or more required)
 
 ## 13 task metadata (REVIEW 2)
-- **REVIEW** `metadata.json`: decision shares the design note's stump vocabulary (overhaul, engineering, protocol): say what the task decides, not how
-- **REVIEW** `metadata.json`: files.swro_integrity_standard_q27.pdf.covers shares the design note's stump vocabulary (physical, overhaul, engineering, protocol): say what the task decides, not how
+- **REVIEW** `metadata.json`: decision shares the design note's stump vocabulary (overhaul, engineering, membrane, protocol): say what the task decides, not how
+- **REVIEW** `metadata.json`: files.swro_integrity_standard_q27.pdf.covers shares the design note's stump vocabulary (physical, overhaul, engineering, desalination, diagnostics): say what the task decides, not how
 
 ## 1 file names (clean)
 

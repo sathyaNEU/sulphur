@@ -81,6 +81,10 @@
     {
       "date": "2026-11-23",
       "event": "Physical & Environmental Sciences domain-fit reframing & Pass 3 verification: replaced all administrative/compliance/Schedule B EUR framing across prompt.txt (96 words, 630 chars, voice-check 0 FAIL 0 WARN, zero chart-slicing, zero triplets), Engineering Protocol SWRO-Q27 (BDM-ENG-Q27-2026, Clause 4.3 excess desalination energy rates 420/360/540 kWh/h in MWh, Annex C energy_2027_mwh), golden XLSX/CSV, submission.md, metadata.json, DESIGN_NOTE.md, and cards/task28.json while keeping core.py (seed 2801) and every single number bit-for-bit identical (1,750.8 MWh total / 1,253.5 MWh overhaul). Stage 4 Pass 3 leak-reader PASS (0 leaks, all REVIEW harmless) and determinism-judge DETERMINISTIC / APPROVE (Gates A-E PASS across 36 forks & 6 +/-20% perturbations)."
+    },
+    {
+      "date": "2026-11-23",
+      "event": "Prompt polish after NATURAL (2/9) + SOME SIGNS (weak hit) platform check: tightened prompt.txt to 87 words (564 chars, voice-check 0 FAIL 0 WARN) replacing 'excess desalination energy burden' with 'energy penalty in MWh', cutting the S1 telemetry/lab method clause, and anchoring the chart and backup explicitly inside the workbook while keeping 100% of graded asks and Domains Fit physical-sciences framing intact; target.zip, golden.zip, and submission.md unchanged."
     }
   ]
 }
