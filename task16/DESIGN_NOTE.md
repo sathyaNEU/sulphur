@@ -300,9 +300,9 @@ Question form: whether (and under which rule)
 Nearest build: task16 architecture 3 (this slot's lineage): the same decision, data and policy at the reviewer's
   request, with the members' decisions moved from direct counts onto estimation (three open members against one) and
   two results added (R8, R9); an earlier build shares the answer shape and the weight, its candidates unrecorded sites ranked on
-  forecast exceedances. Abstraction sentence: none writable against an earlier
+  forecast exceedances. Abstraction sentence: none writable against an earlier build
 
-build ## Frontier check
+## Frontier check
 
 Precedents: R2 L22 (the published formula whose generating assumption the data contradict), L35 (an independence
   binomial where units share shocks), L28 (an estimator certified with checks that cannot see the problem); R3 L28,
