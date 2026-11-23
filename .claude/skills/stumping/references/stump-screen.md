@@ -7,6 +7,8 @@ nothing in-house solves the task, so the idea has to be right before it is built
 
 ## How to run it
 
+0. Put the world through test 0 below before any trap is written. A world that fails it dies in one line,
+   whatever its traps would have been.
 1. Write three to five candidate traps for the draw, one line each: the part of the decision's quantity that no
    record holds and the observation process that hides it, the parameter a run must set to reach the figure and the
    default it reaches for (a pooled value, today's level, a literature constant, the same as another group,
@@ -21,6 +23,33 @@ nothing in-house solves the task, so the idea has to be right before it is built
    write the table into the design note's `## Stump screen` section: each candidate, its twenty answers, kept or
    dropped and why.
 4. Only then register the card, prototype the numbers in a scratch script and write the generator.
+
+## Test 0: the world, before any trap is written
+
+Name the estimand (population, members not yet observed included, outcome, window, unit) and list every record a
+real file of that kind ships, with the public sources that show it (no private or project detail in any query).
+Then read the outcome as it stands before any option or forward change is applied. The world dies if any of these
+holds:
+
+- (a) a shipped monitor, gauge, meter, register or routine sampling programme observes that outcome, or a monotone
+  function of it, at a deciding member over the history window, continuously or on a schedule (an instrument that
+  sees only a part of the member, or only the units that chose or were chosen to be recorded, does not count);
+- (b) an account, a mass balance, or a simple sum or difference of shipped records closes on a deciding member's
+  total or on the part of it the decision moves;
+- (c) the option's lever is a shipped series and the outcome is observed at the deciding members. A forward or
+  counterfactual estimand does not escape (a): the strongest route regresses the observed outcome on the lever, with
+  any lags, interactions with a logged state and running totals since a logged reset (all of them test 18's
+  regression specifications on named fields), and prices the option.
+
+A region-wide or network-wide total may ship, but only as the falsification check (test 16). The world passes only
+where each instrument sees a different part of the estimand and none closes the whole: the approved builds' anatomy
+(`CLAUDE.md`, the four approved builds), stated as a gate. Where it fails, the strongest route calibrates end to end
+and every trap dies at test 15 or 18 however good it is. Every world task3 architecture 11 priced in arithmetic died
+that way: the coater's solvent account (b), the effluent works' scheduled grabs, the radon zones' monitors, the
+valley SO2 monitors, the construction-erosion storm gauges, the river reaches' ammonia sondes, and the rail yard's
+six monitors, asked for an annual mean and again for hours over an action level (all (a), the last two with (c)). A
+first wording, whether any record observes the estimand itself, let the river and rail worlds through, because no
+record observes a 2027 counterfactual; the wording above kills all seven on its literal text.
 
 ## The twenty tests (every kept trap answers YES to all twenty)
 
