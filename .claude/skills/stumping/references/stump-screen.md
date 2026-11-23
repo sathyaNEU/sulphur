@@ -67,13 +67,15 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    and correct every reading with it (by group where the bias varies)"; same mechanism and the same kind of fix):
    a bias or recording effect sized on cases where the source and a checked value both exist is that card, by group
    or not, however the factor is then applied; a single recording effect fitted on one named field or one-join
-   covariate (a time since sampling, a logged condition) is test 18's strongest route; two or more recording effects
+   covariate (a time since sampling, a logged condition) is test 18's strongest route where a shipped file checks it,
+   and is priced on test 19's run routes where nothing does; two or more recording effects
    that bias each other's estimate when each is fitted alone, with no checked sample, separated by one joint fit and
    proved on a signal the recording conditions cannot move, are open (`open-ground.md`, recording effects tangled
    together; the client's example 17, L56 to L58), and so is a recording stump whose estimator is a conservation
-   residual, a recording algorithm inverted or a state the record never held. task3 arch 11's effluent candidate,
-   ammonia lost from a sample waiting warm in its bottle and gained from a sample line that stood, died here: each
-   effect fitted alone on its own logged condition landed every member (weff4.py to weff9.py).
+   residual, a recording algorithm inverted or a state the record never held. task3 arch 11's effluent candidate
+   (ammonia lost from a sample waiting warm in its bottle, gained from a sample line that stood) is the single-effect
+   case: each effect fitted alone on its own logged condition landed every member (weff4.py to weff9.py), so such a
+   world lives only where nothing shipped checks either correction.
 2. **Not a reflex.** No move a careful run makes unprompted settles it (`precedents.json` reflexes: completing
    reporting lags, de-duplicating, a constant-unit panel, re-weighting to the target's mix, the field's textbook
    estimator, hold-outs, back-tests, bootstraps). If that battery executed perfectly lands inside the band, it is not
@@ -190,10 +192,16 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    a run does on the history, because the world's process is weaker there, and (c) the process that moves the forward
    window is not a closed card's fix. No collocated pair ships for any stump's parameter (two heights or two sensors
    at one site, a total beside a tally): that pairing was R98's and R99's handle. **The strongest run's route is priced
-   at full strength on the shipped fields**: every field the pack names and every covariate that one join, group-by,
-   filter or flag of a shipped log gives, fitted jointly (a time since or to an event a shipped log names is one such
-   join wherever any timestamp in the record proxies it), and that route files the wrong call or the stump is a
-   reflex. task3 arch 11's coater pair died on it: the oxidiser's daily gas regressed on each line's sprayed solvent
+   at full strength on the shipped fields wherever a shipped file lets a run check the correction** (a validation
+   handle, a calibration slice, a target or an account observed at the members: test 0) **and on every mechanism of
+   the world the rows carry**: every field the pack names and every covariate that one join, group-by, filter or flag
+   of a shipped log gives, fitted jointly, and that route files the wrong call or the stump is a reflex. Every
+   correction on file that a run made unprompted had such a check (R09, R15, R41, R57, R66, R68, R74, R98, R100,
+   R101). An observation-process correction that nothing shipped checks is priced on test 19's run routes instead
+   (kept as a sensitivity, cut at a threshold, declined, applied generously), because that is where the runs on
+   record lost it (L56, L57, L53; `CLAUDE.md`: they "lose where nothing checks the correction"), so a time to or
+   since a logged event (days to each interview's own deadline) prices at full strength only where a shipped file
+   checks the correction it carries. task3 arch 11's coater pair died on it: the oxidiser's daily gas regressed on each line's sprayed solvent
    with fan hours and ambient called 8.5 of 9 lines right, and the booth sludge split the same way, so a conservation
    account whose every term ships is the runs' (R98, task22 arch 1). The golden needs (a) a covariate built from a
    second file by a construction that is not a join, union, filter, stratification or re-key (days to each
@@ -219,10 +227,10 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    on an unfiled parameter of the recording (what an older receiver adds, which no document states), identified by a
    joint fit or by a covariate built from another file, and no near-complete subsample hands that parameter over
    (the strong strokes every network locates put a station's true count within ten per cent and read the receiver's
-   worth off, the warning case beside it). **An unfiled parameter is still a closed card when its trap is a reading biased
-   against the truth and its fix corrects each reading by the estimated bias**: a shield's solar gain, a gauge's
-   undercatch, a sensor's offset, used at face value and varying by group, is the calibrated-source card however the
-   bias is estimated (task3 arch 10's first screen, a gain read off cloud passages in place of checked cases); a
+   worth off, the warning case beside it). **An unfiled parameter is still a closed card when its fix is the card's**: a
+   bias sized on cases where the source and a checked value both exist, by group or not, is the calibrated-source
+   card (test 1), and a shield's solar gain, a gauge's undercatch or a sensor's offset sized that way is that card
+   whatever else the record carries (task3 arch 10's first screen also handed the recognition over in its frame); a
    quantity read off as the residual of a conservation account (what a register cannot otherwise explain, task4's
    lost containers) is another kind of fix, and conservation stays open ground; and a frame with the history on one sensor basis and the decision
    on another hands every run the recognition in the prompt, so two such parameters are never independent.
