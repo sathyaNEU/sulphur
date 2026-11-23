@@ -1,6 +1,6 @@
 ---
 name: determinism-check
-description: "The determinism spec for every build, result by result: what is filed literally (each result's estimand, every convention), what may stay open (the method, only when forced), the band each result carries where reasonable methods differ and the rivals run to set it, the literal-reader test, the semantic fork table, the closure moves, the generator assertions, figures.json and figures_check.py, the judge's gates A to H, and the judge run. Invoke while the results chain is designed, while the generator is written and on the finished build. The judge thread is spawned only at the pipeline's judge stage or when the author asks."
+description: "The determinism spec for every build, result by result: what is filed literally (each result's estimand, every convention), what may stay open (the method, only when forced), the band each result carries where reasonable methods differ and the rivals run to set it, the literal-reader test, the semantic fork table, the closure moves, the generator assertions, figures.json and figures_check.py, the judge's gates A to H, and the judge run (the platform's Holistic Audit v4 through holistic.py: determinism mode before the runs, holistic mode on them). Invoke while the results chain is designed, while the generator is written and on the finished build. The judge thread is spawned only at the pipeline's judge stage, by /fix-determinism, /triage-runs or /holistic-check, or when the author asks."
 ---
 
 # Determinism
@@ -508,33 +508,60 @@ the write-up does not grade it.
 | E | Decision pinned, every ask single and precise? | `prompt_ambiguity` |
 | F | (design criterion, not the judge's) Does a careful but hurried strong model lose several results, in different areas, for analytical reasons, with the pair estimate at 50 or under (`effort.py`, `supplemental-stumping` Part 0)? | too easy |
 
-The judge's own text: `guidelines/determinism_judge_system_prompt.md`.
+The judge's text: the platform's Holistic Audit v4 (`guidelines/client/quality-checks/holistic-audit-v4-2026-11-22.md`),
+with Gates A to E of `guidelines/determinism_judge_system_prompt.md` as its supplement in determinism mode.
 
 ## Running the judge
 
-- **What it checks: determinism only** (Gates A to E): the prompt and the shipped pack force the answer blocks'
-  figures and call. It starts from the answer blocks, recomputes each load-bearing figure from the files by the
-  blocks' own stated method, runs the reasonable alternatives wherever the prompt or the files leave a choice open,
-  and checks every decisive fact is filed. **It never works the task on its own** (no derivation before reading the
-  blocks, no search for traps) **and never prices difficulty**: stump power, the stumping type and the Sulfur standard
-  (Gates F, G and H in the gate table) are the build's own criteria, held by `precut.py`, `effort.py` and the skeleton
-  guard at design, and measured by the platform's runs (the author's direction, 2026-11-13).
-- **When:** `/build` stage 4 (in the background beside the leak reader, after the free gates pass), once in
-  `/fix-determinism`, or when the author asks in their own words. `/fix-rubric` takes the free gates and no judge.
-- **One thread at medium effort** (the `determinism-judge` agent, about 25 tool calls), no sub-agents. It reads
-  `prompt.txt`, a fresh unzip of `target.zip` and the four answer blocks, and never the design note, the generator,
-  `figures.json`, `pipeline.json` or an earlier report: it checks the shipped text, not the author's intent.
-- **The brief names every convention in the Pinning list** (never the golden's values) and asks the judge to vary
-  each one the ways the field does; a judge brief that names only the build's own rivals approves what an auditor's
-  wider battery sends back (task7 architecture 12).
+- **What it runs: the platform's own quality check**, the Holistic Audit v4, kept verbatim at
+  `guidelines/client/quality-checks/holistic-audit-v4-2026-11-22.md` (the author's direction, 2026-11-22). `holistic.py
+  taskNN [--mode determinism]` fills its placeholders from the task folder (the prompt, a fresh unzip of
+  `target.zip`, the four answer fields and never the Tags or the stump answer, and in holistic mode both saved
+  responses with the files each run produced) in a workspace of its own, and the `determinism-judge` follows the
+  filled copy word for word. Two modes:
+  - **determinism**, before the platform's runs: Step 0, Part A and Part B (the runs' reading and the convention
+    check wait for the runs), with Gates A to E of `guidelines/determinism_judge_system_prompt.md` as the house
+    supplement. It lists the deciding figures from the blocks, **derives each from the shipped files and the
+    definitions the prompt and the documents give before it compares**, runs a fork list of twelve or more in code
+    and the strongest standard rival, and quotes a pin from the prompt or the data for every decision point that
+    could change the call, or writes NO PIN FOUND. It **never prices difficulty**: stump power, the stumping type
+    and the Sulfur standard (Gates F, G and H in the gate table) are the build's own criteria before the runs,
+    held by `precut.py`, `effort.py` and the skeleton guard.
+  - **holistic**, once both platform responses are saved: the whole audit, Step 0 to Output, its own rubric
+    built from its reproduction grading both runs, the convention check where both runs agree, Part D's depth, and
+    the audit's verdict and score (`runs/holistic_check_v4.md`).
+- **When:** determinism mode at `/build` stage 4 (in the background beside the leak reader, after the free gates
+  pass), once in `/fix-determinism`, or when the author asks in their own words; holistic mode from `/triage-runs`
+  (beside `run-triage`) and `/holistic-check`. `/fix-rubric` takes the free gates and no judge.
+- **One thread on Opus 5.5 at high** (the `determinism-judge` agent; about 60 tool calls in determinism mode, 90 in
+  holistic), no sub-agents. It reads only the workspace `holistic.py` makes, and never the design note, the
+  generator, `figures.json`, `pipeline.json`, the golden files, the platform's generated rubric or an earlier
+  report: it checks the shipped text, not the author's intent.
+- **The pin is in the prompt or the data, never in the blocks.** The audit counts a decision point pinned only by
+  a quoted prompt line or named data evidence; "the author's reading is the more natural one" is NO PIN FOUND, and
+  a rival that reproduces a run's figures with nothing quoted against it is not_pinned. A sentence added to the
+  Step-by-Step pins nothing for the solver. So a rival that moves the call with no pin is a SEND_BACK (a pin at
+  authority in the pack, the WHAT and never the method, or a wider margin; `/fix-determinism`), and only a rival
+  that moves a graded figure without moving the call is closed in the blocks, by a band that takes it or a figure
+  from the files that refutes it.
+- **In determinism mode the brief may name every convention in the Pinning list** (never the golden's values) and
+  ask the judge to vary each one the ways the field does; a brief that names only the build's own rivals approves
+  what an auditor's wider battery sends back (task7 architecture 12). The holistic brief names the task and the mode
+  and nothing else, as the platform's audit gets nothing else.
 - **The thread reads literally first** (§2) wherever it runs an alternative, and counts a fork closed only by
-  inference or by the write-up as open. A fork it settles "by the plain reading" is a FIX_NOW.
-- **An APPROVE is scoped to the pack the judge saw.** A later change that moves a graded figure, the prompt or the
-  pack voids it and the judge runs again once. Work that moves nothing graded (realism in a file the call does not
-  read, a wording fix the judge asked for, a band widened to take a rival it ran) does not.
-- **After:** **APPROVE** ships. **FIX_NOW** is made in the generator (answer blocks, bands, stated conventions) and
-  shipped without a second judge unless a graded figure, the prompt or the pack moved. **SEND_BACK** means the fork
-  cannot be closed in the blocks: close it in the prompt or the pack (`/fix-determinism`), then one re-judge.
+  inference or by the write-up as open.
+- **A verdict is scoped to the cut the judge saw** (the md5s in `manifest.json`, quoted in the report). A later
+  change that moves a graded figure, the prompt or the pack voids it and the judge runs again once. Work that moves
+  nothing graded (realism in a file the call does not read, a wording fix the judge asked for, a band widened to
+  take a rival it ran) does not.
+- **After, determinism mode:** **APPROVE** ships. **FIX_NOW** is made in the generator (answer blocks, bands,
+  stated conventions the pack already forces) and shipped without a second judge unless a graded figure, the prompt
+  or the pack moved. **SEND_BACK** means the fork cannot be closed in the blocks: close it in the prompt or the pack
+  (`/fix-determinism`), then one re-judge.
+- **After, holistic mode:** the verdict, score and must_fix list go to `pipeline.json` `holistic` and to the author,
+  on top of the hand-over when the audit fails. Nothing is fixed on an in-house verdict: fixes wait for the
+  platform's audit or the author's word, and the four graded blocks stay byte-identical. The audit's bar is its
+  own (0.65, borderline from 0.60) and the house's SUBMIT bar on the platform's scores is unchanged.
 
 ## Checklist
 
@@ -545,4 +572,5 @@ The judge's own text: `guidelines/determinism_judge_system_prompt.md`.
 - [ ] Semantic fork table complete, every row ruled out or convergent, the stump none of them, every row in `checks.py`
 - [ ] 22-axis closure table (`precut.py` exit 0); pins at authority; counter-pin sweep clean
 - [ ] Figures mid-bin, flip stated; checks and verifier green; rebuild byte-identical; `figures_check.py` exit 0
-- [ ] Judge run (determinism only, from the answer blocks, never solving); FIX_NOW made; re-judged only if a graded figure, the prompt or the pack moved
+- [ ] Judge run in determinism mode (the Holistic Audit v4's Step 0, Part A and Part B: each figure derived from the pack before it is compared, a pin quoted for every call-moving decision point, never pricing difficulty); FIX_NOW made; re-judged only if a graded figure, the prompt or the pack moved
+- [ ] Once both runs are saved, the holistic pass (`/triage-runs` or `/holistic-check`): verdict, score and must_fix recorded and flagged, nothing fixed on it

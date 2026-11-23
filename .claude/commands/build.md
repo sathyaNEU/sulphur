@@ -59,9 +59,10 @@ holds.
    builds, `effort.py` agreeing with the note, `figures_check.py`, `leak.py`, `audit_containers.py`, `guard.py
    surface` and `heart`), plus the realism sweep.
 4. **Stage 4 spawns two agents in one message, in the background:** the leak reader (as `/leak-check` step 4
-   describes, `model: sonnet`, `effort: medium`) and the `determinism-judge` agent (its definition sets Opus 5.5 at
-   high; determinism only: it verifies the answer blocks against the prompt and the pack the way the review's audit
-   does, never works the task on its own and never prices difficulty). This invocation licenses both. While they run, bring the card current and write the pre-ship
+   describes, `model: sonnet`, `effort: medium`) and the `determinism-judge` agent in determinism mode (its
+   definition sets Opus 5.5 at high; the platform's Holistic Audit v4, Step 0, Part A and Part B: it lists the
+   deciding figures from the answer blocks, derives each from the pack before it compares, runs a fork list of
+   twelve or more in code and never prices difficulty). This invocation licenses both. While they run, bring the card current and write the pre-ship
    check. Fix every finding from both in one generator pass; re-judge once only when a fix moved a graded figure,
    the prompt or the pack (an answer-block edit is not re-judged); re-read only if a document or the prompt
    changed.

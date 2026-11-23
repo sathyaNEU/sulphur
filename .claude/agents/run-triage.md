@@ -60,6 +60,18 @@ If a run file or the scores are missing, stop and say which.
    | `near_miss_or_formatting` | no | substantively right, a tight threshold missed, a wrong file type or layout |
    | `defensible_alternative` | no, not deterministic | a sound method the prompt allows that gives a different answer |
 
+   The platform's Holistic Audit v4 (`guidelines/client/quality-checks/holistic-audit-v4-2026-11-22.md`, Part D
+   step 10) gives each run's first break one label of its own, and counts only `method_shortcut`,
+   `unfinished_chain`, `dismissed_own_evidence` and `self_confirming_check` as valid evidence of difficulty. So
+   write the first wrong step's v4 label beside its class: `first_story` reads as `unfinished_chain` (the rival
+   never tested) or `dismissed_own_evidence` (the run computed it and set it aside); `narrow_look` and
+   `one_legitimate_step` as `method_shortcut`; `missed_shallow_hidden_factor` and `missed_planted_defect` as
+   `missed_planted_defect`; `misread_rule_or_definition` as `misread_rule_or_instruction`, or `declined_on_reading`
+   when the run computed the golden's figure and declined it on a reading; `misapplied_written_procedure` as
+   `mechanical_rule_error`; `near_miss_or_formatting` as `near_miss` or `formatting_or_deliverable_slip`;
+   `defensible_alternative` as `defensible_alternative_rejected`. A first break with no valid v4 label is no
+   evidence of difficulty at that audit, however deep the house class reads.
+
    Be adversarial about your own class. Before you write a deep class, ask whether one sentence of help ("that file
    is a sample", "exclude the test rows", "five of the stores also had a price cut") would have rescued the run on
    that result and the ones after it. If yes and the thing it names was built into the data (check the note's
@@ -185,7 +197,7 @@ and line), run 2 made/partly/missed (the run's figure and line)>
 
 ## Run 1
 - Committed: <quote>, <LANDED | OFF_CALL | NO_CALL>
-- First wrong step: <quote with the run's figure>; golden step <n>; class <class>, because <one sentence>
+- First wrong step: <quote with the run's figure>; golden step <n>; class <class> (v4 label <label>), because <one sentence>
 - One-fact test: <the sentence that would rescue it, and the results it rescues, or "none would">
 - Points lost by cause: deep <w>, one legitimate step <w>, surface <w>, formatting <w>, wrong criterion <w>
 

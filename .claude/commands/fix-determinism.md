@@ -69,8 +69,9 @@ Exit 1 means a frozen item moved: undo that change and find a closure that does 
 golden itself was the non-literal figure (a `solution_incorrect` the author accepts) is a move allowed, with
 `--allow <figures.json key>` and the reason in the fork-table row.
 
-**6. Re-judge once.** Spawn the `determinism-judge` agent (determinism only; its definition sets the model and effort) on
-the rebuilt bundle; this command licenses that one pass. APPROVE: go on. FIX_NOW: make the answer-block edits it
+**6. Re-judge once.** Spawn the `determinism-judge` agent in determinism mode (the platform's Holistic Audit v4,
+Step 0, Part A and Part B; its definition sets the model and effort) on the rebuilt bundle; this command licenses
+that one pass. APPROVE: go on. FIX_NOW: make the answer-block edits it
 names and ship without another judge. SEND_BACK: stop and report; the fork needs the prompt or the pack.
 
 **7. Re-ship.** Re-cut `target.zip`, append to `pipeline.json` `returned` (`repair: "determinism"`), set

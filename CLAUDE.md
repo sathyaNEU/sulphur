@@ -18,9 +18,14 @@ reader that solves the prompt and hands back figures. Difficulty is argued on pa
 `## Results chain` and `## Effort test`) and computed by `effort.py` from the generator's own implementations of the
 golden and the hurried methods on the cut pack, which is arithmetic, not a solver: nothing reads the prompt. It is
 measured by the platform's two runs alone, which `/triage-runs` reads. The leak reader reads the pack for leaks and
-never solves it. The determinism judge checks determinism only (Gates A to E): it starts from the answer blocks,
-recomputes them by their own stated method on the shipped files, runs the alternatives the prompt or the files leave
-open, and never derives an answer of its own, prices difficulty or reports on the stump.
+never solves it. The determinism judge runs the platform's own quality check, the Holistic Audit v4
+(`guidelines/client/quality-checks/holistic-audit-v4-2026-11-22.md`, the author's direction of 2026-11-22), in two
+modes. Before the platform's runs (determinism mode) it runs the audit's Step 0, Part A and Part B only: it lists
+the deciding figures from the answer blocks, derives each from the shipped files before it compares, runs the
+alternatives the prompt or the files leave open, and never prices difficulty or reports on the stump. Once both
+platform responses are saved (holistic mode) it runs the whole audit: its own rubric grades those two runs and it
+reads depth the way the platform's QC does. That is the client's check replayed on the platform's own runs, not a
+solver: nothing in-house produces a response, and nothing is priced on a run before the platform's exist.
 
 ## The client's bar comes first
 
@@ -46,6 +51,17 @@ the prompt and the answer blocks. The task passes when the **average of the two 
 **Build to 50 on paper**: `effort.py`'s pair estimate is a model and the platform is the measurement. The two runs
 are two rollouts of one submission; re-runs are cheap and allowed in moderation, never spammed, and a task already
 submitted is reviewed against the same rules (the announcement of 2026-11-21).
+
+**The platform's QC after the runs** (`guidelines/client/quality-checks/holistic-audit-v4-2026-11-22.md`, the
+Holistic Audit v4). It reproduces the four answer fields from the pack, runs the rival readings in code (one that
+reproduces a run's figures with no quoted pin against it, or a more rigorous standard method that moves the call,
+is not_pinned), builds its own rubric (recommend 30 per cent or more, ideally about half) and grades both runs on it,
+and reads depth. It passes a task only when every decisive figure reproduces, determinism is pinned, its rubric's
+mean is 0.65 or below (0.60 to 0.65 borderline), no one-thing flip decides, depth is level 4 or 5 and a run fails at
+a decisive step on a valid label (`method_shortcut`, `unfinished_chain`, `dismissed_own_evidence`,
+`self_confirming_check`); a fail blocks the submission. The house replays it before the paste goes in
+(`/triage-runs` runs it beside the triage, `/holistic-check` alone); the verdict is recorded and flagged, and fixes
+wait for the platform's audit or the author's word.
 
 **Two or more decisive, independent steps** (the page of 11/20). "Only one decisive step" is a send-back by name:
 "even when the deciding step is real analysis, if it is the only challenging part of the task, catching it gives the
@@ -305,7 +321,8 @@ Invoke the skill before the work, whatever the request's wording; if two apply, 
 |---|---|---|
 | `/draw taskNN <domain> <analysis type>` | the brain alone, in the main thread: the core proved in `generator/core.py`, the card, the note to `precut.py` exit 0 with its Build brief; also re-draws a returned build's core | Fable 5.2, xhigh |
 | `/build taskNN <domain> <analysis type>` | spawns the `stump-architect` for the core unless `/draw` did it, then executes the brief: build, leak reader and judge, ready for the platform; resumes from `pipeline.json` | Opus 5.5, high |
-| `/triage-runs taskNN` | records both run scores, maps each run's losses result by result, routes the build, drafts the answer to the form's stump question | medium |
+| `/triage-runs taskNN` | records both run scores, maps each run's losses result by result, replays the platform's Holistic Audit v4 on the pair beside it, routes the build, drafts the answer to the form's stump question | medium |
+| `/holistic-check taskNN [determinism]` | the platform's Holistic Audit v4 replayed in-house through the `determinism-judge` (holistic mode on the saved pair; `determinism` for the pre-platform pass): the predicted verdict, score and must_fix, recorded and flagged, nothing fixed | medium (the judge on Opus 5.5, high) |
 | `/fix-determinism taskNN <finding>` | closes a fork on a result (a run's defensible alternative or a judge finding) | Opus 5.5, high |
 | `/fix-rubric taskNN` | the losses were analytical but the average is 60 or more: reworks the asks so more results are graded | Opus 5.5, high |
 | `/approve taskNN` | the mechanical sign-off before upload (heart, surface, precut, effort, leak verdict) | medium |
@@ -319,7 +336,8 @@ asked of every factor of each member's figure, three stumps kept on different ax
 `stumping/corelib.py`, which grades the core level 5, level 4 or fail, prices every route on the rubric, and which
 `precut.py` runs. The build (Opus
 5.5 at high) executes that brief and moves nothing in it; whatever touches the core goes back to the architect. The
-`determinism-judge` runs on Opus 5.5 at high (it stands in for the review's audit), the leak reader on Sonnet at
+`determinism-judge` runs on Opus 5.5 at high (it replays the platform's holistic audit: determinism mode before the
+runs, holistic mode on them), the leak reader on Sonnet at
 medium, the run triage on Opus at medium, each set in `.claude/agents/` or on the `Agent` call. Fable 5.2 is the
 design's model and no other role's: no judge, reader or triage thread is spawned on it. No isolated thread runs on
 the model's own initiative; the commands above license the ones they name.
@@ -341,15 +359,17 @@ the model's own initiative; the commands above license the ones they name.
            (stages 3 to 5: the build thread, Opus 5.5 high, executing the Build brief)
            gate: generator checks, verify, two byte-identical builds, effort.py, figures_check.py, the realism
            sweep, golden-realism, reduce-house-fixes, leak.py, guard.py surface and heart (or python3 gates.py taskNN)
-4 CHECK    the leak reader and the determinism judge (determinism only) spawned together in the background;
+4 CHECK    the leak reader and the determinism judge (determinism mode: the holistic audit's Step 0, Parts A
+           and B) spawned together in the background;
            every finding fixed in the generator in one pass; re-judged once only when a fix moved a graded figure,
            the prompt or the pack
 5 READY    every gate re-run on the final cut; target.zip and the golden ZIP from the final rebuild; the author
            rewrites the prompt for voice, uploads it and target.zip           COMMIT "READY (taskNN): <call>"
-6 RUNS     /triage-runs saves both responses (status RUNS), maps the losses result by result, writes the stump
-           answer into submission.md directly after the Final Recommendation (mandatory, before the scores,
-           the stump gate), records both scores and routes (submit, /fix-determinism, /fix-rubric, a surface
-           trigger rebuilt as analysis, or redesign from 2)
+6 RUNS     /triage-runs saves both responses (status RUNS), maps the losses result by result, replays the
+           platform's Holistic Audit v4 on the pair beside the triage (recorded and flagged, nothing fixed on
+           it), writes the stump answer into submission.md directly after the Final Recommendation (mandatory,
+           before the scores, the stump gate), records both scores and routes (submit, /fix-determinism,
+           /fix-rubric, a surface trigger rebuilt as analysis, or redesign from 2)
 7 SUBMIT   triage SUBMIT, the Reward block filled, the paste in order (Final Recommendation, the stump answer
            stage 6 wrote, the supplementary answers, the components, the steps), submitted
                                                                       COMMIT "SUBMITTED (taskNN): ..."
@@ -377,7 +397,8 @@ or of any task the client has shown us (`fingerprint/corpus/client_skeletons.jso
 dataset already teaches twice; the client swaps the nouns and counts, so a new setting never clears it.
 
 **Determinism is a construction, not an inspection**: invoke `determinism-check` while the results chain and the
-generator are written. Its judge is spawned at stage 4, by `/fix-determinism`, or when the author asks.
+generator are written. Its judge is spawned at stage 4, by `/fix-determinism`, or when the author asks (determinism
+mode), and by `/triage-runs` and `/holistic-check` once both runs are saved (holistic mode).
 
 ## Git: one branch, and everything a session did is pushed
 

@@ -47,10 +47,19 @@ Where the client text is newer than a skill, the client text wins and the skill 
   index. `1.txt`, `16.txt` and `17.txt` are the three the author shared as the library's hardest on 2026-11-21 (runs
   averaging 0.26, 0.285 and 0.31): the difficulty to match, never a template.
 - `client/quality-checks/quality.txt`: the reviewer-side quality checklist.
-- `determinism_judge_system_prompt.md`: the determinism judge's system prompt with Gate H set to the bar of
+- `client/quality-checks/holistic-audit-v4-2026-11-22.md`: the platform's Holistic Audit v4, verbatim (pasted by the
+  author on 2026-11-22): the QC the platform runs once a task's two responses are back, and that a fellow may run
+  with any checking agent. It reproduces the four answer fields from the pack, runs the rivals in code (a rival that
+  reproduces a run's figures with no quoted pin, or a more rigorous standard method that moves the call, is
+  not_pinned), builds its own rubric and grades both runs on it against 0.65 (borderline from 0.60), and reads depth
+  (level 4 or 5, a run failing at a decisive step on a valid label). The `determinism-judge` replays it:
+  determinism mode (its Step 0, Part A and Part B) before the platform's runs, holistic mode (the whole audit) once
+  both responses are saved; `../.claude/skills/determinism-check/holistic.py` fills its placeholders.
+- `determinism_judge_system_prompt.md`: an earlier platform judge's system prompt with Gate H set to the bar of
   2026-11-09 (H1 domain, H2 layers, H3 not one thing with the shallow hidden factor test, H4 difficulty throughout
-  with the effort test, H5 the one-fact test counted in results, and determinism per result with bands), handed
-  verbatim to the `determinism-judge` agent.
+  with the effort test, H5 the one-fact test counted in results, and determinism per result with bands). Its Gates A
+  to E are the `determinism-judge`'s house supplement in determinism mode; the Holistic Audit v4 decides where they
+  differ.
 
 ## Where the working standard lives
 

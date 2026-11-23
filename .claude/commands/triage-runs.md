@@ -1,5 +1,5 @@
 ---
-description: After the platform has generated the two runs, save both responses, set the build to RUNS, map where each run lost its points result by result and class every loss on the client's failure table, mark each decisive step made or missed, write the answer to the form's stump question (How is each model stumped?) into submission.md directly after the Final Recommendation (mandatory, before the scores and whatever the route), record both scores and the average, and route the build (submit, fix determinism, fix the asks, rebuild a surface trigger as analysis, or redesign).
+description: After the platform has generated the two runs, save both responses, set the build to RUNS, map where each run lost its points result by result and class every loss on the client's failure table, replay the platform's Holistic Audit v4 on the pair beside the triage (the determinism-judge in holistic mode; recorded and flagged, nothing fixed on it), mark each decisive step made or missed, write the answer to the form's stump question (How is each model stumped?) into submission.md directly after the Final Recommendation (mandatory, before the scores and whatever the route), record both scores and the average, and route the build (submit, fix determinism, fix the asks, rebuild a surface trigger as analysis, or redesign).
 argument-hint: taskNN [the two scores, or nothing if runs/rubric.md carries them]
 effort: medium
 ---
@@ -13,7 +13,10 @@ Invoke `build-pipeline` (Stage 6) first.
    rubric (criteria, weights, and each run's pass or fail where the platform shows it). Save them verbatim as
    `taskNN/runs/run1.md`, `taskNN/runs/run2.md` and `taskNN/runs/rubric.md`; a pair already on file from an
    earlier cut is first archived under another name (`archN_pairK_response_1.md`) and moved to `runs.history`.
-   If a response is missing, ask once for it and stop. If only the scores or the rubric are missing, ask for them
+   Where the platform offers the files each run produced, save them under `runs/run1_files/` and
+   `runs/run2_files/`: the holistic audit (step 3) grades a figure from them when a response points to a file, and
+   grades from the response alone, saying so, when they are absent. If a response is missing, ask once for it and
+   stop. If only the scores or the rubric are missing, ask for them
    once and carry on: the loss map and the stump answer are written from the responses alone, and the scores are
    recorded when they come. Never paraphrase a run.
 2. **Record the pair, then the scores,** in `pipeline.json` `runs` (`files`, `recorded` with the ISO date, then
@@ -22,8 +25,14 @@ Invoke `build-pipeline` (Stage 6) first.
    submission; the bar is their average under 60, and exactly 60 fails. A pair re-run on an unchanged submission is
    recorded in `runs.history` with its reason (a rollout that failed or stopped before the analysis), never run to
    draw a lower average.
-3. **Spawn one `run-triage` agent** (its definition sets model and effort) with the absolute task folder. This
-   command licenses it. It writes `runs/triage.md`.
+3. **Spawn two agents in one message, in the background** (each definition sets its model and effort), each with
+   the absolute task folder: one `run-triage` agent, which writes `runs/triage.md`, and one `determinism-judge` in
+   holistic mode, which replays the platform's Holistic Audit v4 on the saved pair
+   (`guidelines/client/quality-checks/holistic-audit-v4-2026-11-22.md`: correctness, determinism with the
+   convention check, its own rubric grading both runs, depth) and writes `runs/holistic_check_v4.md`. This command
+   licenses both. Check the audit's inputs first (`python3 .claude/skills/determinism-check/holistic.py taskNN
+   --check` exits 0) so a missing block or pair stops before the pass is spent. The two
+   threads read the same saved runs, neither waits on the other, and neither changes anything.
 4. **Check its loss map against the design note yourself.** A run that lost the results the `## Effort test`
    priced as lost, in the classes the `## Results chain` names, is the design working; a run that earned a result
    priced as lost found a reflex the careful column missed (record it as evidence); a run that lost somewhere the
@@ -31,6 +40,14 @@ Invoke `build-pipeline` (Stage 6) first.
    `## Decisive steps` table against the critical components: the runs between them missed two or more decisive
    steps, or the build is one decisive step by the runs' own evidence and is not submitted. Where you disagree
    with the agent, say so in one line each and keep both readings in the report.
+4a. **Read the holistic audit beside the triage.** Append its verdict, score, rubric scores, determinism, depth
+   level and must_fix list to `pipeline.json` `holistic` (`/holistic-check` step 4 gives the entry). Where the
+   audit and the triage disagree (a first break classed on a valid label by one and a surface label by the other, a
+   decisive step made in one reading and missed in the other, a fork one calls defensible), say so in one line
+   each. The audit uses the platform's labels, so where the stump answer names a run's first break, it uses the
+   label the audit gave (`run-triage`, the v4 vocabulary). A failed in-house audit does not change the route below
+   and fixes nothing: it is named on top of the hand-over with its must_fix list and `Routes:` line, and the author
+   decides before the paste goes in (fixes wait for the platform's audit or the author's word).
 5. **Write the stump answer into `submission.md` now. It is mandatory, before the scores and whatever the
    route.** The form's question "How is each model stumped?" goes in as `## How is each model stumped?`, the very
    next block after `## Final Recommendation` and before `## Supplementary Questions`, from the triage's draft:
@@ -60,5 +77,7 @@ Invoke `build-pipeline` (Stage 6) first.
 
 Report: both scores and the average (or that they are owed), the counterfactual average, the loss map (which
 results each run lost and why), each run's first wrong step quoted with its class, each decisive step made or
-missed in each run, the stump answer as it now stands in `submission.md` with the `stump` gate's verdict, the
-verdict and the route. No solver runs here: the platform's two runs are the only evidence.
+missed in each run, the in-house holistic audit's five-line summary with its score and must_fix list (and where it
+disagrees with the triage), the stump answer as it now stands in `submission.md` with the `stump` gate's verdict,
+the verdict and the route. No solver runs here: the platform's two runs are the only evidence, and the holistic
+audit replays the platform's own check on them.
