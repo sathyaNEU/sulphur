@@ -1522,8 +1522,12 @@ BESIDE += [("the value equation fitted on the mature weeks alone", dict(weeks_v=
 # row's revenue per account differs several-fold from one sessions value to the next, so one over the accounts is no
 # longer one over the revenue a row is expected to bring: weighted that way the fit prices the pool at 1.027 (pairs)
 # and 1.030 (values) of what it paid, and unweighted at 0.990 and 0.990, and those four are refused by it (the pairs
-# unweighted would file TikTok iOS at 0.8999); weighted by the revenue the fit expects it prices the pool at 1.000 and
-# 0.999, and those two are held beside the battery for the ranges
+# unweighted would file TikTok iOS at 0.8999, and its ratios scaled to price the pool at what it paid file TikTok iOS at
+# 0.905 and the golden's call: its one crossing is its under-pricing); weighted by the revenue the fit expects it prices
+# the pool at 1.000 and 0.999, and those two are held beside the battery for the ranges. POOL_TOL sits just past the
+# largest departure any battery way shows on this record (0.33 per cent) or on three other draws of the people (0.44
+# per cent, seed 74126); on those draws the fits weighted by one over the accounts miss by 2.9 to 4.6 per cent every
+# time, the unweighted ones by 0.05 to 1.0 per cent
 FINER = [("the ratios fitted on each market-week's accounts split by %s, %s" % (gn, wn), dict(rows=rk, **wk))
          for rk, gn in (("market-week-pair", "pairs of first-48-hour sessions values"),
                         ("market-week-bucket", "first-48-hour sessions value"))
