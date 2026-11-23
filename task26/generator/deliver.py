@@ -223,6 +223,7 @@ ROUTE_LABELS = {
     "s1_raw_corr": "S1: Raw Unstripped Hourly Feeder Correlation",
     "s1_indep_quad": "S1: Independent Feeder Quadrature",
     "s1_cf_pooled": "S1: Pooled Register Coincidence Factor",
+    "s1_twin_ratio": "S1: Nearest-Hub Twin Commissioning Ratio",
     "s1_flat_ratio": "S1: Flat Commissioning Peak Ratio",
     "s1_linear_sum": "S1: Additive Feeder Ratio Sum",
     "s2_net_kvarh": "S2: Annual Net kVARh Power Factor",
@@ -305,20 +306,20 @@ def _sheet_components(wb, fig, cache):
 def _sheet_physics(wb, fig, cache):
     ws = wb.create_sheet("Physics_Validation")
     sc = cache.setdefault("xl/worksheets/sheet3.xml", {})
-    ws["A1"] = "Internal Physics-Balance Validation (Sep-Oct Commissioning Surge, 66 kV/LV Voltages, kVARh, 3-Ph Bus Sag & AMI)"
+    ws["A1"] = "Internal Physics-Balance Validation (9-Pt Sep/Oct/Dec PQ, 66 kV/LV Voltages, kVARh, 3-Ph Bus Sag & AMI)"
     ws["A1"].font = Font(bold=True, size=12, name="Calibri", color="1F3B5C")
     rp = fig["ref_params"]
     ws["A2"] = (f"No target-site 15-min PQ, reactive Q, or 3-phase main-bay archive is shipped. Every estimator is checked against "
-                f"Sep-Oct active commissioning surges on Fossheim & Lindberg, 66 kV/22 kV voltage conservation (22 kV bus basis, V), "
-                f"12-month kVARh balance, 3-phase bus-sag RMSE (V), and AMI q_kvar consistency (AMI tracer check: "
-                f"{rp['tracer_matched']}/{rp['tracer_total']} = 100.0% vs GIS {rp['gis_tracer_pct']:.1f}%).")
+                f"9 monthly max(P_15)-max(P_60) active commissioning peaks (Sep, Oct, Dec) on Fossheim, Lindberg, and Solberg, "
+                f"66 kV/22 kV voltage conservation (22 kV bus basis, V), 12-month kVARh balance, 3-phase bus-sag RMSE (V), and "
+                f"AMI q_kvar consistency (AMI tracer check: {rp['tracer_matched']}/{rp['tracer_total']} = 100.0% vs GIS {rp['gis_tracer_pct']:.1f}%).")
     ws["A2"].font = Font(italic=True, size=9, color="444444", name="Calibri")
     ws["A2"].alignment = Alignment(wrap_text=True, vertical="top")
     ws.merge_cells("A2:H2")
-    ws.row_dimensions[2].height = 32
+    ws.row_dimensions[2].height = 36
 
     ws.append([
-        "k_ord (Sep-Oct)", rp["k_ord_raw"], "AMI tan_phi_res", rp["tan_phi_res_raw"],
+        "k_ord (9-Pt PQ)", rp["k_ord_raw"], "AMI tan_phi_res", rp["tan_phi_res_raw"],
         "AMI tan_phi_com", rp["tan_phi_com_raw"], "Drangvik R_off (pca4)", rp["rho_sync_drangvik"],
         "Malmnes R_off (pca4)", rp["rho_stag_malmnes"], f"Reg rho: {rp['reg_rho_drangvik']:.2f} vs {rp['reg_rho_malmnes']:.2f}",
     ])
@@ -331,7 +332,7 @@ def _sheet_physics(wb, fig, cache):
             c.number_format = "0.0000"
 
     ws.append([])
-    ws.append(["Estimation Method", "Sep-Oct Surge MAE (MW)", "LV Bus Balance RMSE (V)",
+    ws.append(["Estimation Method", "9-Pt PQ MAE (MW)", "LV Bus Balance RMSE (V)",
                "12-Mo kVARh Err (MVAr)", "3-Ph Bus Sag RMSE (V)", "AMI q_kvar RMSE (kVAr)",
                "Composite Physics Index", "Multiple of Conformed"])
     _hdr(ws, 5, 8, 34)
@@ -371,7 +372,7 @@ def _sheet_routes(wb, fig):
     order = [
         "golden", "S1", "S2", "S3", "S1+S2", "S1+S3", "S2+S3", "S1+S2+S3",
         "direct", "rigorous", "response1_v2", "run_generous", "run_calibrated", "run_hedge", "run_cutoff",
-        "s1_register_rho", "s1_pca1", "s1_raw_corr", "s1_indep_quad", "s1_cf_pooled", "s1_flat_ratio", "s1_linear_sum",
+        "s1_register_rho", "s1_pca1", "s1_raw_corr", "s1_indep_quad", "s1_cf_pooled", "s1_twin_ratio", "s1_flat_ratio", "s1_linear_sum",
         "s2_winter_kvarh", "s2_monthly_qp", "s2_monthly_win", "s2_class_pf", "s2_targets_only", "s2_local_dv", "s2_rp_only", "s2_raw_dv",
         "s3_gis", "s3_ami_plus_gis", "s3_ami_grossup", "s3_scalar_ols", "s3_evening_cut", "s3_even_zres", "s3_handbook_pf", "s3_sub_pf",
     ]

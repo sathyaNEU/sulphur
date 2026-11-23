@@ -12,7 +12,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.platypus import KeepTogether, Paragraph, Spacer, Table, TableStyle
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts",
+WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".agents", "skills", "reduce-house-fixes", "scripts",
                        "writers")
 sys.path.insert(0, WRITERS)
 import officepdf as O  # noqa: E402
@@ -77,7 +77,8 @@ def _write_planning_standard(out_dir):
             "its heaviest-loaded phase over a 15-minute Imbalance Settlement Period (ISP). A substation's 2026 peak "
             "15-minute limiting-phase equivalent apparent load (Lim_MVA) is defined as three times the apparent power "
             "of its heaviest-loaded phase at the annual 15-minute peak: Lim_MVA = 3 * w_max * S_15m, where S_15m = "
-            "sqrt(P_15m^2 + Q_15m^2) is total three-phase apparent power in MVA and w_max is the share of total "
+            "sqrt(P_15m^2 + Q_h^2) combines annual peak 15-minute active demand P_15m (MW) with peak-hour reactive "
+            "demand Q_h (MVAr) into total three-phase apparent power in MVA, and w_max is the share of total "
             "substation load carried by the heaviest phase (A, B, or C) at peak.", body),
         Paragraph(
             "3.2 Total load on each phase (A, B, or C) at peak consists of all single-phase lateral loads connected "

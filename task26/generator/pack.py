@@ -1,4 +1,4 @@
-"""Materialize the 19 operational dataset files under target/ from core.simulate() arrays (v3).
+"""Materialize the 19 operational dataset files under target/ from core.simulate() arrays (v4).
 
 Every physical array comes directly from core.simulate() (seed 2635). Layer 1 ETL texture (superseded SCADA
 re-export batches, legacy RTU date formatting on Raudfjord, Europe/Oslo CET/CEST vs CET standard alignment,
@@ -71,7 +71,7 @@ FILES = {
     "fdr_m15": "feeder_demand_registers_monthly_2026.csv",
     "bus_vph": "substation_phase_bus_voltages_2026.csv",
     "ami_db": "ami_lateral_telemetry_2026.db",
-    "ref_pq": "pq_commissioning_autumn2026.csv",
+    "ref_pq": "pq_commissioning_2026.csv",
     "ref_tracer": "commissioning_phase_log_2025.csv",
     "rev_xlsx": "revenue_meter_monthly_2026.xlsx",
     "tx_xlsx": "substation_transformer_register.xlsx",
@@ -347,7 +347,7 @@ def _write_phase_bus_and_ami(world, out_dir, ts_utc):
 
 
 def _write_comm_pq_15min(world, out_dir):
-    """Write pq_commissioning_autumn2026.csv: Sep-Oct active-only 15-min log on Fossheim & Lindberg (no Q, no 3-phase, no winter)."""
+    """Write pq_commissioning_2026.csv: Sep, Oct, and Dec active-only 15-min log on Fossheim, Lindberg, and Solberg (no Q, no 3-phase)."""
     path = os.path.join(out_dir, FILES["ref_pq"])
     comm_h_idx = np.where(C.COMM_HOURS)[0]
     n_rows = 0

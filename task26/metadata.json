@@ -65,10 +65,10 @@
    "pulled": "2027-01-12",
    "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
-  "pq_commissioning_autumn2026.csv": {
-   "covers": "Autumn 2026 main-bay active-power interval metering log for selected modernized substations",
+  "pq_commissioning_2026.csv": {
+   "covers": "September, October, and December 2026 main-bay active-power 15-minute interval metering log for selected modernized substations",
    "license": "proprietary, fictional organisation",
-   "pulled": "2026-11-05",
+   "pulled": "2027-01-09",
    "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "revenue_meter_monthly_2026.xlsx": {

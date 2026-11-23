@@ -1,17 +1,17 @@
 {
  "task": "task26",
- "status": "RUNS",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "subdomain": "distribution-losses-energy-balance",
  "objective": "etl",
- "stage": 6,
- "stage_name": "runs",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-22",
  "doctrine": "throughout",
  "seed": 2635,
- "architecture": 3,
- "loops": 0,
- "call": "Phase 1 (2027): Hestmark (141.77%, 50.33 MVA, 20.16 MVA relief), Raudfjord (109.21%, 49.15 MVA, 10.90 MVA), Kvernholm (107.68%, 34.24 MVA, 7.21 MVA), Drangvik (106.61%, 50.64 MVA, 10.26 MVA); Phase 2 (2028-2029): Malmnes (93.29%, 43.29 MVA, 3.85 MVA), Svarthaug (92.60%, 31.67 MVA, 2.60 MVA); Defer: Tverrli (66.51%, 27.27 MVA, 0.00 MVA); pool total relief 54.97 MVA (C1 242.89 MW, C2 77.74 MVAr, C3 37.25%)",
+ "architecture": 4,
+ "loops": 1,
+ "call": "Phase 1 (2027): Hestmark (137.55%, 46.77 MVA, 17.87 MVA relief), Raudfjord (110.89%, 49.35 MVA, 11.52 MVA), Kvernholm (108.18%, 33.75 MVA, 7.23 MVA), Drangvik (106.46%, 48.33 MVA, 9.74 MVA); Phase 2 (2028-2029): Svarthaug (93.13%, 31.29 MVA, 2.73 MVA), Malmnes (93.07%, 39.65 MVA, 3.44 MVA); Defer: Tverrli (64.94%, 26.30 MVA, 0.00 MVA); pool total relief 52.53 MVA (C1 230.12 MW, C2 79.63 MVAr, C3 37.46%)",
  "paper_pair": 20.8,
  "prompt_rewritten": true,
  "core_level": 5,
@@ -22,50 +22,59 @@
   "thorough": 100.0,
   "corelib_one_lost": {
    "S1": 22,
-   "S2": 34,
+   "S2": 28,
    "S3": 40
   },
   "corelib_reflex": 15,
-  "corelib_rigorous": 15,
-  "corelib_response1_v2": 27.4,
+  "corelib_rigorous": 16,
+  "corelib_response1_v2": 39.2,
   "corelib_run_routes": {
-   "calibrated": 33.3,
-   "cutoff": 39.2,
+   "calibrated": 21.6,
+   "cutoff": 21.6,
    "generous": 20.8,
-   "hedge": 14.9
+   "hedge": 9.0
   }
  },
  "gates": {
-  "precut": "PASS (117 checks, 0 FAIL, 1 answered WARN)",
+  "precut": "PASS (0 FAIL, 1 answered WARN)",
   "effort": "PASS (quick 7.0, careful 20.8, thorough 100.0, 0 uncited cells)",
   "voice": "PASS (0 FAIL, 0 WARN)",
-  "leak": "REVIEW (0 LEAK across 13 sweeps, sweep 13 metadata clean, isolated Stage 4 v3 leak-reader polishes resolved)",
-  "figures": "PASS (100% matched across submission.md, CSV, XLSX, figures.json)",
+  "leak": "REVIEW (0 LEAK across 13 sweeps, isolated Stage 4 v4 leak-reader clean)",
+  "figures": "PASS (414/414 matched across submission.md, CSV, XLSX, figures.json)",
   "containers": "PASS (0 FAIL, 0 WARN)",
   "heart": "WARN only (0 BLOCK, skeleton PASS 0 WARN)",
   "surface": "PASS",
-  "checks": "PASS (952 assertions + 115 live Excel formulas verified 0.00e+00 via LibreOffice Calc)",
+  "checks": "PASS (960+ assertions including SF19 + 117 live Excel formulas verified 0.00e+00 via LibreOffice Calc)",
   "verify": "PASS (standalone recomputation from target.zip)",
   "rebuild": "PASS (byte-identical across two full builds)"
  },
  "judge": {
   "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "summary": "Gates A-E PASS on v3 (seed 2635, zero-PQ-handle physics): float64 <= 2.13e-14 reproduction from target.zip; 100% schedule invariance across 27 shipped variants, 20+ adversarial honest variants, 420/420 Cartesian combinations, and 6/6 +/-20% forcing perturbations; internal physics index 2.98 beating all 37 rival shortcuts and frontier run routes by 3.5x-57.4x (RESPONSE1_V2 27.4/100 missing 5/7; run_routes 15-39/100); 115 live Excel formulas verified to 0.00e+00 max diff via LibreOffice Calc; all FIX_NOW deliverables polishes resolved.",
-  "report": "determinism_check_report.md"
+  "disposition": "FIX_NOW_RESOLVED",
+  "summary": "Gates A-E PASS on v4 (seed 2635, 3-hub autumn+winter PQ, natural d_i = M_15 - P_60): exact 2-dp reproduction across all 47 load-bearing figures from target.zip; directly reproduced 9-pt max(P_15)-max(P_60) MAE table (0.52 MW golden vs 2.08-8.64 MW = 4.0x-16.5x for every S1 rival including s1_twin_ratio 5.12 MW); 0 schedule flips across 28 Gate C forks + 6 +/-20% forcing perturbations; Malmnes stays Phase 2 even under forced Fossheim (88.12%) or Solberg (98.71%) commissioning ratios; all three FIX_NOW submission.md polishes (Steps 3-5 conventions and Step 8 Svarthaug clearance) applied cleanly with 414/414 figures matched.",
+  "report": "determinism_check_report_pass2.md"
  },
+ "returned": [
+  {
+   "date": "2026-11-22",
+   "architecture": 3,
+   "reason": "determinism: Fossheim-Malmnes statistical twin ratio moved Malmnes from Phase 2 to Defer; Step 3 MAE did not reproduce directly on natural d_i = M_15 - P_60; Step 8 cited Malmnes vs 100% only",
+   "repair": "determinism (Option A, v4): bounded duty-cycle 15-min bursts aligning natural d_i and monthly max(P_15)-max(P_60); 3 non-twin hubs (Fossheim 11, Solberg 7 mixed, Lindberg 8) across Sep/Oct/Dec (9 pts, pq_commissioning_2026.csv); Malmnes centered in Phase 2 (93.07%, stays Phase 2 even under forced Fossheim/Solberg ratios); NS-2026 Sec 3.1 Q_h aligned; Step 3 & Step 8 fixed",
+   "review_file": "runs/review_2026-11-22.md"
+  }
+ ],
  "runs": {
   "run1": null,
   "run2": null,
   "average": null,
   "counterfactual_average": null
  },
- "resume": "both v3 responses saved under runs/ and How is each model stumped? emitted in submission.md; awaiting platform rubric/scores for final /triage-runs",
+ "resume": "v4 READY for platform upload (target.zip + golden.zip) and fresh two-model platform rollouts; omit stale v3 stump block until v4 runs return for /triage-runs",
  "final_cut": {
-  "date": "2026-11-21",
-  "target_zip_md5": "225e66f9b225262c3fb32a44881bedff",
-  "golden_zip_md5": "86436c687a465f95fa362b470c0adf80",
-  "target_digest": "bbb9e232e9e1ffcd",
-  "golden_digest": "0c2bfa9f7354e21c"
+  "date": "2026-11-22",
+  "target_zip_md5": "ffc7feca782430b716dde5beb0fe27ce",
+  "golden_zip_md5": "15b1c41bde191e4e08227d4bb8c40176",
+  "target_digest": "7c8ff04c8a83572d",
+  "golden_digest": "35cc8ae4b3a559b9"
  }
 }

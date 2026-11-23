@@ -1,21 +1,23 @@
-"""Core physical grid simulator, estimators, rival shortcuts, frontier run routes, and corelib spec for task26 (v3).
+"""Core physical grid simulator, estimators, rival shortcuts, frontier run routes, and corelib spec for task26 (v4).
 
-Architecture v3 (zero-PQ-handle physics):
-  - Replaces the 4-site full-year 3-phase PQ archive with a 2-site non-peak Sep-Oct active-only commissioning log
-    (pq_commissioning_autumn2026.csv on Fossheim & Lindberg: sub_p15_mw only, no Q, no Pa/Pb/Pc, no winter peaks).
+Architecture v4 (zero-in-scope-PQ physics with 3-hub autumn+winter commissioning validation):
+  - Ships active-only 15-min commissioning data on 3 excluded modernized hubs across Sep, Oct, and Dec
+    (pq_commissioning_2026.csv on Fossheim [11 feeders, staggered], Solberg [7 feeders, mixed], and
+    Lindberg [8 feeders, synchronized]: sub_p15_mw only, no Q, no Pa/Pb/Pc, zero in-scope PQ data).
+  - Bounded duty-cycle 15-min feeder pulses ensure monthly max(P_15) - max(P_60) obeys correlated quadrature
+    k_ord * sqrt(d^T R d) directly with the natural register excess d_i = M_15,i - P_60,i across all 9
+    commissioning site-months (< 0.6 MW MAE vs 3.5x-15x worse for every rival including twin-ratio calibration).
   - Four radial 66 kV corridors (COR-N01, COR-N02, COR-S01, COR-S02) place the four modernized hubs UPSTREAM of the
     seven relief-pool substations, so filtering excluded hubs early breaks coupled 66 kV reactive inversion.
   - S1 (unit): seasonal burst duty-cycle modulation on staggered sites inverts 12-month register correlation
-    (Malmnes +0.85 vs Drangvik +0.33) and defeats 1-PC stripping, while stripping 4 regional diurnal-weather modes
-    recovers exact pairwise feeder innovation correlation R_ij (0.83 vs 0.08) for correlated quadrature.
+    (Malmnes ~+0.90 vs Drangvik ~+0.45) and defeats 1-PC stripping, while stripping 4 regional diurnal-weather modes
+    recovers exact pairwise feeder innovation correlation R_ij (~0.83 vs ~0.06) for correlated quadrature.
   - S2 (what): seasonally staged winter fixed caps on Kvernholm flatten monthly net_kvarh while peak-only (>0.85 Pmax)
     inductive loading surges to +19 MVAr; peak-only (>0.87 Pmax) switched caps on Malmnes clamp peak Q near 0 MVAr
-    while off-peak winter net_kvarh rises steeply with P; defeats annual/winter net_kvarh, linear/winter-dummy/quadratic
-    monthly Q(P), class nominal PFs, target-only corridors, local dV, R*P-only dV, and un-demeaned corridor dV.
+    while off-peak winter net_kvarh rises steeply with P; defeats all monthly/local reactive proxies.
   - S3 (who): opposite-phase diurnal class skew (evening residential vs midday commercial) plus a 3.3x reactive
     impedance contrast (AMI-metered tan_phi_res = 0.125 vs tan_phi_com = 0.620 vs handbook 0.329/0.484) and a
-    self-confirming 20/40 partial-AMI rollout (80/80 tracer match hiding opposite legacy skew) defeats scalar OLS,
-    evening cutoff OLS (with z_avg or z_res), multi-class OLS with handbook or substation PF, and all AMI/GIS routes.
+    self-confirming 20/40 partial-AMI rollout (80/80 tracer match hiding opposite legacy skew) defeats all AMI/GIS/scalar routes.
 
 Run:
     python3 task26/generator/core.py --detail --forcing
@@ -28,7 +30,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
-sys.path.insert(0, os.path.join(REPO, ".claude", "skills", "stumping"))
+sys.path.insert(0, os.path.join(REPO, ".agents", "skills", "stumping"))
 import corelib  # noqa: E402
 
 SEED = 2635
@@ -41,12 +43,12 @@ WINTER_MONTHS = (0, 1, 10, 11)
 WINTER_HOURS = np.isin(HOUR_MONTH, WINTER_MONTHS)
 HEATING_MONTHS = (0, 1, 2, 9, 10, 11)
 HEATING_HOURS = np.isin(HOUR_MONTH, HEATING_MONTHS)
-COMM_MONTHS = (8, 9)  # Sep-Oct non-peak commissioning window (active-only!)
+COMM_MONTHS = (8, 9, 11)  # Sep, Oct, Dec commissioning window (autumn + winter, active-only on 3 excluded hubs!)
 COMM_HOURS = np.isin(HOUR_MONTH, COMM_MONTHS)
 
 TARGETS = ("Drangvik", "Hestmark", "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli")
 REFS = ("Fossheim", "Lindberg", "Ostervik", "Solberg")
-PQ_COMM_SITES = ("Fossheim", "Lindberg")
+PQ_COMM_SITES = ("Fossheim", "Lindberg", "Solberg")
 ALL_SUBS = TARGETS + REFS
 
 V_NOM_LV = 22.0
@@ -98,151 +100,158 @@ CORRIDORS = {
 }
 
 SUB_CFG = {
-    # S1-opened (SYNCED industrial cluster, steady burstiness -> LOW 12-mo register_rho, HIGH stripped R_ij -> Phase 1 ~106.5%)
+    # S1-opened (SYNCED industrial cluster, steady burstiness -> LOW 12-mo register_rho, HIGH stripped R_ij -> Phase 1 ~107.6%)
     "Drangvik": dict(
-        firm_mva=47.5, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=0.34, pt_ph_off=(0.16, -0.10, -0.06),
+        firm_mva=45.4, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=0.34, pt_ph_off=(0.16, -0.10, -0.06),
         seasonal_mod=0.0, ramp_thr=0.80,
         feeders=[
-            ("industrial_batch", 5.2, 0.25, 1),
-            ("industrial_batch", 5.0, 0.25, 1),
-            ("industrial_batch", 4.8, 0.24, 1),
-            ("maritime_port",    4.6, 0.24, 1),
-            ("maritime_port",    4.4, 0.23, 1),
-            ("commercial_mixed", 4.4, 0.10, 0),
-            ("residential_heat", 5.2, 0.09, 0),
+            ("industrial_batch", 5.2, 0.52, 1),
+            ("industrial_batch", 5.0, 0.52, 1),
+            ("industrial_batch", 4.8, 0.51, 1),
+            ("maritime_port",    4.6, 0.50, 1),
+            ("maritime_port",    4.4, 0.49, 1),
+            ("commercial_mixed", 4.4, 0.18, 0),
+            ("residential_heat", 5.2, 0.16, 0),
         ],
-        q_alpha=0.42, q_peak_extra=10.5, c_fixed=4.0, c_win_fixed=2.4, c_sw_peak=0.0,
-        res_ph_w=(0.54, 0.23, 0.23), com_ph_w=(0.20, 0.50, 0.30),
+        q_alpha=0.42, q_peak_extra=12.8, c_fixed=4.0, c_win_fixed=2.8, c_sw_peak=0.0,
+        res_ph_w=(0.56, 0.22, 0.22), com_ph_w=(0.20, 0.50, 0.30),
         ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
         gis_ph_w=(0.35, 0.33, 0.32),
     ),
-    # Forced Phase 1 anchor (~141.8%)
+    # Forced Phase 1 anchor (~139%)
     "Hestmark": dict(
-        firm_mva=35.5, r_ohm=0.082, x_ohm=1.08, pt_offset_kv=-0.36, pt_ph_off=(-0.15, 0.11, 0.04),
+        firm_mva=34.0, r_ohm=0.082, x_ohm=1.08, pt_offset_kv=-0.36, pt_ph_off=(-0.15, 0.11, 0.04),
         seasonal_mod=0.0, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 10.0, 0.21, 2),
-            ("industrial_batch",  8.5, 0.20, 2),
-            ("maritime_port",     6.5, 0.18, 0),
-            ("commercial_mixed",  6.0, 0.10, 0),
-            ("residential_heat",  7.5, 0.09, 0),
+            ("industrial_batch", 10.0, 0.38, 2),
+            ("industrial_batch",  8.5, 0.36, 2),
+            ("maritime_port",     6.5, 0.32, 0),
+            ("commercial_mixed",  6.0, 0.18, 0),
+            ("residential_heat",  7.5, 0.16, 0),
         ],
         q_alpha=0.45, q_peak_extra=8.0, c_fixed=4.5, c_win_fixed=2.5, c_sw_peak=0.0,
-        res_ph_w=(0.58, 0.21, 0.21), com_ph_w=(0.18, 0.52, 0.30),
+        res_ph_w=(0.60, 0.20, 0.20), com_ph_w=(0.18, 0.52, 0.30),
         ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
         gis_ph_w=(0.36, 0.32, 0.32),
     ),
-    # S2-opened UP (peak-only >0.85 Pmax inductive surge +17.5 MVAr; c_win_fixed=2.8 flattens monthly Q_m -> Phase 1 ~107.7%)
+    # S2-opened UP (peak-only >0.85 Pmax inductive surge +17.5 MVAr; c_win_fixed=2.8 flattens monthly Q_m -> Phase 1 ~108%)
     "Kvernholm": dict(
-        firm_mva=31.8, r_ohm=0.092, x_ohm=1.18, pt_offset_kv=0.38, pt_ph_off=(0.14, -0.17, 0.03),
+        firm_mva=31.2, r_ohm=0.092, x_ohm=1.18, pt_offset_kv=0.38, pt_ph_off=(0.14, -0.17, 0.03),
         seasonal_mod=0.30, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 6.0, 0.14, 0),
-            ("maritime_port",    5.4, 0.13, 0),
-            ("commercial_mixed", 5.6, 0.10, 0),
-            ("commercial_mixed", 4.6, 0.10, 0),
-            ("residential_heat", 6.6, 0.09, 0),
+            ("industrial_batch", 6.0, 0.26, 0),
+            ("maritime_port",    5.4, 0.24, 0),
+            ("commercial_mixed", 5.6, 0.18, 0),
+            ("commercial_mixed", 4.6, 0.18, 0),
+            ("residential_heat", 6.6, 0.16, 0),
         ],
         q_alpha=0.36, q_peak_extra=17.5, c_fixed=3.5, c_win_fixed=2.8, c_sw_peak=0.0,
         res_ph_w=(0.48, 0.26, 0.26), com_ph_w=(0.30, 0.36, 0.34),
         ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
         gis_ph_w=(0.35, 0.33, 0.32),
     ),
-    # Matched staggered twin of Drangvik + peak-only (>0.87 Pmax) switched cap -> Phase 2 ~93.3%; flipped UP to P1 by S1 & S2 rivals!
+    # Staggered industrial site (distinct from 11-feeder Fossheim) + peak-only (>0.87 Pmax) switched cap -> Phase 2 ~93.0%; flipped UP by S1 & S2 rivals!
     "Malmnes": dict(
-        firm_mva=46.4, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=-0.36, pt_ph_off=(-0.13, 0.15, -0.02),
+        firm_mva=42.6, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=-0.36, pt_ph_off=(-0.13, 0.15, -0.02),
         seasonal_mod=0.62, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 5.2, 0.25, 0),
-            ("industrial_batch", 5.0, 0.25, 0),
-            ("industrial_batch", 4.8, 0.24, 0),
-            ("maritime_port",    4.6, 0.24, 0),
-            ("maritime_port",    4.4, 0.23, 0),
-            ("commercial_mixed", 4.4, 0.10, 0),
-            ("residential_heat", 5.2, 0.09, 0),
+            ("industrial_batch", 5.2, 0.47, 0),
+            ("industrial_batch", 5.0, 0.47, 0),
+            ("industrial_batch", 4.8, 0.46, 0),
+            ("maritime_port",    4.6, 0.45, 0),
+            ("maritime_port",    4.4, 0.44, 0),
+            ("commercial_mixed", 4.4, 0.18, 0),
+            ("residential_heat", 5.2, 0.16, 0),
         ],
         q_alpha=0.66, q_peak_extra=0.0, c_fixed=1.8, c_win_fixed=0.0, c_sw_peak=19.0,
         res_ph_w=(0.54, 0.23, 0.23), com_ph_w=(0.20, 0.50, 0.30),
         ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
         gis_ph_w=(0.34, 0.33, 0.33),
     ),
-    # S3-opened UP (strong residential EVENING peak -> Phase 1 ~109.2%; midday com Phase B=62% breaks scalar/cutoff/handbook/AMI!)
+    # S3-opened UP (strong residential EVENING peak -> Phase 1 ~110%; midday com Phase B=62% breaks scalar/cutoff/handbook/AMI!)
     "Raudfjord": dict(
-        firm_mva=45.0, r_ohm=0.095, x_ohm=1.22, pt_offset_kv=-0.32, pt_ph_off=(0.17, -0.08, -0.09),
+        firm_mva=44.5, r_ohm=0.095, x_ohm=1.22, pt_offset_kv=-0.32, pt_ph_off=(0.17, -0.08, -0.09),
         seasonal_mod=0.25, ramp_thr=0.85,
         feeders=[
-            ("residential_heat", 12.2, 0.09, 0),
-            ("residential_heat", 10.8, 0.09, 0),
-            ("commercial_mixed",  5.2, 0.10, 0),
-            ("commercial_mixed",  4.4, 0.10, 0),
-            ("industrial_batch",  2.4, 0.12, 0),
+            ("residential_heat", 12.2, 0.16, 0),
+            ("residential_heat", 10.8, 0.16, 0),
+            ("commercial_mixed",  5.2, 0.18, 0),
+            ("commercial_mixed",  4.4, 0.18, 0),
+            ("industrial_batch",  2.4, 0.22, 0),
         ],
         q_alpha=0.40, q_peak_extra=4.5, c_fixed=3.5, c_win_fixed=2.0, c_sw_peak=0.0,
-        res_ph_w=(0.58, 0.21, 0.21), com_ph_w=(0.13, 0.62, 0.25),
+        res_ph_w=(0.60, 0.20, 0.20), com_ph_w=(0.13, 0.62, 0.25),
         ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
         gis_ph_w=(0.35, 0.33, 0.32),
     ),
-    # S3-opened OPPOSITE (strong residential EVENING peak -> balanced w ~33.9%, Phase 2 ~92.6%; com Phase C=70% + AMI/GIS C=58% push P2 -> P1!)
+    # S3-opened OPPOSITE (strong residential EVENING peak -> balanced w ~33.9%, Phase 2 ~93%; com Phase C=70% + AMI/GIS C skew push P2 -> P1!)
     "Svarthaug": dict(
-        firm_mva=34.2, r_ohm=0.090, x_ohm=1.16, pt_offset_kv=0.35, pt_ph_off=(-0.10, -0.07, 0.17),
+        firm_mva=33.6, r_ohm=0.090, x_ohm=1.16, pt_offset_kv=0.35, pt_ph_off=(-0.10, -0.07, 0.17),
         seasonal_mod=0.25, ramp_thr=0.85,
         feeders=[
-            ("residential_heat", 12.0, 0.09, 0),
-            ("residential_heat", 10.4, 0.09, 0),
-            ("commercial_mixed",  5.2, 0.10, 0),
-            ("commercial_mixed",  4.4, 0.10, 0),
-            ("industrial_batch",  2.4, 0.12, 0),
+            ("residential_heat", 12.0, 0.16, 0),
+            ("residential_heat", 10.4, 0.16, 0),
+            ("commercial_mixed",  5.2, 0.18, 0),
+            ("commercial_mixed",  4.4, 0.18, 0),
+            ("industrial_batch",  2.4, 0.22, 0),
         ],
         q_alpha=0.42, q_peak_extra=4.5, c_fixed=3.5, c_win_fixed=2.0, c_sw_peak=0.0,
         res_ph_w=(0.37, 0.37, 0.26), com_ph_w=(0.15, 0.15, 0.70),
-        ami_res_w=(0.25, 0.25, 0.50), ami_com_w=(0.25, 0.25, 0.50),
-        gis_ph_w=(0.20, 0.20, 0.60),
+        ami_res_w=(0.29, 0.29, 0.42), ami_com_w=(0.27, 0.27, 0.46),
+        gis_ph_w=(0.23, 0.23, 0.54),
     ),
-    # Forced Defer anchor (~66.5%)
+    # Forced Defer anchor (~66%)
     "Tverrli": dict(
-        firm_mva=41.0, r_ohm=0.098, x_ohm=1.24, pt_offset_kv=-0.40, pt_ph_off=(0.12, 0.04, -0.16),
+        firm_mva=40.5, r_ohm=0.098, x_ohm=1.24, pt_offset_kv=-0.40, pt_ph_off=(0.12, 0.04, -0.16),
         seasonal_mod=0.30, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 5.2, 0.16, 0),
-            ("maritime_port",    4.8, 0.15, 0),
-            ("commercial_mixed", 5.2, 0.10, 0),
-            ("residential_heat", 6.5, 0.09, 0),
-            ("residential_heat", 4.5, 0.09, 0),
+            ("industrial_batch", 5.2, 0.29, 0),
+            ("maritime_port",    4.8, 0.27, 0),
+            ("commercial_mixed", 5.2, 0.18, 0),
+            ("residential_heat", 6.5, 0.16, 0),
+            ("residential_heat", 4.5, 0.16, 0),
         ],
         q_alpha=0.45, q_peak_extra=5.0, c_fixed=4.0, c_win_fixed=2.5, c_sw_peak=0.0,
         res_ph_w=(0.56, 0.22, 0.22), com_ph_w=(0.20, 0.50, 0.30),
         ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
         gis_ph_w=(0.34, 0.33, 0.33),
     ),
-    # 4 Modernized upstream hubs (excluded from 2027-2029 relief pool; ONLY Fossheim & Lindberg ship Sep-Oct active-only PQ!)
+    # 4 Modernized upstream hubs (excluded from 2027-2029 relief pool; Fossheim, Lindberg, Solberg ship active-only Sep/Oct/Dec PQ!)
+    # Fossheim: 11 feeders (9 staggered industrial/maritime + com + res), distinct count & ratio (~0.31) from 7-feeder Malmnes (~0.43)
     "Fossheim": dict(
-        firm_mva=50.0, r_ohm=0.086, x_ohm=1.12, pt_offset_kv=0.36, pt_ph_off=(0.15, -0.09, -0.06),
-        seasonal_mod=0.62, ramp_thr=0.85,
+        firm_mva=54.0, r_ohm=0.086, x_ohm=1.12, pt_offset_kv=0.36, pt_ph_off=(0.15, -0.09, -0.06),
+        seasonal_mod=0.55, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 5.2, 0.25, 0),
-            ("industrial_batch", 5.0, 0.25, 0),
-            ("industrial_batch", 4.8, 0.24, 0),
-            ("maritime_port",    4.6, 0.24, 0),
-            ("maritime_port",    4.4, 0.23, 0),
-            ("commercial_mixed", 4.4, 0.10, 0),
-            ("residential_heat", 5.2, 0.09, 0),
+            ("industrial_batch", 3.4, 0.47, 0),
+            ("industrial_batch", 3.3, 0.47, 0),
+            ("industrial_batch", 3.2, 0.46, 0),
+            ("industrial_batch", 3.1, 0.46, 0),
+            ("industrial_batch", 3.0, 0.45, 0),
+            ("maritime_port",    3.2, 0.46, 0),
+            ("maritime_port",    3.1, 0.45, 0),
+            ("maritime_port",    3.0, 0.45, 0),
+            ("maritime_port",    2.9, 0.44, 0),
+            ("commercial_mixed", 4.6, 0.18, 0),
+            ("residential_heat", 5.4, 0.16, 0),
         ],
         q_alpha=0.60, q_peak_extra=0.0, c_fixed=3.0, c_win_fixed=0.0, c_sw_peak=14.0,
         res_ph_w=(0.50, 0.25, 0.25), com_ph_w=(0.28, 0.44, 0.28),
         ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
         gis_ph_w=(0.35, 0.33, 0.32),
     ),
+    # Lindberg: 8 feeders (6 synchronized industrial/maritime cluster -> ratio ~0.84, widens indep_quad gap > 3.2x!)
     "Lindberg": dict(
-        firm_mva=54.0, r_ohm=0.084, x_ohm=1.10, pt_offset_kv=-0.36, pt_ph_off=(-0.14, 0.10, 0.04),
+        firm_mva=62.0, r_ohm=0.084, x_ohm=1.10, pt_offset_kv=-0.36, pt_ph_off=(-0.14, 0.10, 0.04),
         seasonal_mod=0.0, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 5.2, 0.25, 3),
-            ("industrial_batch", 5.0, 0.25, 3),
-            ("industrial_batch", 4.8, 0.24, 3),
-            ("maritime_port",    4.6, 0.24, 3),
-            ("maritime_port",    4.4, 0.23, 3),
-            ("commercial_mixed", 4.4, 0.10, 0),
-            ("residential_heat", 5.2, 0.09, 0),
+            ("industrial_batch", 5.0, 0.55, 3),
+            ("industrial_batch", 4.9, 0.55, 3),
+            ("industrial_batch", 4.8, 0.54, 3),
+            ("maritime_port",    4.6, 0.53, 3),
+            ("maritime_port",    4.5, 0.53, 3),
+            ("maritime_port",    4.4, 0.52, 3),
+            ("commercial_mixed", 4.4, 0.18, 0),
+            ("residential_heat", 5.2, 0.16, 0),
         ],
         q_alpha=0.62, q_peak_extra=0.0, c_fixed=3.0, c_win_fixed=0.0, c_sw_peak=23.0,
         res_ph_w=(0.48, 0.26, 0.26), com_ph_w=(0.28, 0.42, 0.30),
@@ -253,26 +262,29 @@ SUB_CFG = {
         firm_mva=48.0, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=0.36, pt_ph_off=(-0.12, 0.14, -0.02),
         seasonal_mod=0.25, ramp_thr=0.85,
         feeders=[
-            ("residential_heat", 7.8, 0.09, 0),
-            ("residential_heat", 6.4, 0.09, 0),
-            ("commercial_mixed", 5.8, 0.10, 0),
-            ("commercial_mixed", 5.0, 0.10, 0),
-            ("industrial_batch", 5.0, 0.13, 0),
+            ("residential_heat", 7.8, 0.16, 0),
+            ("residential_heat", 6.4, 0.16, 0),
+            ("commercial_mixed", 5.8, 0.18, 0),
+            ("commercial_mixed", 5.0, 0.18, 0),
+            ("industrial_batch", 5.0, 0.24, 0),
         ],
         q_alpha=0.48, q_peak_extra=22.0, c_fixed=4.0, c_win_fixed=3.0, c_sw_peak=0.0,
         res_ph_w=(0.39, 0.39, 0.22), com_ph_w=(0.25, 0.25, 0.50),
         ami_res_w=(0.25, 0.25, 0.50), ami_com_w=(0.25, 0.25, 0.50),
         gis_ph_w=(0.23, 0.23, 0.54),
     ),
+    # Solberg: 7 feeders (3 synchronized + 2 staggered industrial/maritime -> intermediate ratio ~0.62)
     "Solberg": dict(
-        firm_mva=46.0, r_ohm=0.090, x_ohm=1.16, pt_offset_kv=-0.34, pt_ph_off=(0.13, -0.15, 0.02),
+        firm_mva=50.0, r_ohm=0.090, x_ohm=1.16, pt_offset_kv=-0.34, pt_ph_off=(0.13, -0.15, 0.02),
         seasonal_mod=0.25, ramp_thr=0.85,
         feeders=[
-            ("residential_heat", 7.5, 0.09, 0),
-            ("commercial_mixed", 6.2, 0.10, 0),
-            ("industrial_batch", 6.0, 0.14, 0),
-            ("maritime_port",    5.5, 0.13, 0),
-            ("residential_heat", 5.5, 0.09, 0),
+            ("industrial_batch", 5.0, 0.46, 4),
+            ("industrial_batch", 4.8, 0.46, 4),
+            ("industrial_batch", 4.6, 0.45, 4),
+            ("maritime_port",    4.6, 0.44, 0),
+            ("maritime_port",    4.4, 0.43, 0),
+            ("commercial_mixed", 4.5, 0.18, 0),
+            ("residential_heat", 5.2, 0.16, 0),
         ],
         q_alpha=0.48, q_peak_extra=8.0, c_fixed=4.5, c_win_fixed=3.0, c_sw_peak=0.0,
         res_ph_w=(0.42, 0.29, 0.29), com_ph_w=(0.30, 0.37, 0.33),
@@ -367,12 +379,14 @@ def simulate():
         for fi, (fcls, base_mw, sigma_0, cid) in enumerate(cfg["feeders"]):
             if cid > 0:
                 h_shk = np.sqrt(0.86) * cl_h[cid] + np.sqrt(0.14) * srng.normal(0.0, 1.0, N_HOURS)
-                z_15 = np.sqrt(0.86) * cl_15[cid] + np.sqrt(0.14) * srng.normal(0.0, 1.0, (N_HOURS, 4))
+                g_15 = np.sqrt(0.86) * cl_15[cid] + np.sqrt(0.14) * srng.normal(0.0, 1.0, (N_HOURS, 4))
             else:
                 h_shk = srng.normal(0.0, 1.0, N_HOURS)
-                z_15 = srng.normal(0.0, 1.0, (N_HOURS, 4))
-            z_15 = (z_15 - z_15.mean(axis=1, keepdims=True)) / np.sqrt(0.75)
-            sig_h = sigma_0 * ((1.0 - smod) + smod * seas_curve[HOUR_MONTH]) if sigma_0 > 0.19 else np.full(N_HOURS, sigma_0)
+                g_15 = srng.normal(0.0, 1.0, (N_HOURS, 4))
+            # Bounded duty-cycle within-hour burst pulse (zero mean across 4 quarters, physical rated-step ceiling)
+            u_15 = np.tanh(1.15 * g_15)
+            z_15 = u_15 - u_15.mean(axis=1, keepdims=True)
+            sig_h = sigma_0 * ((1.0 - smod) + smod * seas_curve[HOUR_MONTH]) if sigma_0 > 0.30 else np.full(N_HOURS, sigma_0)
             p_hr = base_mw * diur[fcls] * np.exp(0.012 * h_shk)
             f_p15[fi] = np.maximum(0.05, p_hr[:, None] * (1.0 + sig_h[:, None] * z_15))
             f_p60[fi] = f_p15[fi].mean(axis=1)
@@ -604,17 +618,17 @@ def _infer_feeder_corr_matrices(world, opts=None):
     return out
 
 
-def _quad_excess(sd, R_mat, m_list, form="mult", indep=False):
+def _quad_excess(sd, R_mat, m_list, form="add_raw", indep=False):
     nf = len(sd["f_meta"])
     idx_h = np.where(np.isin(HOUR_MONTH, m_list))[0]
     pk_h = int(idx_h[np.argmax(sd["sub_p60"][idx_h])])
     d = np.zeros(nf)
     for i in range(nf):
-        if form == "mult":
+        if form == "add_raw":
+            d[i] = max(0.0, float(np.mean([sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m] for m in m_list])))
+        elif form == "mult":
             rel = float(np.mean([(sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m]) / sd["feeder_p60_m"][i, m] for m in m_list]))
             d[i] = max(0.0, rel) * float(sd["f_p60"][i, pk_h])
-        elif form == "add_raw":
-            d[i] = max(0.0, float(np.mean([sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m] for m in m_list])))
         else:
             ex = float(np.mean([sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m] for m in m_list]))
             sc = float(sd["f_p60"][i, pk_h]) / float(np.mean([sd["feeder_p60_m"][i, m] for m in m_list]))
@@ -624,11 +638,20 @@ def _quad_excess(sd, R_mat, m_list, form="mult", indep=False):
     return float(np.sqrt(max(0.0, float(d @ R_mat @ d))))
 
 
+def _comm_month_obs_ex(sd, m):
+    """Exact monthly coincident 15-minute peak excess: max(P_15) - max(P_60) in commissioning month m."""
+    mh = (HOUR_MONTH == m)
+    cm = mh[COMM_HOURS]
+    p60_m = float(sd["sub_p60"][mh].max())
+    p15_m = float(sd["comm_p15"][cm].max())
+    return p15_m - p60_m, p60_m
+
+
 def _s1_estimate_all(world, opts):
     mode = opts.get("s1_mode", "golden")
     R_mats = _infer_feeder_corr_matrices(world, opts)
     k_opt = opts.get("s1_kord", "comm_cal")
-    form = opts.get("s1_form", "mult")
+    form = opts.get("s1_form", "add_raw")
     indep = (mode == "indep_quad")
     if k_opt == "unit":
         k_ord = 1.0
@@ -636,16 +659,35 @@ def _s1_estimate_all(world, opts):
         obs_c, raw_c = [], []
         for r in PQ_COMM_SITES:
             sd = world["subs"][r]
-            obs_ex = float((sd["comm_p15"].max(axis=1) - sd["sub_p60"][COMM_HOURS]).max())
-            rq = _quad_excess(sd, R_mats[r], list(COMM_MONTHS), form=form, indep=indep)
-            obs_c.append(obs_ex)
-            raw_c.append(rq)
+            for m in COMM_MONTHS:
+                obs_ex, _ = _comm_month_obs_ex(sd, m)
+                rq = _quad_excess(sd, R_mats[r], [m], form=form, indep=indep)
+                obs_c.append(obs_ex)
+                raw_c.append(rq)
         k_ord = float(sum(obs_c) / sum(raw_c)) if k_opt == "comm_cal" else float(np.mean([o / q for o, q in zip(obs_c, raw_c)]))
 
-    comm_flat = float(np.mean([world["subs"][r]["comm_p15"].max() / world["subs"][r]["sub_p60"][COMM_HOURS].max()
-                               for r in PQ_COMM_SITES]))
-    comm_cf = float(np.mean([world["subs"][r]["comm_p15"].max() / world["subs"][r]["feeder_m15"][:, list(COMM_MONTHS)].max(axis=1).sum()
-                             for r in PQ_COMM_SITES]))
+    # Commissioning ratios directly on monthly max(P_15) - max(P_60) across all 9 site-months
+    flat_vals, cf_vals = [], []
+    site_reg_rat = {}
+    for r in PQ_COMM_SITES:
+        sd = world["subs"][r]
+        r_rats = []
+        for m in COMM_MONTHS:
+            obs_ex, p60_m = _comm_month_obs_ex(sd, m)
+            reg_ex = float(np.sum(np.maximum(0.0, sd["feeder_m15"][:, m] - sd["feeder_p60_m"][:, m])))
+            flat_vals.append((p60_m + obs_ex) / p60_m)
+            cf_vals.append(obs_ex / max(reg_ex, 1e-6))
+            r_rats.append(obs_ex / max(reg_ex, 1e-6))
+        site_reg_rat[r] = float(np.mean(r_rats))
+    comm_flat = float(np.mean(flat_vals))
+    comm_cf = float(np.mean(cf_vals))
+
+    # Mean off-diagonal raw correlation per substation for nearest-PQ-site twin matching
+    raw_R = _infer_feeder_corr_matrices(world, {"s1_mode": "raw_corr"})
+    def _mean_off(R):
+        n = R.shape[0]
+        return float(R[~np.eye(n, dtype=bool)].mean())
+    raw_rho = {s: _mean_off(raw_R[s]) for s in ALL_SUBS}
 
     out = {}
     for s in ALL_SUBS:
@@ -653,23 +695,30 @@ def _s1_estimate_all(world, opts):
         p60_pk = float(sd["sub_p60"].max())
         pk_h = int(np.argmax(sd["sub_p60"]))
         pk_m = int(HOUR_MONTH[pk_h])
+        mopt = opts.get("s1_months", "winter")
+        m_list = list(WINTER_MONTHS) if mopt == "winter" else ([0, 1, 11] if mopt == "djf" else (list(range(12)) if mopt == "all" else [pk_m]))
         if mode == "scada60":
             out[s] = p60_pk
         elif mode == "flat_ratio":
             out[s] = p60_pk * comm_flat
         elif mode == "cf_pooled":
-            out[s] = comm_cf * float(sd["feeder_m15"][:, pk_m].sum())
+            d_mean = float(np.mean([np.sum(np.maximum(0.0, sd["feeder_m15"][:, m] - sd["feeder_p60_m"][:, m])) for m in m_list]))
+            out[s] = p60_pk + comm_cf * d_mean
+        elif mode == "twin_ratio":
+            cands = [r for r in PQ_COMM_SITES if r != s]
+            twin = min(cands, key=lambda r: abs(raw_rho[r] - raw_rho[s]))
+            d_mean = float(np.mean([np.sum(np.maximum(0.0, sd["feeder_m15"][:, m] - sd["feeder_p60_m"][:, m])) for m in m_list]))
+            out[s] = p60_pk + site_reg_rat[twin] * d_mean
         elif mode == "linear_sum":
-            out[s] = float(np.sum(sd["f_p60"][:, pk_h] * (sd["feeder_m15"][:, pk_m] / np.maximum(sd["feeder_p60_m"][:, pk_m], 0.1))))
+            d_mean = float(np.mean([np.sum(np.maximum(0.0, sd["feeder_m15"][:, m] - sd["feeder_p60_m"][:, m])) for m in m_list]))
+            out[s] = p60_pk + d_mean
         elif mode == "rigorous_cf60":
             cf60 = p60_pk / float(sd["f_p60"].max(axis=1).sum())
             out[s] = cf60 * float(sd["feeder_m15"].max(axis=1).sum())
         else:
-            mopt = opts.get("s1_months", "winter")
-            m_list = list(WINTER_MONTHS) if mopt == "winter" else ([0, 1, 11] if mopt == "djf" else (list(range(12)) if mopt == "all" else [pk_m]))
             rq = _quad_excess(sd, R_mats[s], m_list, form=form, indep=indep)
             out[s] = p60_pk + k_ord * rq
-    return out, k_ord, comm_flat, comm_cf, R_mats
+    return out, k_ord, comm_flat, comm_cf, R_mats, site_reg_rat, raw_rho
 
 
 def _s2_estimate_all(world, opts):
@@ -1022,7 +1071,7 @@ def _s3_estimate_all(world, opts, qh_for_subpf=None):
 def evaluate(world, opts=None):
     """Run all three estimation stages and compute internal physics falsification diagnostics."""
     opts = opts or {}
-    p15_all, k_ord, comm_flat, comm_cf, R_mats = _s1_estimate_all(world, opts)
+    p15_all, k_ord, comm_flat, comm_cf, R_mats, site_reg_rat, raw_rho = _s1_estimate_all(world, opts)
     qh_all, q_hr_hat = _s2_estimate_all(world, opts)
     w_all, bus_rms, tphi_ami, ami_q_err = _s3_estimate_all(world, opts, qh_for_subpf=qh_all)
 
@@ -1052,31 +1101,34 @@ def evaluate(world, opts=None):
         out[s] = dict(p15=p15, q_h=q_h, q15=q15, s15_tot=s15, w_max=w_max,
                       lim_mva=lim, loading_pct=load, relief_mva=rel)
 
-    # 1. S1 Sep-Oct active-only commissioning surge MAE (MW) on Fossheim & Lindberg
+    # 1. S1 9-point commissioning MAE (MW) directly on monthly max(P_15) - max(P_60) across Fossheim, Lindberg, Solberg x Sep/Oct/Dec
     comm_err = []
+    mode = opts.get("s1_mode", "golden")
+    form = opts.get("s1_form", "add_raw")
     for r in PQ_COMM_SITES:
         sd = world["subs"][r]
-        true_ex = float((sd["comm_p15"].max(axis=1) - sd["sub_p60"][COMM_HOURS]).max())
-        p60_c = float(sd["sub_p60"][COMM_HOURS].max())
-        mode = opts.get("s1_mode", "golden")
-        if mode == "scada60":
-            est_ex = 0.0
-        elif mode == "flat_ratio":
-            est_ex = p60_c * (comm_flat - 1.0)
-        elif mode == "cf_pooled":
-            est_ex = comm_cf * float(sd["feeder_m15"][:, list(COMM_MONTHS)].max(axis=1).sum()) - p60_c
-        elif mode == "linear_sum":
-            idx_c = np.where(COMM_HOURS)[0]
-            pkh = int(idx_c[np.argmax(sd["sub_p60"][idx_c])])
-            pkm = int(HOUR_MONTH[pkh])
-            est_ex = float(np.sum(sd["f_p60"][:, pkh] * (sd["feeder_m15"][:, pkm] / np.maximum(sd["feeder_p60_m"][:, pkm], 0.1)))) - p60_c
-        elif mode == "rigorous_cf60":
-            cf60 = p60_c / float(sd["f_p60"][:, COMM_HOURS].max(axis=1).sum())
-            est_ex = cf60 * float(sd["feeder_m15"][:, list(COMM_MONTHS)].max(axis=1).sum()) - p60_c
-        else:
-            rq = _quad_excess(sd, R_mats[r], list(COMM_MONTHS), form=opts.get("s1_form", "mult"), indep=(mode == "indep_quad"))
-            est_ex = k_ord * rq
-        comm_err.append(abs(est_ex - true_ex))
+        cands = [r2 for r2 in PQ_COMM_SITES if r2 != r]
+        twin = min(cands, key=lambda r2: abs(raw_rho[r2] - raw_rho[r]))
+        for m in COMM_MONTHS:
+            true_ex, p60_m = _comm_month_obs_ex(sd, m)
+            reg_ex = float(np.sum(np.maximum(0.0, sd["feeder_m15"][:, m] - sd["feeder_p60_m"][:, m])))
+            if mode == "scada60":
+                est_ex = 0.0
+            elif mode == "flat_ratio":
+                est_ex = p60_m * (comm_flat - 1.0)
+            elif mode == "cf_pooled":
+                est_ex = comm_cf * reg_ex
+            elif mode == "twin_ratio":
+                est_ex = site_reg_rat[twin] * reg_ex
+            elif mode == "linear_sum":
+                est_ex = reg_ex
+            elif mode == "rigorous_cf60":
+                cf60 = p60_m / float(sd["f_p60"][:, HOUR_MONTH == m].max(axis=1).sum())
+                est_ex = cf60 * float(sd["feeder_m15"][:, m].sum()) - p60_m
+            else:
+                rq = _quad_excess(sd, R_mats[r], [m], form=form, indep=(mode == "indep_quad"))
+                est_ex = k_ord * rq
+            comm_err.append(abs(est_ex - true_ex))
     s1_comm_mae = float(np.mean(comm_err))
 
     # 2. S2 internal physics balance: hourly LV voltage balance RMSE (mV) + 12-month kVARh conservation (MVAr)
@@ -1105,11 +1157,11 @@ def evaluate(world, opts=None):
     s2_mvar_err = float(np.mean(s2_m_errs))
     s3_bus_mv = float(np.mean([bus_rms[s] * 1000.0 for s in TARGETS]))
 
-    # Dimensionless physical-balance residual index (observes_target=False; golden ~ 2.98, every rival >= 3.5x!)
+    # Dimensionless physical-balance residual index (observes_target=False)
     phys_idx = (s1_comm_mae / 0.35) + (s2_vlv_mv / 8.0) + (s2_mvar_err / 0.40) + (s3_bus_mv / 2.5) + (ami_q_err / 2.5)
 
     return out, dict(
-        k_ord=k_ord, comm_flat=comm_flat, comm_cf=comm_cf,
+        k_ord=k_ord, comm_flat=comm_flat, comm_cf=comm_cf, site_reg_rat=site_reg_rat,
         tan_phi_res=tphi_ami["residential_heat"], tan_phi_com=tphi_ami["commercial_mixed"],
         s1_comm_mae=s1_comm_mae, s2_vlv_mv=s2_vlv_mv, s2_mvar_err=s2_mvar_err,
         s3_bus_mv=s3_bus_mv, s3_amiq=ami_q_err, phys_idx=phys_idx,
@@ -1131,7 +1183,7 @@ FAMILY = [
     ("S1 DJF 3-month", {"s1_months": "djf"}),
     ("S1 peak month only", {"s1_months": "peak_m"}),
     ("S1 scaled additive", {"s1_form": "add"}),
-    ("S1 raw additive", {"s1_form": "add_raw"}),
+    ("S1 multiplicative excess", {"s1_form": "mult"}),
     ("S1 winter innov corr", {"s1_corr_win": "winter"}),
     ("S1 5-PC strip", {"s1_innov": "pca5"}),
     ("S1 6-PC strip", {"s1_innov": "pca6"}),
@@ -1180,6 +1232,7 @@ RIVAL_OPTS = {
     "s1_raw_corr": {"s1_mode": "raw_corr"},
     "s1_indep_quad": {"s1_mode": "indep_quad"},
     "s1_cf_pooled": {"s1_mode": "cf_pooled"},
+    "s1_twin_ratio": {"s1_mode": "twin_ratio"},
     "s1_flat_ratio": {"s1_mode": "flat_ratio"},
     "s1_linear_sum": {"s1_mode": "linear_sum"},
     "s2_net_kvarh": {"s2_mode": "net_kvarh"},
@@ -1282,7 +1335,7 @@ def build_spec(world=None):
         },
         "lattice": {k: {s: v[s]["loading_pct"] for s in TARGETS} for k, v in lat_res.items()},
         "falsification": {
-            "check": "Composite physical-balance residual index (Sep-Oct active commissioning surge + 66kV/LV voltage balance + 12-mo kVARh conservation + 3-phase bus-sag RMSE + AMI q_kvar consistency)",
+            "check": "Composite physical-balance residual index (Sep/Oct/Dec 3-hub active commissioning surge + 66kV/LV voltage balance + 12-mo kVARh conservation + 3-phase bus-sag RMSE + AMI q_kvar consistency)",
             "observes_target": False,
             "truth": 0.0,
             "golden": gold_p["phys_idx"],

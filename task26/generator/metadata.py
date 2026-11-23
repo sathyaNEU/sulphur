@@ -78,8 +78,8 @@ def write(path):
                 "source": sim_src,
             },
             F["ref_pq"]: {
-                "covers": "Autumn 2026 main-bay active-power interval metering log for selected modernized substations",
-                "pulled": "2026-11-05",
+                "covers": "September, October, and December 2026 main-bay active-power 15-minute interval metering log for selected modernized substations",
+                "pulled": "2027-01-09",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
             },

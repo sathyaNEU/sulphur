@@ -271,7 +271,7 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
         lat_q_ami[s][a_i, hidx] = qk
     conn.close()
 
-    # 11. Sep-Oct active-only commissioning 15-min log on Fossheim & Lindberg (no Q, no Pa/Pb/Pc, no winter!)
+    # 11. Sep/Oct/Dec active-only commissioning 15-min log on Fossheim, Lindberg, and Solberg (no Q, no Pa/Pb/Pc!)
     comm_h_idx = np.where(C.COMM_HOURS)[0]
     comm_pos_map = {int(h): pos for pos, h in enumerate(comm_h_idx)}
     comm_p15 = {r: np.zeros((len(comm_h_idx), 4)) for r in C.PQ_COMM_SITES}

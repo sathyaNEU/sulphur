@@ -1,17 +1,18 @@
-"""Comprehensive deterministic assertion suite for task26 (v3, 70+ checks).
+"""Comprehensive deterministic assertion suite for task26 (v4, 950+ checks).
 
 Covers:
-  - Every Semantic Fork SF1 through SF18 explicitly by token
-  - Zero-PQ-handle pack hygiene (pq_commissioning_autumn2026.csv active-only on Fossheim & Lindberg; no pq_archive_15min_2026.csv)
+  - Every Semantic Fork SF1 through SF19 explicitly by token
+  - Zero-PQ-handle pack hygiene (pq_commissioning_2026.csv active-only on Fossheim, Lindberg, Solberg across Sep/Oct/Dec; no pq_archive_15min_2026.csv)
   - Exact reproduction of simulator arrays after Layer 1 ETL conformance (19 files)
   - IEC 60038 / EN 50160 physical voltage realism across all 11 substations (66 kV, 22 kV, 230 V AMI)
   - Layer 1 mess neutrality (superseded batch dedup, comms nulls drop vs interp)
   - Corelib level 5 and +/-20% forcing holds on the cut pack
-  - Internal physics-balance separation (all 37 rivals >= 3.0x golden index; 80/80 AMI field phase-tracer match)
+  - Internal physics-balance separation (all 38 rivals >= 3.0x golden index including s1_twin_ratio; 80/80 AMI field phase-tracer match)
+  - SF19: Fossheim-Malmnes non-twin hub structure + 9-pt PQ MAE refutation of twin_ratio + Malmnes Phase 2 invariance under Fossheim/Solberg ratios
   - Frontier score checks (RESPONSE1_V2 <= 45 and >= 4/7 wrong; all 4 run_routes <= 50)
   - Distractor deletion invariance (removing the 3 distractors leaves every figure byte-identical)
   - Container & surface hygiene (no README/dictionary/notes under target/, zero em dashes in prompt/submission)
-  - PDF multi-reader text extraction check (H25: pypdf AND pdftotext both extract all governing thresholds)
+  - PDF multi-reader text extraction check (H25: pypdf AND pdftotext both extract all governing thresholds + Q_h symbol consistency)
   - Golden deliverables exact tie-out against figures.json + cell-by-cell style readback
 """
 import csv
@@ -33,7 +34,7 @@ TASK = os.path.dirname(HERE)
 TARGET = os.path.join(TASK, "target")
 GOLDEN = os.path.join(TASK, "golden")
 sys.path.insert(0, HERE)
-sys.path.insert(0, os.path.join(os.path.dirname(TASK), ".claude", "skills", "stumping"))
+sys.path.insert(0, os.path.join(os.path.dirname(TASK), ".agents", "skills", "stumping"))
 import corelib  # noqa: E402
 import analysis as A  # noqa: E402
 import core as C  # noqa: E402
@@ -63,12 +64,13 @@ def main():
     check(exts == {".csv", ".xlsx", ".db", ".pdf"}, f"expected 4 file categories, got {exts}")
     banned_names = re.compile(r"readme|dictionary|data_dict|manifest|field_notes|notes|schema", re.I)
     check(not any(banned_names.search(f) for f in tfiles), "banned helper/dictionary filename in target/")
-    check("pq_archive_15min_2026.csv" not in tfiles, "old full-year 3-phase pq_archive_15min_2026.csv must NOT exist in v3")
-    check("pq_commissioning_autumn2026.csv" in tfiles, "v3 active-only pq_commissioning_autumn2026.csv present")
-    with open(os.path.join(TARGET, "pq_commissioning_autumn2026.csv"), encoding="utf-8") as f:
+    check("pq_archive_15min_2026.csv" not in tfiles, "old full-year 3-phase pq_archive_15min_2026.csv must NOT exist in v4")
+    check("pq_commissioning_autumn2026.csv" not in tfiles, "old autumn-only PQ filename must NOT exist in v4")
+    check("pq_commissioning_2026.csv" in tfiles, "v4 active-only pq_commissioning_2026.csv present")
+    with open(os.path.join(TARGET, "pq_commissioning_2026.csv"), encoding="utf-8") as f:
         rd = csv.DictReader(f)
         check(rd.fieldnames == ["substation_id", "ts_utc", "sub_p15_mw"],
-              f"pq_commissioning_autumn2026.csv columns must be active-only, got {rd.fieldnames}")
+              f"pq_commissioning_2026.csv columns must be active-only, got {rd.fieldnames}")
         pq_subs = set()
         pq_months = set()
         pq_rows = 0
@@ -77,8 +79,9 @@ def main():
             pq_subs.add(row["substation_id"])
             pq_months.add(row["ts_utc"][:7])
     check(pq_subs == set(C.PQ_COMM_SITES), f"commissioning PQ sites {pq_subs} != {set(C.PQ_COMM_SITES)}")
-    check(pq_months == {"2026-08", "2026-09", "2026-10"}, f"commissioning PQ months unexpected: {pq_months}")
-    check(pq_rows == 11712, f"expected 11,712 Sep-Oct 15-min rows (2x61x96), got {pq_rows}")
+    check(pq_months == {"2026-08", "2026-09", "2026-10", "2026-11", "2026-12"},
+          f"commissioning PQ UTC months unexpected: {pq_months}")
+    check(pq_rows == 26496, f"expected 26,496 Sep/Oct/Dec 15-min rows (3x92x96), got {pq_rows}")
     check(stats["raw_scada_rows"] >= 20000, f"scada CSV rows {stats['raw_scada_rows']} < 20,000")
     check(os.path.getsize(os.path.join(TARGET, PK.FILES["scada_fdr"])) > 10_000_000, "large feeder CSV > 10 MB")
     check(len(meta["distractor_files"]) == 3, "3 unlabelled distractors declared in metadata.json")
@@ -136,7 +139,7 @@ def main():
               f"EN 50160 230 V AMI bounds on {s}: [{sd_p['lat_v_ami'][:, hm].min():.1f}, {sd_p['lat_v_ami'][:, hm].max():.1f}]")
         if s in C.PQ_COMM_SITES:
             check(np.allclose(sd_p["comm_p15"], sd_s["comm_p15"], atol=1e-4),
-                  f"SF5: {s} Sep-Oct active-only commissioning 15-min log matches simulator")
+                  f"SF5: {s} Sep/Oct/Dec active-only commissioning 15-min log matches simulator")
 
     # Verify comms nulls drop vs interpolate leaves every peak figure unchanged (winter untouched!)
     noninterp_world, _ = A.load_pack(TARGET, interpolate_nulls=False)
@@ -149,7 +152,7 @@ def main():
         check(abs(g_interp[s]["loading_pct"] - g_drop[s]["loading_pct"]) < 1e-9,
               f"SF6: summer v_lv_kv nulls leave {s} loading identical (drop vs interp)")
 
-    # --- 4. SF8-SF18: All 27 honest variants & forcing perturbations hold the schedule and bands ---
+    # --- 4. SF8-SF19: All 27 honest variants, non-twin invariance & forcing perturbations hold schedule and bands ---
     gold_sched = fig["r8_schedule"]
     check(len(fig["variants"]) == len(C.FAMILY) == 27,
           f"SF8, SF9, SF10, SF11, SF12, SF13, SF14, SF15, SF16: expected 27 variants, got {len(fig['variants'])}")
@@ -176,6 +179,14 @@ def main():
         check(0.08 <= ami_frac <= 0.55 and 0.38 <= ami_sp_frac <= 0.60,
               f"SF17: {s} AMI share total={ami_frac:.3f}, single-phase={ami_sp_frac:.3f} realistic partial coverage")
 
+    # SF19: non-twin commissioning hub structure + 9-pt PQ refutation of twin_ratio + Malmnes Phase 2 invariance
+    check(len(pack_world["subs"]["Fossheim"]["f_meta"]) == 11 and len(pack_world["subs"]["Malmnes"]["f_meta"]) == 7,
+          "SF19: Fossheim (11 feeders) and Malmnes (7 feeders) have distinct non-twin feeder topology")
+    check(fig["s1_pq_mae_ratios"]["s1_twin_ratio"] >= 5.0,
+          f"SF19: s1_twin_ratio 9-pt PQ MAE ratio {fig['s1_pq_mae_ratios']['s1_twin_ratio']}x (< 5.0x)")
+    for hub, load_f in fig["malmnes_forced_ratios"].items():
+        check(85.0 <= load_f < 100.0, f"SF19: forcing {hub} commissioning ratio onto Malmnes stays Phase 2 ({load_f}%)")
+
     # Forcing +/- 20% perturbations all HOLD
     check(len(fig["forcing"]) == 6, "6 forcing perturbations recorded")
     for p in fig["forcing"]:
@@ -188,8 +199,8 @@ def main():
           "AMI Phase-ID matches 80/80 field-traced AMI laterals on Fossheim, Lindberg, Ostervik, and Solberg")
     check(fig["ref_params"]["gis_tracer_matched"] <= 64,
           f"GIS matches {fig['ref_params']['gis_tracer_matched']}/80 on modernized reference sites (expected <= 80%)")
-    check(len(fig["phys_ratios"]) == len(C.RIVAL_OPTS) == 37,
-          f"Expected 37 physics-validation rivals, got {len(fig['phys_ratios'])}")
+    check(len(fig["phys_ratios"]) == len(C.RIVAL_OPTS) == 38,
+          f"Expected 38 physics-validation rivals, got {len(fig['phys_ratios'])}")
     for rname, mult in fig["phys_ratios"].items():
         check(mult >= 3.0, f"Physics rival {rname} is {mult}x golden index (< 3.0x)")
     check(fig["routes"]["response1_v2"]["wrong_count"] >= 4,
@@ -221,8 +232,10 @@ def main():
     pdftotext_txt = subprocess.run(["pdftotext", std_pdf, "-"], capture_output=True, text=True, check=True).stdout
     for label, txt in (("pypdf", pypdf_txt), ("pdftotext", pdftotext_txt)):
         for tok in ("NS-2026", "85.0%", "100.0%", "Fossheim", "Lindberg", "Ostervik", "Solberg",
-                    "Drangvik", "Hestmark", "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli", "Lim_MVA"):
+                    "Drangvik", "Hestmark", "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli",
+                    "Lim_MVA", "Q_h"):
             check(tok in txt, f"H25 PDF {label} missing token {tok!r}")
+        check("Q_15m" not in txt, f"H25 PDF {label} must not contain stale Q_15m symbol")
         for banned in ("quadrature", "capacitor", "kVARh", "PT offset", "demean", "storm", "regression",
                        "corridor", "SVD", "PCA", "sag", "LEGACY_NON_AMI", "tan_phi"):
             check(banned.lower() not in txt.lower(), f"Leak check: planning standard PDF mentions {banned!r}")

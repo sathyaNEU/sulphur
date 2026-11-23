@@ -1,124 +1,124 @@
 {
- "architecture": "v3",
+ "architecture": "v4",
  "as_of": "2027-01-20",
  "bands": {
   "c1_total_p15_mw": [
-   240.1,
-   244.3
+   224.7,
+   234.4
   ],
   "c2_total_qpeak_mvar": [
-   76.4,
-   84.2
+   78.3,
+   86.1
   ],
   "c3_mean_lim_phase_pct": [
-   37.17,
-   37.57
+   37.38,
+   37.77
   ],
   "lim_mva": {
    "Drangvik": [
-    48.75,
-    55.05
+    46.8,
+    52.6
    ],
    "Hestmark": [
-    49.2,
-    52.85
+    46.15,
+    48.45
    ],
    "Kvernholm": [
-    33.25,
-    36.25
+    33.15,
+    35.35
    ],
    "Malmnes": [
-    39.8,
-    44.95
+    37.0,
+    41.0
    ],
    "Raudfjord": [
-    47.3,
-    50.45
+    47.45,
+    50.7
    ],
    "Svarthaug": [
-    31.0,
-    33.0
+    30.45,
+    32.65
    ],
    "Tverrli": [
-    26.05,
-    29.5
+    25.5,
+    28.4
    ]
   },
   "loading_pct": {
    "Drangvik": [
-    102.7,
-    115.9
+    103.1,
+    115.8
    ],
    "Hestmark": [
-    138.7,
-    148.8
+    135.7,
+    142.5
    ],
    "Kvernholm": [
-    104.5,
-    114.0
+    106.2,
+    113.2
    ],
    "Malmnes": [
-    85.8,
-    96.9
+    86.9,
+    96.2
    ],
    "Raudfjord": [
-    105.1,
-    112.1
+    106.7,
+    113.9
    ],
    "Svarthaug": [
     90.7,
-    96.5
+    97.2
    ],
    "Tverrli": [
-    63.5,
-    72.0
+    63.0,
+    70.1
    ]
   },
   "p15_mw": {
    "Drangvik": [
-    44.1,
-    47.5
+    41.55,
+    43.75
    ],
    "Hestmark": [
-    43.95,
-    45.45
+    40.85,
+    42.0
    ],
    "Kvernholm": [
-    26.7,
-    28.05
+    26.6,
+    27.25
    ],
    "Malmnes": [
-    37.9,
-    42.85
+    35.25,
+    39.05
    ],
    "Raudfjord": [
-    29.95,
-    31.3
+    29.15,
+    30.2
    ],
    "Svarthaug": [
-    29.2,
-    29.8
+    28.6,
+    29.6
    ],
    "Tverrli": [
-    22.8,
-    23.9
+    22.2,
+    23.0
    ]
   },
   "q_peak_mvar": {
    "Drangvik": [
-    16.4,
-    18.1
+    18.25,
+    20.2
    ],
    "Hestmark": [
-    15.6,
-    16.85
+    15.55,
+    16.95
    ],
    "Kvernholm": [
-    18.65,
+    18.6,
     21.5
    ],
    "Malmnes": [
-    -1.2,
+    -1.15,
     -0.55
    ],
    "Raudfjord": [
@@ -130,22 +130,22 @@
     11.6
    ],
    "Tverrli": [
-    7.25,
+    7.3,
     7.8
    ]
   },
   "total_relief_mva": [
-   50.2,
-   65.0
+   46.2,
+   61.5
   ],
   "w_max_pct": {
    "Drangvik": [
-    34.75,
-    34.85
+    34.7,
+    34.8
    ],
    "Hestmark": [
-    35.2,
-    35.45
+    35.1,
+    35.35
    ],
    "Kvernholm": [
     33.75,
@@ -156,8 +156,8 @@
     35.05
    ],
    "Raudfjord": [
-    49.4,
-    51.45
+    50.95,
+    53.15
    ],
    "Svarthaug": [
     33.6,
@@ -170,23 +170,116 @@
   }
  },
  "c1_band": [
-  240.1,
-  244.3
+  224.7,
+  234.4
  ],
- "c1_total_p15_mw": 242.89,
+ "c1_total_p15_mw": 230.12,
  "c2_band": [
-  76.4,
-  84.2
+  78.3,
+  86.1
  ],
- "c2_total_qpeak_mvar": 77.74,
+ "c2_total_qpeak_mvar": 79.63,
  "c3_band": [
-  37.17,
-  37.57
+  37.38,
+  37.77
  ],
- "c3_mean_lim_phase_pct": 37.25,
+ "c3_mean_lim_phase_pct": 37.46,
+ "comm_pq_points": [
+  {
+   "gold_ex_mw": 4.25,
+   "month": "2026-09",
+   "obs_ex_mw": 2.63,
+   "obs_ratio": 0.225,
+   "p15_max_mw": 30.61,
+   "p60_max_mw": 27.97,
+   "substation_id": "Fossheim",
+   "sum_d_mw": 11.69
+  },
+  {
+   "gold_ex_mw": 4.95,
+   "month": "2026-10",
+   "obs_ex_mw": 4.67,
+   "obs_ratio": 0.344,
+   "p15_max_mw": 32.93,
+   "p60_max_mw": 28.26,
+   "substation_id": "Fossheim",
+   "sum_d_mw": 13.58
+  },
+  {
+   "gold_ex_mw": 7.2,
+   "month": "2026-12",
+   "obs_ex_mw": 7.23,
+   "obs_ratio": 0.369,
+   "p15_max_mw": 39.85,
+   "p60_max_mw": 32.62,
+   "substation_id": "Fossheim",
+   "sum_d_mw": 19.6
+  },
+  {
+   "gold_ex_mw": 12.72,
+   "month": "2026-09",
+   "obs_ex_mw": 12.72,
+   "obs_ratio": 0.809,
+   "p15_max_mw": 40.42,
+   "p60_max_mw": 27.71,
+   "substation_id": "Lindberg",
+   "sum_d_mw": 15.72
+  },
+  {
+   "gold_ex_mw": 13.61,
+   "month": "2026-10",
+   "obs_ex_mw": 15.19,
+   "obs_ratio": 0.898,
+   "p15_max_mw": 43.2,
+   "p60_max_mw": 28.01,
+   "substation_id": "Lindberg",
+   "sum_d_mw": 16.91
+  },
+  {
+   "gold_ex_mw": 14.8,
+   "month": "2026-12",
+   "obs_ex_mw": 15.03,
+   "obs_ratio": 0.808,
+   "p15_max_mw": 47.09,
+   "p60_max_mw": 32.06,
+   "substation_id": "Lindberg",
+   "sum_d_mw": 18.59
+  },
+  {
+   "gold_ex_mw": 5.79,
+   "month": "2026-09",
+   "obs_ex_mw": 5.58,
+   "obs_ratio": 0.554,
+   "p15_max_mw": 29.61,
+   "p60_max_mw": 24.03,
+   "substation_id": "Solberg",
+   "sum_d_mw": 10.08
+  },
+  {
+   "gold_ex_mw": 6.46,
+   "month": "2026-10",
+   "obs_ex_mw": 6.21,
+   "obs_ratio": 0.566,
+   "p15_max_mw": 30.39,
+   "p60_max_mw": 24.18,
+   "substation_id": "Solberg",
+   "sum_d_mw": 10.97
+  },
+  {
+   "gold_ex_mw": 7.97,
+   "month": "2026-12",
+   "obs_ex_mw": 8.49,
+   "obs_ratio": 0.595,
+   "p15_max_mw": 36.54,
+   "p60_max_mw": 28.05,
+   "substation_id": "Solberg",
+   "sum_d_mw": 14.27
+  }
+ ],
  "comm_pq_sites": [
   "Fossheim",
-  "Lindberg"
+  "Lindberg",
+  "Solberg"
  ],
  "forcing": [
   {
@@ -202,13 +295,13 @@
    "holds": true,
    "input": "k_ord -20%",
    "loading_pct": {
-    "Drangvik": 100.66,
-    "Hestmark": 136.0,
-    "Kvernholm": 106.09,
-    "Malmnes": 88.46,
-    "Raudfjord": 107.23,
-    "Svarthaug": 91.13,
-    "Tverrli": 64.8
+    "Drangvik": 101.66,
+    "Hestmark": 133.59,
+    "Kvernholm": 106.88,
+    "Malmnes": 89.52,
+    "Raudfjord": 109.45,
+    "Svarthaug": 91.86,
+    "Tverrli": 63.68
    }
   },
   {
@@ -224,13 +317,13 @@
    "holds": true,
    "input": "k_ord +20%",
    "loading_pct": {
-    "Drangvik": 112.6,
-    "Hestmark": 147.57,
-    "Kvernholm": 109.28,
-    "Malmnes": 98.12,
-    "Raudfjord": 111.2,
-    "Svarthaug": 94.06,
-    "Tverrli": 68.24
+    "Drangvik": 111.29,
+    "Hestmark": 141.52,
+    "Kvernholm": 109.48,
+    "Malmnes": 96.62,
+    "Raudfjord": 112.34,
+    "Svarthaug": 94.39,
+    "Tverrli": 66.19
    }
   },
   {
@@ -246,13 +339,13 @@
    "holds": true,
    "input": "Q_peak -20%",
    "loading_pct": {
-    "Drangvik": 104.31,
-    "Hestmark": 138.91,
-    "Kvernholm": 101.01,
-    "Malmnes": 93.28,
-    "Raudfjord": 107.49,
-    "Svarthaug": 91.02,
-    "Tverrli": 65.42
+    "Drangvik": 103.33,
+    "Hestmark": 134.34,
+    "Kvernholm": 101.27,
+    "Malmnes": 93.06,
+    "Raudfjord": 109.04,
+    "Svarthaug": 91.51,
+    "Tverrli": 63.79
    }
   },
   {
@@ -268,13 +361,13 @@
    "holds": true,
    "input": "Q_peak +20%",
    "loading_pct": {
-    "Drangvik": 109.35,
-    "Hestmark": 145.2,
-    "Kvernholm": 115.31,
-    "Malmnes": 93.3,
-    "Raudfjord": 111.28,
-    "Svarthaug": 94.48,
-    "Tverrli": 67.83
+    "Drangvik": 110.15,
+    "Hestmark": 141.37,
+    "Kvernholm": 116.06,
+    "Malmnes": 93.07,
+    "Raudfjord": 113.11,
+    "Svarthaug": 95.07,
+    "Tverrli": 66.32
    }
   },
   {
@@ -290,13 +383,13 @@
    "holds": true,
    "input": "phase_excess -20%",
    "loading_pct": {
-    "Drangvik": 105.7,
-    "Hestmark": 140.14,
-    "Kvernholm": 107.37,
-    "Malmnes": 92.41,
-    "Raudfjord": 101.62,
-    "Svarthaug": 92.28,
-    "Tverrli": 65.28
+    "Drangvik": 105.6,
+    "Hestmark": 136.04,
+    "Kvernholm": 107.87,
+    "Malmnes": 92.19,
+    "Raudfjord": 102.73,
+    "Svarthaug": 92.81,
+    "Tverrli": 63.73
    }
   },
   {
@@ -312,23 +405,41 @@
    "holds": true,
    "input": "phase_excess +20%",
    "loading_pct": {
-    "Drangvik": 107.51,
-    "Hestmark": 143.41,
-    "Kvernholm": 107.99,
-    "Malmnes": 94.17,
-    "Raudfjord": 116.81,
-    "Svarthaug": 92.91,
-    "Tverrli": 67.75
+    "Drangvik": 107.31,
+    "Hestmark": 139.05,
+    "Kvernholm": 108.49,
+    "Malmnes": 93.94,
+    "Raudfjord": 119.06,
+    "Svarthaug": 93.44,
+    "Tverrli": 66.15
    }
   }
  ],
+ "malmnes_forced_ratios": {
+  "Fossheim": 88.12,
+  "Solberg": 98.71
+ },
  "pack_stats": {
   "clean_scada_rows": 96360,
-  "comm_pq_rows": 11712,
+  "comm_pq_points_count": 9,
+  "comm_pq_rows": 26496,
   "n_ami_per_sub": 20,
   "n_ami_total": 220,
   "n_corridors": 4,
-  "n_feeders": 63,
+  "n_feeders": 70,
+  "n_feeders_by_sub": {
+   "Drangvik": 7,
+   "Fossheim": 11,
+   "Hestmark": 5,
+   "Kvernholm": 5,
+   "Lindberg": 8,
+   "Malmnes": 7,
+   "Ostervik": 5,
+   "Raudfjord": 5,
+   "Solberg": 7,
+   "Svarthaug": 5,
+   "Tverrli": 5
+  },
   "n_gsp": 2,
   "n_laterals_per_sub": 40,
   "n_laterals_total": 440,
@@ -340,388 +451,398 @@
  },
  "phys_details": {
   "direct": {
-   "phys_idx": 86.02,
-   "s1_comm_mae_mw": 9.324,
-   "s2_kvarh_err_mvar": 0.382,
-   "s2_vlv_rmse_v": 376.8,
+   "phys_idx": 85.75,
+   "s1_comm_mae_mw": 8.639,
+   "s2_kvarh_err_mvar": 0.388,
+   "s2_vlv_rmse_v": 389.85,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 27.35
+   "s3_bus_rmse_v": 27.46
   },
   "golden": {
-   "phys_idx": 2.98,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 2.71,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "reflex": {
-   "phys_idx": 85.73,
-   "s1_comm_mae_mw": 9.324,
-   "s2_kvarh_err_mvar": 0.382,
-   "s2_vlv_rmse_v": 376.8,
+   "phys_idx": 85.59,
+   "s1_comm_mae_mw": 8.639,
+   "s2_kvarh_err_mvar": 0.388,
+   "s2_vlv_rmse_v": 389.85,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 26.63
+   "s3_bus_rmse_v": 27.06
   },
   "response1_v2": {
-   "phys_idx": 63.05,
-   "s1_comm_mae_mw": 3.859,
-   "s2_kvarh_err_mvar": 0.303,
-   "s2_vlv_rmse_v": 341.45,
+   "phys_idx": 65.57,
+   "s1_comm_mae_mw": 4.061,
+   "s2_kvarh_err_mvar": 0.311,
+   "s2_vlv_rmse_v": 356.24,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 20.5
+   "s3_bus_rmse_v": 20.7
   },
   "rigorous": {
-   "phys_idx": 31.76,
-   "s1_comm_mae_mw": 3.219,
-   "s2_kvarh_err_mvar": 0.05,
-   "s2_vlv_rmse_v": 91.23,
+   "phys_idx": 31.05,
+   "s1_comm_mae_mw": 2.816,
+   "s2_kvarh_err_mvar": 0.051,
+   "s2_vlv_rmse_v": 93.32,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 26.63
+   "s3_bus_rmse_v": 27.06
   },
   "run_calibrated": {
-   "phys_idx": 36.98,
-   "s1_comm_mae_mw": 3.859,
-   "s2_kvarh_err_mvar": 0.05,
-   "s2_vlv_rmse_v": 91.23,
+   "phys_idx": 37.82,
+   "s1_comm_mae_mw": 4.061,
+   "s2_kvarh_err_mvar": 0.051,
+   "s2_vlv_rmse_v": 93.32,
    "s3_ami_q_rmse_kvar": 34.02,
    "s3_bus_rmse_v": 2.04
   },
   "run_cutoff": {
-   "phys_idx": 56.52,
-   "s1_comm_mae_mw": 3.352,
-   "s2_kvarh_err_mvar": 0.535,
-   "s2_vlv_rmse_v": 286.22,
+   "phys_idx": 56.12,
+   "s1_comm_mae_mw": 2.844,
+   "s2_kvarh_err_mvar": 0.552,
+   "s2_vlv_rmse_v": 293.51,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 23.6
+   "s3_bus_rmse_v": 23.84
   },
   "run_generous": {
-   "phys_idx": 52.42,
-   "s1_comm_mae_mw": 4.162,
+   "phys_idx": 58.08,
+   "s1_comm_mae_mw": 5.962,
    "s2_kvarh_err_mvar": 4.416,
-   "s2_vlv_rmse_v": 157.28,
+   "s2_vlv_rmse_v": 160.67,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 23.6
+   "s3_bus_rmse_v": 23.84
   },
   "run_hedge": {
-   "phys_idx": 68.58,
-   "s1_comm_mae_mw": 3.323,
-   "s2_kvarh_err_mvar": 0.382,
-   "s2_vlv_rmse_v": 376.8,
+   "phys_idx": 68.06,
+   "s1_comm_mae_mw": 2.504,
+   "s2_kvarh_err_mvar": 0.388,
+   "s2_vlv_rmse_v": 389.85,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 26.63
+   "s3_bus_rmse_v": 27.06
   },
   "s1_cf_pooled": {
-   "phys_idx": 10.41,
-   "s1_comm_mae_mw": 3.219,
+   "phys_idx": 9.25,
+   "s1_comm_mae_mw": 2.816,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s1_flat_ratio": {
-   "phys_idx": 11.87,
-   "s1_comm_mae_mw": 3.732,
+   "phys_idx": 11.27,
+   "s1_comm_mae_mw": 3.521,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s1_indep_quad": {
-   "phys_idx": 10.7,
-   "s1_comm_mae_mw": 3.323,
+   "phys_idx": 8.36,
+   "s1_comm_mae_mw": 2.504,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s1_linear_sum": {
-   "phys_idx": 13.1,
-   "s1_comm_mae_mw": 4.162,
+   "phys_idx": 18.24,
+   "s1_comm_mae_mw": 5.962,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s1_pca1": {
-   "phys_idx": 10.78,
-   "s1_comm_mae_mw": 3.352,
+   "phys_idx": 9.33,
+   "s1_comm_mae_mw": 2.844,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s1_pca2": {
-   "phys_idx": 10.86,
-   "s1_comm_mae_mw": 3.378,
+   "phys_idx": 9.33,
+   "s1_comm_mae_mw": 2.842,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s1_raw_corr": {
-   "phys_idx": 10.81,
-   "s1_comm_mae_mw": 3.362,
+   "phys_idx": 9.37,
+   "s1_comm_mae_mw": 2.857,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s1_register_rho": {
-   "phys_idx": 12.23,
-   "s1_comm_mae_mw": 3.859,
+   "phys_idx": 12.81,
+   "s1_comm_mae_mw": 4.061,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s1_scada60": {
-   "phys_idx": 27.85,
-   "s1_comm_mae_mw": 9.324,
+   "phys_idx": 25.89,
+   "s1_comm_mae_mw": 8.639,
+   "s2_kvarh_err_mvar": 0.003,
+   "s2_vlv_rmse_v": 0.0,
+   "s3_ami_q_rmse_kvar": 0.96,
+   "s3_bus_rmse_v": 2.04
+  },
+  "s1_twin_ratio": {
+   "phys_idx": 15.84,
+   "s1_comm_mae_mw": 5.121,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_class_pf": {
-   "phys_idx": 33.68,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 33.82,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 4.416,
-   "s2_vlv_rmse_v": 157.28,
+   "s2_vlv_rmse_v": 160.67,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_local_dv": {
-   "phys_idx": 171.21,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 2.03,
-   "s2_vlv_rmse_v": 1305.25,
+   "phys_idx": 177.6,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 2.057,
+   "s2_vlv_rmse_v": 1358.07,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_monthly_qp": {
-   "phys_idx": 46.41,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 0.303,
-   "s2_vlv_rmse_v": 341.45,
+   "phys_idx": 48.0,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 0.311,
+   "s2_vlv_rmse_v": 356.24,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_monthly_quad": {
-   "phys_idx": 103.13,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 2.509,
-   "s2_vlv_rmse_v": 751.02,
+   "phys_idx": 108.67,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 2.602,
+   "s2_vlv_rmse_v": 795.72,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_monthly_win": {
-   "phys_idx": 14.5,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 0.05,
-   "s2_vlv_rmse_v": 91.23,
+   "phys_idx": 14.49,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 0.051,
+   "s2_vlv_rmse_v": 93.32,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_net_kvarh": {
-   "phys_idx": 51.03,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 0.382,
-   "s2_vlv_rmse_v": 376.8,
+   "phys_idx": 52.4,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 0.388,
+   "s2_vlv_rmse_v": 389.85,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_raw_dv": {
-   "phys_idx": 16.24,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 5.307,
+   "phys_idx": 15.96,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 5.305,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_rp_only": {
-   "phys_idx": 106.98,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 0.846,
-   "s2_vlv_rmse_v": 815.13,
+   "phys_idx": 111.46,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 0.873,
+   "s2_vlv_rmse_v": 852.66,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_targets_only": {
-   "phys_idx": 19.37,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 0.165,
-   "s2_vlv_rmse_v": 127.84,
+   "phys_idx": 21.25,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 0.174,
+   "s2_vlv_rmse_v": 144.95,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s2_winter_kvarh": {
-   "phys_idx": 40.09,
-   "s1_comm_mae_mw": 0.621,
-   "s2_kvarh_err_mvar": 0.535,
-   "s2_vlv_rmse_v": 286.22,
+   "phys_idx": 40.77,
+   "s1_comm_mae_mw": 0.524,
+   "s2_kvarh_err_mvar": 0.552,
+   "s2_vlv_rmse_v": 293.51,
    "s3_ami_q_rmse_kvar": 0.96,
    "s3_bus_rmse_v": 2.04
   },
   "s3_ami_grossup": {
-   "phys_idx": 12.8,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 12.74,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 26.59
+   "s3_bus_rmse_v": 27.13
   },
   "s3_ami_only": {
-   "phys_idx": 12.82,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 12.71,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 26.63
+   "s3_bus_rmse_v": 27.06
   },
   "s3_ami_plus_gis": {
-   "phys_idx": 13.26,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 12.97,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 27.73
+   "s3_bus_rmse_v": 27.7
   },
   "s3_even_zres": {
-   "phys_idx": 11.61,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 11.42,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 23.6
+   "s3_bus_rmse_v": 23.84
   },
   "s3_evening_cut": {
-   "phys_idx": 11.61,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 11.42,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 23.6
+   "s3_bus_rmse_v": 23.84
   },
   "s3_gis": {
-   "phys_idx": 13.44,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 13.22,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 28.2
+   "s3_bus_rmse_v": 28.32
   },
   "s3_handbook_pf": {
-   "phys_idx": 16.21,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 15.93,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 34.02,
    "s3_bus_rmse_v": 2.04
   },
   "s3_raw_vbus": {
-   "phys_idx": 47.68,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 47.28,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 113.79
+   "s3_bus_rmse_v": 113.47
   },
   "s3_scalar_ols": {
-   "phys_idx": 10.36,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 10.17,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
    "s3_ami_q_rmse_kvar": 0.96,
-   "s3_bus_rmse_v": 20.5
+   "s3_bus_rmse_v": 20.7
   },
   "s3_sub_pf": {
-   "phys_idx": 22.76,
-   "s1_comm_mae_mw": 0.621,
+   "phys_idx": 22.51,
+   "s1_comm_mae_mw": 0.524,
    "s2_kvarh_err_mvar": 0.003,
    "s2_vlv_rmse_v": 0.0,
-   "s3_ami_q_rmse_kvar": 50.39,
+   "s3_ami_q_rmse_kvar": 50.46,
    "s3_bus_rmse_v": 2.04
   }
  },
  "phys_idx": {
-  "direct": 86.02,
-  "golden": 2.98,
-  "reflex": 85.73,
-  "response1_v2": 63.05,
-  "rigorous": 31.76,
-  "run_calibrated": 36.98,
-  "run_cutoff": 56.52,
-  "run_generous": 52.42,
-  "run_hedge": 68.58,
-  "s1_cf_pooled": 10.41,
-  "s1_flat_ratio": 11.87,
-  "s1_indep_quad": 10.7,
-  "s1_linear_sum": 13.1,
-  "s1_pca1": 10.78,
-  "s1_pca2": 10.86,
-  "s1_raw_corr": 10.81,
-  "s1_register_rho": 12.23,
-  "s1_scada60": 27.85,
-  "s2_class_pf": 33.68,
-  "s2_local_dv": 171.21,
-  "s2_monthly_qp": 46.41,
-  "s2_monthly_quad": 103.13,
-  "s2_monthly_win": 14.5,
-  "s2_net_kvarh": 51.03,
-  "s2_raw_dv": 16.24,
-  "s2_rp_only": 106.98,
-  "s2_targets_only": 19.37,
-  "s2_winter_kvarh": 40.09,
-  "s3_ami_grossup": 12.8,
-  "s3_ami_only": 12.82,
-  "s3_ami_plus_gis": 13.26,
-  "s3_even_zres": 11.61,
-  "s3_evening_cut": 11.61,
-  "s3_gis": 13.44,
-  "s3_handbook_pf": 16.21,
-  "s3_raw_vbus": 47.68,
-  "s3_scalar_ols": 10.36,
-  "s3_sub_pf": 22.76
+  "direct": 85.75,
+  "golden": 2.71,
+  "reflex": 85.59,
+  "response1_v2": 65.57,
+  "rigorous": 31.05,
+  "run_calibrated": 37.82,
+  "run_cutoff": 56.12,
+  "run_generous": 58.08,
+  "run_hedge": 68.06,
+  "s1_cf_pooled": 9.25,
+  "s1_flat_ratio": 11.27,
+  "s1_indep_quad": 8.36,
+  "s1_linear_sum": 18.24,
+  "s1_pca1": 9.33,
+  "s1_pca2": 9.33,
+  "s1_raw_corr": 9.37,
+  "s1_register_rho": 12.81,
+  "s1_scada60": 25.89,
+  "s1_twin_ratio": 15.84,
+  "s2_class_pf": 33.82,
+  "s2_local_dv": 177.6,
+  "s2_monthly_qp": 48.0,
+  "s2_monthly_quad": 108.67,
+  "s2_monthly_win": 14.49,
+  "s2_net_kvarh": 52.4,
+  "s2_raw_dv": 15.96,
+  "s2_rp_only": 111.46,
+  "s2_targets_only": 21.25,
+  "s2_winter_kvarh": 40.77,
+  "s3_ami_grossup": 12.74,
+  "s3_ami_only": 12.71,
+  "s3_ami_plus_gis": 12.97,
+  "s3_even_zres": 11.42,
+  "s3_evening_cut": 11.42,
+  "s3_gis": 13.22,
+  "s3_handbook_pf": 15.93,
+  "s3_raw_vbus": 47.28,
+  "s3_scalar_ols": 10.17,
+  "s3_sub_pf": 22.51
  },
  "phys_ratios": {
-  "direct": 28.8,
-  "reflex": 28.7,
-  "response1_v2": 21.1,
-  "rigorous": 10.6,
-  "run_calibrated": 12.4,
-  "run_cutoff": 18.9,
-  "run_generous": 17.6,
-  "run_hedge": 23.0,
-  "s1_cf_pooled": 3.5,
-  "s1_flat_ratio": 4.0,
-  "s1_indep_quad": 3.6,
-  "s1_linear_sum": 4.4,
-  "s1_pca1": 3.6,
-  "s1_pca2": 3.6,
-  "s1_raw_corr": 3.6,
-  "s1_register_rho": 4.1,
-  "s1_scada60": 9.3,
-  "s2_class_pf": 11.3,
-  "s2_local_dv": 57.4,
-  "s2_monthly_qp": 15.6,
-  "s2_monthly_quad": 34.6,
-  "s2_monthly_win": 4.9,
-  "s2_net_kvarh": 17.1,
-  "s2_raw_dv": 5.4,
-  "s2_rp_only": 35.9,
-  "s2_targets_only": 6.5,
-  "s2_winter_kvarh": 13.4,
-  "s3_ami_grossup": 4.3,
-  "s3_ami_only": 4.3,
-  "s3_ami_plus_gis": 4.4,
-  "s3_even_zres": 3.9,
-  "s3_evening_cut": 3.9,
-  "s3_gis": 4.5,
-  "s3_handbook_pf": 5.4,
-  "s3_raw_vbus": 16.0,
-  "s3_scalar_ols": 3.5,
-  "s3_sub_pf": 7.6
+  "direct": 31.7,
+  "reflex": 31.6,
+  "response1_v2": 24.2,
+  "rigorous": 11.5,
+  "run_calibrated": 14.0,
+  "run_cutoff": 20.7,
+  "run_generous": 21.5,
+  "run_hedge": 25.2,
+  "s1_cf_pooled": 3.4,
+  "s1_flat_ratio": 4.2,
+  "s1_indep_quad": 3.1,
+  "s1_linear_sum": 6.7,
+  "s1_pca1": 3.4,
+  "s1_pca2": 3.4,
+  "s1_raw_corr": 3.5,
+  "s1_register_rho": 4.7,
+  "s1_scada60": 9.6,
+  "s1_twin_ratio": 5.9,
+  "s2_class_pf": 12.5,
+  "s2_local_dv": 65.6,
+  "s2_monthly_qp": 17.7,
+  "s2_monthly_quad": 40.2,
+  "s2_monthly_win": 5.4,
+  "s2_net_kvarh": 19.4,
+  "s2_raw_dv": 5.9,
+  "s2_rp_only": 41.2,
+  "s2_targets_only": 7.9,
+  "s2_winter_kvarh": 15.1,
+  "s3_ami_grossup": 4.7,
+  "s3_ami_only": 4.7,
+  "s3_ami_plus_gis": 4.8,
+  "s3_even_zres": 4.2,
+  "s3_evening_cut": 4.2,
+  "s3_gis": 4.9,
+  "s3_handbook_pf": 5.9,
+  "s3_raw_vbus": 17.5,
+  "s3_scalar_ols": 3.8,
+  "s3_sub_pf": 8.3
  },
  "planning_lines": {
   "hours_per_year": 8760,
@@ -742,7 +863,7 @@
   "v_nom_lv_kv": 22.0,
   "year": 2026
  },
- "pool_lim_mva_sum": 286.58,
+ "pool_lim_mva_sum": 275.43,
  "r1_p60_by_sub": {
   "Drangvik": 31.05,
   "Hestmark": 34.45,
@@ -753,88 +874,88 @@
   "Tverrli": 20.23
  },
  "r1_p60_sum_mw": 195.43,
- "r5_phys_idx": 2.98,
+ "r5_phys_idx": 2.71,
  "r6_loading_bands": {
   "Drangvik": [
-   102.7,
-   115.9
+   103.1,
+   115.8
   ],
   "Hestmark": [
-   138.7,
-   148.8
+   135.7,
+   142.5
   ],
   "Kvernholm": [
-   104.5,
-   114.0
+   106.2,
+   113.2
   ],
   "Malmnes": [
-   85.8,
-   96.9
+   86.9,
+   96.2
   ],
   "Raudfjord": [
-   105.1,
-   112.1
+   106.7,
+   113.9
   ],
   "Svarthaug": [
    90.7,
-   96.5
+   97.2
   ],
   "Tverrli": [
-   63.5,
-   72.0
+   63.0,
+   70.1
   ]
  },
  "r6_loading_pct": {
-  "Drangvik": 106.61,
-  "Hestmark": 141.77,
-  "Kvernholm": 107.68,
-  "Malmnes": 93.29,
-  "Raudfjord": 109.21,
-  "Svarthaug": 92.6,
-  "Tverrli": 66.51
+  "Drangvik": 106.46,
+  "Hestmark": 137.55,
+  "Kvernholm": 108.18,
+  "Malmnes": 93.07,
+  "Raudfjord": 110.89,
+  "Svarthaug": 93.13,
+  "Tverrli": 64.94
  },
  "r7_mva_and_relief": {
-  "MVA_Drangvik": 50.64,
-  "MVA_Hestmark": 50.33,
-  "MVA_Kvernholm": 34.24,
-  "MVA_Malmnes": 43.29,
-  "MVA_Raudfjord": 49.15,
-  "MVA_Svarthaug": 31.67,
-  "MVA_Tverrli": 27.27,
-  "Total_Relief_MVA": 54.97
+  "MVA_Drangvik": 48.33,
+  "MVA_Hestmark": 46.77,
+  "MVA_Kvernholm": 33.75,
+  "MVA_Malmnes": 39.65,
+  "MVA_Raudfjord": 49.35,
+  "MVA_Svarthaug": 31.29,
+  "MVA_Tverrli": 26.3,
+  "Total_Relief_MVA": 52.53
  },
  "r7_mva_and_relief_bands": {
   "MVA_Drangvik": [
-   48.75,
-   55.05
+   46.8,
+   52.6
   ],
   "MVA_Hestmark": [
-   49.2,
-   52.85
+   46.15,
+   48.45
   ],
   "MVA_Kvernholm": [
-   33.25,
-   36.25
+   33.15,
+   35.35
   ],
   "MVA_Malmnes": [
-   39.8,
-   44.95
+   37.0,
+   41.0
   ],
   "MVA_Raudfjord": [
-   47.3,
-   50.45
+   47.45,
+   50.7
   ],
   "MVA_Svarthaug": [
-   31.0,
-   33.0
+   30.45,
+   32.65
   ],
   "MVA_Tverrli": [
-   26.05,
-   29.5
+   25.5,
+   28.4
   ],
   "Total_Relief_MVA": [
-   50.2,
-   65.0
+   46.2,
+   61.5
   ]
  },
  "r8_schedule": [
@@ -847,28 +968,28 @@
   "Tverrli: Defer"
  ],
  "ref_params": {
-  "comm_cf": 0.7957,
-  "comm_flat": 1.3217,
+  "comm_cf": 0.5743,
+  "comm_flat": 1.3047,
   "gis_tracer_matched": 28,
   "gis_tracer_pct": 35.0,
   "handbook_tan_phi_com": 0.4843,
   "handbook_tan_phi_res": 0.3287,
-  "k_ord": 1.0454,
-  "k_ord_raw": 1.0454292929318798,
+  "k_ord": 0.9298,
+  "k_ord_raw": 0.9298378137399909,
   "pca1_drangvik": 0.3996,
   "pca1_malmnes": 0.397,
-  "reg_rho_drangvik": 0.3261,
-  "reg_rho_fossheim": 0.781,
-  "reg_rho_lindberg": 0.5289,
-  "reg_rho_malmnes": 0.8498,
-  "rho_stag_fossheim": 0.0668,
-  "rho_stag_malmnes": 0.0755,
-  "rho_sync_drangvik": 0.8314,
-  "rho_sync_lindberg": 0.8299,
+  "reg_rho_drangvik": 0.4988,
+  "reg_rho_fossheim": 0.9337,
+  "reg_rho_lindberg": 0.2861,
+  "reg_rho_malmnes": 0.9238,
+  "rho_stag_fossheim": 0.0877,
+  "rho_stag_malmnes": 0.0616,
+  "rho_sync_drangvik": 0.8347,
+  "rho_sync_lindberg": 0.8318,
   "tan_phi_com": 0.62,
-  "tan_phi_com_raw": 0.6199719372367347,
+  "tan_phi_com_raw": 0.6199709974156757,
   "tan_phi_res": 0.125,
-  "tan_phi_res_raw": 0.124987784111456,
+  "tan_phi_res_raw": 0.12499498193353616,
   "tracer_matched": 80,
   "tracer_total": 80
  },
@@ -880,56 +1001,56 @@
  ],
  "route_scores": {
   "S1": 22.3,
-  "S1+S2": 15.7,
+  "S1+S2": 21.6,
   "S1+S2+S3": 14.9,
-  "S1+S3": 15.7,
-  "S2": 34.1,
+  "S1+S3": 21.6,
+  "S2": 28.2,
   "S2+S3": 21.6,
   "S3": 40.0,
-  "calibrated": 33.3,
-  "cutoff": 39.2,
+  "calibrated": 21.6,
+  "cutoff": 21.6,
   "generous": 20.8,
   "golden": 100.0,
-  "hedge": 14.9,
-  "response1_v2": 27.4,
-  "rigorous": 14.9
+  "hedge": 9.0,
+  "response1_v2": 39.2,
+  "rigorous": 15.7
  },
  "routes": {
   "S1": {
    "answer": [
     "Drangvik: Defer",
     "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 2 (2028-2029)",
+    "Kvernholm: Phase 1 (2027)",
     "Malmnes: Defer",
-    "Raudfjord: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
    "c1_total_p15_mw": 195.43,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 36.82,
-    "Hestmark": 40.22,
+    "Drangvik": 37.71,
+    "Hestmark": 40.11,
     "Kvernholm": 31.76,
     "Malmnes": 32.09,
-    "Raudfjord": 44.7,
+    "Raudfjord": 46.14,
     "Svarthaug": 29.17,
     "Tverrli": 23.77
    },
    "loading_pct": {
-    "Drangvik": 77.51,
-    "Hestmark": 113.31,
-    "Kvernholm": 99.87,
-    "Malmnes": 69.16,
-    "Raudfjord": 99.32,
-    "Svarthaug": 85.3,
-    "Tverrli": 57.98
+    "Drangvik": 83.05,
+    "Hestmark": 117.97,
+    "Kvernholm": 101.79,
+    "Malmnes": 75.33,
+    "Raudfjord": 103.69,
+    "Svarthaug": 86.82,
+    "Tverrli": 58.69
    },
-   "phys_idx": 27.85,
-   "phys_ratio": 9.3,
-   "total_relief_mva": 21.33,
-   "wrong_count": 4
+   "phys_idx": 25.89,
+   "phys_ratio": 9.6,
+   "total_relief_mva": 25.38,
+   "wrong_count": 2
   },
   "S1+S2": {
    "answer": [
@@ -943,28 +1064,28 @@
    ],
    "c1_total_p15_mw": 195.43,
    "c2_total_qpeak_mvar": 27.17,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 32.78,
-    "Hestmark": 36.98,
+    "Drangvik": 32.71,
+    "Hestmark": 36.87,
     "Kvernholm": 24.85,
     "Malmnes": 36.07,
-    "Raudfjord": 42.29,
+    "Raudfjord": 43.66,
     "Svarthaug": 27.53,
     "Tverrli": 22.31
    },
    "loading_pct": {
-    "Drangvik": 69.01,
-    "Hestmark": 104.16,
-    "Kvernholm": 78.15,
-    "Malmnes": 77.74,
-    "Raudfjord": 93.98,
-    "Svarthaug": 80.51,
-    "Tverrli": 54.41
+    "Drangvik": 72.04,
+    "Hestmark": 108.44,
+    "Kvernholm": 79.65,
+    "Malmnes": 84.68,
+    "Raudfjord": 98.12,
+    "Svarthaug": 81.95,
+    "Tverrli": 55.09
    },
-   "phys_idx": 75.9,
-   "phys_ratio": 25.4,
-   "total_relief_mva": 10.84,
+   "phys_idx": 75.58,
+   "phys_ratio": 27.9,
+   "total_relief_mva": 13.81,
    "wrong_count": 5
   },
   "S1+S2+S3": {
@@ -979,28 +1100,28 @@
    ],
    "c1_total_p15_mw": 195.43,
    "c2_total_qpeak_mvar": 27.17,
-   "c3_mean_lim_phase_pct": 34.96,
+   "c3_mean_lim_phase_pct": 34.58,
    "lim_mva": {
     "Drangvik": 31.83,
     "Hestmark": 35.55,
     "Kvernholm": 25.37,
     "Malmnes": 35.15,
     "Raudfjord": 27.91,
-    "Svarthaug": 32.81,
+    "Svarthaug": 30.64,
     "Tverrli": 20.74
    },
    "loading_pct": {
-    "Drangvik": 67.02,
-    "Hestmark": 100.15,
-    "Kvernholm": 79.78,
-    "Malmnes": 75.75,
-    "Raudfjord": 62.03,
-    "Svarthaug": 95.95,
-    "Tverrli": 50.58
+    "Drangvik": 70.12,
+    "Hestmark": 104.57,
+    "Kvernholm": 81.31,
+    "Malmnes": 82.51,
+    "Raudfjord": 62.72,
+    "Svarthaug": 91.18,
+    "Tverrli": 51.21
    },
-   "phys_idx": 85.73,
-   "phys_ratio": 28.7,
-   "total_relief_mva": 9.12,
+   "phys_idx": 85.59,
+   "phys_ratio": 31.6,
+   "total_relief_mva": 8.73,
    "wrong_count": 4
   },
   "S1+S3": {
@@ -1010,70 +1131,70 @@
     "Kvernholm: Phase 1 (2027)",
     "Malmnes: Defer",
     "Raudfjord: Defer",
-    "Svarthaug: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
    "c1_total_p15_mw": 195.43,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 34.96,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 34.58,
    "lim_mva": {
-    "Drangvik": 35.76,
+    "Drangvik": 36.7,
     "Hestmark": 38.68,
     "Kvernholm": 32.42,
     "Malmnes": 31.27,
     "Raudfjord": 29.5,
-    "Svarthaug": 34.76,
+    "Svarthaug": 32.46,
     "Tverrli": 22.1
    },
    "loading_pct": {
-    "Drangvik": 75.27,
-    "Hestmark": 108.95,
-    "Kvernholm": 101.95,
-    "Malmnes": 67.39,
-    "Raudfjord": 65.55,
-    "Svarthaug": 101.65,
-    "Tverrli": 53.9
+    "Drangvik": 80.84,
+    "Hestmark": 113.75,
+    "Kvernholm": 103.91,
+    "Malmnes": 73.4,
+    "Raudfjord": 66.29,
+    "Svarthaug": 96.6,
+    "Tverrli": 54.56
    },
-   "phys_idx": 37.68,
-   "phys_ratio": 12.6,
-   "total_relief_mva": 19.59,
-   "wrong_count": 4
+   "phys_idx": 35.9,
+   "phys_ratio": 13.3,
+   "total_relief_mva": 19.57,
+   "wrong_count": 3
   },
   "S2": {
    "answer": [
-    "Drangvik: Phase 1 (2027)",
+    "Drangvik: Phase 2 (2028-2029)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 2 (2028-2029)",
-    "Malmnes: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
     "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
+   "c1_total_p15_mw": 230.12,
    "c2_total_qpeak_mvar": 27.17,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 47.78,
-    "Hestmark": 47.77,
-    "Kvernholm": 27.95,
-    "Malmnes": 46.32,
-    "Raudfjord": 46.97,
-    "Svarthaug": 30.17,
-    "Tverrli": 26.01
+    "Drangvik": 44.54,
+    "Hestmark": 44.02,
+    "Kvernholm": 27.35,
+    "Malmnes": 42.93,
+    "Raudfjord": 47.04,
+    "Svarthaug": 29.77,
+    "Tverrli": 24.99
    },
    "loading_pct": {
-    "Drangvik": 100.6,
-    "Hestmark": 134.58,
-    "Kvernholm": 87.91,
-    "Malmnes": 99.82,
-    "Raudfjord": 104.38,
-    "Svarthaug": 88.21,
-    "Tverrli": 63.43
+    "Drangvik": 98.11,
+    "Hestmark": 129.47,
+    "Kvernholm": 87.66,
+    "Malmnes": 100.78,
+    "Raudfjord": 105.7,
+    "Svarthaug": 88.6,
+    "Tverrli": 61.7
    },
-   "phys_idx": 51.03,
-   "phys_ratio": 17.1,
-   "total_relief_mva": 42.62,
-   "wrong_count": 1
+   "phys_idx": 52.4,
+   "phys_ratio": 19.4,
+   "total_relief_mva": 39.05,
+   "wrong_count": 3
   },
   "S2+S3": {
    "answer": [
@@ -1082,34 +1203,34 @@
     "Kvernholm: Phase 2 (2028-2029)",
     "Malmnes: Phase 2 (2028-2029)",
     "Raudfjord: Defer",
-    "Svarthaug: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
+   "c1_total_p15_mw": 230.12,
    "c2_total_qpeak_mvar": 27.17,
-   "c3_mean_lim_phase_pct": 34.96,
+   "c3_mean_lim_phase_pct": 34.58,
    "lim_mva": {
-    "Drangvik": 46.4,
-    "Hestmark": 45.94,
-    "Kvernholm": 28.54,
-    "Malmnes": 45.13,
-    "Raudfjord": 31.0,
-    "Svarthaug": 35.95,
-    "Tverrli": 24.18
+    "Drangvik": 43.35,
+    "Hestmark": 42.45,
+    "Kvernholm": 27.92,
+    "Malmnes": 41.83,
+    "Raudfjord": 30.07,
+    "Svarthaug": 33.12,
+    "Tverrli": 23.23
    },
    "loading_pct": {
-    "Drangvik": 97.69,
-    "Hestmark": 129.39,
-    "Kvernholm": 89.74,
-    "Malmnes": 97.26,
-    "Raudfjord": 68.89,
-    "Svarthaug": 105.12,
-    "Tverrli": 58.97
+    "Drangvik": 95.49,
+    "Hestmark": 124.85,
+    "Kvernholm": 89.49,
+    "Malmnes": 98.2,
+    "Raudfjord": 67.57,
+    "Svarthaug": 98.58,
+    "Tverrli": 57.35
    },
-   "phys_idx": 60.87,
-   "phys_ratio": 20.4,
-   "total_relief_mva": 35.86,
-   "wrong_count": 4
+   "phys_idx": 62.41,
+   "phys_ratio": 23.1,
+   "total_relief_mva": 29.9,
+   "wrong_count": 3
   },
   "S3": {
    "answer": [
@@ -1121,36 +1242,36 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 34.96,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 34.58,
    "lim_mva": {
-    "Drangvik": 49.18,
-    "Hestmark": 48.39,
-    "Kvernholm": 34.95,
-    "Malmnes": 42.18,
-    "Raudfjord": 32.43,
-    "Svarthaug": 37.74,
-    "Tverrli": 25.35
+    "Drangvik": 47.04,
+    "Hestmark": 45.1,
+    "Kvernholm": 34.45,
+    "Malmnes": 38.63,
+    "Raudfjord": 31.55,
+    "Svarthaug": 34.82,
+    "Tverrli": 24.45
    },
    "loading_pct": {
-    "Drangvik": 103.53,
-    "Hestmark": 136.32,
-    "Kvernholm": 109.92,
-    "Malmnes": 90.9,
-    "Raudfjord": 72.08,
-    "Svarthaug": 110.35,
-    "Tverrli": 61.83
+    "Drangvik": 103.62,
+    "Hestmark": 132.63,
+    "Kvernholm": 110.43,
+    "Malmnes": 90.68,
+    "Raudfjord": 70.89,
+    "Svarthaug": 103.62,
+    "Tverrli": 60.37
    },
-   "phys_idx": 12.82,
-   "phys_ratio": 4.3,
-   "total_relief_mva": 46.35,
+   "phys_idx": 12.71,
+   "phys_ratio": 4.7,
+   "total_relief_mva": 41.26,
    "wrong_count": 2
   },
   "direct": {
    "answer": [
     "Drangvik: Defer",
-    "Hestmark: Phase 2 (2028-2029)",
+    "Hestmark: Phase 1 (2027)",
     "Kvernholm: Defer",
     "Malmnes: Defer",
     "Raudfjord: Defer",
@@ -1170,18 +1291,18 @@
     "Tverrli": 20.23
    },
    "loading_pct": {
-    "Drangvik": 66.08,
-    "Hestmark": 98.17,
-    "Kvernholm": 77.03,
-    "Malmnes": 74.08,
-    "Raudfjord": 61.3,
-    "Svarthaug": 79.14,
-    "Tverrli": 49.35
+    "Drangvik": 69.14,
+    "Hestmark": 102.5,
+    "Kvernholm": 78.51,
+    "Malmnes": 80.69,
+    "Raudfjord": 61.99,
+    "Svarthaug": 80.56,
+    "Tverrli": 49.96
    },
-   "phys_idx": 86.02,
-   "phys_ratio": 28.8,
-   "total_relief_mva": 4.67,
-   "wrong_count": 6
+   "phys_idx": 85.75,
+   "phys_ratio": 31.7,
+   "total_relief_mva": 5.95,
+   "wrong_count": 5
   },
   "golden": {
    "answer": [
@@ -1193,30 +1314,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 50.64,
-    "Hestmark": 50.33,
-    "Kvernholm": 34.24,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.15,
-    "Svarthaug": 31.67,
-    "Tverrli": 27.27
+    "Drangvik": 48.33,
+    "Hestmark": 46.77,
+    "Kvernholm": 33.75,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.3
    },
    "loading_pct": {
-    "Drangvik": 106.61,
-    "Hestmark": 141.77,
-    "Kvernholm": 107.68,
-    "Malmnes": 93.29,
-    "Raudfjord": 109.21,
-    "Svarthaug": 92.6,
-    "Tverrli": 66.51
+    "Drangvik": 106.46,
+    "Hestmark": 137.55,
+    "Kvernholm": 108.18,
+    "Malmnes": 93.07,
+    "Raudfjord": 110.89,
+    "Svarthaug": 93.13,
+    "Tverrli": 64.94
    },
-   "phys_idx": 2.98,
+   "phys_idx": 2.71,
    "phys_ratio": 1.0,
-   "total_relief_mva": 54.97,
+   "total_relief_mva": 52.53,
    "wrong_count": 0
   },
   "reflex": {
@@ -1231,28 +1352,28 @@
    ],
    "c1_total_p15_mw": 195.43,
    "c2_total_qpeak_mvar": 27.17,
-   "c3_mean_lim_phase_pct": 34.96,
+   "c3_mean_lim_phase_pct": 34.58,
    "lim_mva": {
     "Drangvik": 31.83,
     "Hestmark": 35.55,
     "Kvernholm": 25.37,
     "Malmnes": 35.15,
     "Raudfjord": 27.91,
-    "Svarthaug": 32.81,
+    "Svarthaug": 30.64,
     "Tverrli": 20.74
    },
    "loading_pct": {
-    "Drangvik": 67.02,
-    "Hestmark": 100.15,
-    "Kvernholm": 79.78,
-    "Malmnes": 75.75,
-    "Raudfjord": 62.03,
-    "Svarthaug": 95.95,
-    "Tverrli": 50.58
+    "Drangvik": 70.12,
+    "Hestmark": 104.57,
+    "Kvernholm": 81.31,
+    "Malmnes": 82.51,
+    "Raudfjord": 62.72,
+    "Svarthaug": 91.18,
+    "Tverrli": 51.21
    },
-   "phys_idx": 85.73,
-   "phys_ratio": 28.7,
-   "total_relief_mva": 9.12,
+   "phys_idx": 85.59,
+   "phys_ratio": 31.6,
+   "total_relief_mva": 8.73,
    "wrong_count": 4
   },
   "response1_v2": {
@@ -1265,30 +1386,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 241.87,
-   "c2_total_qpeak_mvar": 16.47,
-   "c3_mean_lim_phase_pct": 42.02,
+   "c1_total_p15_mw": 229.72,
+   "c2_total_qpeak_mvar": 15.89,
+   "c3_mean_lim_phase_pct": 41.97,
    "lim_mva": {
-    "Drangvik": 46.11,
-    "Hestmark": 52.04,
-    "Kvernholm": 29.63,
-    "Malmnes": 55.53,
-    "Raudfjord": 43.0,
-    "Svarthaug": 48.2,
-    "Tverrli": 28.77
+    "Drangvik": 44.88,
+    "Hestmark": 47.83,
+    "Kvernholm": 28.8,
+    "Malmnes": 49.89,
+    "Raudfjord": 41.67,
+    "Svarthaug": 47.83,
+    "Tverrli": 27.88
    },
    "loading_pct": {
-    "Drangvik": 97.08,
-    "Hestmark": 146.59,
-    "Kvernholm": 93.18,
-    "Malmnes": 119.68,
-    "Raudfjord": 95.56,
-    "Svarthaug": 140.95,
-    "Tverrli": 70.16
+    "Drangvik": 98.85,
+    "Hestmark": 140.67,
+    "Kvernholm": 92.3,
+    "Malmnes": 117.12,
+    "Raudfjord": 93.63,
+    "Svarthaug": 142.34,
+    "Tverrli": 68.83
    },
-   "phys_idx": 63.05,
-   "phys_ratio": 21.1,
-   "total_relief_mva": 70.18,
+   "phys_idx": 65.57,
+   "phys_ratio": 24.2,
+   "total_relief_mva": 64.28,
    "wrong_count": 5
   },
   "rigorous": {
@@ -1301,30 +1422,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 247.16,
-   "c2_total_qpeak_mvar": 59.12,
-   "c3_mean_lim_phase_pct": 34.96,
+   "c1_total_p15_mw": 231.39,
+   "c2_total_qpeak_mvar": 60.03,
+   "c3_mean_lim_phase_pct": 34.58,
    "lim_mva": {
-    "Drangvik": 43.69,
-    "Hestmark": 45.19,
-    "Kvernholm": 28.62,
-    "Malmnes": 48.23,
-    "Raudfjord": 34.56,
-    "Svarthaug": 38.51,
-    "Tverrli": 27.13
+    "Drangvik": 42.09,
+    "Hestmark": 43.25,
+    "Kvernholm": 29.5,
+    "Malmnes": 43.38,
+    "Raudfjord": 31.21,
+    "Svarthaug": 34.37,
+    "Tverrli": 24.11
    },
    "loading_pct": {
-    "Drangvik": 91.98,
-    "Hestmark": 127.31,
-    "Kvernholm": 89.99,
-    "Malmnes": 103.94,
-    "Raudfjord": 76.8,
-    "Svarthaug": 112.62,
-    "Tverrli": 66.18
+    "Drangvik": 92.72,
+    "Hestmark": 127.21,
+    "Kvernholm": 94.55,
+    "Malmnes": 101.84,
+    "Raudfjord": 70.15,
+    "Svarthaug": 102.3,
+    "Tverrli": 59.54
    },
-   "phys_idx": 31.76,
-   "phys_ratio": 10.6,
-   "total_relief_mva": 38.15,
+   "phys_idx": 31.05,
+   "phys_ratio": 11.5,
+   "total_relief_mva": 33.82,
    "wrong_count": 5
   },
   "run_calibrated": {
@@ -1337,30 +1458,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 241.87,
-   "c2_total_qpeak_mvar": 59.12,
-   "c3_mean_lim_phase_pct": 36.58,
+   "c1_total_p15_mw": 229.72,
+   "c2_total_qpeak_mvar": 60.03,
+   "c3_mean_lim_phase_pct": 36.68,
    "lim_mva": {
-    "Drangvik": 45.25,
-    "Hestmark": 49.66,
-    "Kvernholm": 29.69,
-    "Malmnes": 53.02,
-    "Raudfjord": 37.1,
-    "Svarthaug": 32.64,
-    "Tverrli": 25.81
+    "Drangvik": 44.45,
+    "Hestmark": 45.83,
+    "Kvernholm": 28.9,
+    "Malmnes": 47.74,
+    "Raudfjord": 36.98,
+    "Svarthaug": 32.39,
+    "Tverrli": 25.03
    },
    "loading_pct": {
-    "Drangvik": 95.26,
-    "Hestmark": 139.88,
-    "Kvernholm": 93.36,
-    "Malmnes": 114.27,
-    "Raudfjord": 82.44,
-    "Svarthaug": 95.43,
-    "Tverrli": 62.96
+    "Drangvik": 97.91,
+    "Hestmark": 134.78,
+    "Kvernholm": 92.61,
+    "Malmnes": 112.07,
+    "Raudfjord": 83.1,
+    "Svarthaug": 96.4,
+    "Tverrli": 61.8
    },
-   "phys_idx": 36.98,
-   "phys_ratio": 12.4,
-   "total_relief_mva": 44.16,
+   "phys_idx": 37.82,
+   "phys_ratio": 14.0,
+   "total_relief_mva": 40.52,
    "wrong_count": 4
   },
   "run_cutoff": {
@@ -1373,30 +1494,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 247.39,
-   "c2_total_qpeak_mvar": 20.98,
-   "c3_mean_lim_phase_pct": 37.22,
+   "c1_total_p15_mw": 231.81,
+   "c2_total_qpeak_mvar": 20.77,
+   "c3_mean_lim_phase_pct": 37.34,
    "lim_mva": {
-    "Drangvik": 47.07,
-    "Hestmark": 51.46,
-    "Kvernholm": 29.19,
-    "Malmnes": 53.17,
-    "Raudfjord": 39.07,
-    "Svarthaug": 34.18,
-    "Tverrli": 25.78
+    "Drangvik": 43.97,
+    "Hestmark": 47.13,
+    "Kvernholm": 28.2,
+    "Malmnes": 47.74,
+    "Raudfjord": 38.33,
+    "Svarthaug": 33.48,
+    "Tverrli": 24.73
    },
    "loading_pct": {
-    "Drangvik": 99.1,
-    "Hestmark": 144.97,
-    "Kvernholm": 91.79,
-    "Malmnes": 114.59,
-    "Raudfjord": 86.83,
-    "Svarthaug": 99.95,
-    "Tverrli": 62.88
+    "Drangvik": 96.85,
+    "Hestmark": 138.62,
+    "Kvernholm": 90.37,
+    "Malmnes": 112.07,
+    "Raudfjord": 86.14,
+    "Svarthaug": 99.64,
+    "Tverrli": 61.05
    },
-   "phys_idx": 56.52,
-   "phys_ratio": 18.9,
-   "total_relief_mva": 49.82,
+   "phys_idx": 56.12,
+   "phys_ratio": 20.7,
+   "total_relief_mva": 42.24,
    "wrong_count": 4
   },
   "run_generous": {
@@ -1409,30 +1530,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 267.43,
+   "c1_total_p15_mw": 258.05,
    "c2_total_qpeak_mvar": 91.93,
-   "c3_mean_lim_phase_pct": 41.12,
+   "c3_mean_lim_phase_pct": 41.34,
    "lim_mva": {
-    "Drangvik": 62.91,
-    "Hestmark": 67.49,
-    "Kvernholm": 33.92,
-    "Malmnes": 67.59,
-    "Raudfjord": 49.36,
-    "Svarthaug": 39.47,
+    "Drangvik": 59.49,
+    "Hestmark": 64.21,
+    "Kvernholm": 34.68,
+    "Malmnes": 61.46,
+    "Raudfjord": 50.13,
+    "Svarthaug": 40.79,
     "Tverrli": 30.85
    },
    "loading_pct": {
-    "Drangvik": 132.44,
-    "Hestmark": 190.11,
-    "Kvernholm": 106.67,
-    "Malmnes": 145.66,
-    "Raudfjord": 109.69,
-    "Svarthaug": 115.4,
-    "Tverrli": 75.25
+    "Drangvik": 131.04,
+    "Hestmark": 188.86,
+    "Kvernholm": 111.14,
+    "Malmnes": 144.28,
+    "Raudfjord": 112.65,
+    "Svarthaug": 121.4,
+    "Tverrli": 76.18
    },
-   "phys_idx": 52.42,
-   "phys_ratio": 17.6,
-   "total_relief_mva": 116.4,
+   "phys_idx": 58.08,
+   "phys_ratio": 21.5,
+   "total_relief_mva": 114.16,
    "wrong_count": 2
   },
   "run_hedge": {
@@ -1445,30 +1566,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 253.37,
+   "c1_total_p15_mw": 240.78,
    "c2_total_qpeak_mvar": 27.17,
-   "c3_mean_lim_phase_pct": 34.96,
+   "c3_mean_lim_phase_pct": 34.58,
    "lim_mva": {
-    "Drangvik": 43.19,
-    "Hestmark": 48.35,
-    "Kvernholm": 30.33,
-    "Malmnes": 49.39,
-    "Raudfjord": 32.75,
-    "Svarthaug": 37.72,
-    "Tverrli": 26.15
+    "Drangvik": 41.48,
+    "Hestmark": 44.72,
+    "Kvernholm": 29.68,
+    "Malmnes": 45.6,
+    "Raudfjord": 31.53,
+    "Svarthaug": 34.81,
+    "Tverrli": 24.95
    },
    "loading_pct": {
-    "Drangvik": 90.93,
-    "Hestmark": 136.19,
-    "Kvernholm": 95.39,
-    "Malmnes": 106.44,
-    "Raudfjord": 72.77,
-    "Svarthaug": 110.29,
-    "Tverrli": 63.78
+    "Drangvik": 91.36,
+    "Hestmark": 131.52,
+    "Kvernholm": 95.14,
+    "Malmnes": 107.04,
+    "Raudfjord": 70.86,
+    "Svarthaug": 103.59,
+    "Tverrli": 61.61
    },
-   "phys_idx": 68.58,
-   "phys_ratio": 23.0,
-   "total_relief_mva": 42.89,
+   "phys_idx": 68.06,
+   "phys_ratio": 25.2,
+   "total_relief_mva": 37.5,
    "wrong_count": 5
   },
   "s1_cf_pooled": {
@@ -1476,40 +1597,40 @@
     "Drangvik: Phase 2 (2028-2029)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
     "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 247.16,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 231.39,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 46.44,
-    "Hestmark": 48.55,
-    "Kvernholm": 33.6,
-    "Malmnes": 47.33,
-    "Raudfjord": 53.64,
-    "Svarthaug": 33.19,
-    "Tverrli": 30.09
+    "Drangvik": 45.28,
+    "Hestmark": 46.46,
+    "Kvernholm": 34.32,
+    "Malmnes": 42.1,
+    "Raudfjord": 50.28,
+    "Svarthaug": 31.81,
+    "Tverrli": 26.95
    },
    "loading_pct": {
-    "Drangvik": 97.78,
-    "Hestmark": 136.75,
-    "Kvernholm": 105.66,
-    "Malmnes": 101.99,
-    "Raudfjord": 119.2,
-    "Svarthaug": 97.05,
-    "Tverrli": 73.38
+    "Drangvik": 99.73,
+    "Hestmark": 136.64,
+    "Kvernholm": 110.01,
+    "Malmnes": 98.82,
+    "Raudfjord": 112.99,
+    "Svarthaug": 94.66,
+    "Tverrli": 66.54
    },
-   "phys_idx": 10.41,
-   "phys_ratio": 3.5,
-   "total_relief_mva": 58.41,
-   "wrong_count": 2
+   "phys_idx": 9.25,
+   "phys_ratio": 3.4,
+   "total_relief_mva": 53.64,
+   "wrong_count": 1
   },
   "s1_flat_ratio": {
    "answer": [
-    "Drangvik: Phase 2 (2028-2029)",
+    "Drangvik: Phase 1 (2027)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
     "Malmnes: Phase 2 (2028-2029)",
@@ -1517,31 +1638,31 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 258.29,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 254.98,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 46.27,
-    "Hestmark": 51.15,
-    "Kvernholm": 38.34,
-    "Malmnes": 42.41,
-    "Raudfjord": 57.73,
-    "Svarthaug": 37.64,
-    "Tverrli": 30.6
+    "Drangvik": 46.44,
+    "Hestmark": 50.42,
+    "Kvernholm": 37.98,
+    "Malmnes": 41.86,
+    "Raudfjord": 58.89,
+    "Svarthaug": 37.19,
+    "Tverrli": 30.24
    },
    "loading_pct": {
-    "Drangvik": 97.41,
-    "Hestmark": 144.08,
-    "Kvernholm": 120.56,
-    "Malmnes": 91.4,
-    "Raudfjord": 128.29,
-    "Svarthaug": 110.05,
-    "Tverrli": 74.65
+    "Drangvik": 102.3,
+    "Hestmark": 148.29,
+    "Kvernholm": 121.72,
+    "Malmnes": 98.27,
+    "Raudfjord": 132.33,
+    "Svarthaug": 110.67,
+    "Tverrli": 74.67
    },
-   "phys_idx": 11.87,
-   "phys_ratio": 4.0,
-   "total_relief_mva": 69.19,
-   "wrong_count": 2
+   "phys_idx": 11.27,
+   "phys_ratio": 4.2,
+   "total_relief_mva": 76.17,
+   "wrong_count": 1
   },
   "s1_indep_quad": {
    "answer": [
@@ -1553,30 +1674,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 253.37,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 240.78,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 47.53,
-    "Hestmark": 52.72,
-    "Kvernholm": 35.69,
-    "Malmnes": 47.93,
-    "Raudfjord": 51.69,
-    "Svarthaug": 33.09,
-    "Tverrli": 29.3
+    "Drangvik": 46.56,
+    "Hestmark": 48.99,
+    "Kvernholm": 35.17,
+    "Malmnes": 43.8,
+    "Raudfjord": 51.53,
+    "Svarthaug": 32.73,
+    "Tverrli": 28.07
    },
    "loading_pct": {
-    "Drangvik": 100.06,
-    "Hestmark": 148.5,
-    "Kvernholm": 112.24,
-    "Malmnes": 103.3,
-    "Raudfjord": 114.86,
-    "Svarthaug": 96.74,
-    "Tverrli": 71.47
+    "Drangvik": 102.56,
+    "Hestmark": 144.08,
+    "Kvernholm": 112.71,
+    "Malmnes": 102.82,
+    "Raudfjord": 115.8,
+    "Svarthaug": 97.42,
+    "Tverrli": 69.3
    },
-   "phys_idx": 10.7,
-   "phys_ratio": 3.6,
-   "total_relief_mva": 64.31,
+   "phys_idx": 8.36,
+   "phys_ratio": 3.1,
+   "total_relief_mva": 62.18,
    "wrong_count": 1
   },
   "s1_linear_sum": {
@@ -1586,70 +1707,70 @@
     "Kvernholm: Phase 1 (2027)",
     "Malmnes: Phase 1 (2027)",
     "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
+    "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 267.43,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 258.05,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 53.26,
-    "Hestmark": 53.92,
-    "Kvernholm": 35.64,
-    "Malmnes": 55.0,
-    "Raudfjord": 52.78,
-    "Svarthaug": 32.68,
+    "Drangvik": 51.09,
+    "Hestmark": 51.26,
+    "Kvernholm": 36.29,
+    "Malmnes": 49.52,
+    "Raudfjord": 53.37,
+    "Svarthaug": 33.78,
     "Tverrli": 29.33
    },
    "loading_pct": {
-    "Drangvik": 112.12,
-    "Hestmark": 151.88,
-    "Kvernholm": 112.09,
-    "Malmnes": 118.53,
-    "Raudfjord": 117.29,
-    "Svarthaug": 95.54,
-    "Tverrli": 71.53
+    "Drangvik": 112.54,
+    "Hestmark": 150.76,
+    "Kvernholm": 116.31,
+    "Malmnes": 116.23,
+    "Raudfjord": 119.93,
+    "Svarthaug": 100.52,
+    "Tverrli": 72.42
    },
-   "phys_idx": 13.1,
-   "phys_ratio": 4.4,
-   "total_relief_mva": 78.94,
-   "wrong_count": 1
+   "phys_idx": 18.24,
+   "phys_ratio": 6.7,
+   "total_relief_mva": 78.7,
+   "wrong_count": 2
   },
   "s1_pca1": {
    "answer": [
     "Drangvik: Phase 1 (2027)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
     "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 247.39,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 231.81,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 47.56,
-    "Hestmark": 50.52,
-    "Kvernholm": 34.93,
-    "Malmnes": 48.03,
-    "Raudfjord": 50.49,
-    "Svarthaug": 32.39,
-    "Tverrli": 27.75
+    "Drangvik": 45.6,
+    "Hestmark": 46.66,
+    "Kvernholm": 34.12,
+    "Malmnes": 42.57,
+    "Raudfjord": 50.13,
+    "Svarthaug": 31.78,
+    "Tverrli": 26.71
    },
    "loading_pct": {
-    "Drangvik": 100.14,
-    "Hestmark": 142.31,
-    "Kvernholm": 109.83,
-    "Malmnes": 103.51,
-    "Raudfjord": 112.19,
-    "Svarthaug": 94.7,
-    "Tverrli": 67.68
+    "Drangvik": 100.45,
+    "Hestmark": 137.25,
+    "Kvernholm": 109.36,
+    "Malmnes": 99.94,
+    "Raudfjord": 112.66,
+    "Svarthaug": 94.59,
+    "Tverrli": 65.95
    },
-   "phys_idx": 10.78,
-   "phys_ratio": 3.6,
-   "total_relief_mva": 59.57,
-   "wrong_count": 1
+   "phys_idx": 9.33,
+   "phys_ratio": 3.5,
+   "total_relief_mva": 54.27,
+   "wrong_count": 0
   },
   "s1_pca2": {
    "answer": [
@@ -1661,67 +1782,67 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 248.8,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 233.43,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 47.62,
-    "Hestmark": 50.92,
-    "Kvernholm": 35.13,
-    "Malmnes": 48.06,
-    "Raudfjord": 50.75,
-    "Svarthaug": 32.58,
-    "Tverrli": 28.08
+    "Drangvik": 45.66,
+    "Hestmark": 47.11,
+    "Kvernholm": 34.32,
+    "Malmnes": 42.65,
+    "Raudfjord": 50.53,
+    "Svarthaug": 32.05,
+    "Tverrli": 26.99
    },
    "loading_pct": {
-    "Drangvik": 100.25,
-    "Hestmark": 143.43,
-    "Kvernholm": 110.46,
-    "Malmnes": 103.57,
-    "Raudfjord": 112.78,
-    "Svarthaug": 95.27,
-    "Tverrli": 68.5
+    "Drangvik": 100.57,
+    "Hestmark": 138.56,
+    "Kvernholm": 110.01,
+    "Malmnes": 100.11,
+    "Raudfjord": 113.55,
+    "Svarthaug": 95.37,
+    "Tverrli": 66.65
    },
-   "phys_idx": 10.86,
-   "phys_ratio": 3.6,
-   "total_relief_mva": 60.71,
+   "phys_idx": 9.33,
+   "phys_ratio": 3.4,
+   "total_relief_mva": 55.71,
    "wrong_count": 1
   },
   "s1_raw_corr": {
    "answer": [
-    "Drangvik: Phase 2 (2028-2029)",
+    "Drangvik: Phase 1 (2027)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
     "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 245.41,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.61,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 47.4,
-    "Hestmark": 50.39,
-    "Kvernholm": 35.1,
-    "Malmnes": 47.57,
-    "Raudfjord": 49.29,
-    "Svarthaug": 31.73,
-    "Tverrli": 27.8
+    "Drangvik": 45.51,
+    "Hestmark": 46.49,
+    "Kvernholm": 34.23,
+    "Malmnes": 42.39,
+    "Raudfjord": 49.57,
+    "Svarthaug": 31.37,
+    "Tverrli": 26.62
    },
    "loading_pct": {
-    "Drangvik": 99.78,
-    "Hestmark": 141.93,
-    "Kvernholm": 110.37,
-    "Malmnes": 102.52,
-    "Raudfjord": 109.54,
-    "Svarthaug": 92.79,
-    "Tverrli": 67.81
+    "Drangvik": 100.24,
+    "Hestmark": 136.75,
+    "Kvernholm": 109.7,
+    "Malmnes": 99.51,
+    "Raudfjord": 111.38,
+    "Svarthaug": 93.38,
+    "Tverrli": 65.72
    },
-   "phys_idx": 10.81,
-   "phys_ratio": 3.6,
-   "total_relief_mva": 57.14,
-   "wrong_count": 2
+   "phys_idx": 9.37,
+   "phys_ratio": 3.5,
+   "total_relief_mva": 52.96,
+   "wrong_count": 0
   },
   "s1_register_rho": {
    "answer": [
@@ -1733,67 +1854,103 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 241.87,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 229.72,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 45.51,
-    "Hestmark": 49.23,
-    "Kvernholm": 34.69,
-    "Malmnes": 49.5,
-    "Raudfjord": 48.55,
-    "Svarthaug": 31.29,
-    "Tverrli": 26.93
+    "Drangvik": 45.23,
+    "Hestmark": 45.6,
+    "Kvernholm": 34.03,
+    "Malmnes": 44.12,
+    "Raudfjord": 49.02,
+    "Svarthaug": 31.07,
+    "Tverrli": 26.18
    },
    "loading_pct": {
-    "Drangvik": 95.82,
-    "Hestmark": 138.68,
-    "Kvernholm": 109.08,
-    "Malmnes": 106.69,
-    "Raudfjord": 107.89,
-    "Svarthaug": 91.49,
-    "Tverrli": 65.69
+    "Drangvik": 99.63,
+    "Hestmark": 134.12,
+    "Kvernholm": 109.06,
+    "Malmnes": 103.58,
+    "Raudfjord": 110.16,
+    "Svarthaug": 92.46,
+    "Tverrli": 64.63
    },
-   "phys_idx": 12.23,
-   "phys_ratio": 4.1,
-   "total_relief_mva": 54.44,
+   "phys_idx": 12.81,
+   "phys_ratio": 4.7,
+   "total_relief_mva": 52.47,
    "wrong_count": 2
   },
   "s1_scada60": {
    "answer": [
     "Drangvik: Defer",
     "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 2 (2028-2029)",
+    "Kvernholm: Phase 1 (2027)",
     "Malmnes: Defer",
-    "Raudfjord: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
    "c1_total_p15_mw": 195.43,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 36.82,
-    "Hestmark": 40.22,
+    "Drangvik": 37.71,
+    "Hestmark": 40.11,
     "Kvernholm": 31.76,
     "Malmnes": 32.09,
-    "Raudfjord": 44.7,
+    "Raudfjord": 46.14,
     "Svarthaug": 29.17,
     "Tverrli": 23.77
    },
    "loading_pct": {
-    "Drangvik": 77.51,
-    "Hestmark": 113.31,
-    "Kvernholm": 99.87,
-    "Malmnes": 69.16,
-    "Raudfjord": 99.32,
-    "Svarthaug": 85.3,
-    "Tverrli": 57.98
+    "Drangvik": 83.05,
+    "Hestmark": 117.97,
+    "Kvernholm": 101.79,
+    "Malmnes": 75.33,
+    "Raudfjord": 103.69,
+    "Svarthaug": 86.82,
+    "Tverrli": 58.69
    },
-   "phys_idx": 27.85,
-   "phys_ratio": 9.3,
-   "total_relief_mva": 21.33,
-   "wrong_count": 4
+   "phys_idx": 25.89,
+   "phys_ratio": 9.6,
+   "total_relief_mva": 25.38,
+   "wrong_count": 2
+  },
+  "s1_twin_ratio": {
+   "answer": [
+    "Drangvik: Phase 2 (2028-2029)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 231.22,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "lim_mva": {
+    "Drangvik": 45.24,
+    "Hestmark": 46.43,
+    "Kvernholm": 34.31,
+    "Malmnes": 42.05,
+    "Raudfjord": 50.26,
+    "Svarthaug": 31.79,
+    "Tverrli": 26.93
+   },
+   "loading_pct": {
+    "Drangvik": 99.65,
+    "Hestmark": 136.56,
+    "Kvernholm": 109.97,
+    "Malmnes": 98.71,
+    "Raudfjord": 112.95,
+    "Svarthaug": 94.63,
+    "Tverrli": 66.5
+   },
+   "phys_idx": 15.84,
+   "phys_ratio": 5.9,
+   "total_relief_mva": 53.48,
+   "wrong_count": 1
   },
   "s2_class_pf": {
    "answer": [
@@ -1805,30 +1962,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
+   "c1_total_p15_mw": 230.12,
    "c2_total_qpeak_mvar": 91.93,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 50.54,
-    "Hestmark": 51.15,
-    "Kvernholm": 30.55,
-    "Malmnes": 46.49,
-    "Raudfjord": 49.35,
-    "Svarthaug": 31.73,
-    "Tverrli": 28.06
+    "Drangvik": 47.47,
+    "Hestmark": 47.65,
+    "Kvernholm": 30.0,
+    "Malmnes": 43.12,
+    "Raudfjord": 49.56,
+    "Svarthaug": 31.36,
+    "Tverrli": 27.12
    },
    "loading_pct": {
-    "Drangvik": 106.39,
-    "Hestmark": 144.09,
-    "Kvernholm": 96.08,
-    "Malmnes": 100.19,
-    "Raudfjord": 109.67,
-    "Svarthaug": 92.78,
-    "Tverrli": 68.44
+    "Drangvik": 104.56,
+    "Hestmark": 140.13,
+    "Kvernholm": 96.16,
+    "Malmnes": 101.22,
+    "Raudfjord": 111.38,
+    "Svarthaug": 93.32,
+    "Tverrli": 66.95
    },
-   "phys_idx": 33.68,
-   "phys_ratio": 11.3,
-   "total_relief_mva": 55.47,
+   "phys_idx": 33.82,
+   "phys_ratio": 12.5,
+   "total_relief_mva": 52.55,
    "wrong_count": 2
   },
   "s2_local_dv": {
@@ -1841,35 +1998,35 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Phase 2 (2028-2029)"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 295.38,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 304.08,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 69.62,
-    "Hestmark": 73.1,
-    "Kvernholm": 69.4,
-    "Malmnes": 50.88,
-    "Raudfjord": 74.04,
-    "Svarthaug": 55.4,
-    "Tverrli": 36.43
+    "Drangvik": 70.68,
+    "Hestmark": 71.72,
+    "Kvernholm": 70.11,
+    "Malmnes": 49.11,
+    "Raudfjord": 76.02,
+    "Svarthaug": 55.57,
+    "Tverrli": 35.05
    },
    "loading_pct": {
-    "Drangvik": 146.57,
-    "Hestmark": 205.91,
-    "Kvernholm": 218.24,
-    "Malmnes": 109.66,
-    "Raudfjord": 164.53,
-    "Svarthaug": 162.0,
-    "Tverrli": 88.85
+    "Drangvik": 155.69,
+    "Hestmark": 210.93,
+    "Kvernholm": 224.7,
+    "Malmnes": 115.29,
+    "Raudfjord": 170.84,
+    "Svarthaug": 165.39,
+    "Tverrli": 86.55
    },
-   "phys_idx": 171.21,
-   "phys_ratio": 57.4,
-   "total_relief_mva": 189.68,
+   "phys_idx": 177.6,
+   "phys_ratio": 65.6,
+   "total_relief_mva": 197.24,
    "wrong_count": 3
   },
   "s2_monthly_qp": {
    "answer": [
-    "Drangvik: Phase 1 (2027)",
+    "Drangvik: Phase 2 (2028-2029)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 2 (2028-2029)",
     "Malmnes: Phase 2 (2028-2029)",
@@ -1877,31 +2034,31 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 16.47,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 15.89,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 47.68,
-    "Hestmark": 47.5,
-    "Kvernholm": 28.06,
-    "Malmnes": 45.09,
-    "Raudfjord": 47.01,
-    "Svarthaug": 30.2,
-    "Tverrli": 26.07
+    "Drangvik": 44.38,
+    "Hestmark": 43.73,
+    "Kvernholm": 27.46,
+    "Malmnes": 41.61,
+    "Raudfjord": 47.07,
+    "Svarthaug": 29.8,
+    "Tverrli": 25.06
    },
    "loading_pct": {
-    "Drangvik": 100.37,
-    "Hestmark": 133.81,
-    "Kvernholm": 88.24,
-    "Malmnes": 97.17,
-    "Raudfjord": 104.46,
-    "Svarthaug": 88.3,
-    "Tverrli": 63.59
+    "Drangvik": 97.76,
+    "Hestmark": 128.61,
+    "Kvernholm": 88.01,
+    "Malmnes": 97.67,
+    "Raudfjord": 105.78,
+    "Svarthaug": 88.7,
+    "Tverrli": 61.86
    },
-   "phys_idx": 46.41,
-   "phys_ratio": 15.6,
-   "total_relief_mva": 41.19,
-   "wrong_count": 1
+   "phys_idx": 48.0,
+   "phys_ratio": 17.7,
+   "total_relief_mva": 37.45,
+   "wrong_count": 2
   },
   "s2_monthly_quad": {
    "answer": [
@@ -1913,30 +2070,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": -173.52,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": -180.5,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 62.51,
-    "Hestmark": 61.26,
-    "Kvernholm": 44.32,
-    "Malmnes": 47.86,
-    "Raudfjord": 51.58,
-    "Svarthaug": 33.11,
-    "Tverrli": 32.32
+    "Drangvik": 65.15,
+    "Hestmark": 58.31,
+    "Kvernholm": 43.94,
+    "Malmnes": 44.58,
+    "Raudfjord": 51.93,
+    "Svarthaug": 32.75,
+    "Tverrli": 31.51
    },
    "loading_pct": {
-    "Drangvik": 131.59,
-    "Hestmark": 172.57,
-    "Kvernholm": 139.37,
-    "Malmnes": 103.14,
-    "Raudfjord": 114.62,
-    "Svarthaug": 96.81,
-    "Tverrli": 78.84
+    "Drangvik": 143.5,
+    "Hestmark": 171.5,
+    "Kvernholm": 140.84,
+    "Malmnes": 104.65,
+    "Raudfjord": 116.69,
+    "Svarthaug": 97.47,
+    "Tverrli": 77.8
    },
-   "phys_idx": 103.13,
-   "phys_ratio": 34.6,
-   "total_relief_mva": 96.3,
+   "phys_idx": 108.67,
+   "phys_ratio": 40.2,
+   "total_relief_mva": 100.05,
    "wrong_count": 1
   },
   "s2_monthly_win": {
@@ -1949,67 +2106,67 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 59.12,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 60.03,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 49.3,
-    "Hestmark": 48.84,
-    "Kvernholm": 28.8,
-    "Malmnes": 45.65,
-    "Raudfjord": 47.75,
-    "Svarthaug": 30.75,
-    "Tverrli": 26.28
+    "Drangvik": 46.44,
+    "Hestmark": 45.17,
+    "Kvernholm": 28.22,
+    "Malmnes": 42.22,
+    "Raudfjord": 47.87,
+    "Svarthaug": 30.36,
+    "Tverrli": 25.27
    },
    "loading_pct": {
-    "Drangvik": 103.8,
-    "Hestmark": 137.59,
-    "Kvernholm": 90.57,
-    "Malmnes": 98.38,
-    "Raudfjord": 106.12,
-    "Svarthaug": 89.92,
-    "Tverrli": 64.09
+    "Drangvik": 102.28,
+    "Hestmark": 132.86,
+    "Kvernholm": 90.43,
+    "Malmnes": 99.1,
+    "Raudfjord": 107.57,
+    "Svarthaug": 90.36,
+    "Tverrli": 62.39
    },
-   "phys_idx": 14.5,
-   "phys_ratio": 4.9,
-   "total_relief_mva": 46.76,
+   "phys_idx": 14.49,
+   "phys_ratio": 5.4,
+   "total_relief_mva": 43.66,
    "wrong_count": 1
   },
   "s2_net_kvarh": {
    "answer": [
-    "Drangvik: Phase 1 (2027)",
+    "Drangvik: Phase 2 (2028-2029)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 2 (2028-2029)",
-    "Malmnes: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
     "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
+   "c1_total_p15_mw": 230.12,
    "c2_total_qpeak_mvar": 27.17,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 47.78,
-    "Hestmark": 47.77,
-    "Kvernholm": 27.95,
-    "Malmnes": 46.32,
-    "Raudfjord": 46.97,
-    "Svarthaug": 30.17,
-    "Tverrli": 26.01
+    "Drangvik": 44.54,
+    "Hestmark": 44.02,
+    "Kvernholm": 27.35,
+    "Malmnes": 42.93,
+    "Raudfjord": 47.04,
+    "Svarthaug": 29.77,
+    "Tverrli": 24.99
    },
    "loading_pct": {
-    "Drangvik": 100.6,
-    "Hestmark": 134.58,
-    "Kvernholm": 87.91,
-    "Malmnes": 99.82,
-    "Raudfjord": 104.38,
-    "Svarthaug": 88.21,
-    "Tverrli": 63.43
+    "Drangvik": 98.11,
+    "Hestmark": 129.47,
+    "Kvernholm": 87.66,
+    "Malmnes": 100.78,
+    "Raudfjord": 105.7,
+    "Svarthaug": 88.6,
+    "Tverrli": 61.7
    },
-   "phys_idx": 51.03,
-   "phys_ratio": 17.1,
-   "total_relief_mva": 42.62,
-   "wrong_count": 1
+   "phys_idx": 52.4,
+   "phys_ratio": 19.4,
+   "total_relief_mva": 39.05,
+   "wrong_count": 3
   },
   "s2_raw_dv": {
    "answer": [
@@ -2021,30 +2178,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 72.45,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 74.34,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 52.64,
-    "Hestmark": 48.72,
-    "Kvernholm": 38.38,
-    "Malmnes": 43.86,
-    "Raudfjord": 47.19,
-    "Svarthaug": 33.25,
-    "Tverrli": 26.46
+    "Drangvik": 50.62,
+    "Hestmark": 45.04,
+    "Kvernholm": 37.94,
+    "Malmnes": 40.27,
+    "Raudfjord": 47.27,
+    "Svarthaug": 32.89,
+    "Tverrli": 25.46
    },
    "loading_pct": {
-    "Drangvik": 110.83,
-    "Hestmark": 137.24,
-    "Kvernholm": 120.7,
-    "Malmnes": 94.52,
-    "Raudfjord": 104.86,
-    "Svarthaug": 97.22,
-    "Tverrli": 64.53
+    "Drangvik": 111.49,
+    "Hestmark": 132.47,
+    "Kvernholm": 121.61,
+    "Malmnes": 94.53,
+    "Raudfjord": 106.22,
+    "Svarthaug": 97.88,
+    "Tverrli": 62.85
    },
-   "phys_idx": 16.24,
-   "phys_ratio": 5.4,
-   "total_relief_mva": 59.7,
+   "phys_idx": 15.96,
+   "phys_ratio": 5.9,
+   "total_relief_mva": 57.42,
    "wrong_count": 0
   },
   "s2_rp_only": {
@@ -2052,36 +2209,36 @@
     "Drangvik: Phase 1 (2027)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
     "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 229.9,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 237.07,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 61.97,
-    "Hestmark": 64.73,
-    "Kvernholm": 58.64,
-    "Malmnes": 45.82,
-    "Raudfjord": 65.69,
-    "Svarthaug": 47.22,
-    "Tverrli": 33.76
+    "Drangvik": 62.32,
+    "Hestmark": 62.63,
+    "Kvernholm": 59.01,
+    "Malmnes": 43.18,
+    "Raudfjord": 67.0,
+    "Svarthaug": 47.15,
+    "Tverrli": 32.3
    },
    "loading_pct": {
-    "Drangvik": 130.47,
-    "Hestmark": 182.34,
-    "Kvernholm": 184.39,
-    "Malmnes": 98.74,
-    "Raudfjord": 145.97,
-    "Svarthaug": 138.07,
-    "Tverrli": 82.34
+    "Drangvik": 137.27,
+    "Hestmark": 184.21,
+    "Kvernholm": 189.15,
+    "Malmnes": 101.36,
+    "Raudfjord": 150.57,
+    "Svarthaug": 140.34,
+    "Tverrli": 79.77
    },
-   "phys_idx": 106.98,
-   "phys_ratio": 35.9,
-   "total_relief_mva": 139.72,
-   "wrong_count": 1
+   "phys_idx": 111.46,
+   "phys_ratio": 41.2,
+   "total_relief_mva": 144.7,
+   "wrong_count": 2
   },
   "s2_targets_only": {
    "answer": [
@@ -2093,67 +2250,67 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 89.32,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 91.84,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 53.02,
-    "Hestmark": 49.71,
-    "Kvernholm": 33.57,
-    "Malmnes": 43.41,
-    "Raudfjord": 49.63,
-    "Svarthaug": 31.9,
-    "Tverrli": 28.52
+    "Drangvik": 51.06,
+    "Hestmark": 46.23,
+    "Kvernholm": 33.22,
+    "Malmnes": 39.79,
+    "Raudfjord": 49.94,
+    "Svarthaug": 31.56,
+    "Tverrli": 27.45
    },
    "loading_pct": {
-    "Drangvik": 111.63,
-    "Hestmark": 140.02,
-    "Kvernholm": 105.57,
-    "Malmnes": 93.56,
-    "Raudfjord": 110.28,
-    "Svarthaug": 93.27,
-    "Tverrli": 69.56
+    "Drangvik": 112.47,
+    "Hestmark": 135.98,
+    "Kvernholm": 106.49,
+    "Malmnes": 93.39,
+    "Raudfjord": 112.22,
+    "Svarthaug": 93.93,
+    "Tverrli": 67.77
    },
-   "phys_idx": 19.37,
-   "phys_ratio": 6.5,
-   "total_relief_mva": 56.9,
+   "phys_idx": 21.25,
+   "phys_ratio": 7.9,
+   "total_relief_mva": 55.2,
    "wrong_count": 0
   },
   "s2_winter_kvarh": {
    "answer": [
-    "Drangvik: Phase 1 (2027)",
+    "Drangvik: Phase 2 (2028-2029)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 2 (2028-2029)",
-    "Malmnes: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
     "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 20.98,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 20.77,
+   "c3_mean_lim_phase_pct": 37.46,
    "lim_mva": {
-    "Drangvik": 47.7,
-    "Hestmark": 47.63,
-    "Kvernholm": 27.98,
-    "Malmnes": 46.01,
-    "Raudfjord": 46.96,
-    "Svarthaug": 30.16,
-    "Tverrli": 26.05
+    "Drangvik": 44.44,
+    "Hestmark": 43.87,
+    "Kvernholm": 27.38,
+    "Malmnes": 42.6,
+    "Raudfjord": 47.03,
+    "Svarthaug": 29.76,
+    "Tverrli": 25.03
    },
    "loading_pct": {
-    "Drangvik": 100.43,
-    "Hestmark": 134.18,
-    "Kvernholm": 87.98,
-    "Malmnes": 99.15,
-    "Raudfjord": 104.36,
-    "Svarthaug": 88.18,
-    "Tverrli": 63.53
+    "Drangvik": 97.88,
+    "Hestmark": 129.02,
+    "Kvernholm": 87.74,
+    "Malmnes": 100.0,
+    "Raudfjord": 105.68,
+    "Svarthaug": 88.57,
+    "Tverrli": 61.8
    },
-   "phys_idx": 40.09,
-   "phys_ratio": 13.4,
-   "total_relief_mva": 42.1,
-   "wrong_count": 1
+   "phys_idx": 40.77,
+   "phys_ratio": 15.1,
+   "total_relief_mva": 38.46,
+   "wrong_count": 3
   },
   "s3_ami_grossup": {
    "answer": [
@@ -2165,30 +2322,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 36.59,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 35.82,
    "lim_mva": {
-    "Drangvik": 49.86,
-    "Hestmark": 49.35,
-    "Kvernholm": 36.16,
-    "Malmnes": 43.1,
-    "Raudfjord": 32.81,
-    "Svarthaug": 44.35,
-    "Tverrli": 25.97
+    "Drangvik": 47.7,
+    "Hestmark": 45.99,
+    "Kvernholm": 35.64,
+    "Malmnes": 39.48,
+    "Raudfjord": 31.92,
+    "Svarthaug": 38.87,
+    "Tverrli": 25.04
    },
    "loading_pct": {
-    "Drangvik": 104.98,
-    "Hestmark": 139.02,
-    "Kvernholm": 113.7,
-    "Malmnes": 92.9,
-    "Raudfjord": 72.92,
-    "Svarthaug": 129.67,
-    "Tverrli": 63.34
+    "Drangvik": 105.07,
+    "Hestmark": 135.27,
+    "Kvernholm": 114.23,
+    "Malmnes": 92.67,
+    "Raudfjord": 71.72,
+    "Svarthaug": 115.69,
+    "Tverrli": 61.84
    },
-   "phys_idx": 12.8,
-   "phys_ratio": 4.3,
-   "total_relief_mva": 56.74,
+   "phys_idx": 12.74,
+   "phys_ratio": 4.7,
+   "total_relief_mva": 48.9,
    "wrong_count": 2
   },
   "s3_ami_only": {
@@ -2201,30 +2358,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 34.96,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 34.58,
    "lim_mva": {
-    "Drangvik": 49.18,
-    "Hestmark": 48.39,
-    "Kvernholm": 34.95,
-    "Malmnes": 42.18,
-    "Raudfjord": 32.43,
-    "Svarthaug": 37.74,
-    "Tverrli": 25.35
+    "Drangvik": 47.04,
+    "Hestmark": 45.1,
+    "Kvernholm": 34.45,
+    "Malmnes": 38.63,
+    "Raudfjord": 31.55,
+    "Svarthaug": 34.82,
+    "Tverrli": 24.45
    },
    "loading_pct": {
-    "Drangvik": 103.53,
-    "Hestmark": 136.32,
-    "Kvernholm": 109.92,
-    "Malmnes": 90.9,
-    "Raudfjord": 72.08,
-    "Svarthaug": 110.35,
-    "Tverrli": 61.83
+    "Drangvik": 103.62,
+    "Hestmark": 132.63,
+    "Kvernholm": 110.43,
+    "Malmnes": 90.68,
+    "Raudfjord": 70.89,
+    "Svarthaug": 103.62,
+    "Tverrli": 60.37
    },
-   "phys_idx": 12.82,
-   "phys_ratio": 4.3,
-   "total_relief_mva": 46.35,
+   "phys_idx": 12.71,
+   "phys_ratio": 4.7,
+   "total_relief_mva": 41.26,
    "wrong_count": 2
   },
   "s3_ami_plus_gis": {
@@ -2237,30 +2394,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 39.04,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 38.22,
    "lim_mva": {
-    "Drangvik": 52.16,
-    "Hestmark": 47.95,
-    "Kvernholm": 42.26,
-    "Malmnes": 41.77,
-    "Raudfjord": 34.96,
-    "Svarthaug": 53.71,
-    "Tverrli": 25.53
+    "Drangvik": 49.9,
+    "Hestmark": 44.68,
+    "Kvernholm": 41.65,
+    "Malmnes": 38.26,
+    "Raudfjord": 34.0,
+    "Svarthaug": 47.76,
+    "Tverrli": 24.62
    },
    "loading_pct": {
-    "Drangvik": 109.82,
-    "Hestmark": 135.07,
-    "Kvernholm": 132.89,
-    "Malmnes": 90.03,
-    "Raudfjord": 77.68,
-    "Svarthaug": 157.04,
-    "Tverrli": 62.27
+    "Drangvik": 109.91,
+    "Hestmark": 131.42,
+    "Kvernholm": 133.5,
+    "Malmnes": 89.82,
+    "Raudfjord": 76.4,
+    "Svarthaug": 142.13,
+    "Tverrli": 60.79
    },
-   "phys_idx": 13.26,
-   "phys_ratio": 4.4,
-   "total_relief_mva": 71.76,
+   "phys_idx": 12.97,
+   "phys_ratio": 4.8,
+   "total_relief_mva": 63.47,
    "wrong_count": 2
   },
   "s3_even_zres": {
@@ -2273,30 +2430,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 41.12,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 41.34,
    "lim_mva": {
-    "Drangvik": 59.92,
-    "Hestmark": 62.11,
-    "Kvernholm": 36.17,
-    "Malmnes": 50.83,
-    "Raudfjord": 45.8,
-    "Svarthaug": 38.18,
-    "Tverrli": 27.99
+    "Drangvik": 57.18,
+    "Hestmark": 57.68,
+    "Kvernholm": 35.65,
+    "Malmnes": 46.56,
+    "Raudfjord": 46.18,
+    "Svarthaug": 37.72,
+    "Tverrli": 26.99
    },
    "loading_pct": {
-    "Drangvik": 126.15,
-    "Hestmark": 174.96,
-    "Kvernholm": 113.73,
-    "Malmnes": 109.56,
-    "Raudfjord": 101.77,
-    "Svarthaug": 111.63,
-    "Tverrli": 68.26
+    "Drangvik": 125.95,
+    "Hestmark": 169.65,
+    "Kvernholm": 114.25,
+    "Malmnes": 109.3,
+    "Raudfjord": 103.77,
+    "Svarthaug": 112.27,
+    "Tverrli": 66.64
    },
-   "phys_idx": 11.61,
-   "phys_ratio": 3.9,
-   "total_relief_mva": 88.67,
+   "phys_idx": 11.42,
+   "phys_ratio": 4.2,
+   "total_relief_mva": 84.37,
    "wrong_count": 2
   },
   "s3_evening_cut": {
@@ -2309,30 +2466,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.22,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.34,
    "lim_mva": {
-    "Drangvik": 53.66,
-    "Hestmark": 54.15,
-    "Kvernholm": 34.69,
-    "Malmnes": 45.58,
-    "Raudfjord": 39.71,
-    "Svarthaug": 35.02,
-    "Tverrli": 26.48
+    "Drangvik": 51.26,
+    "Hestmark": 50.37,
+    "Kvernholm": 34.19,
+    "Malmnes": 41.75,
+    "Raudfjord": 39.53,
+    "Svarthaug": 34.6,
+    "Tverrli": 25.54
    },
    "loading_pct": {
-    "Drangvik": 112.96,
-    "Hestmark": 152.53,
-    "Kvernholm": 109.1,
-    "Malmnes": 98.23,
-    "Raudfjord": 88.24,
-    "Svarthaug": 102.4,
-    "Tverrli": 64.59
+    "Drangvik": 112.92,
+    "Hestmark": 148.14,
+    "Kvernholm": 109.6,
+    "Malmnes": 98.0,
+    "Raudfjord": 88.83,
+    "Svarthaug": 102.98,
+    "Tverrli": 63.06
    },
-   "phys_idx": 11.61,
-   "phys_ratio": 3.9,
-   "total_relief_mva": 58.46,
+   "phys_idx": 11.42,
+   "phys_ratio": 4.2,
+   "total_relief_mva": 55.1,
    "wrong_count": 2
   },
   "s3_gis": {
@@ -2345,30 +2502,30 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.81,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.75,
    "lim_mva": {
-    "Drangvik": 49.16,
-    "Hestmark": 49.45,
-    "Kvernholm": 41.26,
-    "Malmnes": 42.72,
-    "Raudfjord": 33.85,
-    "Svarthaug": 48.67,
-    "Tverrli": 24.88
+    "Drangvik": 47.03,
+    "Hestmark": 46.08,
+    "Kvernholm": 40.67,
+    "Malmnes": 39.13,
+    "Raudfjord": 32.92,
+    "Svarthaug": 47.73,
+    "Tverrli": 23.99
    },
    "loading_pct": {
-    "Drangvik": 103.5,
-    "Hestmark": 139.29,
-    "Kvernholm": 129.76,
-    "Malmnes": 92.08,
-    "Raudfjord": 75.22,
-    "Svarthaug": 142.32,
-    "Tverrli": 60.68
+    "Drangvik": 103.59,
+    "Hestmark": 135.53,
+    "Kvernholm": 130.36,
+    "Malmnes": 91.86,
+    "Raudfjord": 73.99,
+    "Svarthaug": 142.06,
+    "Tverrli": 59.24
    },
-   "phys_idx": 13.44,
-   "phys_ratio": 4.5,
-   "total_relief_mva": 65.18,
+   "phys_idx": 13.22,
+   "phys_ratio": 4.9,
+   "total_relief_mva": 61.86,
    "wrong_count": 2
   },
   "s3_handbook_pf": {
@@ -2378,34 +2535,34 @@
     "Kvernholm: Phase 1 (2027)",
     "Malmnes: Phase 2 (2028-2029)",
     "Raudfjord: Phase 2 (2028-2029)",
-    "Svarthaug: Phase 2 (2028-2029)",
+    "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 36.58,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 36.68,
    "lim_mva": {
-    "Drangvik": 52.04,
-    "Hestmark": 52.38,
-    "Kvernholm": 34.66,
-    "Malmnes": 44.49,
-    "Raudfjord": 38.68,
-    "Svarthaug": 34.04,
-    "Tverrli": 27.15
+    "Drangvik": 49.73,
+    "Hestmark": 48.75,
+    "Kvernholm": 34.16,
+    "Malmnes": 40.75,
+    "Raudfjord": 38.39,
+    "Svarthaug": 33.63,
+    "Tverrli": 26.18
    },
    "loading_pct": {
-    "Drangvik": 109.56,
-    "Hestmark": 147.55,
-    "Kvernholm": 108.99,
-    "Malmnes": 95.89,
-    "Raudfjord": 85.95,
-    "Svarthaug": 99.53,
-    "Tverrli": 66.22
+    "Drangvik": 109.54,
+    "Hestmark": 143.37,
+    "Kvernholm": 109.5,
+    "Malmnes": 95.66,
+    "Raudfjord": 86.27,
+    "Svarthaug": 100.1,
+    "Tverrli": 64.65
    },
-   "phys_idx": 16.21,
-   "phys_ratio": 5.4,
-   "total_relief_mva": 51.96,
-   "wrong_count": 1
+   "phys_idx": 15.93,
+   "phys_ratio": 5.9,
+   "total_relief_mva": 48.81,
+   "wrong_count": 2
   },
   "s3_raw_vbus": {
    "answer": [
@@ -2413,35 +2570,35 @@
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
     "Malmnes: Phase 1 (2027)",
-    "Raudfjord: Phase 1 (2027)",
+    "Raudfjord: Phase 2 (2028-2029)",
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Phase 2 (2028-2029)"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 47.74,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 47.65,
    "lim_mva": {
-    "Drangvik": 74.71,
-    "Hestmark": 60.28,
-    "Kvernholm": 59.26,
-    "Malmnes": 52.36,
-    "Raudfjord": 45.89,
-    "Svarthaug": 38.55,
-    "Tverrli": 37.58
+    "Drangvik": 71.36,
+    "Hestmark": 56.44,
+    "Kvernholm": 58.41,
+    "Malmnes": 47.96,
+    "Raudfjord": 43.88,
+    "Svarthaug": 38.09,
+    "Tverrli": 36.24
    },
    "loading_pct": {
-    "Drangvik": 157.29,
-    "Hestmark": 169.8,
-    "Kvernholm": 186.34,
-    "Malmnes": 112.84,
-    "Raudfjord": 101.97,
-    "Svarthaug": 112.73,
-    "Tverrli": 91.66
+    "Drangvik": 157.19,
+    "Hestmark": 166.0,
+    "Kvernholm": 187.2,
+    "Malmnes": 112.57,
+    "Raudfjord": 98.61,
+    "Svarthaug": 113.37,
+    "Tverrli": 89.48
    },
-   "phys_idx": 47.68,
-   "phys_ratio": 16.0,
-   "total_relief_mva": 129.44,
-   "wrong_count": 3
+   "phys_idx": 47.28,
+   "phys_ratio": 17.5,
+   "total_relief_mva": 121.35,
+   "wrong_count": 4
   },
   "s3_scalar_ols": {
    "answer": [
@@ -2449,35 +2606,35 @@
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
     "Malmnes: Phase 1 (2027)",
-    "Raudfjord: Phase 1 (2027)",
+    "Raudfjord: Phase 2 (2028-2029)",
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 42.02,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 41.97,
    "lim_mva": {
-    "Drangvik": 55.34,
-    "Hestmark": 56.52,
-    "Kvernholm": 35.47,
-    "Malmnes": 47.05,
-    "Raudfjord": 45.56,
-    "Svarthaug": 51.22,
-    "Tverrli": 30.5
+    "Drangvik": 52.92,
+    "Hestmark": 52.66,
+    "Kvernholm": 34.96,
+    "Malmnes": 43.1,
+    "Raudfjord": 44.0,
+    "Svarthaug": 50.61,
+    "Tverrli": 29.41
    },
    "loading_pct": {
-    "Drangvik": 116.5,
-    "Hestmark": 159.22,
-    "Kvernholm": 111.55,
-    "Malmnes": 101.41,
-    "Raudfjord": 101.25,
-    "Svarthaug": 149.77,
-    "Tverrli": 74.39
+    "Drangvik": 116.57,
+    "Hestmark": 154.87,
+    "Kvernholm": 112.06,
+    "Malmnes": 101.17,
+    "Raudfjord": 98.87,
+    "Svarthaug": 150.63,
+    "Tverrli": 72.63
    },
-   "phys_idx": 10.36,
-   "phys_ratio": 3.5,
-   "total_relief_mva": 86.83,
-   "wrong_count": 2
+   "phys_idx": 10.17,
+   "phys_ratio": 3.8,
+   "total_relief_mva": 81.65,
+   "wrong_count": 3
   },
   "s3_sub_pf": {
    "answer": [
@@ -2489,32 +2646,69 @@
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 38.21,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 38.29,
    "lim_mva": {
-    "Drangvik": 51.88,
-    "Hestmark": 52.88,
-    "Kvernholm": 34.42,
-    "Malmnes": 56.15,
-    "Raudfjord": 37.28,
-    "Svarthaug": 35.96,
-    "Tverrli": 28.2
+    "Drangvik": 49.31,
+    "Hestmark": 49.23,
+    "Kvernholm": 33.93,
+    "Malmnes": 51.43,
+    "Raudfjord": 37.0,
+    "Svarthaug": 35.53,
+    "Tverrli": 27.2
    },
    "loading_pct": {
-    "Drangvik": 109.23,
-    "Hestmark": 148.95,
-    "Kvernholm": 108.24,
-    "Malmnes": 121.02,
-    "Raudfjord": 82.84,
-    "Svarthaug": 105.13,
-    "Tverrli": 68.79
+    "Drangvik": 108.61,
+    "Hestmark": 144.78,
+    "Kvernholm": 108.74,
+    "Malmnes": 120.74,
+    "Raudfjord": 83.15,
+    "Svarthaug": 105.73,
+    "Tverrli": 67.15
    },
-   "phys_idx": 22.76,
-   "phys_ratio": 7.6,
-   "total_relief_mva": 65.2,
+   "phys_idx": 22.51,
+   "phys_ratio": 8.3,
+   "total_relief_mva": 60.64,
    "wrong_count": 3
   }
+ },
+ "s1_pq_mae_ratios": {
+  "s1_cf_pooled": 5.4,
+  "s1_flat_ratio": 6.7,
+  "s1_indep_quad": 4.8,
+  "s1_linear_sum": 11.4,
+  "s1_pca1": 5.4,
+  "s1_pca2": 5.4,
+  "s1_raw_corr": 5.5,
+  "s1_register_rho": 7.8,
+  "s1_scada60": 16.5,
+  "s1_twin_ratio": 9.8
+ },
+ "s2_vlv_ratios": {
+  "s2_class_pf": 160.7,
+  "s2_local_dv": 1358.1,
+  "s2_monthly_qp": 356.2,
+  "s2_monthly_quad": 795.7,
+  "s2_monthly_win": 93.3,
+  "s2_net_kvarh": 389.9,
+  "s2_raw_dv": 0.0,
+  "s2_rp_only": 852.7,
+  "s2_targets_only": 144.9,
+  "s2_winter_kvarh": 293.5
+ },
+ "s3_ami_q_ratio": 35.4,
+ "s3_bus_ratios": {
+  "s3_ami_grossup": 13.3,
+  "s3_ami_only": 13.3,
+  "s3_ami_plus_gis": 13.6,
+  "s3_even_zres": 11.7,
+  "s3_evening_cut": 11.7,
+  "s3_gis": 13.9,
+  "s3_handbook_pf": 1.0,
+  "s3_raw_vbus": 55.6,
+  "s3_scalar_ols": 10.1,
+  "s3_sub_pf": 1.0
  },
  "schedule_groups": {
   "defer": [
@@ -2532,263 +2726,270 @@
   ]
  },
  "seed": 2635,
+ "site_reg_rat": {
+  "Fossheim": 0.313,
+  "Lindberg": 0.839,
+  "Solberg": 0.572
+ },
  "substations": {
   "Drangvik": {
    "corridor": "COR-N01",
-   "firm_n1_mva": 47.5,
+   "firm_n1_mva": 45.4,
    "gsp": "GSP-Nord",
    "in_pool": true,
-   "lim_mva": 50.64,
-   "lim_mva_raw": 50.6382379522615,
-   "loading_pct": 106.61,
-   "loading_pct_raw": 106.60681674160315,
-   "p15_peak_mw": 45.52,
-   "p15_peak_mw_raw": 45.52338073579001,
+   "lim_mva": 48.33,
+   "lim_mva_raw": 48.33149139975013,
+   "loading_pct": 106.46,
+   "loading_pct_raw": 106.45702951486813,
+   "p15_peak_mw": 42.5,
+   "p15_peak_mw_raw": 42.498324966285516,
    "p60_peak_mw": 31.05,
    "p60_peak_mw_raw": 31.04979,
    "phase": "Phase 1 (2027)",
-   "q15_at_peak_mvar": 16.7,
-   "q_peak_h_mvar": 16.7,
-   "q_peak_h_mvar_raw": 16.698653335661646,
-   "relief_mva": 10.26,
-   "relief_mva_raw": 10.263237952261498,
-   "s15_tot_mva": 48.49,
-   "w_max_pct": 34.81,
-   "w_max_pct_raw": 34.8105110979438
+   "q15_at_peak_mvar": 18.59,
+   "q_peak_h_mvar": 18.59,
+   "q_peak_h_mvar_raw": 18.58633224764384,
+   "relief_mva": 9.74,
+   "relief_mva_raw": 9.741491399750132,
+   "s15_tot_mva": 46.38,
+   "w_max_pct": 34.73,
+   "w_max_pct_raw": 34.732198513450705
   },
   "Fossheim": {
-   "comm_est_surge_mw": 6.23,
-   "comm_obs_surge_mw": 5.61,
+   "comm_est_surge_mw": 5.47,
+   "comm_obs_surge_mw": 4.84,
    "corridor": "COR-N02",
-   "firm_n1_mva": 50.0,
+   "firm_n1_mva": 54.0,
    "gsp": "GSP-Nord",
    "in_pool": false,
-   "lim_mva": 41.67,
-   "lim_mva_raw": 41.67071718903659,
-   "loading_pct": 83.34,
-   "loading_pct_raw": 83.34143437807317,
-   "p15_peak_mw": 40.59,
-   "p15_peak_mw_raw": 40.588837524339795,
-   "p60_peak_mw": 30.41,
-   "p60_peak_mw_raw": 30.40533,
+   "lim_mva": 43.29,
+   "lim_mva_raw": 43.29081128623574,
+   "loading_pct": 80.17,
+   "loading_pct_raw": 80.1681690485847,
+   "p15_peak_mw": 42.03,
+   "p15_peak_mw_raw": 42.02607901386055,
+   "p60_peak_mw": 35.0,
+   "p60_peak_mw_raw": 34.99534,
    "phase": "Modernized (Excluded)",
-   "q15_at_peak_mvar": 1.1,
-   "q_peak_h_mvar": 1.1,
-   "q_peak_h_mvar_raw": 1.0965994006558106,
+   "q15_at_peak_mvar": 4.01,
+   "q_peak_h_mvar": 4.01,
+   "q_peak_h_mvar_raw": 4.014795138573834,
    "relief_mva": 0.0,
    "relief_mva_raw": 0.0,
-   "s15_tot_mva": 40.6,
-   "w_max_pct": 34.21,
-   "w_max_pct_raw": 34.20933737968668
+   "s15_tot_mva": 42.22,
+   "w_max_pct": 34.18,
+   "w_max_pct_raw": 34.18085017265752
   },
   "Hestmark": {
    "corridor": "COR-S01",
-   "firm_n1_mva": 35.5,
+   "firm_n1_mva": 34.0,
    "gsp": "GSP-Sor",
    "in_pool": true,
-   "lim_mva": 50.33,
-   "lim_mva_raw": 50.33010026261144,
-   "loading_pct": 141.77,
-   "loading_pct_raw": 141.77493031721534,
-   "p15_peak_mw": 44.72,
-   "p15_peak_mw_raw": 44.72006454029872,
+   "lim_mva": 46.77,
+   "lim_mva_raw": 46.76568552308038,
+   "loading_pct": 137.55,
+   "loading_pct_raw": 137.54613389141286,
+   "p15_peak_mw": 41.28,
+   "p15_peak_mw_raw": 41.27685527001249,
    "p60_peak_mw": 34.45,
    "p60_peak_mw_raw": 34.45479,
    "phase": "Phase 1 (2027)",
    "q15_at_peak_mvar": 15.81,
    "q_peak_h_mvar": 15.81,
-   "q_peak_h_mvar_raw": 15.811172547061783,
-   "relief_mva": 20.16,
-   "relief_mva_raw": 20.155100262611438,
-   "s15_tot_mva": 47.43,
-   "w_max_pct": 35.37,
-   "w_max_pct_raw": 35.36935329151437
+   "q_peak_h_mvar_raw": 15.811302782370287,
+   "relief_mva": 17.87,
+   "relief_mva_raw": 17.86568552308038,
+   "s15_tot_mva": 44.2,
+   "w_max_pct": 35.27,
+   "w_max_pct_raw": 35.26701125622783
   },
   "Kvernholm": {
    "corridor": "COR-S01",
-   "firm_n1_mva": 31.8,
+   "firm_n1_mva": 31.2,
    "gsp": "GSP-Sor",
    "in_pool": true,
-   "lim_mva": 34.24,
-   "lim_mva_raw": 34.241729233438754,
-   "loading_pct": 107.68,
-   "loading_pct_raw": 107.67839381584514,
-   "p15_peak_mw": 27.55,
-   "p15_peak_mw_raw": 27.552191600213106,
+   "lim_mva": 33.75,
+   "lim_mva_raw": 33.75072385842811,
+   "loading_pct": 108.18,
+   "loading_pct_raw": 108.17539698214138,
+   "p15_peak_mw": 26.96,
+   "p15_peak_mw_raw": 26.957037579015992,
    "p60_peak_mw": 24.49,
    "p60_peak_mw_raw": 24.49306,
    "phase": "Phase 1 (2027)",
    "q15_at_peak_mvar": 19.49,
    "q_peak_h_mvar": 19.49,
-   "q_peak_h_mvar_raw": 19.494297008231257,
-   "relief_mva": 7.21,
-   "relief_mva_raw": 7.211729233438753,
-   "s15_tot_mva": 33.75,
+   "q_peak_h_mvar_raw": 19.494500954841534,
+   "relief_mva": 7.23,
+   "relief_mva_raw": 7.23072385842811,
+   "s15_tot_mva": 33.27,
    "w_max_pct": 33.82,
-   "w_max_pct_raw": 33.81767993432227
+   "w_max_pct_raw": 33.817652689544715
   },
   "Lindberg": {
-   "comm_est_surge_mw": 12.42,
-   "comm_obs_surge_mw": 13.04,
+   "comm_est_surge_mw": 13.71,
+   "comm_obs_surge_mw": 14.31,
    "corridor": "COR-S01",
-   "firm_n1_mva": 54.0,
+   "firm_n1_mva": 62.0,
    "gsp": "GSP-Sor",
    "in_pool": false,
-   "lim_mva": 47.57,
-   "lim_mva_raw": 47.573493089540285,
-   "loading_pct": 88.1,
-   "loading_pct_raw": 88.09906127692646,
-   "p15_peak_mw": 46.04,
-   "p15_peak_mw_raw": 46.0358373831052,
-   "p60_peak_mw": 30.7,
-   "p60_peak_mw_raw": 30.69907,
+   "lim_mva": 50.98,
+   "lim_mva_raw": 50.975065127884186,
+   "loading_pct": 82.22,
+   "loading_pct_raw": 82.21784698045836,
+   "p15_peak_mw": 49.82,
+   "p15_peak_mw_raw": 49.822259944907145,
+   "p60_peak_mw": 34.72,
+   "p60_peak_mw_raw": 34.71803,
    "phase": "Modernized (Excluded)",
-   "q15_at_peak_mvar": -6.89,
-   "q_peak_h_mvar": -6.89,
-   "q_peak_h_mvar_raw": -6.889977059048552,
-   "relief_mva": 1.67,
-   "relief_mva_raw": 1.6734930895402869,
-   "s15_tot_mva": 46.55,
-   "w_max_pct": 34.07,
-   "w_max_pct_raw": 34.06727280306712
+   "q15_at_peak_mvar": -4.46,
+   "q_peak_h_mvar": -4.46,
+   "q_peak_h_mvar_raw": -4.4594836077876945,
+   "relief_mva": 0.0,
+   "relief_mva_raw": 0.0,
+   "s15_tot_mva": 50.02,
+   "w_max_pct": 33.97,
+   "w_max_pct_raw": 33.96881010858132
   },
   "Malmnes": {
    "corridor": "COR-N01",
-   "firm_n1_mva": 46.4,
+   "firm_n1_mva": 42.6,
    "gsp": "GSP-Nord",
    "in_pool": true,
-   "lim_mva": 43.29,
-   "lim_mva_raw": 43.286397914163814,
-   "loading_pct": 93.29,
-   "loading_pct_raw": 93.28965067707719,
-   "p15_peak_mw": 41.24,
-   "p15_peak_mw_raw": 41.244728222384566,
+   "lim_mva": 39.65,
+   "lim_mva_raw": 39.646796491210296,
+   "loading_pct": 93.07,
+   "loading_pct_raw": 93.06759739720727,
+   "p15_peak_mw": 37.78,
+   "p15_peak_mw_raw": 37.77571545201833,
    "p60_peak_mw": 30.57,
    "p60_peak_mw_raw": 30.57286,
    "phase": "Phase 2 (2028-2029)",
    "q15_at_peak_mvar": -0.69,
    "q_peak_h_mvar": -0.69,
-   "q_peak_h_mvar_raw": -0.6926207396548043,
-   "relief_mva": 3.85,
-   "relief_mva_raw": 3.8463979141638163,
-   "s15_tot_mva": 41.25,
+   "q_peak_h_mvar_raw": -0.6923418039523176,
+   "relief_mva": 3.44,
+   "relief_mva_raw": 3.436796491210295,
+   "s15_tot_mva": 37.78,
    "w_max_pct": 34.98,
-   "w_max_pct_raw": 34.97844663465199
+   "w_max_pct_raw": 34.97850309996495
   },
   "Ostervik": {
    "corridor": "COR-N01",
    "firm_n1_mva": 48.0,
    "gsp": "GSP-Nord",
    "in_pool": false,
-   "lim_mva": 40.4,
-   "lim_mva_raw": 40.39727692482753,
-   "loading_pct": 84.16,
-   "loading_pct_raw": 84.16099359339069,
-   "p15_peak_mw": 24.84,
-   "p15_peak_mw_raw": 24.839095951301694,
+   "lim_mva": 40.21,
+   "lim_mva_raw": 40.2147852887048,
+   "loading_pct": 83.78,
+   "loading_pct_raw": 83.78080268480167,
+   "p15_peak_mw": 24.61,
+   "p15_peak_mw_raw": 24.611922942100573,
    "p60_peak_mw": 22.46,
    "p60_peak_mw_raw": 22.45806,
    "phase": "Modernized (Excluded)",
    "q15_at_peak_mvar": 25.15,
    "q_peak_h_mvar": 25.15,
-   "q_peak_h_mvar_raw": 25.14743006959794,
+   "q_peak_h_mvar_raw": 25.146721033538235,
    "relief_mva": 0.0,
    "relief_mva_raw": 0.0,
-   "s15_tot_mva": 35.35,
+   "s15_tot_mva": 35.19,
    "w_max_pct": 38.1,
-   "w_max_pct_raw": 38.0964596041314
+   "w_max_pct_raw": 38.09657021063625
   },
   "Raudfjord": {
    "corridor": "COR-N02",
-   "firm_n1_mva": 45.0,
+   "firm_n1_mva": 44.5,
    "gsp": "GSP-Nord",
    "in_pool": true,
-   "lim_mva": 49.15,
-   "lim_mva_raw": 49.14536370427649,
-   "loading_pct": 109.21,
-   "loading_pct_raw": 109.21191934283664,
-   "p15_peak_mw": 30.63,
-   "p15_peak_mw_raw": 30.629648708055843,
+   "lim_mva": 49.35,
+   "lim_mva_raw": 49.347584919968845,
+   "loading_pct": 110.89,
+   "loading_pct_raw": 110.89344925835697,
+   "p15_peak_mw": 29.71,
+   "p15_peak_mw_raw": 29.709794733711924,
    "p60_peak_mw": 27.58,
    "p60_peak_mw_raw": 27.57784,
    "phase": "Phase 1 (2027)",
    "q15_at_peak_mvar": 9.45,
    "q_peak_h_mvar": 9.45,
-   "q_peak_h_mvar_raw": 9.45375339441215,
-   "relief_mva": 10.9,
-   "relief_mva_raw": 10.895363704276491,
-   "s15_tot_mva": 32.06,
-   "w_max_pct": 51.1,
-   "w_max_pct_raw": 51.10460825210368
+   "q_peak_h_mvar_raw": 9.453386431363818,
+   "relief_mva": 11.52,
+   "relief_mva_raw": 11.52258491996885,
+   "s15_tot_mva": 31.18,
+   "w_max_pct": 52.76,
+   "w_max_pct_raw": 52.759774826265414
   },
   "Solberg": {
+   "comm_est_surge_mw": 6.74,
+   "comm_obs_surge_mw": 6.76,
    "corridor": "COR-S02",
-   "firm_n1_mva": 46.0,
+   "firm_n1_mva": 50.0,
    "gsp": "GSP-Sor",
    "in_pool": false,
-   "lim_mva": 30.76,
-   "lim_mva_raw": 30.757310779806186,
-   "loading_pct": 66.86,
-   "loading_pct_raw": 66.86371908653518,
-   "p15_peak_mw": 26.4,
-   "p15_peak_mw_raw": 26.404645671768108,
-   "p60_peak_mw": 23.7,
-   "p60_peak_mw_raw": 23.70219,
+   "lim_mva": 40.97,
+   "lim_mva_raw": 40.97460410290631,
+   "loading_pct": 81.95,
+   "loading_pct_raw": 81.94920820581262,
+   "p15_peak_mw": 38.0,
+   "p15_peak_mw_raw": 38.00410109938012,
+   "p60_peak_mw": 30.0,
+   "p60_peak_mw_raw": 29.99831,
    "phase": "Modernized (Excluded)",
-   "q15_at_peak_mvar": 11.53,
-   "q_peak_h_mvar": 11.53,
-   "q_peak_h_mvar_raw": 11.525639816668123,
+   "q15_at_peak_mvar": 14.41,
+   "q_peak_h_mvar": 14.41,
+   "q_peak_h_mvar_raw": 14.41413137640841,
    "relief_mva": 0.0,
    "relief_mva_raw": 0.0,
-   "s15_tot_mva": 28.81,
-   "w_max_pct": 35.59,
-   "w_max_pct_raw": 35.58574871748411
+   "s15_tot_mva": 40.65,
+   "w_max_pct": 33.6,
+   "w_max_pct_raw": 33.603005363125824
   },
   "Svarthaug": {
    "corridor": "COR-N02",
-   "firm_n1_mva": 34.2,
+   "firm_n1_mva": 33.6,
    "gsp": "GSP-Nord",
    "in_pool": true,
-   "lim_mva": 31.67,
-   "lim_mva_raw": 31.66779629159476,
-   "loading_pct": 92.6,
-   "loading_pct_raw": 92.59589558945837,
-   "p15_peak_mw": 29.64,
-   "p15_peak_mw_raw": 29.637015327081684,
+   "lim_mva": 31.29,
+   "lim_mva_raw": 31.290465302836864,
+   "loading_pct": 93.13,
+   "loading_pct_raw": 93.12638482987161,
+   "p15_peak_mw": 29.25,
+   "p15_peak_mw_raw": 29.24718655128767,
    "p60_peak_mw": 27.05,
    "p60_peak_mw_raw": 27.04875,
    "phase": "Phase 2 (2028-2029)",
    "q15_at_peak_mvar": 9.52,
    "q_peak_h_mvar": 9.52,
-   "q_peak_h_mvar_raw": 9.523503919499976,
-   "relief_mva": 2.6,
-   "relief_mva_raw": 2.5977962915947614,
-   "s15_tot_mva": 31.13,
+   "q_peak_h_mvar_raw": 9.52367082874803,
+   "relief_mva": 2.73,
+   "relief_mva_raw": 2.7304653028368655,
+   "s15_tot_mva": 30.76,
    "w_max_pct": 33.91,
-   "w_max_pct_raw": 33.90966808015945
+   "w_max_pct_raw": 33.909598862090206
   },
   "Tverrli": {
    "corridor": "COR-S02",
-   "firm_n1_mva": 41.0,
+   "firm_n1_mva": 40.5,
    "gsp": "GSP-Sor",
    "in_pool": true,
-   "lim_mva": 27.27,
-   "lim_mva_raw": 27.271095331116094,
-   "loading_pct": 66.51,
-   "loading_pct_raw": 66.51486666125876,
-   "p15_peak_mw": 23.59,
-   "p15_peak_mw_raw": 23.585437517281562,
+   "lim_mva": 26.3,
+   "lim_mva_raw": 26.29951100758718,
+   "loading_pct": 64.94,
+   "loading_pct_raw": 64.93706421626464,
+   "p15_peak_mw": 22.66,
+   "p15_peak_mw_raw": 22.65974397839915,
    "p60_peak_mw": 20.23,
    "p60_peak_mw_raw": 20.23117,
    "phase": "Defer",
    "q15_at_peak_mvar": 7.45,
    "q_peak_h_mvar": 7.45,
-   "q_peak_h_mvar_raw": 7.448453913758149,
+   "q_peak_h_mvar_raw": 7.448705860727945,
    "relief_mva": 0.0,
    "relief_mva_raw": 0.0,
-   "s15_tot_mva": 24.73,
+   "s15_tot_mva": 23.85,
    "w_max_pct": 36.75,
-   "w_max_pct_raw": 36.75306064884631
+   "w_max_pct_raw": 36.752799937568675
   }
  },
  "targets": [
@@ -2802,10 +3003,10 @@
  ],
  "task": "task26",
  "total_relief_band": [
-  50.2,
-  65.0
+  46.2,
+  61.5
  ],
- "total_relief_mva": 54.97,
+ "total_relief_mva": 52.53,
  "variants": [
   {
    "answer": [
@@ -2817,30 +3018,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 50.64,
-    "Hestmark": 50.33,
-    "Kvernholm": 34.24,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.15,
-    "Svarthaug": 31.67,
-    "Tverrli": 27.27
+    "Drangvik": 48.33,
+    "Hestmark": 46.77,
+    "Kvernholm": 33.75,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.3
    },
    "loading_pct": {
-    "Drangvik": 106.61,
-    "Hestmark": 141.77,
-    "Kvernholm": 107.68,
-    "Malmnes": 93.29,
-    "Raudfjord": 109.21,
-    "Svarthaug": 92.6,
-    "Tverrli": 66.51
+    "Drangvik": 106.46,
+    "Hestmark": 137.55,
+    "Kvernholm": 108.18,
+    "Malmnes": 93.07,
+    "Raudfjord": 110.89,
+    "Svarthaug": 93.13,
+    "Tverrli": 64.94
    },
    "name": "golden",
-   "total_relief_mva": 54.97
+   "total_relief_mva": 52.53
   },
   {
    "answer": [
@@ -2852,29 +3053,274 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 240.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 226.33,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 51.06,
-    "Hestmark": 50.81,
-    "Kvernholm": 34.47,
-    "Malmnes": 40.67,
-    "Raudfjord": 48.52,
-    "Svarthaug": 31.54,
-    "Tverrli": 27.14
+    "Drangvik": 47.82,
+    "Hestmark": 46.71,
+    "Kvernholm": 33.58,
+    "Malmnes": 37.69,
+    "Raudfjord": 48.78,
+    "Svarthaug": 30.85,
+    "Tverrli": 25.99
    },
    "loading_pct": {
-    "Drangvik": 107.5,
-    "Hestmark": 143.12,
-    "Kvernholm": 108.39,
-    "Malmnes": 87.65,
-    "Raudfjord": 107.83,
-    "Svarthaug": 92.21,
-    "Tverrli": 66.19
+    "Drangvik": 105.34,
+    "Hestmark": 137.38,
+    "Kvernholm": 107.62,
+    "Malmnes": 88.46,
+    "Raudfjord": 109.63,
+    "Svarthaug": 91.8,
+    "Tverrli": 64.18
    },
    "name": "S1 all-12 months",
+   "total_relief_mva": 48.82
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 231.06,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.51,
+    "Hestmark": 46.96,
+    "Kvernholm": 33.8,
+    "Malmnes": 39.98,
+    "Raudfjord": 49.41,
+    "Svarthaug": 31.34,
+    "Tverrli": 26.38
+   },
+   "loading_pct": {
+    "Drangvik": 106.86,
+    "Hestmark": 138.11,
+    "Kvernholm": 108.34,
+    "Malmnes": 93.85,
+    "Raudfjord": 111.03,
+    "Svarthaug": 93.27,
+    "Tverrli": 65.13
+   },
+   "name": "S1 DJF 3-month",
+   "total_relief_mva": 53.4
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.41,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 47.8,
+    "Hestmark": 46.64,
+    "Kvernholm": 33.69,
+    "Malmnes": 40.32,
+    "Raudfjord": 49.78,
+    "Svarthaug": 31.38,
+    "Tverrli": 26.33
+   },
+   "loading_pct": {
+    "Drangvik": 105.28,
+    "Hestmark": 137.16,
+    "Kvernholm": 107.99,
+    "Malmnes": 94.65,
+    "Raudfjord": 111.86,
+    "Svarthaug": 93.38,
+    "Tverrli": 65.01
+   },
+   "name": "S1 peak month only",
+   "total_relief_mva": 53.0
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 231.47,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 49.11,
+    "Hestmark": 47.01,
+    "Kvernholm": 33.78,
+    "Malmnes": 40.01,
+    "Raudfjord": 49.25,
+    "Svarthaug": 31.34,
+    "Tverrli": 26.21
+   },
+   "loading_pct": {
+    "Drangvik": 108.18,
+    "Hestmark": 138.26,
+    "Kvernholm": 108.26,
+    "Malmnes": 93.92,
+    "Raudfjord": 110.68,
+    "Svarthaug": 93.29,
+    "Tverrli": 64.71
+   },
+   "name": "S1 scaled additive",
+   "total_relief_mva": 53.9
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 231.52,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 49.14,
+    "Hestmark": 47.02,
+    "Kvernholm": 33.78,
+    "Malmnes": 40.01,
+    "Raudfjord": 49.26,
+    "Svarthaug": 31.35,
+    "Tverrli": 26.21
+   },
+   "loading_pct": {
+    "Drangvik": 108.24,
+    "Hestmark": 138.28,
+    "Kvernholm": 108.28,
+    "Malmnes": 93.91,
+    "Raudfjord": 110.69,
+    "Svarthaug": 93.31,
+    "Tverrli": 64.72
+   },
+   "name": "S1 multiplicative excess",
+   "total_relief_mva": 53.95
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.14,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.32,
+    "Hestmark": 46.78,
+    "Kvernholm": 33.76,
+    "Malmnes": 39.63,
+    "Raudfjord": 49.34,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.33
+   },
+   "loading_pct": {
+    "Drangvik": 106.43,
+    "Hestmark": 137.58,
+    "Kvernholm": 108.2,
+    "Malmnes": 93.03,
+    "Raudfjord": 110.87,
+    "Svarthaug": 93.12,
+    "Tverrli": 65.02
+   },
+   "name": "S1 winter innov corr",
+   "total_relief_mva": 52.5
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.15,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.35,
+    "Hestmark": 46.78,
+    "Kvernholm": 33.75,
+    "Malmnes": 39.63,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.3
+   },
+   "loading_pct": {
+    "Drangvik": 106.49,
+    "Hestmark": 137.58,
+    "Kvernholm": 108.18,
+    "Malmnes": 93.03,
+    "Raudfjord": 110.91,
+    "Svarthaug": 93.14,
+    "Tverrli": 64.94
+   },
+   "name": "S1 5-PC strip",
+   "total_relief_mva": 52.55
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.35,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.48,
+    "Hestmark": 46.83,
+    "Kvernholm": 33.77,
+    "Malmnes": 39.55,
+    "Raudfjord": 49.39,
+    "Svarthaug": 31.32,
+    "Tverrli": 26.32
+   },
+   "loading_pct": {
+    "Drangvik": 106.79,
+    "Hestmark": 137.73,
+    "Kvernholm": 108.24,
+    "Malmnes": 92.83,
+    "Raudfjord": 110.99,
+    "Svarthaug": 93.21,
+    "Tverrli": 64.98
+   },
+   "name": "S1 6-PC strip",
    "total_relief_mva": 52.73
   },
   {
@@ -2887,65 +3333,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 243.59,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 50.77,
-    "Hestmark": 50.66,
-    "Kvernholm": 34.32,
-    "Malmnes": 43.76,
-    "Raudfjord": 49.22,
-    "Svarthaug": 31.47,
-    "Tverrli": 27.1
-   },
-   "loading_pct": {
-    "Drangvik": 106.88,
-    "Hestmark": 142.71,
-    "Kvernholm": 107.93,
-    "Malmnes": 94.31,
-    "Raudfjord": 109.38,
-    "Svarthaug": 92.02,
-    "Tverrli": 66.09
-   },
-   "name": "S1 DJF 3-month",
-   "total_relief_mva": 55.86
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 243.48,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 52.02,
-    "Hestmark": 49.84,
+    "Drangvik": 48.33,
+    "Hestmark": 46.77,
     "Kvernholm": 33.75,
-    "Malmnes": 44.09,
-    "Raudfjord": 49.78,
-    "Svarthaug": 31.35,
-    "Tverrli": 26.64
+    "Malmnes": 39.64,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.3
    },
    "loading_pct": {
-    "Drangvik": 109.52,
-    "Hestmark": 140.38,
-    "Kvernholm": 106.12,
-    "Malmnes": 95.01,
-    "Raudfjord": 110.62,
-    "Svarthaug": 91.67,
-    "Tverrli": 64.99
+    "Drangvik": 106.46,
+    "Hestmark": 137.54,
+    "Kvernholm": 108.18,
+    "Malmnes": 93.06,
+    "Raudfjord": 110.89,
+    "Svarthaug": 93.13,
+    "Tverrli": 64.94
    },
-   "name": "S1 peak month only",
-   "total_relief_mva": 56.48
+   "name": "S1 ref_log strip",
+   "total_relief_mva": 52.52
   },
   {
    "answer": [
@@ -2957,30 +3368,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.88,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.31,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 50.66,
-    "Hestmark": 50.32,
-    "Kvernholm": 34.23,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.18,
-    "Svarthaug": 31.64,
-    "Tverrli": 27.26
+    "Drangvik": 48.29,
+    "Hestmark": 46.83,
+    "Kvernholm": 33.78,
+    "Malmnes": 39.72,
+    "Raudfjord": 49.37,
+    "Svarthaug": 31.3,
+    "Tverrli": 26.33
    },
    "loading_pct": {
-    "Drangvik": 106.64,
-    "Hestmark": 141.74,
-    "Kvernholm": 107.65,
-    "Malmnes": 93.31,
-    "Raudfjord": 109.29,
-    "Svarthaug": 92.51,
-    "Tverrli": 66.49
+    "Drangvik": 106.38,
+    "Hestmark": 137.72,
+    "Kvernholm": 108.26,
+    "Malmnes": 93.24,
+    "Raudfjord": 110.95,
+    "Svarthaug": 93.16,
+    "Tverrli": 65.01
    },
-   "name": "S1 scaled additive",
-   "total_relief_mva": 54.98
+   "name": "S1 ref_diff strip",
+   "total_relief_mva": 52.69
   },
   {
    "answer": [
@@ -2992,134 +3403,29 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 241.42,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 232.74,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 49.83,
-    "Hestmark": 50.04,
-    "Kvernholm": 34.19,
-    "Malmnes": 42.88,
-    "Raudfjord": 49.12,
-    "Svarthaug": 31.66,
-    "Tverrli": 27.4
+    "Drangvik": 49.16,
+    "Hestmark": 47.27,
+    "Kvernholm": 33.9,
+    "Malmnes": 40.22,
+    "Raudfjord": 49.59,
+    "Svarthaug": 31.45,
+    "Tverrli": 26.49
    },
    "loading_pct": {
-    "Drangvik": 104.9,
-    "Hestmark": 140.96,
-    "Kvernholm": 107.51,
-    "Malmnes": 92.4,
-    "Raudfjord": 109.16,
-    "Svarthaug": 92.58,
-    "Tverrli": 66.82
+    "Drangvik": 108.28,
+    "Hestmark": 139.04,
+    "Kvernholm": 108.67,
+    "Malmnes": 94.41,
+    "Raudfjord": 111.44,
+    "Svarthaug": 93.6,
+    "Tverrli": 65.41
    },
-   "name": "S1 raw additive",
-   "total_relief_mva": 53.38
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.82,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.61,
-    "Hestmark": 50.36,
-    "Kvernholm": 34.25,
-    "Malmnes": 43.17,
-    "Raudfjord": 49.13,
-    "Svarthaug": 31.66,
-    "Tverrli": 27.32
-   },
-   "loading_pct": {
-    "Drangvik": 106.54,
-    "Hestmark": 141.87,
-    "Kvernholm": 107.71,
-    "Malmnes": 93.04,
-    "Raudfjord": 109.18,
-    "Svarthaug": 92.58,
-    "Tverrli": 66.63
-   },
-   "name": "S1 winter innov corr",
-   "total_relief_mva": 54.85
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.91,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.63,
-    "Hestmark": 50.34,
-    "Kvernholm": 34.24,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.15,
-    "Svarthaug": 31.67,
-    "Tverrli": 27.27
-   },
-   "loading_pct": {
-    "Drangvik": 106.6,
-    "Hestmark": 141.79,
-    "Kvernholm": 107.68,
-    "Malmnes": 93.31,
-    "Raudfjord": 109.22,
-    "Svarthaug": 92.6,
-    "Tverrli": 66.52
-   },
-   "name": "S1 5-PC strip",
-   "total_relief_mva": 54.98
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.93,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.81,
-    "Hestmark": 50.37,
-    "Kvernholm": 34.26,
-    "Malmnes": 42.99,
-    "Raudfjord": 49.2,
-    "Svarthaug": 31.7,
-    "Tverrli": 27.28
-   },
-   "loading_pct": {
-    "Drangvik": 106.96,
-    "Hestmark": 141.9,
-    "Kvernholm": 107.73,
-    "Malmnes": 92.66,
-    "Raudfjord": 109.34,
-    "Svarthaug": 92.69,
-    "Tverrli": 66.55
-   },
-   "name": "S1 6-PC strip",
+   "name": "S1 unit k_ord=1.0",
    "total_relief_mva": 54.99
   },
   {
@@ -3132,30 +3438,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.88,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 228.92,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 50.64,
-    "Hestmark": 50.33,
-    "Kvernholm": 34.24,
-    "Malmnes": 43.28,
-    "Raudfjord": 49.14,
-    "Svarthaug": 31.67,
-    "Tverrli": 27.27
+    "Drangvik": 47.95,
+    "Hestmark": 46.53,
+    "Kvernholm": 33.68,
+    "Malmnes": 39.39,
+    "Raudfjord": 49.24,
+    "Svarthaug": 31.22,
+    "Tverrli": 26.21
    },
    "loading_pct": {
-    "Drangvik": 106.6,
-    "Hestmark": 141.76,
-    "Kvernholm": 107.68,
-    "Malmnes": 93.27,
-    "Raudfjord": 109.21,
-    "Svarthaug": 92.59,
-    "Tverrli": 66.51
+    "Drangvik": 105.63,
+    "Hestmark": 136.86,
+    "Kvernholm": 107.95,
+    "Malmnes": 92.45,
+    "Raudfjord": 110.64,
+    "Svarthaug": 92.91,
+    "Tverrli": 64.72
    },
-   "name": "S1 ref_log strip",
-   "total_relief_mva": 54.95
+   "name": "S1 mean-ratio comm k_ord",
+   "total_relief_mva": 51.4
   },
   {
    "answer": [
@@ -3167,485 +3473,380 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 243.08,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 50.59,
-    "Hestmark": 50.42,
-    "Kvernholm": 34.28,
-    "Malmnes": 43.34,
-    "Raudfjord": 49.18,
-    "Svarthaug": 31.68,
-    "Tverrli": 27.3
+    "Drangvik": 49.34,
+    "Hestmark": 47.3,
+    "Kvernholm": 34.05,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.56,
+    "Svarthaug": 31.43,
+    "Tverrli": 26.47
+   },
+   "loading_pct": {
+    "Drangvik": 108.67,
+    "Hestmark": 139.12,
+    "Kvernholm": 109.12,
+    "Malmnes": 93.07,
+    "Raudfjord": 111.36,
+    "Svarthaug": 93.55,
+    "Tverrli": 65.36
+   },
+   "name": "Q15 ami_slope",
+   "total_relief_mva": 54.71
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 51.61,
+    "Hestmark": 48.05,
+    "Kvernholm": 34.95,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.71,
+    "Svarthaug": 31.54,
+    "Tverrli": 26.62
+   },
+   "loading_pct": {
+    "Drangvik": 113.68,
+    "Hestmark": 141.32,
+    "Kvernholm": 112.03,
+    "Malmnes": 93.08,
+    "Raudfjord": 111.71,
+    "Svarthaug": 93.88,
+    "Tverrli": 65.74
+   },
+   "name": "Q15 const_pf",
+   "total_relief_mva": 58.91
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.33,
+    "Hestmark": 46.77,
+    "Kvernholm": 33.75,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.3
+   },
+   "loading_pct": {
+    "Drangvik": 106.46,
+    "Hestmark": 137.55,
+    "Kvernholm": 108.17,
+    "Malmnes": 93.07,
+    "Raudfjord": 110.89,
+    "Svarthaug": 93.13,
+    "Tverrli": 64.94
+   },
+   "name": "S2 winter anchor",
+   "total_relief_mva": 52.53
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.62,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.33,
+    "Hestmark": 46.77,
+    "Kvernholm": 33.75,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.3
+   },
+   "loading_pct": {
+    "Drangvik": 106.46,
+    "Hestmark": 137.55,
+    "Kvernholm": 108.17,
+    "Malmnes": 93.07,
+    "Raudfjord": 110.89,
+    "Svarthaug": 93.13,
+    "Tverrli": 64.93
+   },
+   "name": "S2 full-year anchor",
+   "total_relief_mva": 52.53
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 84.4,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.88,
+    "Hestmark": 47.11,
+    "Kvernholm": 34.66,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.57,
+    "Svarthaug": 31.54,
+    "Tverrli": 26.38
+   },
+   "loading_pct": {
+    "Drangvik": 107.67,
+    "Hestmark": 138.55,
+    "Kvernholm": 111.09,
+    "Malmnes": 93.09,
+    "Raudfjord": 111.39,
+    "Svarthaug": 93.87,
+    "Tverrli": 65.14
+   },
+   "name": "S2 1-step M_bar",
+   "total_relief_mva": 54.81
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.78,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.34,
+    "Hestmark": 46.93,
+    "Kvernholm": 33.51,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.43,
+    "Svarthaug": 31.27,
+    "Tverrli": 26.33
+   },
+   "loading_pct": {
+    "Drangvik": 106.47,
+    "Hestmark": 138.04,
+    "Kvernholm": 107.41,
+    "Malmnes": 93.07,
+    "Raudfjord": 111.08,
+    "Svarthaug": 93.06,
+    "Tverrli": 65.02
+   },
+   "name": "S2 meas V_lv",
+   "total_relief_mva": 52.52
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 84.8,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.6,
+    "Hestmark": 47.07,
+    "Kvernholm": 34.16,
+    "Malmnes": 39.66,
+    "Raudfjord": 50.14,
+    "Svarthaug": 31.85,
+    "Tverrli": 26.38
+   },
+   "loading_pct": {
+    "Drangvik": 107.04,
+    "Hestmark": 138.46,
+    "Kvernholm": 109.5,
+    "Malmnes": 93.09,
+    "Raudfjord": 112.67,
+    "Svarthaug": 94.79,
+    "Tverrli": 65.14
+   },
+   "name": "S2 fit20 peak Q",
+   "total_relief_mva": 54.87
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 82.59,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.58,
+    "Hestmark": 47.07,
+    "Kvernholm": 33.94,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.7,
+    "Svarthaug": 31.48,
+    "Tverrli": 26.28
+   },
+   "loading_pct": {
+    "Drangvik": 107.0,
+    "Hestmark": 138.44,
+    "Kvernholm": 108.79,
+    "Malmnes": 93.07,
+    "Raudfjord": 111.69,
+    "Svarthaug": 93.7,
+    "Tverrli": 64.88
+   },
+   "name": "S2 single-hr peak Q",
+   "total_relief_mva": 53.82
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.47,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.35,
+    "Hestmark": 46.72,
+    "Kvernholm": 33.8,
+    "Malmnes": 39.6,
+    "Raudfjord": 49.34,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.34
+   },
+   "loading_pct": {
+    "Drangvik": 106.51,
+    "Hestmark": 137.43,
+    "Kvernholm": 108.34,
+    "Malmnes": 92.96,
+    "Raudfjord": 110.88,
+    "Svarthaug": 93.12,
+    "Tverrli": 65.03
+   },
+   "name": "S3 winter bus-sag",
+   "total_relief_mva": 52.51
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.31,
+    "Hestmark": 46.76,
+    "Kvernholm": 33.75,
+    "Malmnes": 39.61,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.28,
+    "Tverrli": 26.35
+   },
+   "loading_pct": {
+    "Drangvik": 106.41,
+    "Hestmark": 137.53,
+    "Kvernholm": 108.18,
+    "Malmnes": 92.99,
+    "Raudfjord": 110.89,
+    "Svarthaug": 93.1,
+    "Tverrli": 65.06
+   },
+   "name": "S3 heating bus-sag",
+   "total_relief_mva": 52.46
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 1 (2027)",
+    "Malmnes: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 1 (2027)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.45,
+   "holds": true,
+   "lim_mva": {
+    "Drangvik": 48.35,
+    "Hestmark": 46.72,
+    "Kvernholm": 33.82,
+    "Malmnes": 39.63,
+    "Raudfjord": 49.29,
+    "Svarthaug": 31.27,
+    "Tverrli": 26.27
    },
    "loading_pct": {
     "Drangvik": 106.5,
-    "Hestmark": 142.02,
-    "Kvernholm": 107.79,
-    "Malmnes": 93.41,
-    "Raudfjord": 109.28,
-    "Svarthaug": 92.63,
-    "Tverrli": 66.59
-   },
-   "name": "S1 ref_diff strip",
-   "total_relief_mva": 55.14
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 240.83,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.02,
-    "Hestmark": 49.88,
-    "Kvernholm": 34.13,
-    "Malmnes": 42.8,
-    "Raudfjord": 48.95,
-    "Svarthaug": 31.56,
-    "Tverrli": 27.12
-   },
-   "loading_pct": {
-    "Drangvik": 105.31,
-    "Hestmark": 140.52,
-    "Kvernholm": 107.33,
-    "Malmnes": 92.24,
-    "Raudfjord": 108.78,
-    "Svarthaug": 92.28,
-    "Tverrli": 66.14
-   },
-   "name": "S1 unit k_ord=1.0",
-   "total_relief_mva": 53.01
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 241.71,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.29,
-    "Hestmark": 50.07,
-    "Kvernholm": 34.18,
-    "Malmnes": 43.01,
-    "Raudfjord": 49.03,
-    "Svarthaug": 31.61,
-    "Tverrli": 27.18
-   },
-   "loading_pct": {
-    "Drangvik": 105.86,
-    "Hestmark": 141.06,
-    "Kvernholm": 107.48,
-    "Malmnes": 92.69,
-    "Raudfjord": 108.97,
-    "Svarthaug": 92.41,
-    "Tverrli": 66.3
-   },
-   "name": "S1 mean-ratio comm k_ord",
-   "total_relief_mva": 53.85
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 51.76,
-    "Hestmark": 51.1,
-    "Kvernholm": 34.6,
-    "Malmnes": 43.31,
-    "Raudfjord": 49.43,
-    "Svarthaug": 31.83,
-    "Tverrli": 27.5
-   },
-   "loading_pct": {
-    "Drangvik": 108.96,
-    "Hestmark": 143.94,
-    "Kvernholm": 108.82,
-    "Malmnes": 93.33,
-    "Raudfjord": 109.84,
-    "Svarthaug": 93.08,
-    "Tverrli": 67.08
-   },
-   "name": "Q15 ami_slope",
-   "total_relief_mva": 57.69
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 53.98,
-    "Hestmark": 52.21,
-    "Kvernholm": 35.73,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.64,
-    "Svarthaug": 31.96,
-    "Tverrli": 27.71
-   },
-   "loading_pct": {
-    "Drangvik": 113.64,
-    "Hestmark": 147.07,
-    "Kvernholm": 112.34,
-    "Malmnes": 93.3,
-    "Raudfjord": 110.32,
-    "Svarthaug": 93.46,
-    "Tverrli": 67.59
-   },
-   "name": "Q15 const_pf",
-   "total_relief_mva": 62.47
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.64,
-    "Hestmark": 50.33,
-    "Kvernholm": 34.24,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.15,
-    "Svarthaug": 31.67,
-    "Tverrli": 27.27
-   },
-   "loading_pct": {
-    "Drangvik": 106.61,
-    "Hestmark": 141.77,
-    "Kvernholm": 107.68,
-    "Malmnes": 93.29,
-    "Raudfjord": 109.21,
-    "Svarthaug": 92.6,
-    "Tverrli": 66.51
-   },
-   "name": "S2 winter anchor",
-   "total_relief_mva": 54.97
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.64,
-    "Hestmark": 50.33,
-    "Kvernholm": 34.24,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.15,
-    "Svarthaug": 31.67,
-    "Tverrli": 27.27
-   },
-   "loading_pct": {
-    "Drangvik": 106.61,
-    "Hestmark": 141.77,
-    "Kvernholm": 107.68,
-    "Malmnes": 93.29,
-    "Raudfjord": 109.21,
-    "Svarthaug": 92.6,
-    "Tverrli": 66.51
-   },
-   "name": "S2 full-year anchor",
-   "total_relief_mva": 54.97
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 82.15,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 51.05,
-    "Hestmark": 50.61,
-    "Kvernholm": 35.15,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.34,
-    "Svarthaug": 31.9,
-    "Tverrli": 27.35
-   },
-   "loading_pct": {
-    "Drangvik": 107.48,
-    "Hestmark": 142.56,
-    "Kvernholm": 110.54,
-    "Malmnes": 93.31,
-    "Raudfjord": 109.65,
-    "Svarthaug": 93.27,
-    "Tverrli": 66.71
-   },
-   "name": "S2 1-step M_bar",
-   "total_relief_mva": 57.0
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.93,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.65,
-    "Hestmark": 50.48,
-    "Kvernholm": 34.04,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.22,
-    "Svarthaug": 31.64,
-    "Tverrli": 27.3
-   },
-   "loading_pct": {
-    "Drangvik": 106.64,
-    "Hestmark": 142.2,
-    "Kvernholm": 107.05,
-    "Malmnes": 93.29,
-    "Raudfjord": 109.38,
-    "Svarthaug": 92.52,
-    "Tverrli": 66.58
-   },
-   "name": "S2 meas V_lv",
-   "total_relief_mva": 54.99
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 82.88,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.86,
-    "Hestmark": 50.62,
-    "Kvernholm": 34.65,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.89,
-    "Svarthaug": 32.22,
-    "Tverrli": 27.35
-   },
-   "loading_pct": {
-    "Drangvik": 107.07,
-    "Hestmark": 142.59,
-    "Kvernholm": 108.96,
-    "Malmnes": 93.31,
-    "Raudfjord": 110.87,
-    "Svarthaug": 94.21,
-    "Tverrli": 66.71
-   },
-   "name": "S2 fit20 peak Q",
-   "total_relief_mva": 57.19
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 80.7,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.85,
-    "Hestmark": 50.62,
-    "Kvernholm": 34.43,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.48,
-    "Svarthaug": 31.86,
-    "Tverrli": 27.25
-   },
-   "loading_pct": {
-    "Drangvik": 107.05,
-    "Hestmark": 142.58,
-    "Kvernholm": 108.28,
-    "Malmnes": 93.29,
-    "Raudfjord": 109.95,
-    "Svarthaug": 93.15,
-    "Tverrli": 66.46
-   },
-   "name": "S2 single-hr peak Q",
-   "total_relief_mva": 56.18
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.26,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.66,
-    "Hestmark": 50.29,
-    "Kvernholm": 34.29,
-    "Malmnes": 43.24,
-    "Raudfjord": 49.14,
-    "Svarthaug": 31.66,
-    "Tverrli": 27.31
-   },
-   "loading_pct": {
-    "Drangvik": 106.66,
-    "Hestmark": 141.65,
-    "Kvernholm": 107.84,
-    "Malmnes": 93.18,
-    "Raudfjord": 109.2,
-    "Svarthaug": 92.59,
-    "Tverrli": 66.61
-   },
-   "name": "S3 winter bus-sag",
-   "total_relief_mva": 54.94
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.62,
-    "Hestmark": 50.32,
-    "Kvernholm": 34.24,
-    "Malmnes": 43.25,
-    "Raudfjord": 49.14,
-    "Svarthaug": 31.66,
-    "Tverrli": 27.32
-   },
-   "loading_pct": {
-    "Drangvik": 106.56,
-    "Hestmark": 141.75,
-    "Kvernholm": 107.69,
-    "Malmnes": 93.21,
-    "Raudfjord": 109.21,
-    "Svarthaug": 92.57,
-    "Tverrli": 66.64
-   },
-   "name": "S3 heating bus-sag",
-   "total_relief_mva": 54.89
-  },
-  {
-   "answer": [
-    "Drangvik: Phase 1 (2027)",
-    "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
-    "Tverrli: Defer"
-   ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.24,
-   "holds": true,
-   "lim_mva": {
-    "Drangvik": 50.66,
-    "Hestmark": 50.28,
-    "Kvernholm": 34.31,
-    "Malmnes": 43.27,
-    "Raudfjord": 49.09,
-    "Svarthaug": 31.64,
-    "Tverrli": 27.24
-   },
-   "loading_pct": {
-    "Drangvik": 106.65,
-    "Hestmark": 141.63,
-    "Kvernholm": 107.89,
-    "Malmnes": 93.25,
-    "Raudfjord": 109.09,
-    "Svarthaug": 92.53,
-    "Tverrli": 66.45
+    "Hestmark": 137.41,
+    "Kvernholm": 108.39,
+    "Malmnes": 93.03,
+    "Raudfjord": 110.77,
+    "Svarthaug": 93.06,
+    "Tverrli": 64.87
    },
    "name": "S3 diff bus-sag",
-   "total_relief_mva": 54.91
+   "total_relief_mva": 52.47
   },
   {
    "answer": [
@@ -3657,30 +3858,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 50.68,
-    "Hestmark": 50.36,
-    "Kvernholm": 34.23,
-    "Malmnes": 43.31,
-    "Raudfjord": 49.14,
-    "Svarthaug": 31.67,
-    "Tverrli": 27.23
+    "Drangvik": 48.37,
+    "Hestmark": 46.79,
+    "Kvernholm": 33.73,
+    "Malmnes": 39.67,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.26
    },
    "loading_pct": {
-    "Drangvik": 106.69,
-    "Hestmark": 141.85,
-    "Kvernholm": 107.63,
-    "Malmnes": 93.33,
-    "Raudfjord": 109.21,
-    "Svarthaug": 92.6,
-    "Tverrli": 66.41
+    "Drangvik": 106.54,
+    "Hestmark": 137.62,
+    "Kvernholm": 108.12,
+    "Malmnes": 93.11,
+    "Raudfjord": 110.89,
+    "Svarthaug": 93.13,
+    "Tverrli": 64.83
    },
    "name": "S3 2-class bus-sag",
-   "total_relief_mva": 55.04
+   "total_relief_mva": 52.59
   },
   {
    "answer": [
@@ -3692,30 +3893,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.5,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.7,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 50.62,
-    "Hestmark": 50.17,
-    "Kvernholm": 34.23,
-    "Malmnes": 43.21,
-    "Raudfjord": 47.85,
-    "Svarthaug": 32.67,
-    "Tverrli": 28.93
+    "Drangvik": 48.31,
+    "Hestmark": 46.62,
+    "Kvernholm": 33.74,
+    "Malmnes": 39.57,
+    "Raudfjord": 48.02,
+    "Svarthaug": 32.28,
+    "Tverrli": 27.89
    },
    "loading_pct": {
-    "Drangvik": 106.56,
-    "Hestmark": 141.33,
-    "Kvernholm": 107.65,
-    "Malmnes": 93.12,
-    "Raudfjord": 106.32,
-    "Svarthaug": 95.51,
-    "Tverrli": 70.55
+    "Drangvik": 106.41,
+    "Hestmark": 137.11,
+    "Kvernholm": 108.14,
+    "Malmnes": 92.9,
+    "Raudfjord": 107.92,
+    "Svarthaug": 96.06,
+    "Tverrli": 68.88
    },
    "name": "S3 top-5 peak w_max",
-   "total_relief_mva": 54.4
+   "total_relief_mva": 51.93
   },
   {
    "answer": [
@@ -3727,30 +3928,30 @@
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
-   "c1_total_p15_mw": 242.89,
-   "c2_total_qpeak_mvar": 77.74,
-   "c3_mean_lim_phase_pct": 37.25,
+   "c1_total_p15_mw": 230.12,
+   "c2_total_qpeak_mvar": 79.63,
+   "c3_mean_lim_phase_pct": 37.46,
    "holds": true,
    "lim_mva": {
-    "Drangvik": 50.64,
-    "Hestmark": 50.33,
-    "Kvernholm": 34.24,
-    "Malmnes": 43.29,
-    "Raudfjord": 49.15,
-    "Svarthaug": 31.67,
-    "Tverrli": 27.27
+    "Drangvik": 48.33,
+    "Hestmark": 46.77,
+    "Kvernholm": 33.75,
+    "Malmnes": 39.65,
+    "Raudfjord": 49.35,
+    "Svarthaug": 31.29,
+    "Tverrli": 26.3
    },
    "loading_pct": {
-    "Drangvik": 106.61,
-    "Hestmark": 141.77,
-    "Kvernholm": 107.68,
-    "Malmnes": 93.29,
-    "Raudfjord": 109.21,
-    "Svarthaug": 92.6,
-    "Tverrli": 66.52
+    "Drangvik": 106.46,
+    "Hestmark": 137.55,
+    "Kvernholm": 108.18,
+    "Malmnes": 93.07,
+    "Raudfjord": 110.89,
+    "Svarthaug": 93.13,
+    "Tverrli": 64.94
    },
    "name": "S3 winter AMI tan_phi",
-   "total_relief_mva": 54.97
+   "total_relief_mva": 52.53
   }
  ]
 }

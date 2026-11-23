@@ -1,5 +1,5 @@
 """Compute every owed figure strictly from the cut pack under target/, re-prove corelib.run(spec) on the
-shipped files, and emit figures.json and effort.json (v3).
+shipped files, and emit figures.json and effort.json (v4).
 
     python3 task26/generator/results.py
 """
@@ -12,7 +12,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "stumping"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), ".agents", "skills", "stumping"))
 import corelib  # noqa: E402
 import analysis as A  # noqa: E402
 import core as C  # noqa: E402
@@ -200,9 +200,62 @@ def run(target_dir):
             phase=phase_label(g["loading_pct"]) if s in TARGETS else "Modernized (Excluded)",
         )
         if s in C.PQ_COMM_SITES:
-            subs_out[s]["comm_obs_surge_mw"] = round(float((sd["comm_p15"].max(axis=1) - sd["sub_p60"][C.COMM_HOURS]).max()), 2)
-            rq = C._quad_excess(sd, R_gold[s], list(C.COMM_MONTHS))
-            subs_out[s]["comm_est_surge_mw"] = round(float(gold_p["k_ord"] * rq), 2)
+            obs_list, est_list = [], []
+            for m in C.COMM_MONTHS:
+                obs_ex, _ = C._comm_month_obs_ex(sd, m)
+                est_ex = float(gold_p["k_ord"] * C._quad_excess(sd, R_gold[s], [m], form="add_raw"))
+                obs_list.append(obs_ex)
+                est_list.append(est_ex)
+            subs_out[s]["comm_obs_surge_mw"] = round(float(np.mean(obs_list)), 2)
+            subs_out[s]["comm_est_surge_mw"] = round(float(np.mean(est_list)), 2)
+
+    comm_pq_points = []
+    for r in C.PQ_COMM_SITES:
+        sd = pack_world["subs"][r]
+        for m in C.COMM_MONTHS:
+            obs_ex, p60_m = C._comm_month_obs_ex(sd, m)
+            d_sum = float(np.sum(np.maximum(0.0, sd["feeder_m15"][:, m] - sd["feeder_p60_m"][:, m])))
+            est_ex = float(gold_p["k_ord"] * C._quad_excess(sd, R_gold[r], [m], form="add_raw"))
+            comm_pq_points.append(dict(
+                substation_id=r,
+                month=f"2026-{m + 1:02d}",
+                p60_max_mw=round(p60_m, 2),
+                p15_max_mw=round(p60_m + obs_ex, 2),
+                obs_ex_mw=round(obs_ex, 2),
+                sum_d_mw=round(d_sum, 2),
+                gold_ex_mw=round(est_ex, 2),
+                obs_ratio=round(obs_ex / max(d_sum, 1e-6), 3),
+            ))
+
+    # Direct Malmnes invariance check if Fossheim or Solberg commissioning ratio is forced onto Malmnes
+    sd_m = pack_world["subs"]["Malmnes"]
+    p60_m_pk = float(sd_m["sub_p60"].max())
+    sum_d_m_win = float(np.mean([
+        np.sum(np.maximum(0.0, sd_m["feeder_m15"][:, mm] - sd_m["feeder_p60_m"][:, mm]))
+        for mm in C.WINTER_MONTHS
+    ]))
+    gm_q = gold_res["Malmnes"]["q_h"]
+    gm_w = gold_res["Malmnes"]["w_max"]
+    gm_firm = float(sd_m["cfg"]["firm_mva"])
+    malmnes_forced_ratios = {}
+    for hub in ("Fossheim", "Solberg"):
+        p15_f = p60_m_pk + gold_p["site_reg_rat"][hub] * sum_d_m_win
+        load_f = 100.0 * 3.0 * gm_w * float(np.hypot(p15_f, gm_q)) / gm_firm
+        malmnes_forced_ratios[hub] = round(load_f, 2)
+
+    s1_pq_mae_ratios = {
+        k: round(phys_details[k]["s1_comm_mae_mw"] / phys_details["golden"]["s1_comm_mae_mw"], 1)
+        for k in C.RIVAL_OPTS if k.startswith("s1_")
+    }
+    s2_vlv_ratios = {
+        k: round(phys_details[k]["s2_vlv_rmse_v"], 1)
+        for k in C.RIVAL_OPTS if k.startswith("s2_")
+    }
+    s3_bus_ratios = {
+        k: round(phys_details[k]["s3_bus_rmse_v"] / phys_details["golden"]["s3_bus_rmse_v"], 1)
+        for k in C.RIVAL_OPTS if k.startswith("s3_")
+    }
+    s3_ami_q_ratio = round(phys_details["s3_handbook_pf"]["s3_ami_q_rmse_kvar"] / phys_details["golden"]["s3_ami_q_rmse_kvar"], 1)
 
     all_routes = {
         "golden": (gold_res, gold_p),
@@ -261,12 +314,19 @@ def run(target_dir):
 
     fig = dict(
         task="task26",
-        architecture="v3",
+        architecture="v4",
         as_of="2027-01-20",
         seed=C.SEED,
         targets=list(TARGETS),
         refs=list(REFS),
         comm_pq_sites=list(C.PQ_COMM_SITES),
+        comm_pq_points=comm_pq_points,
+        site_reg_rat={r: round(gold_p["site_reg_rat"][r], 3) for r in C.PQ_COMM_SITES},
+        malmnes_forced_ratios=malmnes_forced_ratios,
+        s1_pq_mae_ratios=s1_pq_mae_ratios,
+        s2_vlv_ratios=s2_vlv_ratios,
+        s3_bus_ratios=s3_bus_ratios,
+        s3_ami_q_ratio=s3_ami_q_ratio,
         planning_lines=dict(
             phase2_pct=C.LINE_P2, phase1_pct=C.LINE_P1, limiting_factor=3, tap_step_pct=1.25,
             isp_minutes=15, hours_per_year=C.N_HOURS, tap_step_frac=C.TAP_STEP,
@@ -280,7 +340,9 @@ def run(target_dir):
             superseded_dropped=stats["superseded_dropped"],
             vlv_nulls=stats["vlv_nulls"],
             comm_pq_rows=stats["comm_pq_rows"],
+            comm_pq_points_count=len(comm_pq_points),
             n_feeders=sum(len(pack_world["subs"][s]["f_meta"]) for s in ALL_SUBS),
+            n_feeders_by_sub={s: len(pack_world["subs"][s]["f_meta"]) for s in ALL_SUBS},
             n_corridors=stats["n_corridors"],
             n_gsp=stats["n_gsp"],
             n_ami_per_sub=C.N_AMI_LAT,
@@ -493,7 +555,7 @@ def run(target_dir):
         ],
         "hints": [
             {
-                "sentence": "Stripping four regional diurnal-weather SVD modes across other substations removes shared class profiles and reveals true pairwise feeder innovation correlation R_ij (inverted relative to 12-month register correlation), allowing correlated quadrature calibrated on Sep-Oct active commissioning surges.",
+                "sentence": "Stripping four regional diurnal-weather SVD modes across other substations removes shared class profiles and reveals true pairwise feeder innovation correlation R_ij (inverted relative to 12-month register correlation), allowing correlated quadrature calibrated on Sep, Oct, and Dec active commissioning peaks across Fossheim, Lindberg, and Solberg.",
                 "rescues": ["R2"],
             },
             {

@@ -11,7 +11,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts",
+WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".agents", "skills", "reduce-house-fixes", "scripts",
                        "writers")
 sys.path.insert(0, WRITERS)
 import postprocess  # noqa: E402
@@ -29,7 +29,7 @@ EXPORTED = {
     F["fdr_m15"]:    dt.datetime(2027, 1,  8, 10, 14, 27, tzinfo=UTC),
     F["bus_vph"]:    dt.datetime(2027, 1, 12,  6,  4, 51, tzinfo=UTC),
     F["ami_db"]:     dt.datetime(2027, 1, 14,  9, 47, 19, tzinfo=UTC),
-    F["ref_pq"]:     dt.datetime(2026, 11,  5, 14, 23,  8, tzinfo=UTC),
+    F["ref_pq"]:     dt.datetime(2027, 1,  9, 14, 23,  8, tzinfo=UTC),
     F["ref_tracer"]: dt.datetime(2025, 12,  5, 15, 11, 33, tzinfo=UTC),
     F["gis_lat"]:    dt.datetime(2026, 12, 18, 11, 42,  6, tzinfo=UTC),
     F["xwalk"]:      dt.datetime(2024, 11, 18,  8, 27, 55, tzinfo=UTC),

@@ -31,7 +31,7 @@ MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 HOUR_MONTH = np.concatenate([np.full(d * 24, m, dtype=int) for m, d in enumerate(MONTH_DAYS)])
 WINTER_MONTHS = (0, 1, 10, 11)
 HEATING_MONTHS = (0, 1, 2, 9, 10, 11)
-COMM_MONTHS = (8, 9)
+COMM_MONTHS = (8, 9, 11)
 WINTER_HOURS = np.isin(HOUR_MONTH, WINTER_MONTHS)
 HEATING_HOURS = np.isin(HOUR_MONTH, HEATING_MONTHS)
 COMM_HOURS = np.isin(HOUR_MONTH, COMM_MONTHS)
@@ -164,27 +164,28 @@ def main():
 
         def raw_quad(s, m_list):
             nf = len(feeders_by_sub[s])
-            idx_h = np.where(np.isin(HOUR_MONTH, m_list))[0]
-            pk_h = int(idx_h[np.argmax(sub_p60[s][idx_h])])
             d = np.zeros(nf)
             for i in range(nf):
-                rel = np.mean([(f_m15[s][i, m] - f_p60_m[s][i, m]) / f_p60_m[s][i, m] for m in m_list])
-                d[i] = max(0.0, rel) * f_p60[s][i, pk_h]
+                d[i] = max(0.0, float(np.mean([f_m15[s][i, m] - f_p60_m[s][i, m] for m in m_list])))
             return float(np.sqrt(max(0.0, float(d @ R_mats[s] @ d))))
 
-        # 7. Sep-Oct active-only commissioning 15-min log on Fossheim & Lindberg -> calibrate k_ord on within-hour surge
+        # 7. Sep/Oct/Dec active-only commissioning 15-min log on Fossheim, Lindberg, Solberg -> calibrate k_ord on 9 monthly max(P15)-max(P60)
         assert not os.path.exists(os.path.join(tmp, "pq_archive_15min_2026.csv")), "old full-year PQ file must not exist!"
-        df_cpq = pd.read_csv(os.path.join(tmp, "pq_commissioning_autumn2026.csv"))
+        assert not os.path.exists(os.path.join(tmp, "pq_commissioning_autumn2026.csv")), "old autumn-only PQ file must not exist!"
+        df_cpq = pd.read_csv(os.path.join(tmp, "pq_commissioning_2026.csv"))
         assert list(df_cpq.columns) == ["substation_id", "ts_utc", "sub_p15_mw"], f"unexpected PQ cols {list(df_cpq.columns)}"
-        assert len(df_cpq) == 11712, f"expected 11,712 Sep-Oct rows, got {len(df_cpq)}"
+        assert len(df_cpq) == 26496, f"expected 26,496 Sep/Oct/Dec rows (3x92x96), got {len(df_cpq)}"
         df_cpq["k"] = ((pd.to_datetime(df_cpq["ts_utc"], utc=True) - base_pd).dt.total_seconds() // 900).astype(int)
         obs_c, raw_c = [], []
         for r in sorted(df_cpq["substation_id"].unique()):
             g = df_cpq[df_cpq["substation_id"] == r].sort_values("k")
             sp15 = g["sub_p15_mw"].to_numpy(dtype=float).reshape(-1, 4)
-            obs_ex = float((sp15.max(axis=1) - sub_p60[r][COMM_HOURS]).max())
-            obs_c.append(obs_ex)
-            raw_c.append(raw_quad(r, list(COMM_MONTHS)))
+            for m in COMM_MONTHS:
+                mh = (HOUR_MONTH == m)
+                cm = mh[COMM_HOURS]
+                obs_ex = float(sp15[cm].max() - sub_p60[r][mh].max())
+                obs_c.append(obs_ex)
+                raw_c.append(raw_quad(r, [m]))
         k_ord = float(sum(obs_c) / sum(raw_c))
 
         # 8. S2: coupled 4-corridor 66 kV impedance inversion (including upstream hubs) anchored to peak-month net kVARh
