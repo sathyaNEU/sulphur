@@ -983,6 +983,42 @@ def pooled_pins(O, v):
     return out
 
 
+def continuation_pin(O):
+    """what refutes a continuation read off another route for the subscriptions nobody opens: each store's renewal
+    excess over the records, summed over the periods the fit uses (and over the last six), against the excess the
+    subscriptions last seen set to renew and the trial-end candidates charged would bring carried forward from their
+    last charges at each continuation (the fit to the stores' excess, the rate the app saw, the web checkout's):
+    {store: {continuation: (q, share of the excess over all periods, over the last six)}}"""
+    ren, fst = s1_candidates(O)
+    fits = s1_fit(O)
+    qweb = float(s1_web_fit(O))
+    out = {}
+    for pl, name in ((0, "Google Play"), (1, "the App Store")):
+        mk = (O.ios.astype(int) == pl) & ~O.web
+        R = O.store[pl]["ren"] - _monthly_counts(O, mk, "ren")
+        fm = fst & mk & (O.plan_seen == 1)
+        idx = np.where(ren & mk)[0]
+        last = O.rdays[idx, O.n_rec[idx] - 1]
+        te = O.day[fm] + 7
+        Mr = np.zeros((K, O.NM)); Mf = np.zeros((K, O.NM))
+        for j in range(1, K):
+            d = last + np.round(MONTH_DAYS * j).astype(int)
+            d = d[d <= END_DAY]
+            Mr[j - 1] = np.bincount((d // MONTH_DAYS).astype(int), minlength=O.NM)[:O.NM]
+            d2 = te + np.round(MONTH_DAYS * j).astype(int)
+            d2 = d2[d2 <= END_DAY]
+            Mf[j - 1] = np.bincount((d2 // MONTH_DAYS).astype(int), minlength=O.NM)[:O.NM]
+        use = np.arange(O.NM) < O.NM - 1
+        pw = np.arange(1, K + 1)
+        row = {}
+        for nm, q in (("fitted", fits[pl]["q"]), ("the rate the app saw", s1_seen_rate(O, pl)),
+                      ("the web checkout's", qweb)):
+            pr = ((q ** pw) @ Mr + fits[pl]["c_m"] * ((q ** pw) @ Mf))[use]
+            row[nm] = (float(q), float(pr.sum() / R[use].sum()), float(pr[-6:].sum() / R[use][-6:].sum()))
+        out[name] = row
+    return out
+
+
 def asa_ratio(O, v, cells="fine", rcells="tier2"):
     """on Apple Search Ads, whose every account carries its channel: the declined installs' value over the others',
     by coarse cell, laid on the pricing cells"""
@@ -2428,6 +2464,18 @@ def explore():
     for k, rows_ in pooled_sessions_pin(O, values(O)).items():
         print("   %s: " % k + "; ".join("cell %d: sessions %d %.2f, sessions %d %.2f (x%.2f)" % (
             r[0], r[1], r[2], r[3], r[4], r[4] / max(r[2], 1e-9)) for r in rows_))
+    print("the continuation of a subscription nobody opens against each store's renewal excess (q, share over all periods, over the last six):")
+    for st, row in continuation_pin(O).items():
+        print("    %-14s " % st + "; ".join("%s %.3f: %.3f, %.3f" % (nm, *x) for nm, x in row.items()))
+    aw = route(O, s1="awake")
+    print("    the continuation the app saw, the other two steps the golden's: " + " ".join(
+        "%s %.3f/%.1f" % (c[:8], aw[c]["roas"], aw[c]["pay100"]) for c in MEMBERS))
+    print("the plan's budgets at the record's share against the record's budgets (lowest, highest):")
+    for c in MEMBERS:
+        Bc = O.B[c]
+        pb = plan_spend(c) / (Bc["spend"].sum() / Bc["budget"].sum())
+        print("    %-18s plan %6.0f to %6.0f  record %6.0f to %6.0f" % (c, pb.min(), pb.max(), Bc["budget"].min(),
+                                                                     Bc["budget"].max()))
     print("delivery pins:")
     for c, p in delivery_pins(O).items():
         print("    %-18s share %.3f  whole budget billed in %2d weeks  at share 1 the fit adds up to %.3f  best quarter %.3f"
