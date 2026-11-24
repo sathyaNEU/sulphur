@@ -42,7 +42,9 @@ lg = lambda x: 1.0 / (1.0 + np.exp(-x))
 RHO = 0.30
 CONSENT = dict(ios=-1.02, android=0.15, u=0.30, e=0.10)        # the tracking prompt's answer
 CONV = dict(a=-1.15, e=1.00, u=0.55)                           # trial to paid at day 7
-DORMANT0 = dict(a=-4.00, e=0.45, u=0.60, f=1.00)               # the chance of never opening again after the trial week
+DORMANT0 = dict(a=-4.00, e=0.45, u=0.60)                       # the chance of never opening again after the trial week,
+#                                                                the same whatever ad found the person: where the ad found
+#                                                                them shows only month by month, once they are paying
 DORMANT = dict(a=-2.10, e=0.45, u=0.60, f=1.00)                # the monthly chance of never opening again, later
 CHURN = dict(a=-2.00, e=0.45, u=0.60)                          # the monthly chance of cancelling while still opening
 CHURN_SILENT = dict(a=-3.45, e=-0.10)                          # and once the app is no longer opened: a store
@@ -57,7 +59,7 @@ GAP = {"Meta iOS": 1.05, "TikTok iOS": 0.80, "Snapchat iOS": 0.52, "Google iOS":
        "Apple Search Ads": 0.0, "Google Android": 0.18, "AppLovin Android": 0.50}
 MARKETS = ("ES", "IT", "PT")
 # the ad platforms' delivery: a campaign spends its weekly budget only as far as the week's auction lets it
-KAPPA, LAMBDA, SIG_M, RHO_M, DBAR = 0.55, 1.00, 0.26, 0.25, 0.86
+KAPPA, LAMBDA, SIG_M, RHO_M, DBAR = 0.55, 1.00, 0.26, 0.25, 0.80
 
 # channel: platform; complete (the channel is on file for every account, whatever the tracking answer); the people
 # it brings (mean engagement, reachability, readiness to go quiet); installs a week at the reference weekly budget b0;
@@ -65,14 +67,14 @@ KAPPA, LAMBDA, SIG_M, RHO_M, DBAR = 0.55, 1.00, 0.26, 0.25, 0.86
 # spend over the norm; the team's budget moves (first week, weeks, factor)
 SCALE = 2.0
 CH = {
-    "Meta iOS":         dict(ios=1, complete=0, mu=0.05,  nu=0.10, phi=-5.00, n=330, b0=2046, el=0.78, xs=0.35, plan=1.10, stretch=1.30),
-    "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.80,  n=300, b0=1595, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
+    "Meta iOS":         dict(ios=1, complete=0, mu=0.05,  nu=0.10, phi=-5.00, n=330, b0=2250, el=0.78, xs=0.35, plan=1.10, stretch=1.30),
+    "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.80,  n=300, b0=1694, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
     "Snapchat iOS":     dict(ios=1, complete=0, mu=-0.15, nu=0.08, phi=0.80,  n=250, b0=1268, el=0.76, xs=0.35, plan=1.30, stretch=1.15),
-    "Google iOS":       dict(ios=1, complete=0, mu=0.10,  nu=0.10, phi=-1.20, n=260, b0=2250, el=0.70, xs=0.30, plan=1.25, stretch=1.35),
-    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.70,  n=200, b0=1553, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
+    "Google iOS":       dict(ios=1, complete=0, mu=0.10,  nu=0.10, phi=-1.20, n=260, b0=2436, el=0.70, xs=0.30, plan=1.25, stretch=1.35),
+    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.70,  n=200, b0=1617, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
     "Apple Search Ads": dict(ios=1, complete=1, mu=0.60,  nu=0.15, phi=-0.80, n=140, b0=1390, el=0.62, xs=0.30, plan=1.40, stretch=1.00),
-    "Google Android":   dict(ios=0, complete=1, mu=0.00,  nu=0.10, phi=0.55,  n=420, b0=5300, el=0.66, xs=0.30, plan=0.60, stretch=1.25),
-    "AppLovin Android": dict(ios=0, complete=1, mu=-0.55, nu=0.05, phi=1.10,  n=500, b0=3248, el=0.82, xs=0.30, plan=0.72, stretch=1.45),
+    "Google Android":   dict(ios=0, complete=1, mu=0.00,  nu=0.10, phi=0.55,  n=420, b0=5538, el=0.66, xs=0.30, plan=0.60, stretch=1.25),
+    "AppLovin Android": dict(ios=0, complete=1, mu=-0.55, nu=0.05, phi=1.10,  n=500, b0=3328, el=0.82, xs=0.30, plan=0.72, stretch=1.45),
 }
 ORGANIC = {"organic iOS": dict(ios=1, mu=0.25, nu=0.12, phi=1.00, n=380),
            "organic Android": dict(ios=0, mu=0.10, nu=0.12, phi=-0.80, n=700)}
@@ -666,11 +668,16 @@ CELL_ROWS = {"market-week-pair": 2, "market-week-bucket": 1}     # sessions valu
 FITKEYS = ("rows", "weight", "markets", "org_pin", "span", "minpool", "group", "shrink", "r_nudge")
 GROUPS = {"kind": (("Meta iOS", "TikTok iOS", "Snapchat iOS", "Pinterest iOS"),),      # the social networks as one
           "social": (("Meta iOS", "TikTok iOS", "Snapchat iOS"),),
-          # the groupings a run could test for one shared ratio; on this record a five per cent test of equal ratios
-          # (s2_equal_test, with the row-by-row spread or with one variance for every row) lets through only TikTok
-          # iOS with Snapchat iOS, which the battery carries
+          # the groupings a run could test for one shared ratio. Of the 57 sets of two or more of the six sources, a
+          # five per cent test of equal ratios (s2_equal_test, with the row-by-row spread or with one variance for
+          # every row) lets through four on this record under one reading or the other, Snapchat iOS with Pinterest
+          # iOS, TikTok iOS with Snapchat iOS, TikTok iOS with Pinterest iOS and the three together, and the battery
+          # carries all four; it refuses the other 53 under both
           "pair": (("Meta iOS", "TikTok iOS"),),
           "pair2": (("TikTok iOS", "Snapchat iOS"),),
+          "ps": (("Snapchat iOS", "Pinterest iOS"),),
+          "pt": (("TikTok iOS", "Pinterest iOS"),),
+          "pst": (("TikTok iOS", "Snapchat iOS", "Pinterest iOS"),),
           "gp": (("Google iOS", "Pinterest iOS"),),
           "gpo": (("Google iOS", "Pinterest iOS", "organic iOS"),),
           "po": (("Pinterest iOS", "organic iOS"),),
@@ -919,6 +926,30 @@ def s2_equal_test(O, v, names, cov=True):
     d = R @ b
     stat = float(d @ np.linalg.solve(R @ V @ R.T, d))
     return stat, {nm: (float(b[j]), float(np.sqrt(V[j, j]))) for nm, j in zip(names, idx)}
+
+
+def pooled_sessions_pin(O, v, minn=50):
+    """what rules out the second step's fit on rows split by first-48-hour sessions priced on cells that pool those
+    sessions values: within each such cell, the iOS installs that allowed tracking (the installs the cells are priced
+    on) are worth very different amounts from one sessions value to the next. {grouping: [(cell, the sessions value
+    worth least, its worth, the one worth most, its worth)]}, sessions values with fewer than minn installs left out"""
+    mat = O.mature & O.ios & O.consent & (O.label >= 0)
+    sess = O.cv & 7
+    out = {}
+    for cells, per in (("tier4", 2), ("tier4", 1), ("tier8", 1)):
+        key = _cells(O.cv, cells)
+        rows = []
+        for k in sorted(set(key[mat].tolist())):
+            w = {}
+            for sv in sorted(set((sess[mat & (key == k)] // per).tolist())):
+                sel = mat & (key == k) & (sess // per == sv)
+                if sel.sum() >= minn:
+                    w[sv] = float(v[sel].mean())
+            if len(w) > 1 and max(w.values()) > 0:                 # a cell no install of which paid tells nothing
+                lo, hi = min(w, key=w.get), max(w, key=w.get)
+                rows.append((int(k), int(lo), w[lo], int(hi), w[hi]))
+        out["%s by sessions %s" % (cells, "pair" if per == 2 else "value")] = rows
+    return out
 
 
 def pooled_pins(O, v):
@@ -1512,6 +1543,9 @@ VARIANTS = [
     ("market-weeks of fewer than a hundred unattributed accounts left out", dict(minpool=100)),
     ("the networks' ratios drawn toward their pooled ratio by the fit's own spread", dict(shrink=True)),
     ("TikTok iOS and Snapchat iOS sharing one ratio", dict(group="pair2")),
+    ("Snapchat iOS and Pinterest iOS sharing one ratio", dict(group="ps")),
+    ("TikTok iOS and Pinterest iOS sharing one ratio", dict(group="pt")),
+    ("TikTok iOS, Snapchat iOS and Pinterest iOS sharing one ratio", dict(group="pst")),
     ("every postback dated back three days", dict(align="three")),
     ("every postback dated back four days", dict(align="four")),
     ("each channel's own month pattern", dict(months="own")),
@@ -1561,6 +1595,84 @@ FINER = [("the ratios fitted on each market-week's accounts split by %s, %s" % (
                         ("unweighted", dict(weight="none")))]
 BESIDE += FINER
 
+# the crossed family: every two of the battery's ways that can be taken together, one way of each step taken at once,
+# and each way beside the battery with each single way it can be taken with and with one way of each of the other two
+# steps. Every graded figure's range holds it. Two conventions cannot be taken together when they are two ways of one
+# thing: the same setting (two groupings of sources that share a source, where two that share none are both made), the
+# weeks the delivery share is taken over, the organic installs' ratio taken from Apple Search Ads and shared with a
+# network, the ratios fitted apart for lighter and heavier use on a grouping of the first-48-hour values that leaves
+# the lighter fit no cell (the eight cells and the sessions bucket or the flags alone), or the ratios fitted on rows
+# split by first-48-hour sessions on pricing cells that pool the sessions values the rows split: the four groups pool
+# sessions values across both splits and the eight groups pool each pair's two values, so every row's installs would be
+# priced at a worth the row's own sessions value does not have (two grains of the first-48-hour value at once; the
+# named installs show the worth differing inside a group, POOLED_SESSIONS_PIN)
+SAME_THING = {"dbar_weeks": "delivery share weeks", "dbar_from": "delivery share weeks"}
+ORGANIC_SHARED = ("gpo", "po", "go")
+NO_LIGHTER_CELL = ("tier8", "sess8", "sess4", "tp4")
+S1_KEYS = {"split", "trim", "form", "cadence", "cshare", "bins", "pt", "refunds", "clock"}
+S3_KEYS = {"months", "weeks_i", "weeks_v", "quality", "qpool", "dbar_weeks", "dbar_from", "s3", "month", "carry"}
+
+
+def step_of(kw):
+    """the step a convention belongs to"""
+    ks = set(kw)
+    return "S1" if ks <= S1_KEYS else "S3" if ks <= S3_KEYS else "S2"
+
+
+def _grouped(kw):
+    return {nm for g in groups_of(kw["group"]) for nm in g} if kw.get("group") else set()
+
+
+def merged(ka, kb):
+    """two conventions taken together; two groupings of different sources are both made"""
+    both = dict(ka, **kb)
+    if ka.get("group") and kb.get("group"):
+        both["group"] = ka["group"] + "+" + kb["group"]
+    return both
+
+
+def together(ka, kb):
+    """whether two conventions can be taken together"""
+    same = {SAME_THING.get(k, k) for k in ka} & {SAME_THING.get(k, k) for k in kb}
+    if same == {"group"} and not (_grouped(ka) & _grouped(kb)):
+        same = set()
+    if same:
+        return False
+    both = merged(ka, kb)
+    if "org_pin" in both and set(both.get("group", "").split("+")) & set(ORGANIC_SHARED):
+        return False
+    if both.get("rows") == "market-week-tier" and both.get("cells") in NO_LIGHTER_CELL:
+        return False
+    if both.get("rows") in CELL_ROWS and not resolves(both.get("cells", "fine"), CELL_ROWS[both["rows"]]):
+        return False
+    return True
+
+
+def resolves(cells, per):
+    """whether a grouping of the first-48-hour values keeps apart every sessions value a row split by sessions keeps
+    apart (per=1: the eight values; per=2: their four pairs)"""
+    key, sg = _cells(np.arange(32), cells), (np.arange(32) & 7) // per
+    return all(len(set(sg[key == k])) == 1 for k in set(key))
+
+
+def crossed_ways(singles=None):
+    """[(name, conventions)] of the crossed family on the battery's ways (core's, or the build's with its own)"""
+    import itertools
+    singles = [(nm, dict(kw)) for nm, kw in (singles or VARIANTS)]
+    step = {}
+    for nm, kw in singles:
+        step.setdefault(step_of(kw), []).append((nm, kw))
+    out = [(na + "; " + nb, merged(ka, kb)) for (na, ka), (nb, kb) in itertools.combinations(singles, 2)
+           if together(ka, kb)]
+    out += [("; ".join((na, nb, nc)), dict(ka, **kb, **kc))
+            for (na, ka), (nb, kb), (nc, kc) in itertools.product(step["S1"], step["S2"], step["S3"])]
+    for bn, bk in BESIDE:
+        out += [(bn + "; " + nm, merged(bk, kw)) for nm, kw in singles if together(bk, kw)]
+        a, b = [s_ for s_ in ("S1", "S2", "S3") if s_ != step_of(bk)]
+        out += [("; ".join((bn, na, nb)), dict(bk, **ka, **kb))
+                for (na, ka), (nb, kb) in itertools.product(step[a], step[b]) if together(bk, ka) and together(bk, kb)]
+    return out
+
 
 # each step made the way a run was seen to make it: the billing records taken as they stand (both runs); the declined
 # installs valued by Response 1's mixture, a payers' gap per source with their revenue shifted by a quarter of it; the
@@ -1589,11 +1701,69 @@ def quarter_departure(O):
     return worst
 
 
-def ratio_spread(O):
+def ratio_spread(O, unit="eur"):
     """each source's fitted ratio's relative spread: two of the fit's own standard errors (the row-by-row spread of
-    the market-week adding-up) over the ratio"""
-    srcs, b, V = s2_fit(O, values(O), cov=True)
+    the market-week adding-up) over the ratio (unit="months": the fit on the monthly payments)"""
+    srcs, b, V = s2_fit(O, values(O, unit=unit) if unit != "eur" else values(O), cov=True)
     return {SOURCES[i]: 2.0 * float(np.sqrt(V[j, j])) / float(b[j]) for j, i in enumerate(srcs)}
+
+
+ANCHOR = 0.05                    # how far a golden figure may sit from the world's own, at the least
+
+
+def world_payments(W, O):
+    """the world's own payments on the monthly plan in twelve months per hundred installs, by the source that truly
+    bought each install, over the 52 mature weeks (read with every account's source, which the files do not hold)"""
+    win = W["rdays"] < (W["day"] + 365)[:, None]
+    cnt = (W["charge"] & win).sum(1)
+    return {c: 100.0 * float(cnt[(W["src"] == ORDER.index(c)) & O.mature].mean()) for c in MEMBERS}
+
+
+def anchor(W, O, g, T):
+    """every graded figure against the world's own: {figure: golden, world, gap, tolerance}. The tolerance is five per
+    cent for the steps every channel shares; an iOS network's figures carry the second step's error beside it, the
+    figure's move when its source's ratio moves by two of the fit's own standard errors (the revenue fit's for the
+    return, the payments fit's for the payments), and the two are taken as independent errors, the square root of the
+    sum of their squares. Across six draws the fit sits under the world's own ratio on every network by about one of
+    its standard errors and over it on the organic installs by about one (anchor_draws): the organic column takes up
+    part of the networks' revenue in the adding-up, and the golden carries that"""
+    rs = {"roas": ratio_spread(O), "pay100": ratio_spread(O, unit="months")}
+    wp = world_payments(W, O)
+    out = {}
+    for c in MEMBERS:
+        for fam, k, world in (("return ", "roas", T[c]["roas"]), ("payments per 100 ", "pay100", wp[c])):
+            tol = ANCHOR
+            if c in GATED:
+                mv = max(abs(route(O, r_nudge=(c, 1.0 + sg * rs[k][c]))[c][k] / g[c][k] - 1.0) for sg in (-1.0, 1.0))
+                tol = math.sqrt(ANCHOR ** 2 + mv ** 2)
+            out[fam + c] = dict(golden=float(g[c][k]), world=float(world), gap=float(g[c][k] / world - 1.0),
+                                tolerance=float(tol))
+    wi, wr = sum(T[c]["installs_week"] * 52.0 for c in MEMBERS), sum(T[c]["revenue"] for c in MEMBERS)
+    for (nm, i), world in zip(PLAN_FIGURES, (wi, wr)):
+        out[nm] = dict(golden=float(g["plan"][i]), world=float(world), gap=float(g["plan"][i] / world - 1.0),
+                       tolerance=ANCHOR)
+    return out
+
+
+def anchor_draws(seeds=(72126, 73126, 74126, 75126, 76126)):
+    """the golden against the world's own on the shipped draw and five other draws of the same world: whether a gap
+    repeats (a bias) or wanders (the fit's error); prints each figure's gap per draw, their mean and spread"""
+    import multiprocessing as mp
+    T = truth_at_plan()
+    with mp.get_context("fork").Pool(min(6, max(1, (os.cpu_count() or 2) - 2))) as P:
+        rows = P.map(_anchor_one, [(sd, T) for sd in (SEED,) + tuple(seeds)])
+    for fid in rows[0]:
+        gaps = [r[fid]["gap"] for r in rows]
+        print("%-36s %s  mean %+.3f sd %.3f  tolerance on the shipped draw %.3f" % (
+            fid, " ".join("%+.3f" % x for x in gaps), float(np.mean(gaps)), float(np.std(gaps, ddof=1)),
+            rows[0][fid]["tolerance"]))
+
+
+def _anchor_one(arg):
+    sd, T = arg
+    W = simulate(sd)
+    O = Obs(W)
+    return anchor(W, O, route(O), T)
 
 
 def forcing(O, fifth=False):
@@ -1876,6 +2046,68 @@ RUNS = {
     "cutoff:keep-9": dict(s1="keep:9", s2="consenters"),
     "cutoff:keep-12": dict(s1="keep:12", s2="consenters"),
 }
+# every rung of the run routes taken alone: the second step's rungs with the third step golden and the third step's
+# with the second golden, each with the first step made (the one-stump-lost rule across every rung) and with it lost
+# (the billing records as they stand) beside the first step lost alone, where a second loss must not earn back what the
+# first cost
+RUNGS = {"S2: Response 1's mixture": dict(s2="r1mix")}
+RUNGS.update({"S2: Response 1's mixture, %s" % k.split(":")[1]: dict(s2=k) for k in R1MIX if ":" in k})
+RUNGS.update({
+    "S2: every declined install at its network's named value": dict(s2="bridge"),
+    "S2: every declined install at Apple Search Ads' ratio": dict(s2="ratio"),
+    "S2: the ratio its kind of network shows on Android": dict(s2="analogue"),
+    "S2: one ratio for every source": dict(s2="common"),
+    "S2: the ratios fitted on the weeks with the three markets summed": dict(markets="pooled"),
+    "S2: each network's installs at its named installs' value": dict(s2="consenters"),
+    "S3: full delivery in the fit's own prediction": dict(carry="plain", dbar_set=1.0),
+    "S3: full delivery, rescaled to the record": dict(dbar_set=1.0),
+    "S3: installs fitted on the billed spend": dict(s3="spend"),
+    "S3: Response 1's carry": dict(R1_CARRY)})
+
+
+def price_routes(spec, named):
+    """{route: [base, band by band, by figure, both]}: what each route (its graded figures) earns on the rubric read
+    four ways: one criterion per answer line; the recommendation graded band by band; every figure its own
+    criterion; both"""
+    import corelib as L
+    figs, _p = L._figures(spec, {})
+    names = sorted(spec["members"])
+    gcall = L._calls(spec, {m: spec["members"][m]["golden"] for m in names})
+    out = {}
+    for nm, fv in named.items():
+        call = L._calls(spec, {m: fv["return " + m] for m in names})
+        right = sum(a == b for a, b in zip(call, gcall)) / len(gcall)
+        row = []
+        for rb, pf in ((0, 0), (1, 0), (0, 1), (1, 1)):
+            fs = [dict(f, sentence=f["id"]) for f in figs] if pf else figs
+            e = L._score(fs, call == gcall, lambda f: fv[stated_id(f["id"])])
+            row.append(e + (L.BLOCKS["recommendation"] * (right - (call == gcall)) if rb else 0.0))
+        out[nm] = row
+    return out
+
+
+def rung_table(spec):
+    """the rungs priced: the first step made with each rung, then lost with each rung beside it lost alone, with
+    the figures the second loss puts back in band"""
+    import corelib as L
+    figs, _p = L._figures(spec, {})
+    R = spec["rungs"]
+    made = price_routes(spec, R["made"])
+    lost = price_routes(spec, dict(R["lost"], **{"S1 lost alone": R["s1_alone"]}))
+    fmt = lambda r: " / ".join("%.1f" % x for x in r)
+    print("the first step made, one rung of another step lost (base / band by band / by figure / both):")
+    for nm in R["made"]:
+        print("  %-68s %s" % (nm, fmt(made[nm])))
+    a = lost["S1 lost alone"]
+    print("the first step lost (the records as they stand), alone %s; with a second rung:" % fmt(a))
+    earned = lambda fv: {f["id"] for f in figs if L._earned(f, fv[stated_id(f["id"])])}
+    e0 = earned(R["s1_alone"])
+    for nm in R["lost"]:
+        back = sorted(earned(R["lost"][nm]) - e0)
+        print("  %-68s %s%s" % (nm, fmt(lost[nm]), ("  above alone; back in band: " + ", ".join(back))
+                                if any(x > y + 1e-9 for x, y in zip(lost[nm], a)) else ""))
+
+
 # each stump pushed past its fitted value to the far end a run might set: every subscription last seen set to renew
 # paying out its twelve months; every declined install worth nothing; the plan read at a delivery share as far below
 # the record's as full delivery is above it
@@ -1924,9 +2156,36 @@ def delivery_pins(O):
     return out
 
 
+_XW = {}
+
+
+def _crossed_one(kw):
+    """one way of the crossed family, on the record the workers hold (_XW): its graded figures"""
+    kw = dict(kw)
+    al = kw.pop("align", None)
+    if al is not None and al not in _XW:
+        _XW[al] = Obs(_XW["W"], align=al)
+    return figure_values(route(_XW["O"] if al is None else _XW[al], **kw))
+
+
+def crossed_family(W, O):
+    """the graded figures of every way of the crossed family, in the order crossed_ways gives, worked across the
+    machine's cores (forked, so every worker holds the same record and the figures do not depend on the cores)"""
+    import multiprocessing as mp
+    ways = [kw for _nm, kw in crossed_ways()]
+    _XW.clear()
+    _XW.update(W=W, O=O)
+    try:
+        with mp.get_context("fork").Pool(max(1, min(14, (os.cpu_count() or 2) - 2))) as P:
+            return P.map(_crossed_one, ways, chunksize=8)
+    except (ValueError, OSError):
+        return [_crossed_one(kw) for kw in ways]
+
+
 def build_spec(W=None, verbose=False):
     W = W or simulate()
     O = Obs(W)
+    xf = crossed_family(W, O)                                      # before the record's caches fill, so forks are light
     T = truth_at_plan()
     g = route(O)
     aligned = {}
@@ -1952,10 +2211,14 @@ def build_spec(W=None, verbose=False):
     rigorous = route(O, **RIGOROUS)
     runs = {k: route(O, **kw) for k, kw in RUNS.items()}
     over = {s_: route(O, **kw) for s_, kw in OVER.items()}
+    rungs = dict(made={k: figure_values(route(O, **kw)) for k, kw in RUNGS.items()},
+                 lost={k: figure_values(route(O, s1="raw", **kw)) for k, kw in RUNGS.items()},
+                 s1_alone=figure_values(route(O, s1="raw")))
+    anc = anchor(W, O, g, T)
     members = {}
     for c in MEMBERS:
         members[c] = dict(lines=list(LINES), truth=float(T[c]["roas"]), golden=float(g[c]["roas"]),
-                          family=[float(r[c]["roas"]) for r in fam],
+                          family=[float(r[c]["roas"]) for r in fam] + [float(x["return " + c]) for x in xf],
                           routes=dict(direct=float(direct[c]["roas"]), rigorous=float(rigorous[c]["roas"])))
     stumps = {s_: dict(st, opens=OWN[s_], sides=dict(over={c: float(over[s_][c]["roas"]) for c in MEMBERS}))
               for s_, st in STUMPS.items()}
@@ -1964,7 +2227,8 @@ def build_spec(W=None, verbose=False):
     ff = [figure_values(r) for r in fam]
     lf = {k: figure_values(r) for k, r in lat_res.items()}
     runf = {k: figure_values(r) for k, r in runs.items()}
-    rng = lambda fid: band_of(fid, gf[fid], [x[fid] for x in ff[:nbat]], [x[fid] for x in ff[nbat:]])
+    # each graded figure's range: the battery's ways and the crossed family's, then the ways beside the battery
+    rng = lambda fid: band_of(fid, gf[fid], [x[fid] for x in ff[:nbat]] + [x[fid] for x in xf], [x[fid] for x in ff[nbat:]])
     figures = []
     for c in MEMBERS:
         figures.append(dict(id="return " + c, block="ask", weight=1.0, member=c, band=rng("return " + c)))
@@ -1972,7 +2236,8 @@ def build_spec(W=None, verbose=False):
     others = [kind + c for kind, _k in FAMILIES[1:] for c in MEMBERS] + [nm for nm, _i in PLAN_FIGURES]
     for fid in others:
         figures.append(dict(id=fid, block="component" if fid in own else "ask", weight=1.0, golden=gf[fid],
-                            band=rng(fid), family=[x[fid] for x in ff], lattice={k: x[fid] for k, x in lf.items()},
+                            band=rng(fid), family=[x[fid] for x in ff] + [x[fid] for x in xf],
+                            lattice={k: x[fid] for k, x in lf.items()},
                             routes=dict(rigorous=rf[fid], **{k: x[fid] for k, x in runf.items()})))
     run_routes = {k: {c: float(r[c]["roas"]) for c in MEMBERS} for k, r in runs.items()}
     v = values(O)
@@ -1985,9 +2250,9 @@ def build_spec(W=None, verbose=False):
     spec = dict(call="lines", members=members, stumps=stumps, lattice=lattice, run_routes=run_routes,
                 referee=dict(slice=ref["slice"], covers_target=False, truth=ref["truth"], golden=ref["golden"],
                              rivals=ref["rivals"]),
-                falsification=fal, figures=as_stated(figures))
+                falsification=fal, figures=as_stated(figures), rungs=rungs, anchor=anc)
     if verbose:
-        return spec, dict(O=O, W=W, T=T, g=g, fam=fam, lat=lat_res, direct=direct, rigorous=rigorous, ref=ref,
+        return spec, dict(O=O, W=W, T=T, g=g, fam=fam, xf=xf, lat=lat_res, direct=direct, rigorous=rigorous, ref=ref,
                           runs=runs, over=over, v=v, pay=pay)
     return spec
 
@@ -2136,6 +2401,10 @@ def explore():
         print("    %-18s live %3d, dark %3d  golden %.3f and %.3f  pooled %.3f and %.3f" % (nm, r["live"], r["dark"],
               r["golden"][0], r["golden"][1], r["pooled"][0], r["pooled"][1]))
     print("    the pooled ratios' Wald distance from the market-week fit's: %.1f on %d degrees of freedom" % pp["wald"])
+    print("the rows finer than their pricing cells (the worth of a named install inside one cell, by sessions):")
+    for k, rows_ in pooled_sessions_pin(O, values(O)).items():
+        print("   %s: " % k + "; ".join("cell %d: sessions %d %.2f, sessions %d %.2f (x%.2f)" % (
+            r[0], r[1], r[2], r[3], r[4], r[4] / max(r[2], 1e-9)) for r in rows_))
     print("delivery pins:")
     for c, p in delivery_pins(O).items():
         print("    %-18s share %.3f  whole budget billed in %2d weeks  at share 1 the fit adds up to %.3f  best quarter %.3f"
@@ -2169,6 +2438,9 @@ if __name__ == "__main__":
     if "--seeds" in sys.argv:
         seeds()
         sys.exit(0)
+    if "--anchor" in sys.argv:
+        anchor_draws()
+        sys.exit(0)
     if "--shipped" in sys.argv:
         for c, x in shipped_check().items():
             print("%-18s filed %.4f carry %.4f (%+.4f)  value filed %.2f mixture %.2f (%+.1f%%)  mixture's return %.4f" % (
@@ -2176,4 +2448,10 @@ if __name__ == "__main__":
                 100 * (x["value_mix"] / x["value_filed"] - 1), x["return_mix"]))
         sys.exit(0)
     import corelib
-    sys.exit(corelib.run(build_spec()))
+    spec = build_spec()
+    rung_table(spec)
+    print("every graded figure against the world's own (golden, world, gap, tolerance):")
+    for fid, a in spec["anchor"].items():
+        print("  %-36s %12.3f %12.3f %+.3f %.3f %s" % (fid, a["golden"], a["world"], a["gap"], a["tolerance"],
+                                                   "inside" if abs(a["gap"]) <= a["tolerance"] else "OUTSIDE"))
+    sys.exit(corelib.run(spec))
