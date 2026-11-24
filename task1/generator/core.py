@@ -2063,6 +2063,18 @@ RUNGS.update({
     "S3: full delivery, rescaled to the record": dict(dbar_set=1.0),
     "S3: installs fitted on the billed spend": dict(s3="spend"),
     "S3: Response 1's carry": dict(R1_CARRY)})
+# the first step's own rungs, the second and third steps the golden's: each continuation and each scaling a run could
+# put on the subscriptions nobody opens. The continuation the app saw (the cancellations per charge on file of the
+# subscribers still opening it, 0.912 and 0.875 against the 0.971 fitted to the stores' excess) places the excess on
+# the right subscriptions at the stores' trial-end share and files the golden's call on this draw: a report, beside
+# the run routes, of where the first step's continuation is decisive for its own figures and not for the call
+S1_RUNGS = {
+    "S1: the records as they stand": dict(s1="raw"),
+    "S1: trued up to the stores by period": dict(s1="prop_month"),
+    "S1: trued up to the stores over the whole record": dict(s1="prop"),
+    "S1: a subscription set to renew paying three months more": dict(s1="keep:3"),
+    "S1: the web checkout's continuation carried to the stores": dict(webq=True),
+    "S1: the continuation the app saw carried to the silent subscriptions": dict(s1="awake")}
 
 
 def price_routes(spec, named):
@@ -2106,6 +2118,12 @@ def rung_table(spec):
         back = sorted(earned(R["lost"][nm]) - e0)
         print("  %-68s %s%s" % (nm, fmt(lost[nm]), ("  above alone; back in band: " + ", ".join(back))
                                 if any(x > y + 1e-9 for x, y in zip(lost[nm], a)) else ""))
+    own = price_routes(spec, R.get("own", {}))
+    gcall = L._calls(spec, {m: spec["members"][m]["golden"] for m in sorted(spec["members"])})
+    print("the first step's own rungs, the second and third steps the golden's:")
+    for nm, fv in R.get("own", {}).items():
+        call = L._calls(spec, {m: fv["return " + m] for m in sorted(spec["members"])})
+        print("  %-68s %s  %s" % (nm, fmt(own[nm]), "files the golden's call" if call == gcall else "call wrong"))
 
 
 # each stump pushed past its fitted value to the far end a run might set: every subscription last seen set to renew
@@ -2213,7 +2231,8 @@ def build_spec(W=None, verbose=False):
     over = {s_: route(O, **kw) for s_, kw in OVER.items()}
     rungs = dict(made={k: figure_values(route(O, **kw)) for k, kw in RUNGS.items()},
                  lost={k: figure_values(route(O, s1="raw", **kw)) for k, kw in RUNGS.items()},
-                 s1_alone=figure_values(route(O, s1="raw")))
+                 s1_alone=figure_values(route(O, s1="raw")),
+                 own={k: figure_values(route(O, **kw)) for k, kw in S1_RUNGS.items()})
     anc = anchor(W, O, g, T)
     members = {}
     for c in MEMBERS:
@@ -2227,8 +2246,12 @@ def build_spec(W=None, verbose=False):
     ff = [figure_values(r) for r in fam]
     lf = {k: figure_values(r) for k, r in lat_res.items()}
     runf = {k: figure_values(r) for k, r in runs.items()}
-    # each graded figure's range: the battery's ways and the crossed family's, then the ways beside the battery
-    rng = lambda fid: band_of(fid, gf[fid], [x[fid] for x in ff[:nbat]] + [x[fid] for x in xf], [x[fid] for x in ff[nbat:]])
+    # each graded figure's range: the battery's ways and their crossings, then the ways beside the battery and every
+    # crossing that holds one of them (two rebuilds of a fit on finer rows differ by more, crossed or not)
+    bes = {nm for nm, _k in BESIDE}
+    xb = [nm.split("; ")[0] in bes for nm, _k in crossed_ways()]
+    rng = lambda fid: band_of(fid, gf[fid], [x[fid] for x in ff[:nbat]] + [x[fid] for x, b in zip(xf, xb) if not b],
+                              [x[fid] for x in ff[nbat:]] + [x[fid] for x, b in zip(xf, xb) if b])
     figures = []
     for c in MEMBERS:
         figures.append(dict(id="return " + c, block="ask", weight=1.0, member=c, band=rng("return " + c)))
