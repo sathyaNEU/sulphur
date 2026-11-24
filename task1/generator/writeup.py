@@ -274,7 +274,8 @@ def write(path, f):
           "first three, the five networks' fitted ratios stand %.1f from Apple Search Ads' ratio and %.1f from the "
           "Android ratios against a five per cent point of %.2f, and one ratio misses the market-weeks' revenue by %.1f "
           "per cent against %.1f. Sources sharing one ratio are refused by the fit's own test wherever it refuses them "
-          "(the five networks %s; Meta with TikTok %s) and kept where it cannot (TikTok with Snapchat %s). The ratios "
+          "(the five networks %s; Meta with TikTok %s) and kept where it cannot (Snapchat with Pinterest %s, TikTok with "
+          "Snapchat %s, TikTok with Pinterest %s, the three together %s). The ratios "
           "fitted on the %d weeks with the three markets summed file TikTok iOS in scale (%.3f, its ratio %.3f) and "
           "Google iOS at %.3f (its ratio %.3f): each market's own weeks put TikTok's ratio at %s, every one under %.3f, "
           "and Google's at %s, every one over %.3f; priced market-week by market-week at the summed-markets ratios, the "
@@ -297,7 +298,8 @@ def write(path, f):
               sc["android"]["return_plan"][M], sc["one_ratio"]["return_plan"][M], Q["adding_up"]["borrowed_shift"],
               Q["adding_up"]["named"], Q["adding_up"]["search_ads"], Q["lent"]["search_ads"]["stat"],
               Q["lent"]["android"]["stat"], Q["lent"]["search_ads"]["point"], mw["one_ratio"], mw["fitted"],
-              _two(T["the five networks"]), _two(T["Meta and TikTok"]), _two(T["TikTok and Snapchat"]),
+              _two(T["the five networks"]), _two(T["Meta and TikTok"]), _two(T["Snapchat and Pinterest"]),
+              _two(T["TikTok and Snapchat"]), _two(T["TikTok and Pinterest"]), _two(T["TikTok, Snapchat and Pinterest"]),
               s["mature_weeks"], P["return_plan"]["TikTok iOS"], tk["pooled"], P["return_plan"][GI], gk["pooled"],
               _list("%.3f" % x for x in tk["markets"]), tk["pooled"], _list("%.3f" % x for x in gk["markets"]),
               gk["pooled"], sp["TikTok iOS"]["pooled"][0], sp["TikTok iOS"]["live"], sp["TikTok iOS"]["pooled"][1],

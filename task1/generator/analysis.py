@@ -518,7 +518,7 @@ def battery(O, cross=True):
     # already take its step's slot
     g = C.figure_values(route(O))
     moves = {nm: max(abs(C.figure_values(r)[f] / g[f] - 1.0) for f in g) for (nm, r) in singles[len(C.VARIANTS):]}
-    layer = [(nm, kw) for nm, kw in PACK_VARIANTS if moves[nm] >= 5e-5]
+    layer = [(nm, kw) for nm, kw in PACK_VARIANTS if moves[nm] > 0.0]
     combo = ("every convention of the files that moves a figure", {k: v for _n, kw in layer for k, v in kw.items()})
     members = [(nm, kw, False) for nm, kw in SINGLES] + [(nm, kw, True) for nm, kw in C.BESIDE] + \
               [(nm, kw, b) for (nm, kw), (_n, _f, b, _c) in zip(ways, crossed)]

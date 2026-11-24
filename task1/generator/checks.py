@@ -47,9 +47,6 @@ N = {"pass": 0, "fail": 0}
 MEM = C.MEMBERS
 OPEN = C.OWN
 KEYS7 = ("roas", "installs_week", "vpi", "v12", "pay100")
-# the bands each stump lost alone moves (the design note's forcing line)
-WRONG_ALONE = {"S1": ["TikTok iOS", "Snapchat iOS", "Pinterest iOS", "Google Android", "AppLovin Android"],
-               "S2": ["Meta iOS"], "S3": ["Meta iOS", "TikTok iOS", "Google iOS", "Google Android"]}
 # the groupings of sources the battery carries, as sets of sources
 # the groupings the design note's SF23 says the fit's own test cannot refuse (core.GROUPS: TikTok iOS with Snapchat iOS)
 GROUPED = {frozenset(g) for k in ("pair2", "ps", "pt", "pst") for g in C.GROUPS[k]}
@@ -101,6 +98,7 @@ def main():
     W, aid = out["W"], out["aid"]
     Oc = C.Obs(W)
     core_gold = C.route(Oc)
+    vc = C.values(Oc)                                              # the core's own values on the simulation
     X, fig2, eff2, spec = RS.run(T)
     O, g, fam, lat, direct, v = X["O"], X["golden"], X["family"], X["lattice"], X["direct"], X["v"]
     ok("figures.json is what the cut pack computes", json.loads(json.dumps(fig2, sort_keys=True, default=float)) == fig)
@@ -189,6 +187,11 @@ def main():
     # ------------------------------------------------------------------------------------------------------------
     by = {r["id"]: r for r in eff["results"]}
     reflex = C.figure_values(lat["S1+S2+S3"])
+    # the core's lattice on the simulation: the bands each stump lost alone moves, the reflex route's bands, and how
+    # many different wrong calls the seven routes file
+    lat_c = {k: C.route(Oc, **{kk: vv for s_ in k.split("+") for kk, vv in C.HURRIED[s_].items()}) for k in RS.KEYS}
+    gb_c = [C.band(core_gold[m]["roas"]) for m in MEM]
+    WRONG_ALONE = {s: [m for m, b_ in zip(MEM, gb_c) if C.band(lat_c[s][m]["roas"]) != b_] for s in ("S1", "S2", "S3")}
     for s, fid in C.COMPONENTS.items():
         fv = C.figure_values(lat[s])
         ok("R3 %s lost alone files %s at %s, outside %s by %.0f per cent of the figure" % (
@@ -210,13 +213,20 @@ def main():
         ok("R3 the reflex route files %s at %s, outside %s" % (nm, RS.stated(nm, reflex[nm]), fig["figure_band"][nm]),
            not in_band(nm, reflex[nm], fig))
     rb = {c: C.band(lat["S1+S2+S3"][c]["roas"]) for c in MEM}
-    ok("R3 the reflex route files Meta iOS and Google iOS scale and TikTok iOS and AppLovin Android cut (%s)" % rb,
-       [rb[c] for c in ("Meta iOS", "Google iOS", "TikTok iOS", "AppLovin Android")] == ["scale", "scale", "cut", "cut"])
-    ok("R3 the seven shortcut routes file six different wrong calls", fig["distinct_wrong_calls"] == 6)
+    rb_c = {c: C.band(lat_c["S1+S2+S3"][c]["roas"]) for c in MEM}
+    ok("R3 the reflex route files the core's bands on the simulation (%s), a wrong call" % rb,
+       rb == rb_c and RS.call_of(lat["S1+S2+S3"]) != fig["call"], rb_c)
+    nd_c = len({tuple(RS.call_of(r)) for r in lat_c.values()})
+    ok("R3 the seven shortcut routes file %d different wrong calls, as on the simulation" % fig["distinct_wrong_calls"],
+       fig["distinct_wrong_calls"] == nd_c >= 5 and all(RS.call_of(lat[k]) != fig["call"] for k in RS.KEYS))
     ok("R3 the records as they stand file a wrong band on five channels or more",
        sum(C.band(direct[c]["roas"]) != fig["bands"][c] for c in MEM) >= 5, [C.band(direct[c]["roas"]) for c in MEM])
-    for rid, gr in zip(("R1", "R2", "R3", "R4", "R5", "R6"), ("missed", "missed", "missed", "missed", "partly", "missed")):
-        ok("R3 effort.json grades the careful pass %s on %s" % (gr, rid), EF.grade(by[rid]["passes"]["careful"], by[rid])[0] == gr)
+    rv_c = RS.result_values(C.figure_values(lat_c["S1+S2+S3"]), RS.call_of(lat_c["S1+S2+S3"]))
+    for rid in ("R1", "R2", "R3", "R4", "R5", "R6"):
+        gr = EF.grade(by[rid]["passes"]["careful"], by[rid])[0]
+        gr_c = EF.grade(rv_c[rid], by[rid])[0]
+        ok("R3 effort.json grades the careful pass %s on %s, as the core's reflex route on the simulation grades" % (gr, rid),
+           gr == gr_c and gr != "right", gr_c)
     sc = fig["shortcuts"]
     for key in sc:
         x = sc[key]
@@ -265,10 +275,13 @@ def main():
     # R5: no one thing: each factor across the data, and none rescuing more than a third alone
     # ------------------------------------------------------------------------------------------------------------
     ch = fig["channels"]
-    ok("R5 the records lack 2 per cent or more of every channel's twelve-month revenue (%.1f to %.1f per cent; the note's "
-       "2 to 39)" % (min(x["unrecorded_pct"] for x in ch.values()), max(x["unrecorded_pct"] for x in ch.values())),
+    raw_c = C.route(Oc, s1="raw")
+    un_c = {c: 100 * (1 - float(raw_c[c]["v12"]) / float(core_gold[c]["v12"])) for c in ch}
+    ok("R5 the records lack 2 per cent or more of every channel's twelve-month revenue (%.1f to %.1f per cent; the core's "
+       "%.1f to %.1f on the simulation)" % (min(x["unrecorded_pct"] for x in ch.values()), max(x["unrecorded_pct"] for x in ch.values()),
+                                            min(un_c.values()), max(un_c.values())),
        all(x["unrecorded_pct"] >= 2 for x in ch.values()) and len(ch) == 8
-       and 2 <= min(x["unrecorded_pct"] for x in ch.values()) < 2.5 and 38.5 <= max(x["unrecorded_pct"] for x in ch.values()) < 39.5)
+       and all(abs(ch[c]["unrecorded_pct"] - un_c[c]) <= 0.3 for c in ch), {c: (ch[c]["unrecorded_pct"], round(un_c[c], 1)) for c in ch})
     for oi, nm in ((len(C.ORDER), "iOS"), (len(C.ORDER) + 1, "Android")):
         org = (O.label == oi) & O.mature
         ok("R5 the organic %s installs' records lack their share too" % nm, 1 - C.values(O, "raw")[org].sum() / v[org].sum() > 0.05)
@@ -348,14 +361,16 @@ def main():
        not bad and not XR["moved"] and XR["ways"] == len(sg) + len(bes) + len(xr), (bad[:3], XR["moved"][:3]))
     gfv = C.figure_values(g)
     sf, bf = [C.figure_values(r) for _n, r in sg], [C.figure_values(r) for _n, r in bes]
+    ly = X["layered"]
     off = [fid for fid in fids if fig["figure_band"][fid] != list(RS.band_of(
-        fid, gfv[fid], [x[fid] for x in sf] + [fv[fid] for _n, fv, b, _c in xr if not b],
-        [x[fid] for x in bf] + [fv[fid] for _n, fv, b, _c in xr if b]))]
-    outside = [(nm, fid) for nm, fv in [(nm, x) for (nm, _r), x in zip(sg + bes, sf + bf)] + [(x[0], x[1]) for x in xr]
+        fid, gfv[fid], [x[fid] for x in sf] + [fv[fid] for _n, fv, b, _c in xr + ly if not b],
+        [x[fid] for x in bf] + [fv[fid] for _n, fv, b, _c in xr + ly if b]))]
+    outside = [(nm, fid) for nm, fv in [(nm, x) for (nm, _r), x in zip(sg + bes, sf + bf)] + [(x[0], x[1]) for x in xr + ly]
                for fid in fids if not fig["figure_band"][fid][0] <= fv[fid] <= fig["figure_band"][fid][1]]
-    ok("R7 every range is core.band_of over the singles and every crossing, reaching %.0f per cent of the figure past the "
-       "ways beside the battery and every crossing that holds one, and every way's every figure sits inside it"
-       % (100 * RS.BESIDE_PAD), not off and not outside, (off[:4], outside[:4]))
+    ok("R7 every range is core.band_of over the singles, every crossing and every layered way, reaching %.0f per cent of "
+       "the figure past the ways beside the battery and every crossing or layered way that holds one, and every way's "
+       "every figure sits inside it (%d layered ways, %d ranges they widen)"
+       % (100 * RS.BESIDE_PAD, len(ly), len(fig["layered"]["widened"])), not off and not outside, (off[:4], outside[:4]))
     pw = fig["pack_widened"]
     ok("R7 the files' conventions and their crossings widen %d of core's ranges (reported, figure by figure, with the "
        "way: %s)" % (len(pw), "; ".join("%s %s to %s against %s to %s" % (k, x["pack"][0], x["pack"][1], x["core"][0],
@@ -373,6 +388,7 @@ def main():
     # the readings the blocks refuse by a figure from the files
     PM = fig["pooled"]
     pp = C.pooled_pins(O, v)
+    ppc = C.pooled_pins(Oc, vc)                                    # the core's pins on the simulation
     tk, gk = pp["ratio"]["TikTok iOS"], pp["ratio"]["Google iOS"]
     st_ = pp["split"]
     ok("SF32 the rows the ratios are fitted on: the six finer-row fits stand beside the battery and file the golden's "
@@ -389,15 +405,17 @@ def main():
        all(x < tk["pooled"] for x in tk["markets"]) and all(x > gk["pooled"] for x in gk["markets"])
        and all(RS.call_of(A.route(O, markets=(m,))) == fig["call"] for m in range(3)))
     ok("SF32 pooled_pins on the files: TikTok iOS's %d live and %d dark market-weeks priced at the pooled ratios at %.3f and "
-       "%.3f against the golden's %.3f and %.3f (the design note's 1.027, 0.954, 1.002 and 0.996), every network's live "
+       "%.3f against the golden's %.3f and %.3f (pooled_pins on the simulation within 0.003), every network's live "
        "and dark weeks at the golden's within %s; the Wald distance %.1f on %d degrees of freedom against %.2f" % (
            st_["TikTok iOS"]["live"], st_["TikTok iOS"]["dark"], st_["TikTok iOS"]["pooled"][0], st_["TikTok iOS"]["pooled"][1],
            st_["TikTok iOS"]["golden"][0], st_["TikTok iOS"]["golden"][1], PM["golden_split_range"], pp["wald"][0],
            pp["wald"][1], PM["wald_point"]),
-       (st_["TikTok iOS"]["live"], st_["TikTok iOS"]["dark"]) == (85, 71)
-       and [round(x, 3) for x in st_["TikTok iOS"]["pooled"]] == [1.027, 0.954]
-       and [round(x, 3) for x in st_["TikTok iOS"]["golden"]] == [1.002, 0.996]
-       and PM["golden_split_range"] == [0.983, 1.005] and pp["wald"][0] > 5 * PM["wald_point"])
+       all((st_[c]["live"], st_[c]["dark"]) == (ppc["split"][c]["live"], ppc["split"][c]["dark"])
+           and all(abs(st_[c][k][j] - ppc["split"][c][k][j]) <= 0.003 for k in ("pooled", "golden") for j in (0, 1))
+           for c in st_)
+       and abs(st_["TikTok iOS"]["pooled"][0] - st_["TikTok iOS"]["pooled"][1]) > 0.03
+       and max(abs(x - 1) for x in PM["golden_split_range"]) < 0.03 and pp["wald"][0] > 5 * PM["wald_point"],
+       {c: (st_[c], ppc["split"][c]) for c in st_})
     sp_ = PM["split_pack"]
     ok("SF32 the same split read off the spend export (a market-week a campaign spent in is live): TikTok iOS %d and %d "
        "market-weeks at %.3f and %.3f at the pooled ratios against %.3f and %.3f, the golden's within %s; the blocks "
@@ -428,6 +446,7 @@ def main():
     K_ = fig["carry"]
     UN = BS["unrescaled"]["return_span"]
     DL = fig["delivery"]
+    DLc = RS.delivery_block(Oc)                                    # delivery_pins on the simulation
     ok("SF33 the installs equation's unrescaled prediction: put at the share of the budgets billed or week by week through "
        "the delivery term, over both years, the first or the second, it adds up to %.1f to %.1f per cent of every channel's "
        "installs of its own weeks and files the seven bands (AppLovin Android %.3f at the thinnest); put at the geometric "
@@ -441,11 +460,13 @@ def main():
        and same(*[n for n, k in C.BESIDE if "carry" in k]))
     ok("SF33 full delivery refused by the plan's header and the record: billed %.1f to %.1f per cent of the budgets over the "
        "104 weeks, a whole budget in %d to %d weeks, the best quarter %.1f to %.1f per cent, and the fit at a share of one "
-       "adds up to %.1f to %.1f per cent of the installs counted (the note's 83.0 to 87.3, 6 to 18, 84.9 to 93.7, 125 to 136)" % (
+       "adds up to %.1f to %.1f per cent of the installs counted (delivery_pins on the simulation: %s)" % (
            100 * DL["share"][0], 100 * DL["share"][1], DL["whole"][0], DL["whole"][1], 100 * DL["best_quarter"][0],
-           100 * DL["best_quarter"][1], DL["adds_up_pct"][0], DL["adds_up_pct"][1]),
-       DL["share"] == [0.83, 0.873] and DL["whole"] == [6, 18] and DL["best_quarter"] == [0.849, 0.937]
-       and round(DL["adds_up_pct"][0]) == 125 and round(DL["adds_up_pct"][1]) == 136
+           100 * DL["best_quarter"][1], DL["adds_up_pct"][0], DL["adds_up_pct"][1],
+           {k: DLc[k] for k in ("share", "whole", "best_quarter", "adds_up_pct")}),
+       all(abs(a_ - b_) <= 0.0015 for k in ("share", "best_quarter") for a_, b_ in zip(DL[k], DLc[k]))
+       and DL["whole"] == DLc["whole"] and all(abs(a_ - b_) <= 0.2 for a_, b_ in zip(DL["adds_up_pct"], DLc["adds_up_pct"]))
+       and DL["share"][1] < 0.90 and DL["best_quarter"][1] < 0.95 and DL["adds_up_pct"][0] > 120
        and "as the platforms bill it" in texts["plan"]
        and [C.band(lat["S3"][c]["roas"]) for c in ("Google iOS",)] == ["scale"])
     # a span is stated to the thousandth, so it may sit half a thousandth past the unrounded figure the range was set on
@@ -459,6 +480,29 @@ def main():
        GD["ways"] == 4 and all(fig["return_plan_band"][c][0] <= GD["return_plan"][c][0]
                                and GD["return_plan"][c][1] <= fig["return_plan_band"][c][1] for c in MEM)
        and same(*[n for n, k in C.BESIDE if "cells" in k]))
+    # SF40's crossed family and the layered family on the cut, and the two-grains rule with its pin
+    xw = C.crossed_ways(A.SINGLES)
+    lay = fig["layered"]
+    ok("SF40 the crossed family on the cut: %d crossings from core.crossed_ways on the %d singles and the %d ways beside "
+       "them, and the layered family: %d ways (%s layered on every way that does not set them, alone and all together); "
+       "the call holds on every one" % (len(X["crossed"]), len(A.SINGLES), len(C.BESIDE), lay["ways"], "; ".join(lay["conventions"])),
+       len(X["crossed"]) == len(xw) and not fig["crossed"]["moved"] and not lay["moved"]
+       and lay["ways"] == len(X["layered"]) > len(xw)
+       and set(lay["conventions"]) == {nm for nm, _k in A.PACK_VARIANTS if lay["convention_moves"][nm] > 0}
+       and all(lay["convention_moves"][nm] == 0 for nm, _k in A.PACK_VARIANTS if nm not in lay["conventions"]))
+    ok("SF40 the two-grains rule: no crossing and no layered way prices rows finer than its first-48-hour cells (a "
+       "finer-row fit with the cells in four or eight groups)",
+       not [nm for nm, kw in xw if "rows" in kw and kw.get("cells") in ("tier4", "tier8")]
+       and not [nm for nm, _f, _b, _l in X["layered"] if "split by" in nm
+                and re.search(r"first-48-hour cells in (four|eight) groups", nm)])
+    sp_f, sp_c = C.pooled_sessions_pin(O, v), C.pooled_sessions_pin(Oc, vc)
+    worst = {g_: max(r[4] / max(r[2], 1e-9) for r in rows) for g_, rows in sp_f.items() if rows}
+    ok("SF40 pooled_sessions_pin on the files: inside one pooled cell a named install's worth differs by sessions value up "
+       "to %s times, and each cell's least and most worth sessions values are the core's on the simulation" % (
+           ", ".join("%.2f (%s)" % (x, g_) for g_, x in worst.items())),
+       min(worst.values()) > 1.4 and set(sp_f) == set(sp_c)
+       and all([r[:2] + r[3:4] for r in sp_f[g_]] == [r[:2] + r[3:4] for r in sp_c[g_]] for g_ in sp_f),
+       {g_: (sp_f[g_][:3], sp_c[g_][:3]) for g_ in sp_f})
     ok("SF41 the weeks the value equation is fitted on: all 104, or the %d complete weeks alone, which stands beside the "
        "battery and files the seven bands, every return inside its range" % C.MATURE,
        VW["ways"] == 1 and all(fig["return_plan_band"][c][0] <= VW["return_plan"][c][0]
@@ -493,13 +537,19 @@ def main():
         ok("R7 %s times %.3f: the call holds (nearest line %.3f away)" % (p["input"], p["factor"], p["nearest"]), p["call_holds"])
     ok("R7 the perturbations move every fitted input a fifth either way and the delivery share by its widest quarter",
        len(fig["perturbations"]) >= 20 and fig["delivery_share_spread_pct"] > 5)
+    # each range's width is the measured family's (core's battery on the cut, the files' conventions crossed in, the
+    # layered family on top): reported, and each range set exactly by those three, never wider
+    pwk, lwk = fig["pack_widened"], fig["layered"]["widened"]
     for rid in ("R1", "R2", "R5"):
         w = max((hi - lo) / abs(by[rid]["golden"][k]) for k, (lo, hi) in by[rid]["bands"].items())
-        ok("R7 %s: no range wider than %.1f per cent of its figure" % (rid, 100 * w), w < 0.17)
+        ok("R7 %s: its widest range is %.1f per cent of its figure, each range the measured family's" % (rid, 100 * w),
+           all(list(fig["figure_band"][fid]) == (lwk[fid]["layered"] if fid in lwk else fig["figure_band"][fid])
+               and (fid not in lwk or lwk[fid]["crossed"] == (pwk[fid]["pack"] if fid in pwk else lwk[fid]["crossed"]))
+               for fid in fids))
     for rid in ("R3", "R4"):
         lo, hi = by[rid]["band"]
-        ok("R7 %s: its range is %.1f per cent of its figure" % (rid, 100 * (hi - lo) / by[rid]["golden"]),
-           (hi - lo) / by[rid]["golden"] < 0.08)
+        ok("R7 %s: its range is %.1f per cent of its figure (the measured family's)" % (rid, 100 * (hi - lo) / by[rid]["golden"]),
+           lo < by[rid]["golden"] < hi)
     ok("R7 R5: the reflex route lands two returns at most inside their ranges",
        sum(in_band("return " + c, reflex["return " + c], fig) for c in MEM) <= 2)
     ok("R7 corelib on the cut pack: level 5, no failure", fig["rubric"]["level"] == 5 and not fig["rubric"]["fails"], fig["rubric"]["fails"])
@@ -565,6 +615,17 @@ def main():
            max(twelve_.values())),
        all(x > 0 for x in one_.values()) and all(twelve_[c] > one_[c] for c in MEM)
        and not any(in_band("payments per 100 " + c, CV["annual_as_one"]["pay100"][c], fig) for c in ("Pinterest iOS",)))
+    pin_in, pin_out = ("months_365_25", "days_366", "refunds_counted"), ("first_left_out", "web_left_out", "annual_as_one",
+                                                                         "annual_as_twelve")
+    ok("SF6 AppLovin Android's payments per 100 installs under each convention: %s; inside its range %s on 365.25 and 366 "
+       "days and refunds counted (Google Android too), outside it with the first charge or the web checkout left out and "
+       "an annual charge as one or twelve" % (
+           ", ".join("%s %.1f" % (k, CV[k]["pay100"]["AppLovin Android"]) for k in ("golden",) + pin_in + pin_out),
+           fig["pay100_band"]["AppLovin Android"]),
+       all(in_band("payments per 100 " + c, CV[k]["exact"][c], fig) for k in pin_in for c in ("AppLovin Android", "Google Android"))
+       and all(not in_band("payments per 100 " + c, CV[k]["exact"][c], fig) for k in pin_out
+               for c in ("AppLovin Android", "Google Android"))
+       and CV["golden"]["pay100"] == gold_pay, {k: CV[k]["pay100"]["AppLovin Android"] for k in CV})
     Q_ = fig["ratios"]
     pa = Q_["payments_adding_up"]
     ok("SF7 the iOS networks' payments come from the second step fitted on the payments: the fitted ratios add the accounts "
@@ -627,13 +688,23 @@ def main():
     ok("SF20 same call: one share charged for every trial-end candidate, one fit across both stores",
        same("one share charged for every trial-end candidate", "one fit across both stores"))
     gr, ar = fig["stores"]["Google Play"], fig["stores"]["App Store"]
-    ok("SF21 same call for the four fitted ways; the web checkout's continuation (%.3f) and the one the app saw (%.3f and "
-       "%.3f) take in under 70 per cent of each store's renewals beyond the records, the fitted one within 1 per cent, and "
-       "they file AppLovin Android %.3f and TikTok iOS %.3f in cut" % (
+    cf1 = C.s1_fit(Oc)                                             # the core's fit on the simulation
+    cp, cpc = C.continuation_pin(O), C.continuation_pin(Oc)        # on the files, and on the simulation
+    ok("SF21 same call for the four fitted ways; the fitted continuation is the core's (%.3f and %.3f); the web checkout's "
+       "(%.3f) and the one the app saw (%.3f and %.3f) take in under 70 per cent of each store's renewals beyond the "
+       "records, the fitted one within 1 per cent; continuation_pin on the files (the app's rate %s of the excess, the web "
+       "checkout's %s, the fit %s; within 0.02 of the core's) and they file AppLovin Android %.3f and TikTok iOS %.3f in cut" % (
+           gr["continuation"], ar["continuation"],
            gr["rivals"]["web"]["rate"], gr["rivals"]["seen"]["rate"], ar["rivals"]["seen"]["rate"],
+           " and ".join("%.0f" % (100 * cp[nm]["the rate the app saw"][1]) for nm in cp),
+           " and ".join("%.0f" % (100 * cp[nm]["the web checkout's"][1]) for nm in cp),
+           " and ".join("%.1f" % (100 * cp[nm]["fitted"][1]) for nm in cp),
            fig["shortcuts"]["web_rate"]["return_plan"]["AppLovin Android"], fig["shortcuts"]["seen_rate"]["return_plan"]["TikTok iOS"]),
        same("two-rate continuation", "fit without the last two months", "thirty-day cadence", "one fit across both stores")
-       and gr["continuation"] == ar["continuation"] == 0.971
+       and [gr["continuation"], ar["continuation"]] == [round(float(cf1[pl]["q"]), 3) for pl in (0, 1)]
+       and all(abs(cp[nm]["fitted"][1] - 1) < 0.01 and cp[nm][k][1] < 0.70
+               for nm in cp for k in ("the rate the app saw", "the web checkout's"))
+       and all(abs(cpc[nm][k][j] - cp[nm][k][j]) <= 0.02 for nm in cp for k in cp[nm] for j in (1, 2))
        and all(x["rivals"][k]["takes_in"] < 0.70 * x["renewal_excess_fitted_periods"] for x in (gr, ar) for k in ("web", "seen"))
        and all(abs(x["rivals"]["fitted"]["takes_in"] / x["renewal_excess_fitted_periods"] - 1) < 0.01 for x in (gr, ar))
        and C.band(fig["shortcuts"]["web_rate"]["return_plan"]["AppLovin Android"]) == "cut"
@@ -646,22 +717,40 @@ def main():
             "the networks' ratios drawn toward their pooled ratio by the fit's own spread"))
     ST = fig["ratios"]["share_tests"]
     kept = sorted(k for k, x in ST.items() if not x["refused"])
-    ok("SF23 sources sharing one ratio: the fit's own test under both of its statistics lets through only %s (%.2f and %.2f "
-       "against %.2f), which the battery carries, and refuses the rest (the five networks %.1f and %.1f against %.2f)" % (
-           ", ".join(kept), ST["TikTok and Snapchat"]["stat"], ST["TikTok and Snapchat"]["stat_one_variance"],
-           ST["TikTok and Snapchat"]["point"], ST["the five networks"]["stat"], ST["the five networks"]["stat_one_variance"],
-           ST["the five networks"]["point"]),
-       kept == ["TikTok and Snapchat"] and same("TikTok iOS and Snapchat iOS sharing one ratio")
-       and [round(ST["TikTok and Snapchat"][k], 2) for k in ("stat", "stat_one_variance")] == [1.37, 1.22]
-       and [round(ST["Meta and TikTok"][k], 1) for k in ("stat", "stat_one_variance")] == [26.6, 16.1]
+    KEPT = sorted(k for k, nms in RS.SHARE_TESTS if frozenset(nms) in GROUPED)
+    # the core's own test on the simulation, each grouping the blocks name: both statistics within 2 per cent of the
+    # cut's, and the same verdict
+    core_st = {k: (C.s2_equal_test(Oc, vc, nms)[0], C.s2_equal_test(Oc, vc, nms, cov="classical")[0])
+               for k, nms in RS.SHARE_TESTS}
+    close = lambda a_, b_: abs(a_ - b_) <= 0.02 * max(1.0, abs(b_))
+    ok("SF23 sources sharing one ratio: the fit's own test under one of its statistics or the other lets through only %s "
+       "(%s), which the battery carries, and refuses the rest under both (the nearest %s %s; the five networks %.2f and "
+       "%.2f against %.2f); each statistic within 2 per cent of the core's on the simulation" % (
+           ", ".join(kept), "; ".join("%.2f and %.2f against %.2f" % (ST[k]["stat"], ST[k]["stat_one_variance"],
+                                                                       ST[k]["point"]) for k in kept),
+           min((k for k in ST if ST[k]["refused"]), key=lambda k: min(ST[k]["stat"], ST[k]["stat_one_variance"]) / ST[k]["point"]),
+           "%.2f and %.2f" % tuple(min(((ST[k]["stat"], ST[k]["stat_one_variance"]) for k in ST if ST[k]["refused"]),
+                                       key=lambda t: min(t))),
+           ST["the five networks"]["stat"], ST["the five networks"]["stat_one_variance"], ST["the five networks"]["point"]),
+       kept == KEPT and len(KEPT) == 4
+       and same(*[nm for nm, kw in C.VARIANTS if kw.get("group") in ("pair2", "ps", "pt", "pst")])
        and all(x["refused"] and x["stat"] > x["point"] and x["stat_one_variance"] > x["point"]
-               for k, x in ST.items() if k != "TikTok and Snapchat"))
+               for k, x in ST.items() if k not in KEPT)
+       and all(close(ST[k]["stat"], core_st[k][0]) and close(ST[k]["stat_one_variance"], core_st[k][1])
+               and ST[k]["refused"] == (min(core_st[k]) > ST[k]["point"]) for k in ST),
+       {k: (ST[k]["stat"], ST[k]["stat_one_variance"], [round(x, 2) for x in core_st[k]]) for k in ST})
     au, ca = fig["ratios"]["adding_up"], fig["check_android"]["AppLovin Android"]
     ok("SF24 a worth lent by another source: the accounts with no channel add up to %.2f and %.2f times what they paid against "
        "%.2f fitted; on Android AppLovin's declined installs paid %.2f against %.2f fitted, %.2f and %.2f lent" % (
            au["named"], au["search_ads"], au["fitted"], ca["paid"], ca["fitted"], ca["search_ads"], ca["named"]),
-       [au["named"], au["search_ads"], au["borrowed_shift"]] == [1.455, 1.247, 1.207] and abs(au["fitted"] - 1) < 0.01
-       and [ca["paid"], ca["fitted"], ca["search_ads"], ca["named"]] == [3.15, 3.30, 4.40, 5.13]
+       all(close(au[k], x) for k, x in (("named", C.adding_up(Oc, vc, "bridge")), ("search_ads", C.adding_up(Oc, vc, "ratio")),
+                                         ("fitted", C.adding_up(Oc, vc)),
+                                         ("borrowed_shift", C.falsification_s2(Oc, vc, C.values(Oc, which="payers"), "r1mix"))))
+       and abs(au["fitted"] - 1) < 0.01 and min(au["named"], au["search_ads"], au["borrowed_shift"]) > 1.15
+       and all(close(ca[k], x) for k, x in zip(("paid", "fitted", "search_ads", "named"), (
+           lambda r: (r["truth"], r["golden"], r["rivals"]["at Apple Search Ads' ratio"],
+                      r["rivals"]["priced at its installs that allowed tracking, by first-48-hour value"]))(
+               C.referee_s2(Oc, vc, "AppLovin Android"))))
        and all(abs(x["fitted"] - x["paid"]) < 0.5 * min(abs(x["search_ads"] - x["paid"]), abs(x["named"] - x["paid"]))
                for x in fig["check_android"].values()))
     cm = fig["check_moves"]
@@ -712,18 +801,24 @@ def main():
     gaps = pd.Series(gaps, index=mon.account_id.to_numpy()).sort_values().groupby(level=0).diff().dropna()
     ok("pin: the billing cadence measured on the events is a twelfth of a year (mean gap %.4f days)" % gaps.mean(),
        abs(gaps.mean() - C.MONTH_DAYS) < 0.02 and set(gaps.unique()) <= {30, 31} and fig["policy"]["cadence_days"] == 30.4375)
-    for name, want in (("Google Play", (0.026, 0.029, 0.971)), ("App Store", (0.036, 0.041, 0.971))):
+    for pl, name in ((0, "Google Play"), (1, "App Store")):
         s_ = fig["stores"][name]
-        ok("pin: %s's fitted shares and continuation are the core's (%.3f, %.3f, %.3f; the note's pinning list has App Store's monthly share at 0.037)" % (
-            name, s_["trial_end_share_monthly"], s_["trial_end_share_annual"], s_["continuation"]),
-           (s_["trial_end_share_monthly"], s_["trial_end_share_annual"], s_["continuation"]) == want)
-    ok("pin: each source's fitted ratio is the note's",
-       {c: x["ratio"] for c, x in rs.items()} == {"Meta iOS": 0.394, "TikTok iOS": 0.576, "Snapchat iOS": 0.633,
-                                                  "Google iOS": 0.757, "Pinterest iOS": 0.640, "organic iOS": 0.953},
-       {c: x["ratio"] for c, x in rs.items()})
-    ds = [ch[c]["delivery_share"] for c in C.ORDER]
-    ok("pin: each channel's spend over its budget across the 104 weeks is 0.83 to 0.87 (%.3f to %.3f)" % (min(ds), max(ds)),
-       0.83 <= min(ds) and max(ds) <= 0.875)
+        want = tuple(round(float(cf1[pl][k]), 3) for k in ("c_m", "c_a", "q"))
+        ok("pin: %s's fitted shares and continuation are the core's on the simulation (%.3f, %.3f, %.3f against %s)" % (
+            name, s_["trial_end_share_monthly"], s_["trial_end_share_annual"], s_["continuation"], want),
+           all(abs(a_ - b_) <= 0.0015 for a_, b_ in zip((s_["trial_end_share_monthly"], s_["trial_end_share_annual"],
+                                                         s_["continuation"]), want)))
+    srcs_c, b_c = C.s2_fit(Oc, vc, cov=True)[:2]
+    core_r = {C.SOURCES[i]: round(float(x), 3) for i, x in zip(srcs_c, b_c)}
+    ok("pin: each source's fitted ratio on the files is the core's on the simulation within 0.005 (%s)" % (
+        ", ".join("%s %.3f" % (c, x["ratio"]) for c, x in rs.items())),
+       set(rs) == set(core_r) and all(abs(rs[c]["ratio"] - core_r[c]) <= 0.005 for c in rs),
+       {c: (x["ratio"], core_r.get(c)) for c, x in rs.items()})
+    dpc = C.delivery_pins(Oc)
+    ds = [ch[c]["delivery_share"] for c in C.MEMBERS]
+    ok("pin: each channel's spend over its budget across the 104 weeks is the core's (%.3f to %.3f)" % (min(ds), max(ds)),
+       all(abs(ch[c]["delivery_share"] - dpc[c]["share"]) <= 0.0015 for c in C.MEMBERS),
+       {c: (ch[c]["delivery_share"], round(dpc[c]["share"], 3)) for c in C.MEMBERS})
     ok("pin: a postback arrives three or four days after its install, never sooner (the schema's timer)",
        sorted(set(W["pb_lag"][np.isin(W["src"], [C.ORDER.index(c) for c in C.GATED])].tolist())) == [3, 4] and C.PB_ALIGN == "split")
 

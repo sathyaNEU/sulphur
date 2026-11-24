@@ -92,6 +92,22 @@ def store_block(O, fits):
     return out, webq
 
 
+# the groupings of sources whose shared ratio the fit's own test is asked about in the blocks (SF23)
+SHARE_TESTS = (("Meta and TikTok", ("Meta iOS", "TikTok iOS")), ("TikTok and Snapchat", ("TikTok iOS", "Snapchat iOS")),
+               ("Snapchat and Pinterest", ("Snapchat iOS", "Pinterest iOS")),
+               ("TikTok and Pinterest", ("TikTok iOS", "Pinterest iOS")),
+               ("TikTok, Snapchat and Pinterest", ("TikTok iOS", "Snapchat iOS", "Pinterest iOS")),
+               ("Snapchat and Google", ("Snapchat iOS", "Google iOS")),
+               ("Snapchat, Google and Pinterest", ("Snapchat iOS", "Google iOS", "Pinterest iOS")),
+               ("Meta, TikTok and Snapchat", ("Meta iOS", "TikTok iOS", "Snapchat iOS")),
+               ("the four social networks", ("Meta iOS", "TikTok iOS", "Snapchat iOS", "Pinterest iOS")),
+               ("the five networks", ("Meta iOS", "TikTok iOS", "Snapchat iOS", "Google iOS", "Pinterest iOS")),
+               ("Google and Pinterest", ("Google iOS", "Pinterest iOS")),
+               ("Google, Pinterest and organic", ("Google iOS", "Pinterest iOS", "organic iOS")),
+               ("Pinterest and organic", ("Pinterest iOS", "organic iOS")),
+               ("Google and organic", ("Google iOS", "organic iOS")))
+
+
 def ratio_block(O, v, vm):
     """each source's fitted ratio with its standard error (on the revenue, and refitted on the monthly payments), the
     adding-up overall and by market, which sources could share a ratio, and how far the fitted ratios stand from the
@@ -145,14 +161,7 @@ def ratio_block(O, v, vm):
     out["payments_at_revenue_ratios"] = carried
     out["payments_at_payment_ratios"] = own
     tests = {}
-    for key, nms in (("Meta and TikTok", ("Meta iOS", "TikTok iOS")), ("TikTok and Snapchat", ("TikTok iOS", "Snapchat iOS")),
-                     ("Meta, TikTok and Snapchat", ("Meta iOS", "TikTok iOS", "Snapchat iOS")),
-                     ("the four social networks", ("Meta iOS", "TikTok iOS", "Snapchat iOS", "Pinterest iOS")),
-                     ("the five networks", ("Meta iOS", "TikTok iOS", "Snapchat iOS", "Google iOS", "Pinterest iOS")),
-                     ("Google and Pinterest", ("Google iOS", "Pinterest iOS")),
-                     ("Google, Pinterest and organic", ("Google iOS", "Pinterest iOS", "organic iOS")),
-                     ("Pinterest and organic", ("Pinterest iOS", "organic iOS")),
-                     ("Google and organic", ("Google iOS", "organic iOS"))):
+    for key, nms in SHARE_TESTS:
         st, _d = C.s2_equal_test(O, v, nms)
         sc, _d = C.s2_equal_test(O, v, nms, cov="classical")
         pt = CHI[len(nms) - 1]
