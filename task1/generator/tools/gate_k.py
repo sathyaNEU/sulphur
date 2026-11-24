@@ -11,7 +11,7 @@ import sys, json
 sys.path.insert(0, _GEN)
 import core as C
 fig = json.load(open(sys.argv[1]))
-new = fig["pack_shifts"]
+new = {k: v for k, v in fig["pack_shifts"].items() if k in C.PACK_SHIFTS}   # the Monday months are crossed in core itself
 names = [n for n in C.PACK_SHIFTS]
 assert set(new) == set(names), (sorted(new), names)
 print("PACK_SHIFTS, core (last cut) against this cut:")

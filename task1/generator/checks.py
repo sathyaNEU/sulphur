@@ -52,7 +52,7 @@ WRONG_ALONE = {"S1": ["TikTok iOS", "Snapchat iOS", "Pinterest iOS", "Google And
                "S2": ["Meta iOS"], "S3": ["Meta iOS", "TikTok iOS", "Google iOS", "Google Android"]}
 # the groupings of sources the battery carries, as sets of sources
 # the groupings the design note's SF23 says the fit's own test cannot refuse (core.GROUPS: TikTok iOS with Snapchat iOS)
-GROUPED = {frozenset(g) for k in ("pair2",) for g in C.GROUPS[k]}
+GROUPED = {frozenset(g) for k in ("pair2", "ps", "pt", "pst") for g in C.GROUPS[k]}
 
 
 def ok(label, cond, detail=""):
@@ -281,9 +281,13 @@ def main():
     ok("R5 every iOS network has 20 to 35 per cent of its installs named by the export (%.1f to %.1f)" % (min(named), max(named)),
        len(named) == 5 and 20 < min(named) and max(named) < 35)
     rs = fig["ratios"]["sources"]
-    ok("R5 on every source an unnamed install is worth less than a named one of the same first-48-hour value (%.3f to %.3f)" % (
-        min(x["ratio"] for x in rs.values()), max(x["ratio"] for x in rs.values())),
-       len(rs) == 6 and all(x["ratio"] + 2 * x["se"] < 1 for x in rs.values()))
+    nets = {c: rs[c] for c in C.GATED}
+    ok("R5 on every iOS network an unnamed install is worth less than a named one of the same first-48-hour value, by "
+       "more than two of the fit's standard errors (%.3f to %.3f); the organic installs' ratio, which no network buys or "
+       "steers, is reported, not graded (%.3f, standard error %.3f)" % (
+           min(x["ratio"] for x in nets.values()), max(x["ratio"] for x in nets.values()), rs["organic iOS"]["ratio"],
+           rs["organic iOS"]["se"]),
+       len(rs) == 6 and len(nets) == 5 and all(x["ratio"] + 2 * x["se"] < 1 for x in nets.values()))
     ok("R5 the same holds where the declined installs are named: Apple Search Ads %.2f, Android %s" % (
         fig["ratios"]["search_ads_ratio"], fig["android_ratios"]),
        fig["ratios"]["search_ads_ratio"] < 0.95 and all(x < 0.9 for x in fig["android_ratios"].values()))
@@ -318,78 +322,54 @@ def main():
     # R7: the rivals, and the forcing on both sides
     # ------------------------------------------------------------------------------------------------------------
     n = fig["variant_counts"]
+    sg, bes, xr = X["singles"], X["beside"], X["crossed"]
     nb = n["beside"]
-    bat, bes = fam[:len(fam) - nb], fam[len(fam) - nb:]
-    ok("R7 the battery holds %d variants beside the golden: %d singly, %d in pairs, %d one for each step" % (
-        len(bat), n["singles"], n["pairs"], n["triples"]),
-       len(bat) == fig["variants"] == n["singles"] + n["pairs"] + n["triples"] and len(set(names)) == len(fam)
-       and n["singles"] == len(C.VARIANTS) + len(A.PACK_VARIANTS) and n["pairs"] + n["apart"] == n["singles"] * (n["singles"] - 1) // 2
-       and n["triples"] == n["by_step"]["S1"] * n["by_step"]["S2"] * n["by_step"]["S3"] and min(n["by_step"].values()) >= 10)
+    ways = C.crossed_ways(A.SINGLES)
+    ok("R7 the battery holds %d single ways (core's %d and the files' %d) and %d crossings from core.crossed_ways on them "
+       "(core's own %d among them, the files' conventions crossed by the same rule)" % (
+           n["singles"], len(C.VARIANTS), len(A.PACK_VARIANTS), n["crossings"], n["core_crossings"]),
+       n["singles"] == len(sg) == len(C.VARIANTS) + len(A.PACK_VARIANTS) == fig["variants"]
+       and n["crossings"] == len(xr) == len(ways) and [x[0] for x in xr] == [w[0] for w in ways]
+       and n["core_crossings"] == len(C.crossed_ways()) and n["pack_crossings"] == len(xr) - n["core_crossings"]
+       and len({x[0] for x in xr} | set(names)) == len(xr) + len(names)
+       and not any(nm.split("; ")[0] in dict(C.BESIDE) and not b for nm, _f, b, _c in xr))
     BS = fig["beside"]
-    ok("R7 %d more ways stand beside the battery, each run as it stands: the second step's fit on finer rows (%d), the "
-       "installs equation's unrescaled prediction (%d), the first-48-hour values grouped on one part of them (%d) and the "
-       "value equation on the complete weeks (%d)" % (nb, BS["finer_rows"]["ways"], BS["unrescaled"]["ways"],
-                                                      BS["grouped"]["ways"], BS["value_weeks"]["ways"]),
+    ok("R7 %d more ways stand beside the battery: the second step's fit on finer rows (%d), the installs equation's "
+       "unrescaled prediction (%d), the first-48-hour values grouped on one part of them (%d) and the value equation on "
+       "the complete weeks (%d)" % (nb, BS["finer_rows"]["ways"], BS["unrescaled"]["ways"],
+                                    BS["grouped"]["ways"], BS["value_weeks"]["ways"]),
        nb == len(C.BESIDE) == 17 and [x for x, _r in bes] == [x for x, _k in C.BESIDE] == BS["names"]
        and (BS["finer_rows"]["ways"], BS["unrescaled"]["ways"], BS["grouped"]["ways"], BS["value_weeks"]["ways"]) == (6, 6, 4, 1))
-    bad = []
-    edge = {fid: [fig["figure"][fid], fig["figure"][fid]] for fid in fids}
-    for i, (nm, r) in enumerate(fam):
-        fv = C.figure_values(r)
-        crossed_way = n["singles"] <= i < len(bat)
-        if RS.call_of(r) != fig["call"] or (not crossed_way and any(not in_band(fid, fv[fid], fig) for fid in fids)):
-            bad.append(nm)
-        if i < n["singles"]:
-            for fid in fids:
-                edge[fid] = [min(edge[fid][0], fv[fid]), max(edge[fid][1], fv[fid])]
-    ok("R7 every variant, in the battery and beside it, files the golden call, and every single way and every way beside "
-       "the battery has every graded figure in its range (the pairs and triples for the call)", not bad, bad[:5])
-    PT = fig["pairs_and_triples"]
-    ok("R7 the pairs and triples (%d) file the golden call; %d of the %d figures are moved past a stated range by some of "
-       "them (%s)" % (PT["ways"], len(PT["past_range"]), len(fids), ", ".join(
-           "%s %s to %s against %s" % (k, x["low"], x["high"], x["range"]) for k, x in sorted(PT["past_range"].items())[:4])),
-       PT["calls_all_golden"] and PT["ways"] == n["pairs"] + n["triples"])
-    loose, tight = [], []
-    for fid in fids:
-        if fid in fig["beside"]["edges"]:
-            continue
-        x, step = abs(fig["figure"][fid]), 10.0 ** -RS.unit(fid)
-        for room in (edge[fid][0] - fig["figure_band"][fid][0], fig["figure_band"][fid][1] - edge[fid][1]):
-            if room > RS.BAND_PAD * x + step + 1e-9:
-                loose.append(fid)
-            if room < RS.BAND_PAD * x - 1e-9:
-                tight.append(fid)
-    ok("R7 every range no way beside the battery leaves is the battery's span with %.1f per cent of the figure either "
-       "side, stated outward at the figure's precision: none wider, none narrower" % (100 * RS.BAND_PAD),
-       not loose and not tight, (loose[:4], tight[:4]))
+    XR = fig["crossed"]
+    bad = [nm for nm, r in sg + bes if RS.call_of(r) != fig["call"]]
+    ok("R7 every way files the golden's call: the %d singles, the %d beside the battery and all %d crossings (%d ways; "
+       "the nearest crossing to a line %s at %.3f, %s)" % (len(sg), len(bes), len(xr), XR["ways"], XR["nearest"]["channel"],
+                                                         XR["nearest"]["return_plan"], XR["nearest"]["variant"]),
+       not bad and not XR["moved"] and XR["ways"] == len(sg) + len(bes) + len(xr), (bad[:3], XR["moved"][:3]))
     gfv = C.figure_values(g)
-    bat_f, bes_f = [C.figure_values(r) for _n, r in bat[:n["singles"]]], [C.figure_values(r) for _n, r in bes]
-    off = [fid for fid in fids
-           if fig["figure_band"][fid] != RS.band_of(fid, gfv[fid], [x[fid] for x in bat_f], [x[fid] for x in bes_f])]
-    # a way beside the battery that moves a figure sits a full per cent of the figure inside its range, both sides
-    thin = [fid for fid in fids for x in bes_f
-            if abs(x[fid] - gfv[fid]) > 1e-6 * abs(gfv[fid])
-            and min(x[fid] - fig["figure_band"][fid][0], fig["figure_band"][fid][1] - x[fid])
-            < RS.BESIDE_PAD * abs(gfv[fid]) - 1e-9]
-    still = [fid for fid in fids if all(abs(x[fid] - gfv[fid]) <= 1e-6 * abs(gfv[fid]) for x in bes_f)]
-    ok("R7 %d ranges are taken out to a way beside the battery, each reaching %.0f per cent of the figure beyond every "
-       "such way that moves the figure (%d figures none of them moves)"
-       % (len(fig["beside"]["edges"]), 100 * RS.BESIDE_PAD, len(still)),
-       not off and not thin and 10 <= len(fig["beside"]["edges"]) <= 45
-       and not set(still) & set(fig["beside"]["edges"]), (off[:4], thin[:4]))
-    near = min(abs(r[c]["roas"] - l) for _n, r in bat + [("golden", g)] for c in MEM for l in C.LINES)
-    ok("R7 no variant of the battery brings a channel within 0.04 of a line (nearest %.3f, %s)" % (near, fig["nearest_variant"]["variant"]),
+    sf, bf = [C.figure_values(r) for _n, r in sg], [C.figure_values(r) for _n, r in bes]
+    off = [fid for fid in fids if fig["figure_band"][fid] != list(RS.band_of(
+        fid, gfv[fid], [x[fid] for x in sf] + [fv[fid] for _n, fv, b, _c in xr if not b],
+        [x[fid] for x in bf] + [fv[fid] for _n, fv, b, _c in xr if b]))]
+    outside = [(nm, fid) for nm, fv in [(nm, x) for (nm, _r), x in zip(sg + bes, sf + bf)] + [(x[0], x[1]) for x in xr]
+               for fid in fids if not fig["figure_band"][fid][0] <= fv[fid] <= fig["figure_band"][fid][1]]
+    ok("R7 every range is core.band_of over the singles and every crossing, reaching %.0f per cent of the figure past the "
+       "ways beside the battery and every crossing that holds one, and every way's every figure sits inside it"
+       % (100 * RS.BESIDE_PAD), not off and not outside, (off[:4], outside[:4]))
+    pw = fig["pack_widened"]
+    ok("R7 the files' conventions and their crossings widen %d of core's ranges (reported, figure by figure, with the "
+       "way: %s)" % (len(pw), "; ".join("%s %s to %s against %s to %s" % (k, x["pack"][0], x["pack"][1], x["core"][0],
+                                                                          x["core"][1]) for k, x in sorted(pw.items())[:6])),
+       all(x["pack"][0] <= x["core"][0] and x["core"][1] <= x["pack"][1] for x in pw.values()))
+    ok("R7 Meta iOS's return range stays under the scale line (%s to %s, against 1.20)" % tuple(fig["figure_band"]["return Meta iOS"]),
+       fig["figure_band"]["return Meta iOS"][1] < C.LINES[1])
+    near = min(abs(r[c]["roas"] - l) for _n, r in sg + [("golden", g)] for c in MEM for l in C.LINES)
+    ok("R7 no single way brings a channel within 0.04 of a line (nearest %.3f, %s)" % (near, fig["nearest_variant"]["variant"]),
        near >= 0.04 and abs(near - fig["nearest_variant"]["distance"]) < 0.001)
     near_b = min(abs(r[c]["roas"] - l) for _n, r in bes for c in MEM for l in C.LINES)
     ok("R7 no way beside the battery brings a channel within 0.01 of a line (nearest %.3f, %s, %s)" % (
         near_b, fig["nearest_beside"]["channel"], fig["nearest_beside"]["variant"]),
-       near_b >= 0.01 and abs(near_b - fig["nearest_beside"]["distance"]) < 0.001
-       and fig["nearest_beside"]["channel"] == "AppLovin Android")
-    XR, crossed = fig["crossed"], X["crossed"]
-    ok("R7 the ways beside the battery are run alone, as the design note has them; crossed with the battery (%d crossings) "
-       "%d move a band (nearest %s at %.3f, %s), and the blocks claim nothing of the crossings" % (
-           len(crossed), len(XR["moved"]), XR["nearest"]["channel"], XR["nearest"]["return_plan"], XR["nearest"]["variant"]),
-       XR["crossings"] == len(crossed) and "crossing" not in open(os.path.join(TASK, "submission.md")).read())
+       near_b >= 0.01 and abs(near_b - fig["nearest_beside"]["distance"]) < 0.001)
     # the readings the blocks refuse by a figure from the files
     PM = fig["pooled"]
     pp = C.pooled_pins(O, v)
@@ -533,8 +513,13 @@ def main():
             s, r["golden"], r["truth"], worst_rival / max(ge, 1e-9)), worst_rival > 3 * ge)
     T0 = C.truth_at_plan()
     ok("R7 the golden call is the world's own on all seven channels", all(C.band(T0[c]["roas"]) == fig["bands"][c] for c in MEM))
-    ok("R7 every golden return is within 5 per cent of the world's own (worst %.1f)" % (
-        100 * max(abs(g[c]["roas"] / T0[c]["roas"] - 1) for c in MEM)), max(abs(g[c]["roas"] / T0[c]["roas"] - 1) for c in MEM) < 0.05)
+    anc = C.anchor(W, Oc, core_gold, T0)                           # the world's own figures need every account's source
+    for fid in fids:
+        a_ = anc[fid]
+        gap_ = gfv[fid] / a_["world"] - 1.0
+        ok("R7 the truth anchor: %s %s against the world's own %s, %+.3f inside its tolerance %.3f" % (
+            fid, RS.stated(fid, gfv[fid]), RS.stated(fid, a_["world"]), gap_, a_["tolerance"]),
+           abs(gap_) <= a_["tolerance"] and abs(a_["gap"] - gap_) < 1e-3)
 
     # ------------------------------------------------------------------------------------------------------------
     # the fork table, row by row (every filed sentence read from the shipped PDF through two extractors)

@@ -229,19 +229,23 @@ def write(path, f):
     thin_c = min(thin["returns"], key=lambda c: min(abs(thin["returns"][c] - x) for x in (lo, hi)))
     names = f["single_variants"]
     assert f["family_calls_all_golden"]
+    xr = f["crossed"]
+    assert not xr["moved"], xr["moved"][:5]                        # no call moves on any single way or crossing
     sp = P["split_pack"]
     tk = P["ratio"]["TikTok iOS"]
     gk = P["ratio"]["Google iOS"]
     assert all(x < tk["pooled"] for x in tk["markets"]) and all(x > gk["pooled"] for x in gk["markets"]), (tk, gk)
     L += ["", "No other conclusion survives. Every other defensible way of taking the steps files the same seven bands, "
-              "and each range above holds the span of their figures with %s per cent of the figure either side, each of "
-              "these taken singly (%s); every two of them that can be taken together and one of each step at once (%s "
-              "more ways) file the same seven bands as well. The closest any comes to a line is %s at %.3f from it." % (
-                  f["band_pad_pct"], "; ".join(names),
-                  _n(f["variant_counts"]["pairs"] + f["variant_counts"]["triples"]), nv["channel"], nv["distance"]),
+              "each taken singly (%s), and every way of crossing them: every two that can be taken together, one way of "
+              "each step at once, and each of the four families below with every single way and every pair of the "
+              "other two steps it can be taken with (%s more ways, %s in all). Each range above holds the span of their "
+              "figures with %s per cent of the figure either side. The closest a single way comes to a line is %s at "
+              "%.3f from it, and the closest of all the crossings %s at %.3f." % (
+                  "; ".join(names), _n(xr["crossings"]), _n(xr["ways"]), f["band_pad_pct"], nv["channel"],
+                  nv["distance"], xr["nearest"]["channel"], xr["nearest"]["distance"]),
           "",
-          "Four more families were run as they stand, each way alone, and wherever one moves a figure its range reaches "
-          "%g per cent of the figure beyond it; each files the same seven bands. The ratios fitted on each market-week's "
+          "Four more families stand beside those ways, and wherever one of them or one of its crossings moves a figure its "
+          "range reaches %g per cent of the figure beyond it; alone, each files the same seven bands. The ratios fitted on each market-week's "
           "accounts split by their own first-48-hour sessions (weighted by one over the accounts, unweighted, or by the "
           "revenue the fit expects) put Meta iOS at %.1f to %.1f payments per 100 installs and its return at %.3f to "
           "%.3f, and TikTok iOS's return at %.3f to %.3f. The installs equation's own prediction at the plan, not scaled, "
