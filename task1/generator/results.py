@@ -660,14 +660,36 @@ def figures(X):
     fids = [nm + c for nm, _k in C.FAMILIES for c in MEM] + [nm for nm, _i in C.PLAN_FIGURES]
     fig = {"call": call_of(g), "bands": {c: C.band(g[c]["roas"]) for c in MEM}}
     fig["by_band"] = {b: [c for c in MEM if fig["bands"][c] == b] for b in ("scale", "hold", "cut")}
-    nb = X["counts"].get("beside", 0)                          # the ways beside the battery sit last in the family
-    ns = X["counts"]["singles"]                                # the ranges hold the single ways; the pairs and the
-    # triples are run for the call (the design note's battery line)
+    sg, bs, xr = X["singles"], X["beside"], X["crossed"]
+    sf, bf = [C.figure_values(r) for _n, r in sg], [C.figure_values(r) for _n, r in bs]
+    ncore = len(C.VARIANTS)                                    # core's battery first, then the files' conventions
+    # each range: core.band_of over the singles and every crossing, the ways beside the battery and every crossing
+    # that holds one of them in the beside list (core.build_spec's rule, the files' own conventions crossed in)
+    rng = lambda fid, core_only=False: band_of(
+        fid, gf[fid],
+        [x[fid] for x in (sf[:ncore] if core_only else sf)] + [fv[fid] for _n, fv, b, cc in xr
+                                                               if not b and (cc or not core_only)],
+        [x[fid] for x in bf] + [fv[fid] for _n, fv, b, cc in xr if b and (cc or not core_only)])
     val, band = {}, {}
+    core_band = {}
     for fid in fids:
         val[fid] = stated(fid, gf[fid])
-        band[fid] = band_of(fid, gf[fid], [x[fid] for x in ff[:ns]], [x[fid] for x in ff[len(ff) - nb:]])
+        band[fid] = rng(fid)
+        core_band[fid] = rng(fid, core_only=True)
     fig["figure"], fig["figure_band"] = val, band
+    # each convention only the files carry, its move on every graded figure (core's PACK_SHIFTS, re-measured on this
+    # cut), and what they and their crossings add to core's ranges, figure by figure, with the way
+    fig["pack_shifts"] = {n: {fid: round(x[fid] / gf[fid] - 1.0, 4) for fid in fids
+                              if abs(x[fid] / gf[fid] - 1.0) >= 0.00005}
+                          for (n, _r), x in zip(sg[ncore:], sf[ncore:])}
+    fig["pack_widened"] = {}
+    for fid in fids:
+        if band[fid] != core_band[fid]:
+            ways = [(n, x[fid]) for (n, _r), x in zip(sg[ncore:], sf[ncore:])] + [(n, fv[fid]) for n, fv, _b, cc in xr
+                                                                              if not cc]
+            lo = min(ways, key=lambda t: t[1]); hi = max(ways, key=lambda t: t[1])
+            fig["pack_widened"][fid] = dict(core=core_band[fid], pack=band[fid],
+                                            low=[lo[0], stated(fid, lo[1])], high=[hi[0], stated(fid, hi[1])])
     for nm, key in FAM_KEY.items():
         fig[key] = {c: val[nm + c] for c in MEM}
         fig[key + "_band"] = {c: band[nm + c] for c in MEM}
@@ -694,12 +716,12 @@ def figures(X):
     fig["route_outside"] = {k: [fid for fid in fids if not band[fid][0] <= stated(fid, x[fid]) <= band[fid][1]]
                             for k, x in list(lf.items()) + [("direct", df), ("rigorous", rf)]
                             + [(k, C.figure_values(r)) for k, r in runs.items()]}
-    bat, bes = fam[:len(fam) - nb], fam[len(fam) - nb:]
-    fig["variants"] = len(bat)
+    bat, bes = sg, bs
+    fig["variants"] = len(sg)
     fig["variant_counts"] = X["counts"]
     fig["band_pad_pct"] = round(100 * BAND_PAD, 1)
     fig["beside_pad_pct"] = round(100 * BESIDE_PAD, 1)
-    fig["single_variants"] = [n for n, _r in fam[:X["counts"]["singles"]]]
+    fig["single_variants"] = [n for n, _r in sg]
     kwof = dict(C.BESIDE)
     of = lambda key: [(n, r) for n, r in bes if key in kwof[n]]
     rows_, carry_, cells_, weeks_ = of("rows"), of("carry"), of("cells"), of("weeks_v")
@@ -713,37 +735,28 @@ def figures(X):
         unrescaled=dict(ways=len(carry_), return_span={c: span(carry_, c, "roas", 3) for c in MEM},
                         installs=[stated("installs the plan buys", r["plan"][0]) for _n, r in carry_]),
         grouped=dict(ways=len(cells_), return_plan={c: span(cells_, c, "roas", 3) for c in MEM}),
-        value_weeks=dict(ways=len(weeks_), return_plan={c: span(weeks_, c, "roas", 3) for c in MEM}),
-        edges=sorted(fid for fid in fids if band[fid] != band_of(fid, gf[fid], [x[fid] for x in ff[:ns]])))
+        value_weeks=dict(ways=len(weeks_), return_plan={c: span(weeks_, c, "roas", 3) for c in MEM}))
     worst = min((abs(r[c]["roas"] - l), c, n) for n, r in bat for c in MEM for l in C.LINES)
     fig["nearest_variant"] = {"distance": math.floor(worst[0] * 1000) / 1000.0, "channel": worst[1], "variant": worst[2]}
     worst = min((abs(r[c]["roas"] - l), c, n) for n, r in bes for c in MEM for l in C.LINES)
     fig["nearest_beside"] = {"distance": math.floor(worst[0] * 1000) / 1000.0, "channel": worst[1], "variant": worst[2]}
-    fig["family_calls_all_golden"] = all(call_of(r) == fig["call"] for _n, r in fam)
-    cr = X.get("crossed") or []
-    if cr:
-        worst = min((abs(r[c]["roas"] - l), c, n, float(r[c]["roas"]), l) for n, r in cr for c in MEM for l in C.LINES)
+    fig["family_calls_all_golden"] = all(call_of(r) == fig["call"] for _n, r in sg + bs)
+    fcall = lambda fv: [C.band(fv["return " + c]) for c in MEM]
+    if xr:
+        worst = min((abs(fv["return " + c] - l), c, n, fv["return " + c], l) for n, fv, _b, _c in xr for c in MEM
+                    for l in C.LINES)
         fig["crossed"] = dict(
-            crossings=len(cr), moved=sorted(n for n, r in cr if call_of(r) != fig["call"]),
+            crossings=len(xr), core_crossings=sum(cc for *_x, cc in xr), pack_crossings=sum(not cc for *_x, cc in xr),
+            ways=len(sg) + len(bs) + len(xr),
+            moved=sorted(n for n, fv, _b, _c in xr if fcall(fv) != [fig["bands"][c] for c in MEM]),
             nearest=dict(distance=math.floor(worst[0] * 1000) / 1000.0, channel=worst[1], variant=worst[2],
                          return_plan=stated("return " + worst[1], worst[3]), line=worst[4]),
-            return_range={c: [round(min(float(r[c]["roas"]) for _n, r in cr), 3),
-                              round(max(float(r[c]["roas"]) for _n, r in cr), 3)] for c in MEM})
-    crossed_ = [C.figure_values(r) for _n, r in fam[ns:len(fam) - nb]]
-    past = {}
-    for fid in fids:
-        lo, hi = band[fid]
-        xs = [stated(fid, x[fid]) for x in crossed_]
-        out_ = [x for x in xs if not lo <= x <= hi]
-        if out_:
-            past[fid] = dict(ways=len(out_), low=min(xs), high=max(xs), range=band[fid],
-                             crossed_range=list(band_of(fid, gf[fid], [x[fid] for x in ff[:len(ff) - nb]],
-                                                        [x[fid] for x in ff[len(ff) - nb:]])))
-    fig["pairs_and_triples"] = dict(ways=len(crossed_), calls_all_golden=all(call_of(r) == fig["call"] for _n, r in
-                                                                            fam[ns:len(fam) - nb]),
-                                    past_range=past)
-    fig["variant_range"] = {c: [round(min(float(r[c]["roas"]) for _n, r in fam), 3),
-                                round(max(float(r[c]["roas"]) for _n, r in fam), 3)] for c in MEM}
+            return_range={c: [round(min(fv["return " + c] for _n, fv, _b, _c in xr), 3),
+                              round(max(fv["return " + c] for _n, fv, _b, _c in xr), 3)] for c in MEM})
+    fig["variant_range"] = {c: [round(min([float(r[c]["roas"]) for _n, r in sg + bs]
+                                          + [fv["return " + c] for _n, fv, _b, _c in xr]), 3),
+                                round(max([float(r[c]["roas"]) for _n, r in sg + bs]
+                                          + [fv["return " + c] for _n, fv, _b, _c in xr]), 3)] for c in MEM}
     # every channel of the records, for the working sheets (Apple Search Ads sits outside the plan)
     v = X["v"]
     T = C.s2_cells(O, v)
@@ -852,11 +865,10 @@ def spec_of(X, fig, R):
     g, fam, lat, direct, rig, runs, over = (X["golden"], X["family"], X["lattice"], X["direct"], X["rigorous"], X["runs"],
                                             X["over"])
     T = C.truth_at_plan()
-    ns, nb = X["counts"]["singles"], X["counts"].get("beside", 0)
-    fam = fam[:ns] + fam[len(fam) - nb:]                           # the core's family: the single ways and the ways
-    ffs = R["ff"][:ns] + R["ff"][len(R["ff"]) - nb:]               # beside them (core.build_spec), as the ranges are
+    xf = [fv for _n, fv, _b, _c in X["crossed"]]                  # core.build_spec's family: the singles, the ways
+    ffs = R["ff"] + xf                                             # beside the battery and every crossing
     members = {c: dict(lines=list(C.LINES), truth=float(T[c]["roas"]), golden=float(g[c]["roas"]),
-                       family=[float(r[c]["roas"]) for _n, r in fam],
+                       family=[float(r[c]["roas"]) for _n, r in fam] + [x["return " + c] for x in xf],
                        routes=dict(direct=float(direct[c]["roas"]), rigorous=float(rig[c]["roas"])))
                for c in MEM}
     own = set(C.COMPONENTS.values())
@@ -969,15 +981,15 @@ def effort(X, fig, R, pert):
     routes.append({"name": fig["route_names"]["direct"], "answer": call_of(direct)})
     routes.append({"name": fig["route_names"]["rigorous"], "answer": call_of(X["rigorous"])})
     routes += [{"name": "run route " + k, "answer": call_of(r)} for k, r in runs.items()]
-    singles = fam[:X["counts"]["singles"]]
-    nb = X["counts"].get("beside", 0)
-    crossed = fam[len(singles):len(fam) - nb]
+    singles, crossed = X["singles"], X["crossed"]
+    xcall = lambda fv: sorted("%s: %s" % (c, C.band(fv["return " + c])) for c in MEM)
     forcing = {"kind": "set", "golden_answer": fig["call"],
                "golden_family": [{"name": "the golden", "answer": fig["call"]}]
                + [{"name": n, "answer": call_of(r)} for n, r in singles]
-               + [{"name": "every pair and every triple of those ways, one from each step (%d)" % len(crossed),
-                   "answer": fig["call"] if all(call_of(r) == fig["call"] for _n, r in crossed) else ["a crossed way moves the call"]}]
-               + [{"name": n, "answer": call_of(r)} for n, r in fam[len(fam) - nb:]],
+               + [{"name": n, "answer": call_of(r)} for n, r in X["beside"]]
+               + [{"name": "every crossing of those ways, core.crossed_ways on the singles (%d)" % len(crossed),
+                   "answer": fig["call"] if all(xcall(fv) == fig["call"] for _n, fv, _b, _c in crossed)
+                   else ["a crossed way moves the call"]}],
                "shortcuts": [{"name": r["name"], "answer": r["answer"]} for r in routes[1:]],
                "perturbations": [{"input": "%s, times %.3f" % (n, f), "answer": sorted("%s: %s" % (c, C.band(x[c])) for c in MEM)}
                                  for n, f, x, _ok in pert]}

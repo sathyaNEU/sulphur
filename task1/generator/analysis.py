@@ -5,7 +5,6 @@ before they are set against it, and the conventions the files leave to the analy
 records are compared on, where a refunded purchase is netted, the clock an install runs from, the month a week
 belongs to) are properties of a view of the observations, each run as a variant."""
 import datetime as dt
-import itertools
 import os
 import sys
 
@@ -421,17 +420,10 @@ def use_plan(O):
 
 def route(O, s1="golden", s2="golden", s3="golden", **kw):
     """core.route under a variant's conventions: the ones that are readings of the files go to a view of the
-    observations, the month a week belongs to is swapped in core for the length of the call, the rest are core's"""
+    observations, the rest are core's (the week's month from its Monday through core._on_mondays)"""
     kw = dict(kw)
     conv = {k: kw.pop(k) for k in VIEW_KEYS if k in kw}
     V = O.view(**conv) if conv else O
-    if kw.get("month") == "mon":
-        keep = C.WMONTH, C.PLAN_MONTH
-        C.WMONTH, C.PLAN_MONTH = MON
-        try:
-            return C.route(V, s1, s2, s3, **kw)
-        finally:
-            C.WMONTH, C.PLAN_MONTH = keep
     return C.route(V, s1, s2, s3, **kw)
 
 
@@ -471,127 +463,75 @@ def plan_blocks(O):
                 apart_on_monday=int((chg & mon & apart).sum()), off=int((chg & ~thu).sum()))
 
 
-THING = {"dbar_weeks": "delivery share weeks", "dbar_from": "delivery share weeks"}
-ORGANIC_SHARED = ("gpo", "po", "go")
+SINGLES = C.VARIANTS + PACK_VARIANTS                 # core's battery and the conventions only the files carry
+_XP = {}
 
 
-def _grouped(kw):
-    """the sources a convention puts on a shared ratio"""
-    return {nm for g in C.groups_of(kw["group"]) for nm in g} if kw.get("group") else set()
+def _way_one(kw):
+    """one way of the crossed family on the record the workers hold: its graded figures"""
+    return C.figure_values(route(_XP["O"], **kw))
 
 
-def merged(ka, kb):
-    """two conventions taken together; two groupings of different sources are both made"""
-    both = dict(ka, **kb)
-    if ka.get("group") and kb.get("group"):
-        both["group"] = ka["group"] + "+" + kb["group"]
-    return both
+def crossed_family(O, ways):
+    """the graded figures of every way given, worked across the machine's cores (forked, so every worker holds the
+    same record and the figures do not depend on the cores); serially where fork is not available"""
+    import multiprocessing as mp
+    kws = [kw for _nm, kw in ways]
+    _XP.clear()
+    _XP["O"] = O
+    try:
+        with mp.get_context("fork").Pool(max(1, min(14, (os.cpu_count() or 2) - 2))) as Pl:
+            return Pl.map(_way_one, kws, chunksize=8)
+    except (ValueError, OSError):
+        return [_way_one(kw) for kw in kws]
 
 
-NO_LIGHTER_CELL = ("tier8", "sess8", "sess4", "tp4")     # groupings on which the lighter half of a split fit is empty
-
-
-def together(ka, kb):
-    """whether two conventions can be taken together. They cannot when they are two ways of one thing: the same
-    setting (two groupings of sources that share a source among them, where two that share none are both made); the
-    weeks the delivery share is taken over; the organic installs' ratio taken from Apple Search Ads and shared with
-    a network; the ratios fitted apart for lighter and heavier use on a grouping of the first-48-hour values that
-    leaves the lighter fit no cell (the eight cells, which put every trial starter in the heavier half; the sessions
-    bucket alone and the flags alone, where every group that holds a trial or a purchase counts as heavier)"""
-    same = {THING.get(k, k) for k in ka} & {THING.get(k, k) for k in kb}
-    if same == {"group"} and not (_grouped(ka) & _grouped(kb)):
-        same = set()
-    if same:
-        return False
-    both = merged(ka, kb)
-    if "org_pin" in both and set(both.get("group", "").split("+")) & set(ORGANIC_SHARED):
-        return False
-    if both.get("rows") == "market-week-tier" and both.get("cells") in NO_LIGHTER_CELL:
-        return False
-    return True
-
-
-def battery(O, cross=True, verbose=False):
-    """every defensible way of taking a step: core's variants and the conventions only the files carry, each
-    alone; then every two of them that can be taken together; then one way of each of the three steps together.
-    Returns [(name, route)] and how many of each."""
-    singles = [(nm, dict(kw)) for nm, kw in C.VARIANTS + PACK_VARIANTS]
-    fam = [(nm, route(O, **kw)) for nm, kw in singles]
-    counts = dict(singles=len(fam), pairs=0, triples=0, apart=0)
-    step = {}
-    for nm, kw in singles:
-        step.setdefault(step_of(kw), []).append((nm, kw))
-    counts["by_step"] = {k: len(step[k]) for k in ("S1", "S2", "S3")}
+def battery(O, cross=True):
+    """every defensible way of taking a step: core's variants and the conventions only the files carry, each alone
+    (singles), the ways that stand beside the battery (beside), and the crossed family core.crossed_ways builds on
+    the singles (every two that can be taken together, one way of each step at once, each way beside the battery with
+    every single and every pair of the other two steps it can be taken with). Returns singles and beside as
+    [(name, route)], the crossings as [(name, figures, holds a way beside the battery, is a crossing of core's own
+    family)], and how many of each."""
+    ways, figs = [], []
+    if cross:                                                      # forked first, before any fit runs in this process
+        ways = C.crossed_ways(SINGLES)
+        figs = crossed_family(O, ways)
+    singles = [(nm, route(O, **kw)) for nm, kw in SINGLES]
     beside = [(nm, route(O, **kw)) for nm, kw in C.BESIDE]
-    counts["beside"] = len(beside)
+    counts = dict(singles=len(singles), beside=len(beside), crossings=0,
+                  by_step={s: sum(C.step_of(kw) == s for _n, kw in SINGLES) for s in ("S1", "S2", "S3")})
     if not cross:
-        return fam + beside, counts
-    for (na, ka), (nb, kb) in itertools.combinations(singles, 2):
-        if together(ka, kb):
-            fam.append((na + "; " + nb, route(O, **merged(ka, kb))))
-        else:
-            counts["apart"] += 1
-    counts["pairs"] = len(fam) - counts["singles"]
-    for (na, ka), (nb, kb), (nc, kc) in itertools.product(step["S1"], step["S2"], step["S3"]):
-        fam.append(("; ".join((na, nb, nc)), route(O, **dict(ka, **kb, **kc))))
-    counts["triples"] = len(fam) - counts["singles"] - counts["pairs"]
-    return fam + beside, counts
-
-
-def crossings(O):
-    """every way that stands beside the battery, crossed with it: with each single way of the battery it can be taken
-    with, and with one way of each of the other two steps at once. Returns [(name, route)]."""
-    singles = [(nm, dict(kw)) for nm, kw in C.VARIANTS + PACK_VARIANTS]
-    step = {}
-    for nm, kw in singles:
-        step.setdefault(step_of(kw), []).append((nm, kw))
-    out = []
-    for bn, bk in C.BESIDE:
-        for nm, kw in singles:
-            if together(bk, kw):
-                out.append((bn + "; " + nm, route(O, **merged(bk, kw))))
-        a, b = [s for s in ("S1", "S2", "S3") if s != step_of(bk)]
-        for (na, ka), (nb, kb) in itertools.product(step[a], step[b]):
-            if together(bk, ka) and together(bk, kb):
-                out.append(("; ".join((bn, na, nb)), route(O, **dict(bk, **ka, **kb))))
-    return out
-
-
-S1_KEYS = {"split", "trim", "form", "cadence", "cshare", "bins", "pt", "refunds", "clock"}
-S3_KEYS = {"months", "weeks_i", "weeks_v", "quality", "qpool", "dbar_weeks", "dbar_from", "s3", "month", "carry"}
-
-
-def step_of(kw):
-    """the step a variant's convention belongs to"""
-    ks = set(kw)
-    if ks <= S1_KEYS:
-        return "S1"
-    if ks <= S3_KEYS:
-        return "S3"
-    return "S2"
+        return singles, beside, [], counts
+    bes = {nm for nm, _k in C.BESIDE}
+    core_names = {nm for nm, _k in C.crossed_ways()}
+    crossed = [(nm, fv, nm.split("; ")[0] in bes, nm in core_names) for (nm, _kw), fv in zip(ways, figs)]
+    counts.update(crossings=len(crossed), core_crossings=sum(x[3] for x in crossed),
+                  pack_crossings=sum(not x[3] for x in crossed), beside_crossings=sum(x[2] for x in crossed))
+    return singles, beside, crossed, counts
 
 
 def run(target, cross=True, verbose=False):
     """every route the build needs, computed on the shipped files"""
     O = PackObs(target)
     use_plan(O)
+    singles, beside, crossed, counts = battery(O, cross)          # forked before the record's caches fill
     g = route(O)
-    fam, counts = battery(O, cross)
     keys = [["S1"], ["S2"], ["S3"], ["S1", "S2"], ["S1", "S3"], ["S2", "S3"], ["S1", "S2", "S3"]]
     lat = {"+".join(k): lattice_route(O, k) for k in keys}
     direct = route(O, "raw", "direct", "average")
     rigorous = route(O, **C.RIGOROUS)
     v = C.values(O)
     refs = dict(S1=C.referee_s1(O), S2=C.referee_s2(O, v), S3=C.referee_s3(O, v))
-    return dict(O=O, golden=g, family=fam, counts=counts, lattice=lat, direct=direct, rigorous=rigorous, v=v,
-                refs=refs, fits=s1_fit(O), crossed=crossings(O) if cross else [])
+    return dict(O=O, golden=g, singles=singles, beside=beside, family=singles + beside, crossed=crossed,
+                counts=counts, lattice=lat, direct=direct, rigorous=rigorous, v=v, refs=refs, fits=s1_fit(O))
 
 
 if __name__ == "__main__":
     import time
     t0 = time.time()
     X = run(sys.argv[1], cross="--cross" in sys.argv)
-    print("%.0fs" % (time.time() - t0))
+    print("%.0fs" % (time.time() - t0), X["counts"])
     for c in C.ORDER:
         print("%-18s" % c, " ".join("%s %.4f" % (k, X["golden"][c][k]) for k in
                                     ("roas", "roas_s", "installs_week", "vpi", "marginal", "v12", "unrec")))
