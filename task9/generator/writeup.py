@@ -41,6 +41,150 @@ def cap(s):
     return s[0].upper() + s[1:]
 
 
+def _stump_block(fig):
+    """Answer to the platform's stump question (How is each model stumped?), built from runs/run1.md and
+    runs/run2.md (architecture 6, pair 1). Every quoted response phrase and figure is asserted verbatim against
+    the saved responses; every golden figure comes from figures.json."""
+    import os
+    here = os.path.dirname(os.path.abspath(__file__))
+    task = os.path.dirname(here)
+    r1p, r2p = (os.path.join(task, "runs", n) for n in ("run1.md", "run2.md"))
+    if not (os.path.exists(r1p) and os.path.exists(r2p)):
+        return []
+    t1 = open(r1p, encoding="utf-8").read()
+    t2 = open(r2p, encoding="utf-8").read()
+
+    q1 = {
+        "call": "Escalate optimisation noise (12.119 points) and label revisions (9.795 points); file a "
+                "remediation plan for training data (6.685 points); monitor retunes (4.295 points) and "
+                "feature releases (4.563 points).",
+        "lag": "Warm-start lag fits drove persistence toward one/linear accumulation",
+        "lin": "Refit randomness accumulates linearly over 13 warm-started refreshes; each source's weekly "
+               "mean-squares add.",
+        "mod": "it is a model, not a contractual formula",
+        "flip": "Misreading warm-start accumulation is the one judgment that could flip noise",
+        "rel": "Event effects are independent mean-square contributions; instruments carry no sign/cross-term, "
+               "and repeated same-group releases have no special rule. If releases are correlated within group, "
+               "actual combined could differ though each source's placement would likely not.",
+        "rec": "Group fits favored lambda 0.91 (52-week) and 0.94 (104-week); per-family nonlinear fits "
+               "clustered near 0.906-0.917 and 0.923-0.942.",
+        "pin": "Share of 2027's weekly retrains expected to actually run on pinned feature views: 35.256%, "
+               "i.e. 256.667 of 728 family-week retrains",
+        "sep": "Sep 2026 rather than Dec 2027 book gives noise 12.130, data 6.761, retunes 4.294, releases "
+               "4.571, labels 9.818, combined 18.127",
+        "own": "mean 111.378 mean-square = 10.554 points",
+        "clean": "25,007 roster merchants",
+        "runs": "leaving 2,858",
+        "pairs": "all 870 instrument pairs",
+        "comb": "18.076",
+    }
+    q2 = {
+        "call": "Escalate optimisation noise and label revisions to the board risk committee, put training "
+                "data on a remediation plan, and keep retunes and feature releases on monitor.",
+        "noise": "noise pair MS = Σ over 13 refreshes of R/2 (warm-start carries randomness, §1.4)",
+        "dec": "Result: 52-week d = 0.911755, weighted χ² = 93.86 on 104 df; 104-week d = 0.933962, χ² = "
+               "126.94 on 104 df.",
+        "turn": "training pair MS = mean over the 13 refreshes of C/N_eff",
+        "marg": "training's year margin over the 5.5 floor is only 0.450 points",
+        "comp": "Compounding training-data sensitivity across 13 refreshes (treating it like warm-start noise): "
+                "year training 21.453 points and combined 26.935",
+        "pin": "607 of 728 family-week retrains = 83.379%",
+        "pinrule": "pins from PC-26-058 planned ISO weeks, inclusive",
+        "rel": "Feature-group identity is not separately modelled; family instrument levels were stable across "
+               "release groups, so releases use family MS.",
+        "own": "mean 124.034, RMS 11.137",
+        "book": "125,031 merchants",
+        "runs": "2,867 JSONL rows; 9 run IDs appeared twice",
+        "pairs": "870 pairs",
+        "on": "12.117",
+        "td": "5.950",
+        "fr": "1.960",
+        "comb": "17.339",
+    }
+    nt1 = t1.replace("\u2019", "'").replace("\u2018", "'")
+    nt2 = t2.replace("\u2019", "'").replace("\u2018", "'")
+    for k, q in q1.items():
+        assert q in nt1, "Response 1 quote %s missing from runs/run1.md: %r" % (k, q)
+    for k, q in q2.items():
+        assert q in nt2, "Response 2 quote %s missing from runs/run2.md: %r" % (k, q)
+
+    B, b, bd, rd, pr, fa = (fig[k] for k in ("bands", "base", "bend", "recency_diag", "probe", "falsification"))
+    f2, f1 = (lambda x: "%.2f" % x), (lambda x: "%.1f" % x)
+    bo = band(B["cc1"], 2)
+    bt = band(B["cc2"], 2)
+    bf = band(B["cc3"], 2)
+    bp = band(B["cc_pin"], 1)
+    by = band(B["tot_yr"], 2)
+
+    p1 = (
+        f"Response 1 files the wrong call: \"{q1['call']}\" (combined {q1['comb']} against {f2(fig['tot_yr'])}, "
+        f"band {by}). It solves two hard steps unprompted: recency-weighted training turnover (6.685 on December "
+        f"2027 weights; 6.761 on September 2026 weights inside {bt}, \"{q1['rec']}\") and pinned-view adoption "
+        f"(\"{q1['pin']}\", inside {bp} per cent). It fails two independent decisive steps. On optimisation noise "
+        f"it files 12.119 (12.130 September book, escalation) against {f2(fig['cc1'])} (band {bo}, remediation "
+        f"plan), writing \"{q1['lag']}\" and \"{q1['lin']}\" while conceding \"{q1['mod']}\" and \"{q1['flip']}\"; "
+        f"its 2026 residual (111.378 points squared against {f2(fig['own_ms'])}) absorbs the overshoot. On "
+        f"feature releases it files 4.563 (4.571 September book, monitor) against {f2(fig['cc3'])} (band {bf}, "
+        f"remediation plan), claiming \"{q1['rel']}\" without checking signed deltas in "
+        f"mrm_instrument_pair_scores_2026.csv, where same-group pairs correlate at {b['coh_same_mean']:.3f} "
+        f"across {b['coh_same_n']} pairs."
+    )
+    p2 = (
+        f"Response 2 files the same wrong call (\"{q2['call']}\") and misses four requested figures: optimisation "
+        f"noise {q2['on']} (band {bo}), training data {q2['td']} (band {bt}, remediation by proximity only), "
+        f"feature releases {q2['fr']} (band {bf}), and pinned views \"{q2['pin']}\" (against {f1(fig['cc_pin'])} "
+        f"per cent, band {bp}; combined {q2['comb']} against {f2(fig['tot_yr'])}). On optimisation noise it sums "
+        f"\"{q2['noise']}\" without checking warm-versus-cold lag curves, letting its 2026 residual (124.034 "
+        f"against {f2(fig['own_ms'])}) absorb the error. On training data it inverts decay (\"{q2['dec']}\") but "
+        f"substitutes single-refit \"{q2['turn']}\" ({q2['td']}, flagging \"{q2['marg']}\") for overlapping "
+        f"weighted-window turnover. On pinned views it uses \"{q2['pinrule']}\" (83.379 per cent), ignoring 42 "
+        f"historical lags and rollbacks, and on releases it sums variances orthogonally (\"{q2['rel']}\"), "
+        f"dropping releases to {q2['fr']} monitor."
+    )
+    p3 = (
+        f"The stump is fair, with no planted defect and no buried sentence. Both runs passed Layer 1 hygiene "
+        f"before losing on modeling: Response 1 matched {b['panel_merchants']:,} merchants, "
+        f"{b['manifest_runs']:,} runs, {b['pairs']} pairs, and covenant_tier_change_monitor_2026.csv exactly; "
+        f"Response 2 matched {b['manifest_runs']:,} runs, {b['pairs']} pairs, and the {b['book_sep26']:,} "
+        f"September 2026 book. Governing definitions sit plainly in gms_model_stability_standard_2026.pdf "
+        f"(sections 1.4 to 1.6, 2.2, 3.1), and every mechanism spans all 14 families: warm lag curves bend "
+        f"(lag 8 to 25 intercepts average {f1(bd['intercept8_book'])}, minimum {f1(bd['intercept8_min'])}) while "
+        f"{bd['cold_min_weeks']} to {bd['cold_max_weeks']} cold weeks stay linear (curvature "
+        f"{bd['cold_curv_mean']:+.3f}); {b['pairs_by_kind']['bootstrap']} bootstrap pairs identify decay "
+        f"(reached by Response 1 at 6.761 and inverted by Response 2); 42 past rollouts show take-up lags "
+        f"(reached by Response 1 at 35.256 per cent); and all {b['coh_same_n']} same-group release pairs across "
+        f"12 groups and 14 families correlate positively (minimum {b['coh_same_min']:.3f}, mean "
+        f"{b['coh_same_mean']:.3f}, versus {b['coh_diff_mean']:+.3f} across {b['coh_diff_n']} cross-group pairs)."
+    )
+    p4 = (
+        f"Solving the task takes real statistical modeling because every shortcut fails the 2026 record. On "
+        f"optimisation noise, linear carry ({f2(pr['linear 13 refits (half pair)'])} half-pair, "
+        f"{f2(pr['full replicate pair per refit'])} full pair, escalation), one replicate "
+        f"({f2(pr['single replicate pair (over)'])} monitor), and unanchored lag fits "
+        f"({f2(pr['unanchored fit (raw curve)'])} escalation, implied replicate "
+        f"{f2(pr['unanchored raw implied rep'])} against {f2(b['replicate'])}) fail; anchored AR(1) decay "
+        f"verified by cold linearity reproduces 1-week variance ({f2(fa['golden_parts']['d1'])} vs "
+        f"{f2(fa['obs_d1'])}, discrepancy {f2(fa['golden_err'])} vs {f2(fa['rivals']['S1 linear carry'])}) and "
+        f"lands {f2(fig['cc1'])}. On training data, raw bootstrap ({f2(pr['raw bootstrap face value'])}), net "
+        f"bootstrap ({f2(pr['net bootstrap face value (over)'])}), uniform turnover "
+        f"({f2(pr['uniform window turnover'])} monitor, log-RMSE {rd['log_rmse_unif']:.4f} vs "
+        f"{rd['log_rmse_exp']:.4f}, discrepancy {f2(fa['rivals']['S2 uniform window'])}), and single-refit mean "
+        f"({q2['td']}) miss; {f2(fig['cc2'])} needs decay inversion plus overlapping weighted-window turnover. "
+        f"On pinned views and releases, planned dates ({f1(b['cov_plan'])} per cent, "
+        f"{f2(pr['orthogonal releases (calendar plan)'])} monitor) and slip alone ({f1(b['cov_declared'])} per "
+        f"cent) fail 42 rollouts (leave-one-out {f1(100.0 * fig['loo']['runtime']['record'])} vs "
+        f"{f1(100.0 * fig['loo']['runtime']['model'])}, {f1(100.0 * fig['loo']['warm']['record'])} vs "
+        f"{f1(100.0 * fig['loo']['warm']['model'])}, {f1(100.0 * fig['loo']['amp']['record'])} vs "
+        f"{f1(100.0 * fig['loo']['amp']['model'])} per cent, landing {f1(fig['cc_pin'])} per cent); orthogonal "
+        f"releases give {f2(pr['orthogonal releases (actual lag)'])} monitor (discrepancy "
+        f"{f2(fa['rivals']['S3 orthogonal releases'])}) and all-aligned releases give "
+        f"{f2(pr['all releases aligned (over)'])} escalation, so {f2(fig['cc3'])} needs within-group covariance "
+        f"({f2(fa['golden_parts']['rel_cov'])} vs {f2(fa['obs_rel_cov'])}) with joint live probabilities. Each "
+        f"step owns a separate source or ask, and the two runs failed different subsets."
+    )
+    return ["## How is each model stumped?", "", p1, "", p2, "", p3, "", p4, ""]
+
+
 def write(path, fig):
     B = fig["bands"]
     P = fig["points"]
@@ -80,6 +224,7 @@ def write(path, fig):
           rf["points"]["optimisation noise"], rf["points"]["training data"],
           rf["points"]["feature releases"], dr["points"]["feature releases"]))
     a("")
+    L.extend(_stump_block(fig))
     a("## Supplementary Questions")
     a("")
     a("### garrane_score_stability_sources_2027.xlsx")

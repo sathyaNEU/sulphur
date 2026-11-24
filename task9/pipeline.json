@@ -76,9 +76,12 @@
   "average": null,
   "rubric": null,
   "recorded": "2026-11-24",
+  "triage": "runs/triage.md",
+  "triage_verdict": "SURFACE_RISK (disagrees with holistic_check_v4.md pass score 4 on S3 tells/catch; author ruling owed)",
+  "counterfactual_average": 51.5,
   "first_wrong_step": {
-   "run1": "method_shortcut (S1 linear warm-start carry 12.119; S3 orthogonal feature releases 4.563)",
-   "run2": "method_shortcut (S1 linear warm-start carry 12.117; S2 single-refit mean(C/N_eff) 5.950; S3 orthogonal releases 1.960; S4 calendar planned pins 83.379%)"
+   "run1": "method_shortcut (S1 linear warm-start carry 12.119; S3 orthogonal feature releases 4.563, flagged constructed catch by run-triage vs method_shortcut by holistic_check_v4)",
+   "run2": "method_shortcut (S1 linear warm-start carry 12.117; S2 unfinished_chain single-refit mean(C/N_eff) 5.950; S3 orthogonal releases 1.960; S4 calendar planned pins 83.379%)"
   },
   "history": [
    {
@@ -226,7 +229,7 @@
    }
   }
  ],
- "resume": "stage 6: in-house Holistic Audit v4 passed on architecture 6 pair 1 (score 4, depth level 4, Run 1 0.58, Run 2 0.32, mean 0.45, loss_concentration 0.381 spread, must_fix none); run /triage-runs for run-triage and How is each model stumped?, confirm prompt_rewritten status, and proceed to submit",
+ "resume": "stage 6: How is each model stumped? emitted in submission.md (stump_block_check PASS 803 words, figures_check 179/179 PASS, target.zip/golden.zip/prompt.txt unchanged); Holistic Audit v4 passed (score 4, depth 4, Run 1 0.58 / Run 2 0.32 / mean 0.45, must_fix none) while adversarial run-triage flagged SURFACE_RISK on S3 tells/catch (Run 1 counterfactual 71) and construction_tells.py exit 1 on core.py line 112; author decides whether to paste as-is or de-tell S3 and re-roll",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -397,6 +400,10 @@
   {
    "date": "2026-11-24",
    "event": "RUNS: architecture 6 pair 1 saved verbatim as runs/run1.md and runs/run2.md; in-house Holistic Audit v4 (determinism-judge holistic mode) passed, score 4: correctness passed, determinism pinned (both shared run shortcuts forced by 2026 panel and release-shadow records), rubric Run 1 0.58 / Run 2 0.32 / mean 0.45 (stumped passed), depth level 4 (DEEP, depth_flag none, loss_concentration 0.381 spread), must_fix none"
+  },
+  {
+   "date": "2026-11-24",
+   "event": "RUNS: adversarial run-triage written to runs/triage.md (SURFACE_RISK on S3 construction tells and catch-or-step sweep, Run 1 counterfactual 71, plus construction_tells.py exit 1 on core.py line 112; explicitly disagreements with holistic_check_v4.md pass score 4 documented); How is each model stumped? emitted into submission.md via writeup.py _stump_block (stump_block_check PASS 803 words, figures_check 179/179 PASS; prompt.txt, target.zip, golden.zip byte-identical)"
   }
  ],
  "final_cut": {
