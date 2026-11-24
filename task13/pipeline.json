@@ -1,12 +1,12 @@
 {
  "task": "task13",
- "status": "READY",
+ "status": "RUNS",
  "domain": "energy-systems-utilities",
  "subdomain": "grid-reliability-outage-analysis",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-13",
+ "stage": 6,
+ "stage_name": "runs",
+ "updated": "2026-11-24",
  "doctrine": "throughout",
  "call": "this winter fit perch guards at 6 roost structures, replace 4 cracked strings (Line 2 structure 63 on the Gulf among them), wash 13 coastal sections before 1 December (Line 2 sections 1 and 6, washed in October, among them) and remove the hazard trees at 2 dead pine stands; before summer 2027 clear 4 grow-in spans and restore the clearance at Line 6 structures 57-58",
  "chain": "R1 the 69 kV faults by year (444); R2 the 2026 faults by cause; R3 the 2026 member interruptions and member-minutes by line; R4 the failing string on the Gulf lines (Line 2 structure 63); R5 the clearance contact at Line 6 structures 57-58; R6 the sections washed in October before the blow that are due again (Line 2 sections 1 and 6); R7 each section's deposit on 31 October; R8 every repeat location with its cause; R9 the memo's work list; R10 the work list",
@@ -39,21 +39,25 @@
  },
  "cited_pair": 44.3,
  "runs": {
+  "files": [
+   "runs/run1.md",
+   "runs/run2.md"
+  ],
   "run1": null,
   "run2": null,
   "average": null,
-  "counterfactual_average": null,
+  "counterfactual_average": 77.0,
   "first_wrong_step": {
-   "run1": "",
-   "run2": ""
+   "run1": "method_shortcut on Line 6 str 57-58 + unfinished_chain on Line 9 str 136 solar infeed + dismissed_own_evidence on Line 2 str 63 (flagged catch by both reports; run-triage classes missed_planted_defect on J1 and mechanical_rule_error on Line 9)",
+   "run2": "no_output (halted after Step 1 intermediate forensics with 0 deliverables; Step 1 solved J3 and flagged Line 2 sec 4 str 62-64 as unresolved trap)"
   },
-  "triage": "",
-  "recorded": "",
+  "triage": "runs/triage.md",
+  "recorded": "2026-11-24",
   "history": [
    {
     "architecture": 3,
     "run1": null,
-    "run1_note": "not reported; on the golden (the author: 'model identified the ground truth'); task13/runs/run1.md",
+    "run1_note": "not reported; on the golden (the author: 'model identified the ground truth'); archived file removed per author",
     "run2": null,
     "run2_note": "not pasted",
     "verdict": "REDESIGN (landed)",
@@ -62,7 +66,7 @@
    {
     "architecture": 4,
     "run1": null,
-    "run1_note": "score not pasted; landed R1 (the five yearly figures exactly), R2 (21,780 by the same walk) and R3 (the golden 16 plus RCL-20378); missed R4 and R5; task13/runs/arch4_run1.md",
+    "run1_note": "score not pasted; landed R1 (the five yearly figures exactly), R2 (21,780 by the same walk) and R3 (the golden 16 plus RCL-20378); missed R4 and R5; archived file removed per author",
     "run2": null,
     "run2_note": "one run generated",
     "verdict": "REDESIGN (landed, and returned by the holistic audit on determinism)",
@@ -76,6 +80,21 @@
     "run2_note": "",
     "verdict": "RETURNED at review (reward 75.0, stumped failed, determinism and solution passed)",
     "recorded": "2026-11-13"
+   },
+   {
+    "architecture": 6,
+    "files": [
+     "runs/run1.md",
+     "runs/run2.md"
+    ],
+    "run1": null,
+    "run1_note": "Holistic Audit v4: 0.49 (0.54 with omitted workbook tables), off call (missed L2 str 63, L6 57-58 underbuild, L9 str 136 -> pole 145, added spurious L16 pole 42; solved J3); run-triage est. ~56 (59-62 with files/ECF), CF ~77",
+    "run2": null,
+    "run2_note": "unusable no_output (stopped after Step 1 intermediate forensics; Step 1 solved J3 and spotted L2 sec 4 str 62-64 trap)",
+    "triage": "runs/triage.md",
+    "holistic": "runs/holistic_check_v4.md",
+    "verdict": "RECONCILED HOLD (holistic_check_v4: passed score 4, depth 4, Run 1 0.49, thin evidence 1 usable run; run-triage: SURFACE_RISK / REDESIGN on J1 catch, J3 reflex + 4.51x Oct gale tell, and 3 golden CSV bugs)",
+    "recorded": "2026-11-24"
    }
   ]
  },
@@ -230,7 +249,7 @@
    "commit": ""
   }
  ],
- "resume": "READY: the author rewrites prompt.txt for voice (voice-check.py --rewrite, leak.py), resubmits the same platform task (238b1307-701b-4f8b-b44d-c64277f77336) with target.zip and the four answer blocks from submission.md; then /triage-runs task13",
+ "resume": "RUNS (reconciled hold, 2026-11-24): Holistic Audit v4 PASSED (score 4, depth 4, Run 1 0.49 [0.54 with omitted workbook tables], Run 2 n/a no_output, thin evidence on 1 usable run, spread 0.392, must_fix none), while internal run-triage flagged SURFACE_RISK / REDESIGN (J1 catch, J3 reflex + 4.51x Oct gale & 8.9x deposit dead-zone tells, counterfactual ~77, and 3 golden CSV bugs). Awaiting author decision: re-run Run 2 for a second complete platform rollout (and fix/write stump block if proceeding) OR redesign into v4-hardened Architecture 7.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -258,5 +277,31 @@
   "replace the string: Line 2, structure 63 (J1)",
   "restore the clearance: Line 6, structures 57-58 (J2)",
   "wash: Line 2, Sections 1 and 6 (J3)"
+ ],
+ "holistic": [
+  {
+   "date": "2026-11-24",
+   "mode": "holistic",
+   "report": "task13/runs/holistic_check_v4.md",
+   "verdict": "passed",
+   "score": 4,
+   "rubric": {
+    "run1": 0.49,
+    "run2": null,
+    "mean": 0.49,
+    "stumped": "passed (thin evidence: 1 usable run; Run 2 no_output)"
+   },
+   "correctness": "passed",
+   "determinism": "pinned",
+   "depth_level": 4,
+   "depth_flag": "none",
+   "loss_concentration": 0.392,
+   "must_fix": [],
+   "md5": {
+    "prompt.txt": "e07882dc7d848e0bee8567ac341146e1",
+    "target.zip": "26cf322e25872527e4d33ef95c080d42",
+    "submission.md": "51238c150a3aedb5adb139627b3726db"
+   }
+  }
  ]
 }

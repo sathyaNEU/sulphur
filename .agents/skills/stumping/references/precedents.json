@@ -1632,6 +1632,14 @@
    "move": "rival explanations a dated calendar or a cost card can rule out (a finished sale, a rate change) cleared unprompted, and the latest month's figure seen as overstated by returns still to come",
    "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
    "quote": "correctly found September overstated (EUR 20.02 against the reported 26.37) and cleared the sale and label rates"
+  },
+  {
+   "id": "R98",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "daily onshore-wind salt-deposition and exponential rain-washout state-space model fitted across test-insulator intervals and simulated forward through a post-sampling coastal gale after recent section washes",
+   "source": "task13 arch 6 (runs/run1.md and runs/run2.md, 2026-11-24): both Run 1 and Run 2 independently fitted onshore-wind ESDD accumulation with rain removal, spotted the 23-26 October gale after all October readings (5-20 Oct), and separated the 13 due sections (including Line 2 sections 1 and 6) from the 9 post-gale clean sections",
+   "quote": "fitted a daily ESDD state recurrence over 427 intervals ... lowest are Line 2 §1 at 0.05854 and §6 at 0.06104, while the nine post-gale sections are all <=0.00935 / Found the critical period the October readings miss: 23-26 October 2026, a high onshore-wind, essentially rain-free salt-deposition event"
   }
  ]
 }
