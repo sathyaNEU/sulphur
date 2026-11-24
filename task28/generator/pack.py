@@ -256,9 +256,15 @@ def build(target_dir, world=None):
         m_hrs = 4 if (day % 7) < 5 else 8
         prog = "PROG_4H_STD" if m_hrs == 4 else "PROG_8H_EXT"
         bpd = 24 // m_hrs
+        # Weekly bay bench assignment with occasional relief rotation
+        wk = day // 7
+        op_north = ops[wk % 3]
+        op_south = ops[2 + (wk % 3)]
         for u in core.TRAINS:
             # Legacy tags in Q1 (Jan-Mar)
             tcode = TRAIN_META[u]["legacy"] if day < 90 else u
+            base_op = op_north if TRAIN_META[u]["bay"] == "North" else op_south
+            op = rng.choice(ops) if rng.random() < 0.14 else base_op
             auto_rows.append([
                 cur_d.isoformat(),
                 tcode,
@@ -266,7 +272,7 @@ def build(target_dir, world=None):
                 bpd,
                 m_hrs,
                 "FLOW_PROPORTIONAL",
-                ops[(day + core.TRAINS.index(u)) % len(ops)],
+                op,
             ])
     counts[FILES["autosampler"]] = _write_csv(
         os.path.join(target_dir, FILES["autosampler"]),
@@ -468,26 +474,26 @@ def build(target_dir, world=None):
         sh_rows,
     )
 
-    # 9. cip_wash_log_2026.csv (~178 rows, Europe/Lisbon ISO timestamps, legacy tags in H1)
+    # 9. cip_wash_log_2026.csv (~178 rows, Europe/Lisbon ISO timestamps, legacy tags in H1, dual chemical recipes)
     cip_events = []
     techs = [PEOPLE["maint"], PEOPLE["hydraulics"], PEOPLE["scada"], PEOPLE["analyst"]]
     for u in core.TRAINS:
         td = data["trains"][u]
         meta = TRAIN_META[u]
-        for cb in td["cip_blocks"]:
+        for cb, recipe in td["cip_events"]:
             t_dt = START_2026 + dt.timedelta(hours=4 * cb)
             # Legacy tags in H1 (before July 1, 2026 -> block < 1086)
             tcode = meta["legacy"] if cb < 1086 else u
             soak_h = round(rng.uniform(3.2, 4.4), 1)
-            cip_events.append((t_dt, u, cb, tcode, soak_h))
+            cip_events.append((t_dt, u, cb, tcode, recipe, soak_h))
     cip_events.sort(key=lambda e: (e[0], e[1]))
     cip_rows = []
-    for wid, (t_dt, _u, cb, tcode, soak_h) in enumerate(cip_events, 1):
+    for wid, (t_dt, _u, cb, tcode, recipe, soak_h) in enumerate(cip_events, 1):
         cip_rows.append([
             f"CIP-2026-{wid:04d}",
             tcode,
             _fmt_lisbon(t_dt),
-            "ACID_ALKALINE_STD",
+            recipe,
             f"{soak_h:.1f}",
             techs[(wid + cb) % len(techs)],
         ])
@@ -536,7 +542,10 @@ def build(target_dir, world=None):
             "PROG_8H_EXT": {"bottles_per_day": 3, "window_hours": 8, "mode": "flow-proportional"},
         },
         "telemetry_cadence_minutes": {"header_chemistry": 15, "feed_hydraulics": 60, "integrity_alarms": 240},
-        "cip_protocol": {"recipe": "ACID_ALKALINE_STD", "post_cip_monitoring_cycle_hours": 120},
+        "cip_protocol": {
+            "cip_recipes": ["CIP_ALK_pH11", "CIP_ACID_pH2"],
+            "post_cip_monitoring_cycle_hours": 120,
+        },
     }
     with open(os.path.join(target_dir, FILES["scada_cfg"]), "w", encoding="utf-8", newline="\n") as f:
         json.dump(cfg, f, indent=2)

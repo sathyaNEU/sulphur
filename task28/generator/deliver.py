@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Build the two requested golden deliverables in task28/golden/ and cut target.zip and golden.zip:
-  1. golden/barlavento_swro_overhaul_plan_2027.xlsx (formula-driven, styled, chart, postprocess scrubbed)
-  2. golden/barlavento_train_diagnostics_2027.csv (exact SWRO-Q27 Annex C schema)
+"""task28/generator/deliver.py (v2): Build the two requested golden deliverables in task28/golden/
+and cut target.zip and golden.zip:
+  1. golden/barlavento_swro_overhaul_plan_2027.xlsx (7 formula-driven tabs, styled, chart, postprocess scrubbed)
+  2. golden/barlavento_train_diagnostics_2027.csv (exact SWRO-Q27 Annex B 8-column schema)
 
 Every graded figure is computed live from analysis.run_all(target_dir); zero hardcoded totals.
 """
@@ -13,6 +14,7 @@ import sys
 
 import openpyxl
 from openpyxl.chart import BarChart, Reference
+from openpyxl.drawing.text import CharacterProperties, ParagraphProperties
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
@@ -129,22 +131,21 @@ def write_workbook(golden_dir, res, ordered_trains):
     wb = openpyxl.Workbook()
     S = _styles()
 
-    # Create all 7 sheets in presentation order
     ws_exec = wb.active
     ws_exec.title = "Overhaul_Triage_2027"
-    ws_s1 = wb.create_sheet("S1_Boron_Support")
-    ws_s2 = wb.create_sheet("S2_Hydraulic_Parcels")
-    ws_s3 = wb.create_sheet("S3_Structural_LCA")
+    ws_s1 = wb.create_sheet("S1_Boron_Flux_Support")
+    ws_s2 = wb.create_sheet("S2_TwoPath_Hydraulics")
+    ws_s3 = wb.create_sheet("S3_DualCIP_LCA")
     ws_fal = wb.create_sheet("Falsification_And_Routes")
     ws_plan = wb.create_sheet("Operating_Plan_2027")
-    ws_aud = wb.create_sheet("Screening_Audit_2026")
+    ws_sens = wb.create_sheet("Sensitivity_And_QA_2026")
 
     # ==========================================================================
     # TAB 6: Operating_Plan_2027 (built first so Overhaul_Triage_2027 links to it)
     # ==========================================================================
-    ws_plan["A1"] = "Barlavento SWRO 2026-to-2027 Quarterly Failure-Mode Forecast (Protocol SWRO-Q27 Annex B)"
+    ws_plan["A1"] = "Barlavento SWRO 2026-to-2027 Quarterly Failure-Mode Forecast (Protocol SWRO-Q27 Annex A)"
     ws_plan["A1"].font = S["title_font"]
-    ws_plan["A2"] = "Uniform Annex B quarterly multipliers from operating_plan_2027.csv applied to estimated 2026 physical mode hours."
+    ws_plan["A2"] = "Uniform Annex A quarterly multipliers from operating_plan_2027.csv applied to estimated 2026 physical mode hours."
     ws_plan["A2"].font = S["sub_font"]
 
     plan_hdrs = [
@@ -160,7 +161,7 @@ def write_workbook(golden_dir, res, ordered_trains):
         "2027 Scaling (h)",
         "2027 Struct (h)",
         "2027 Total (h)",
-        "2027 Excess Energy (MWh)",
+        "2027 Energy Penalty (MWh)",
     ]
     ws_plan.append([])
     ws_plan.append(plan_hdrs)  # row 4
@@ -185,7 +186,11 @@ def write_workbook(golden_dir, res, ordered_trains):
             ws_plan.cell(r, 10, f"=D{r}*H{r}*F{r}")
             ws_plan.cell(r, 11, f"=E{r}*F{r}")
             ws_plan.cell(r, 12, f"=SUM(I{r}:K{r})")
-            ws_plan.cell(r, 13, f"=(I{r}*{int(core.TARIFF_BORON)}+J{r}*{int(core.TARIFF_SCALING)}+K{r}*{int(core.TARIFF_STRUCT)})/1000")
+            ws_plan.cell(
+                r,
+                13,
+                f"=(I{r}*{int(core.ENERGY_BORON_KWH)}+J{r}*{int(core.ENERGY_SCALING_KWH)}+K{r}*{int(core.ENERGY_STRUCT_KWH)})/1000",
+            )
             for c in range(1, len(plan_hdrs) + 1):
                 cell = ws_plan.cell(r, c)
                 cell.font = S["body_font"]
@@ -205,7 +210,7 @@ def write_workbook(golden_dir, res, ordered_trains):
                     cell.alignment = Alignment(horizontal="right")
             plan_row += 1
 
-    # Total row on Operating_Plan_2027 (row 37)
+    # Row 37 totals
     tot_p = plan_row
     ws_plan.cell(tot_p, 1, "Plant Total")
     ws_plan.cell(tot_p, 2, "All 4 Qtrs")
@@ -222,148 +227,14 @@ def write_workbook(golden_dir, res, ordered_trains):
         elif c in (3, 4, 5, 9, 10, 11, 12):
             cell.number_format = "#,##0.0"
     ws_plan.freeze_panes = "C5"
-    _set_widths(ws_plan, [11, 12, 14, 15, 14, 12, 15, 15, 14, 15, 14, 14, 18])
+    _set_widths(ws_plan, [11, 12, 14, 15, 14, 12, 15, 15, 14, 15, 14, 14, 20])
     _setup_print(ws_plan, len(plan_hdrs), tot_p, repeat_row=4)
 
     # ==========================================================================
-    # TAB 7: Screening_Audit_2026 (built before Exec so Exec can link discrepancy %)
+    # TAB 1: Overhaul_Triage_2027 (Executive summary + live formulas + bar chart)
     # ==========================================================================
     n_var = len(res["variants_named"])
-    ws_aud["A1"] = f"2026 Raw Monitoring Alarm Divergence & {n_var}-Variant Estimation Uncertainty"
-    ws_aud["A1"].font = S["title_font"]
-    ws_aud["A2"] = "Clause 4.4 Discrepancy Rate = 100 * Sum(|Est_2026 - Raw_2026|) / Sum(Est_2026) across 8 trains x 3 modes."
-    ws_aud["A2"].font = S["sub_font"]
-
-    aud_hdrs = [
-        "Train",
-        "Est Boron 26 (h)",
-        "Inc Boron 26 (h)",
-        "|Diff Boron|",
-        "Est Scaling 26 (h)",
-        "Inc Scaling 26 (h)",
-        "|Diff Scaling|",
-        "Est Struct 26 (h)",
-        "Inc Struct 26 (h)",
-        "|Diff Struct|",
-        "Est Total 26 (h)",
-        "Sum |Mode Diffs|",
-    ]
-    ws_aud.append([])
-    ws_aud.append(aud_hdrs)  # row 4
-    _style_header_row(ws_aud, 4, len(aud_hdrs), S)
-
-    for idx, u in enumerate(ordered_trains):
-        r = 5 + idx
-        tr = res["train_rows"][u]
-        ws_aud.cell(r, 1, u)
-        ws_aud.cell(r, 2, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$C$5:$C$36)")
-        ws_aud.cell(r, 3, round(tr["inc_boron_2026_h"], 6))
-        ws_aud.cell(r, 4, f"=ABS(B{r}-C{r})")
-        ws_aud.cell(r, 5, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$D$5:$D$36)")
-        ws_aud.cell(r, 6, round(tr["inc_scaling_2026_h"], 6))
-        ws_aud.cell(r, 7, f"=ABS(E{r}-F{r})")
-        ws_aud.cell(r, 8, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$E$5:$E$36)")
-        ws_aud.cell(r, 9, round(tr["inc_struct_2026_h"], 6))
-        ws_aud.cell(r, 10, f"=ABS(H{r}-I{r})")
-        ws_aud.cell(r, 11, f"=B{r}+E{r}+H{r}")
-        ws_aud.cell(r, 12, f"=D{r}+G{r}+J{r}")
-        for c in range(1, len(aud_hdrs) + 1):
-            cell = ws_aud.cell(r, c)
-            cell.font = S["body_font"]
-            cell.border = S["border"]
-            if r % 2 == 0:
-                cell.fill = S["zebra_fill"]
-            if c == 1:
-                cell.alignment = Alignment(horizontal="center")
-            else:
-                cell.number_format = "#,##0.0"
-                cell.alignment = Alignment(horizontal="right")
-
-    # Row 13 totals
-    ws_aud.cell(13, 1, "Plant Total")
-    for c in range(2, 13):
-        col_l = get_column_letter(c)
-        ws_aud.cell(13, c, f"=SUM({col_l}5:{col_l}12)")
-    for c in range(1, 13):
-        cell = ws_aud.cell(13, c)
-        cell.font = S["bold_font"]
-        cell.fill = S["tot_fill"]
-        cell.border = S["tot_border"]
-        if c >= 2:
-            cell.number_format = "#,##0.0"
-
-    ws_aud.cell(15, 1, "2026 Raw Monitoring Screening Discrepancy Rate (%)").font = S["bold_font"]
-    ws_aud.cell(15, 4, "=L13/K13")
-    ws_aud.cell(15, 4).font = S["bold_font"]
-    ws_aud.cell(15, 4).number_format = "0.0%"
-    ws_aud.cell(15, 4).fill = S["call_fill"]
-    ws_aud.cell(15, 4).border = S["border"]
-
-    # Variant sensitivity & 6-way +/-20% forcing summary on rows 17+
-    ws_aud.cell(17, 1, f"{n_var}-Variant Estimator Battery & 6-Way +/-20% Forcing Perturbations").font = S["sec_font"]
-    v_hdrs = ["Variant / Perturbation", "Overhaul Slate", "TR01", "TR02", "TR03", "TR04", "TR05", "TR06", "TR07", "TR08", "Plant Total", "Matches Golden"]
-    for c, h in enumerate(v_hdrs, 1):
-        ws_aud.cell(18, c, h)
-    _style_header_row(ws_aud, 18, len(v_hdrs), S, fill_key="subhdr_fill")
-
-    vr = 19
-    g_sl_str = ", ".join(res["golden_slate"])
-    for nm, asm in res["variants_named"]:
-        sl = ", ".join(sorted(u for u in core.TRAINS if asm["members"][u] >= core.THRESHOLD))
-        ws_aud.cell(vr, 1, nm)
-        ws_aud.cell(vr, 2, sl)
-        for j, u in enumerate(core.TRAINS):
-            ws_aud.cell(vr, 3 + j, round(asm["members"][u], 1))
-        ws_aud.cell(vr, 11, round(asm["A_total_2027"], 1))
-        ws_aud.cell(vr, 12, "HOLD" if sl == g_sl_str else "FLIP")
-        for c in range(1, 13):
-            cell = ws_aud.cell(vr, c)
-            cell.font = S["body_font"]
-            cell.border = S["border"]
-            if 3 <= c <= 11:
-                cell.number_format = "#,##0.0"
-                cell.alignment = Alignment(horizontal="right")
-            elif c == 12:
-                cell.alignment = Alignment(horizontal="center")
-        vr += 1
-
-    for pt in res["perturbations"]:
-        sl = ", ".join(pt["answer"])
-        ws_aud.cell(vr, 1, f"Forcing: {pt['input']}")
-        ws_aud.cell(vr, 2, sl)
-        ws_aud.cell(vr, 3, f"min OV={pt['min_overhaul']:.1f}")
-        ws_aud.cell(vr, 4, f"max MO={pt['max_monitor']:.1f}")
-        ws_aud.cell(vr, 12, "HOLD" if pt["holds"] else "FLIP")
-        for c in range(1, 13):
-            cell = ws_aud.cell(vr, c)
-            cell.font = S["body_font"]
-            cell.border = S["border"]
-            if c == 12:
-                cell.alignment = Alignment(horizontal="center")
-        vr += 1
-
-    # Cleaning & conventions notes at bottom of Screening_Audit_2026
-    nr = vr + 1
-    ws_aud.cell(nr, 1, "Data Conformance & Modeling Conventions (2026 Operational Archive)").font = S["sec_font"]
-    cl = res["cleaning"]
-    notes = [
-        f"As-of archive date: {PK.AS_OF}; diagnostics finalized 2027-01-21 under Engineering Protocol SWRO-Q27 (BDM-ENG-Q27-2026).",
-        f"LIMS permeate boron assays cleaned from {cl['boron_raw_rows']:,} raw rows to {cl['boron_clean_rows']:,} unique bottles ({cl['boron_superseded_dropped']} superseded rev-1 rows removed, {cl['boron_ug_rows']:,} South-bay ug/L rows converted to mg/L, {cl['boron_dmy_rows']:,} DD/MM/YYYY dates parsed, {cl['boron_legacy_rows']} legacy LINE tags mapped).",
-        f"15-minute chemistry cleaned from {cl['intake_raw_rows']:,} intake ({cl['intake_dups_dropped']} dup frames removed) and {cl['ro_feed_raw_rows']:,} RO-feed ({cl['ro_feed_dups_dropped']} dup frames removed) to 280,320 exact intervals each; first 32 burn-in intervals excluded per Clause 2.2.",
-        f"Hourly SCADA hydraulics cleaned from {cl['hydraulics_raw_rows']:,} to {cl['hydraulics_clean_rows']:,} rows ({cl['hydraulics_dups_dropped']} retry polls removed, {cl['hydraulics_ls_rows']:,} South-bay L/s rows converted to m3/h). Shift diagnostics (17,520 blocks) and {cl['cip_rows']} CIP washes aligned via Europe/Lisbon ISO offsets.",
-        "Out-of-scope regional files (mibel_iberian_power_spot_2026.csv, algarve_reservoir_levels_2026.xlsx) excluded from membrane reliability estimation.",
-    ]
-    for i, txt in enumerate(notes, 1):
-        ws_aud.cell(nr + i, 1, txt).font = S["note_font"]
-
-    ws_aud.freeze_panes = "B5"
-    _set_widths(ws_aud, [44, 22, 14, 13, 15, 15, 13, 15, 15, 13, 15, 15])
-    _setup_print(ws_aud, 12, nr + len(notes), repeat_row=4)
-
-    # ==========================================================================
-    # TAB 1: Overhaul_Triage_2027 (Executive recommendation + live formulas + bar chart)
-    # ==========================================================================
-    ws_exec["A1"] = "Barlavento SWRO 2027 Vessel Overhaul Diagnostics: Pull TR07, TR06, TR01, and TR02 (>= 400 h)"
+    ws_exec["A1"] = "Barlavento SWRO 2027 Vessel Overhaul Diagnostics: Pull TR07, TR06, TR02, and TR01 (>= 400 h)"
     ws_exec["A1"].font = S["title_font"]
     ws_exec["A2"] = (
         f"Estacao Dessalinizadora de Alvor | Engineering Protocol SWRO-Q27 Membrane Reliability Diagnostics | "
@@ -382,14 +253,15 @@ def write_workbook(golden_dir, res, ordered_trains):
         for u in ordered_trains
         if res["train_rows"][u]["designation"] == "MONITOR"
     )
-    dir_m = res["lattice_asm"]["S1+S2+S3"]["members"]
+    rig_m = res["rig_r1_asm"]["members"]
     ws_exec["A4"] = (
         f"Recommendation: Schedule four SWRO trains for 2027 vessel overhaul under Engineering Protocol SWRO-Q27 (>= 400 h): "
         f"{ov_str}, totaling {res['gold_asm']['A_overhaul_2027']:,.1f} overhaul-train hours and "
-        f"{res['gold_asm']['A_overhaul_eur_k']:,.1f} MWh excess desalination energy burden; keep {mo_str} on routine monitoring. "
-        f"This rejects raw composite, wall-clock, and 2-of-3 shift monitoring, which flags bio-fouled healthy TR03 "
-        f"({dir_m['TR03']:,.1f} h) while missing short-range boron train TR01 ({dir_m['TR01']:,.1f} h) and "
-        f"short-circuited scaling train TR02 ({dir_m['TR02']:,.1f} h)."
+        f"{res['gold_asm']['A_overhaul_mwh']:,.1f} MWh projected energy penalty; retain {mo_str} on routine monitoring "
+        f"(plant-wide {res['gold_asm']['A_total_2027']:,.1f} h; {res['gold_asm']['A_energy_mwh']:,.1f} MWh). "
+        f"Rejects both raw monitoring and single-stream textbook models (stationary AR(1), 1D single-plug V_eff, pooled-CIP EM), "
+        f"which miss TR01 ({rig_m['TR01']:,.1f} h) and TR02 ({rig_m['TR02']:,.1f} h) while mis-flagging TR03 ({rig_m['TR03']:,.1f} h), "
+        f"TR04 ({rig_m['TR04']:,.1f} h), and TR05 ({rig_m['TR05']:,.1f} h)."
     )
     ws_exec["A4"].font = Font(name="Calibri", size=10, bold=True, color="0F172A")
     ws_exec["A4"].fill = S["call_fill"]
@@ -397,8 +269,8 @@ def write_workbook(golden_dir, res, ordered_trains):
     for rr in (4, 5):
         for cc in range(1, 11):
             ws_exec.cell(rr, cc).border = S["border"]
-    ws_exec.row_dimensions[4].height = 28
-    ws_exec.row_dimensions[5].height = 28
+    ws_exec.row_dimensions[4].height = 29
+    ws_exec.row_dimensions[5].height = 29
 
     # Main Triage Table (rows 7..18)
     t_hdrs = [
@@ -431,7 +303,11 @@ def write_workbook(golden_dir, res, ordered_trains):
             7,
             f'=SUMIFS(Operating_Plan_2027!$L$5:$L$36,Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$B$5:$B$36,"2027-Q3")',
         )
-        ws_exec.cell(r, 8, f"=(C{r}*{int(core.TARIFF_BORON)}+D{r}*{int(core.TARIFF_SCALING)}+E{r}*{int(core.TARIFF_STRUCT)})/1000")
+        ws_exec.cell(
+            r,
+            8,
+            f"=(C{r}*{int(core.ENERGY_BORON_KWH)}+D{r}*{int(core.ENERGY_SCALING_KWH)}+E{r}*{int(core.ENERGY_STRUCT_KWH)})/1000",
+        )
         ws_exec.cell(r, 9, int(core.THRESHOLD))
         ws_exec.cell(r, 10, f'=IF(F{r}>=I{r},"OVERHAUL","MONITOR")')
 
@@ -497,7 +373,7 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.number_format = "#,##0.0"
                 cell.alignment = Alignment(horizontal="right")
 
-    # KPI & Critical Components block (rows 20..30)
+    # KPI & Critical Components block (rows 20..29)
     ws_exec.cell(20, 1, f"Key Diagnostic Forecasts & {n_var}-Variant Estimation Uncertainty Ranges").font = S["sec_font"]
     kpi_hdrs = ["Diagnostic Metric", "Point Estimate", "Unit", f"{n_var}-Variant Range", "Protocol Ref"]
     for c, h in enumerate(kpi_hdrs, 1):
@@ -506,15 +382,14 @@ def write_workbook(golden_dir, res, ordered_trains):
 
     bnds = res["bands"]
     kpis = [
-        ("Plant-wide 2027 Permeate Boron Hours (Component 1)", "=C16", "hours", f"{bnds['C1_boron_2027'][0]:,.1f} to {bnds['C1_boron_2027'][1]:,.1f}", "Clause 2.1 + Annex B", "#,##0.0"),
-        ("Plant-wide 2027 Pretreatment-to-RO Scaling Hours (Component 2)", "=D16", "hours", f"{bnds['C2_scaling_2027'][0]:,.1f} to {bnds['C2_scaling_2027'][1]:,.1f}", "Clause 2.2 + Annex B", "#,##0.0"),
-        ("Plant-wide 2027 Persistent Structural Fault Hours (Component 3)", "=E16", "hours", f"{bnds['C3_struct_2027'][0]:,.1f} to {bnds['C3_struct_2027'][1]:,.1f}", "Clause 2.3 + Annex B", "#,##0.0"),
+        ("Plant-wide 2027 Permeate Boron Hours (Component 1)", "=C16", "hours", f"{bnds['C1_boron_2027'][0]:,.1f} to {bnds['C1_boron_2027'][1]:,.1f}", "Clause 2.1 + Annex A", "#,##0.0"),
+        ("Plant-wide 2027 Pretreatment-to-RO Scaling Hours (Component 2)", "=D16", "hours", f"{bnds['C2_scaling_2027'][0]:,.1f} to {bnds['C2_scaling_2027'][1]:,.1f}", "Clause 2.2 + Annex A", "#,##0.0"),
+        ("Plant-wide 2027 Persistent Structural Fault Hours (Component 3)", "=E16", "hours", f"{bnds['C3_struct_2027'][0]:,.1f} to {bnds['C3_struct_2027'][1]:,.1f}", "Clause 2.3 + Annex A", "#,##0.0"),
         ("Plant-wide 2027 Total Anomalous Operating Hours", "=F16", "hours", f"{bnds['A_total_2027'][0]:,.1f} to {bnds['A_total_2027'][1]:,.1f}", "Clause 3.1", "#,##0.0"),
-        ("Overhaul-Train 2027 Anomalous Hours (TR07, TR06, TR01, TR02)", "=F17", "hours", f"{bnds['A_overhaul_2027'][0]:,.1f} to {bnds['A_overhaul_2027'][1]:,.1f}", "Clause 3.1", "#,##0.0"),
-        ("Plant-wide Summer Q3 2027 Anomalous Hours", "=G16", "hours", f"{bnds['A_q3_2027'][0]:,.1f} to {bnds['A_q3_2027'][1]:,.1f}", "Annex B", "#,##0.0"),
-        ("Plant-wide 2027 Excess Desalination Energy Burden", "=H16", "MWh", f"{bnds['A_cost_eur_k'][0]:,.1f} to {bnds['A_cost_eur_k'][1]:,.1f}", "Clause 4.3", "#,##0.0"),
-        ("Overhaul-Train 2027 Excess Desalination Energy Burden", "=H17", "MWh", f"{bnds['A_overhaul_eur_k'][0]:,.1f} to {bnds['A_overhaul_eur_k'][1]:,.1f}", "Clause 4.3", "#,##0.0"),
-        ("2026 Raw Monitoring Screening Discrepancy Rate", "=Screening_Audit_2026!D15", "% of true 2026", f"{bnds['A_diag_err_pct'][0]:.1f}% to {bnds['A_diag_err_pct'][1]:.1f}%", "Clause 4.4", "0.0%"),
+        ("Overhaul-Train 2027 Anomalous Hours (TR07, TR06, TR02, TR01)", "=F17", "hours", f"{bnds['A_overhaul_2027'][0]:,.1f} to {bnds['A_overhaul_2027'][1]:,.1f}", "Clause 3.1", "#,##0.0"),
+        ("Plant-wide Summer Q3 2027 Anomalous Hours", "=G16", "hours", f"{bnds['A_q3_2027'][0]:,.1f} to {bnds['A_q3_2027'][1]:,.1f}", "Annex A", "#,##0.0"),
+        ("Plant-wide 2027 Excess Desalination Energy Penalty", "=H16", "MWh", f"{bnds['A_energy_mwh'][0]:,.1f} to {bnds['A_energy_mwh'][1]:,.1f}", "Clause 4.3", "#,##0.0"),
+        ("Overhaul-Train 2027 Excess Desalination Energy Penalty", "=H17", "MWh", f"{bnds['A_overhaul_mwh'][0]:,.1f} to {bnds['A_overhaul_mwh'][1]:,.1f}", "Clause 4.3", "#,##0.0"),
     ]
     for i, (lbl, fml, unit, btxt, ref, nfmt) in enumerate(kpis):
         r = 22 + i
@@ -535,11 +410,7 @@ def write_workbook(golden_dir, res, ordered_trains):
             elif c in (3, 4):
                 cell.alignment = Alignment(horizontal="center")
 
-    # Bar chart on Overhaul_Triage_2027 comparing every train's 2027 total vs 400h threshold
-    # NOTE: In OpenPyXL horizontal BarChart(type="bar"), x_axis is vertical category axis and y_axis is horizontal value axis.
-    from openpyxl.chart.text import RichText
-    from openpyxl.drawing.text import CharacterProperties, Paragraph as DParagraph, ParagraphProperties, RegularTextRun
-
+    # Bar chart on Overhaul_Triage_2027 comparing every train's 2027 total vs 400h criterion
     chart = BarChart()
     chart.type = "bar"
     chart.style = 10
@@ -560,34 +431,34 @@ def write_workbook(golden_dir, res, ordered_trains):
     chart.series[0].graphicalProperties.solidFill = "163A5F"
     chart.series[1].graphicalProperties.solidFill = "C2410C"
     chart.width = 17.5
-    chart.height = 12.2
+    chart.height = 11.4
     ws_exec.add_chart(chart, "F20")
 
     ws_exec.freeze_panes = "C8"
     _set_widths(ws_exec, [48, 14, 15, 18, 18, 15, 13, 16, 13, 14])
-    _setup_print(ws_exec, 10, 39, repeat_row=7)
+    _setup_print(ws_exec, 10, 44, repeat_row=7)
 
     # ==========================================================================
-    # TAB 2: S1_Boron_Support
+    # TAB 2: S1_Boron_Flux_Support
     # ==========================================================================
-    ws_s1["A1"] = "Mode 1 Backup: Permeate Boron Multi-Support Dispersion-Autocovariance Deconvolution (Clause 2.1)"
+    ws_s1["A1"] = "Mode 1 Backup: Permeate Boron Solute-Flux Coupling (1/Q) & Multi-Support AR(1) Deconvolution (Clause 2.1)"
     ws_s1["A1"].font = S["title_font"]
-    ws_s1["A2"] = "4-hour (Thu-Mon) and 8-hour (Tue-Wed) composite moments inverted to 1-hour support (0.004 mg/L ICP-OES SD subtracted)."
+    ws_s1["A2"] = "C_comp = alpha_{u,q} + beta_u / Q_bar_k + eps_bar_k^(Q) inverted to 1-hour support across 8,760 hourly flows (0.004 mg/L lab SD subtracted)."
     ws_s1["A2"].font = S["sub_font"]
 
     s1_hdrs = [
         "Train",
-        "Obs Var(4h)",
-        "Obs Var(8h)",
-        "Obs V8/V4",
-        "Fit V8/V4",
-        "Obs r1(4h)",
-        "Fit r1(4h)",
+        "Fit Flux Slope beta (mg*m3/L*h)",
+        "Mean alpha (mg/L)",
+        "Obs Res V8/V4",
+        "Fit Res V8/V4",
+        "Obs Res r1(4h)",
+        "Fit Res r1(4h)",
         "Fit Corr Scale lam (h)",
-        "Fit 1h SD (mg/L)",
-        "2026 Raw Comp (h)",
-        "2026 Deconv 1h (h)",
-        "2027 Projected Boron (h)",
+        "Fit 1h Res SD (mg/L)",
+        "2027 Raw Comp (h)",
+        "2027 Stat AR1 MLE (h)",
+        "2027 Flux+AR1 Boron (h)",
     ]
     ws_s1.append([])
     ws_s1.append(s1_hdrs)  # row 4
@@ -597,16 +468,16 @@ def write_workbook(golden_dir, res, ordered_trains):
         r = 5 + idx
         tr = res["train_rows"][u]
         ws_s1.cell(r, 1, u)
-        ws_s1.cell(r, 2, round(tr["s1_v4"], 6))
-        ws_s1.cell(r, 3, round(tr["s1_v8"], 6))
-        ws_s1.cell(r, 4, f"=C{r}/B{r}")
+        ws_s1.cell(r, 2, round(tr["s1_beta_hat"], 2))
+        ws_s1.cell(r, 3, round(sum(tr["s1_alphas"]) / 4.0, 4))
+        ws_s1.cell(r, 4, round(tr["s1_v8_v4_obs"], 4))
         ws_s1.cell(r, 5, round(tr["s1_v8_v4_pred"], 4))
         ws_s1.cell(r, 6, round(tr["s1_r1_4_obs"], 4))
         ws_s1.cell(r, 7, round(tr["s1_r1_4_pred"], 4))
         ws_s1.cell(r, 8, round(tr["s1_lam_h"], 2))
         ws_s1.cell(r, 9, round(tr["s1_sd1"], 4))
-        ws_s1.cell(r, 10, round(tr["inc_boron_2026_h"], 2))
-        ws_s1.cell(r, 11, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$C$5:$C$36)")
+        ws_s1.cell(r, 10, round(tr["s1_raw_2027_h"], 1))
+        ws_s1.cell(r, 11, round(tr["s1_stat_ar1_2027_h"], 1))
         ws_s1.cell(r, 12, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$I$5:$I$36)")
         for c in range(1, len(s1_hdrs) + 1):
             cell = ws_s1.cell(r, c)
@@ -616,21 +487,18 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.fill = S["zebra_fill"]
             if c == 1:
                 cell.alignment = Alignment(horizontal="center")
-            elif c in (2, 3):
-                cell.number_format = "0.00000"
-                cell.alignment = Alignment(horizontal="right")
-            elif c in (4, 5, 6, 7, 9):
-                cell.number_format = "0.000"
-                cell.alignment = Alignment(horizontal="right")
-            elif c == 8:
+            elif c in (2, 8):
                 cell.number_format = "0.00"
+                cell.alignment = Alignment(horizontal="right")
+            elif c in (3, 4, 5, 6, 7, 9):
+                cell.number_format = "0.000"
                 cell.alignment = Alignment(horizontal="right")
             else:
                 cell.number_format = "#,##0.0"
                 cell.alignment = Alignment(horizontal="right")
 
     ws_s1.cell(13, 1, "Plant Total / Mean")
-    for c in (4, 5, 6, 7, 8, 9):
+    for c in (2, 3, 4, 5, 6, 7, 8, 9):
         col_l = get_column_letter(c)
         ws_s1.cell(13, c, f"=AVERAGE({col_l}5:{col_l}12)")
     for c in (10, 11, 12):
@@ -641,35 +509,36 @@ def write_workbook(golden_dir, res, ordered_trains):
         cell.font = S["bold_font"]
         cell.fill = S["tot_fill"]
         cell.border = S["tot_border"]
-        if c in (4, 5, 6, 7, 9):
-            cell.number_format = "0.000"
-        elif c == 8:
+        if c in (2, 8):
             cell.number_format = "0.00"
+        elif c in (3, 4, 5, 6, 7, 9):
+            cell.number_format = "0.000"
         elif c in (10, 11, 12):
             cell.number_format = "#,##0.0"
     ws_s1.freeze_panes = "B5"
-    _set_widths(ws_s1, [18, 13, 13, 12, 12, 12, 12, 17, 15, 16, 17, 18])
+    _set_widths(ws_s1, [18, 18, 14, 13, 13, 13, 13, 17, 16, 16, 17, 18])
     _setup_print(ws_s1, 12, 13, repeat_row=4)
 
     # ==========================================================================
-    # TAB 3: S2_Hydraulic_Parcels
+    # TAB 3: S2_TwoPath_Hydraulics
     # ==========================================================================
-    ws_s2["A1"] = "Mode 2 Backup: Cumulative-Flow Lagrangian Parcel Alignment & Effective Holdup Recovery (Clause 2.2)"
+    ws_s2["A1"] = "Mode 2 Backup: Two-Path Bimodal DAF/DMF Hydraulic Short-Circuit Recovery (Clause 2.2)"
     ws_s2["A1"].font = S["title_font"]
-    ws_s2["A2"] = "Effective pretreatment DAF/DMF holdup volume V_eff estimated by profiling ambient intake-to-RO-feed seawater conductivity in cumulative flow Phi(t)."
+    ws_s2["A2"] = "Conservative seawater conductivity c_out(Phi) = f_fast * c_in(Phi - V_fast) + (1 - f_fast) * c_in(Phi - V_main) profiled in cumulative flow Phi(t)."
     ws_s2["A2"].font = S["sub_font"]
 
     s2_hdrs = [
         "Train",
         "Nominal V_nom (m3)",
-        "Fitted V_eff (m3)",
-        "Baffling Ratio V_eff/V_nom",
-        "Lagrangian Cond RMS (mS/cm)",
+        "Bypass Share f_fast",
+        "Fast V_fast (m3)",
+        "Main V_main (m3)",
+        "Two-Path Cond RMS (mS/cm)",
+        "Single-Plug Cond RMS (mS/cm)",
         "Same-Time Cond RMS (mS/cm)",
-        "Fixed-Lag Cond RMS (mS/cm)",
-        "2026 Same-Time Scaling (h)",
-        "2026 Parcel Scaling (h)",
-        "2027 Projected Scaling (h)",
+        "2027 Same-Time (h)",
+        "2027 Single-Plug V_eff (h)",
+        "2027 Two-Path Scaling (h)",
     ]
     ws_s2.append([])
     ws_s2.append(s2_hdrs)  # row 4
@@ -680,14 +549,15 @@ def write_workbook(golden_dir, res, ordered_trains):
         tr = res["train_rows"][u]
         ws_s2.cell(r, 1, u)
         ws_s2.cell(r, 2, tr["v_nom_m3"])
-        ws_s2.cell(r, 3, round(tr["s2_v_eff_hat"], 1))
-        ws_s2.cell(r, 4, f"=C{r}/B{r}")
-        ws_s2.cell(r, 5, round(tr["s2_cond_rms"], 4))
-        ws_s2.cell(r, 6, round(res["r2_h"][u]["c_rms"], 4))
-        ws_s2.cell(r, 7, round(res["r2_rig"][u]["c_rms"], 4))
-        ws_s2.cell(r, 8, round(tr["inc_scaling_2026_h"], 2))
-        ws_s2.cell(r, 9, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$D$5:$D$36)")
-        ws_s2.cell(r, 10, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$J$5:$J$36)")
+        ws_s2.cell(r, 3, round(tr["s2_f_fast_hat"], 4))
+        ws_s2.cell(r, 4, round(tr["s2_v_fast_hat"], 1))
+        ws_s2.cell(r, 5, round(tr["s2_v_main_hat"], 1))
+        ws_s2.cell(r, 6, round(tr["s2_cond_rms"], 4))
+        ws_s2.cell(r, 7, round(tr["s2_sp_cond_rms"], 4))
+        ws_s2.cell(r, 8, round(tr["s2_raw_cond_rms"], 4))
+        ws_s2.cell(r, 9, round(tr["s2_raw_2027_h"], 1))
+        ws_s2.cell(r, 10, round(tr["s2_sp_2027_h"], 1))
+        ws_s2.cell(r, 11, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$J$5:$J$36)")
         for c in range(1, len(s2_hdrs) + 1):
             cell = ws_s2.cell(r, c)
             cell.font = S["body_font"]
@@ -696,13 +566,10 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.fill = S["zebra_fill"]
             if c == 1:
                 cell.alignment = Alignment(horizontal="center")
-            elif c in (2, 3):
-                cell.number_format = "#,##0.0"
-                cell.alignment = Alignment(horizontal="right")
-            elif c == 4:
+            elif c == 3:
                 cell.number_format = "0.0%"
                 cell.alignment = Alignment(horizontal="right")
-            elif c in (5, 6, 7):
+            elif c in (6, 7, 8):
                 cell.number_format = "0.000"
                 cell.alignment = Alignment(horizontal="right")
             else:
@@ -710,52 +577,56 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.alignment = Alignment(horizontal="right")
 
     ws_s2.cell(13, 1, "Plant Total / Mean")
-    for c in (2, 3, 4, 5, 6, 7):
+    for c in (2, 3, 4, 5, 6, 7, 8):
         col_l = get_column_letter(c)
         ws_s2.cell(13, c, f"=AVERAGE({col_l}5:{col_l}12)")
-    for c in (8, 9, 10):
+    for c in (9, 10, 11):
         col_l = get_column_letter(c)
         ws_s2.cell(13, c, f"=SUM({col_l}5:{col_l}12)")
-    for c in range(1, 11):
+    for c in range(1, 12):
         cell = ws_s2.cell(13, c)
         cell.font = S["bold_font"]
         cell.fill = S["tot_fill"]
         cell.border = S["tot_border"]
-        if c in (2, 3, 8, 9, 10):
-            cell.number_format = "#,##0.0"
-        elif c == 4:
+        if c == 3:
             cell.number_format = "0.0%"
-        elif c in (5, 6, 7):
+        elif c in (6, 7, 8):
             cell.number_format = "0.000"
+        elif c >= 2:
+            cell.number_format = "#,##0.0"
     ws_s2.freeze_panes = "B5"
-    _set_widths(ws_s2, [18, 17, 15, 20, 20, 20, 20, 18, 17, 18])
-    _setup_print(ws_s2, 10, 13, repeat_row=4)
+    _set_widths(ws_s2, [18, 16, 15, 14, 15, 18, 19, 18, 16, 19, 19])
+    _setup_print(ws_s2, 11, 13, repeat_row=4)
 
     # ==========================================================================
-    # TAB 4: S3_Structural_LCA
+    # TAB 4: S3_DualCIP_LCA
     # ==========================================================================
-    ws_s3["A1"] = "Mode 3 Backup: 3-State CIP-Invariant Conditionally-Dependent Latent Class Diagnostics (Clause 2.3)"
+    ws_s3["A1"] = "Mode 3 Backup: 4-State Dual-Recipe CIP-Invariant Latent-Class Diagnostics (Clause 2.3)"
     ws_s3["A1"].font = S["title_font"]
-    p2_e = res["train_rows"]["TR01"]["s3_p2_emissions"]
+    p_bio = res["train_rows"]["TR01"]["s3_p_bio"]
+    p_min = res["train_rows"]["TR01"]["s3_p_min"]
+    p_str = res["train_rows"]["TR01"]["s3_p_str"]
     ws_s3["A2"] = (
-        f"Separates persistent structural membrane faults from reversible bio-fouling across 128 pre/post-CIP shift cells "
-        f"(fitted structural sensitivities: D1={p2_e[0]:.3f}, D2={p2_e[1]:.3f}, D3={p2_e[2]:.3f})."
+        f"192-cell EM (8 trains x 3 regimes [Pre, Post-ALK, Post-ACID] x 8 triples): "
+        f"Bio=({p_bio[0]:.2f},{p_bio[1]:.2f},{p_bio[2]:.3f}), "
+        f"MinCrust=({p_min[0]:.2f},{p_min[1]:.2f},{p_min[2]:.2f}), "
+        f"Struct=({p_str[0]:.2f},{p_str[1]:.2f},{p_str[2]:.2f})."
     )
     ws_s3["A2"].font = S["sub_font"]
 
     s3_hdrs = [
         "Train",
-        "2026 CIP Washes",
-        "Obs Pre-CIP (1,1,0)",
-        "Obs Post-CIP (1,1,0)",
-        "Obs D3 Drop (pp)",
-        "Fit Bio-Foul Pre",
-        "Fit Bio-Foul Post",
+        "CIP_ALK Washes",
+        "CIP_ACID Washes",
+        "Obs D3 Drop ALK (pp)",
+        "Obs D3 Drop ACID (pp)",
+        "Fit Bio-Foul Prev",
+        "Fit Min-Crust Prev",
         "Fit Struct Prev",
-        "2026 Maj-Vote (h)",
-        "2026 2-Class DS (h)",
-        "2026 Struct LCA (h)",
-        "2027 Projected Struct (h)",
+        "2027 2-of-3 MV (h)",
+        "2027 Pooled-CIP 3-St (h)",
+        "2027 Post-CIP 2-Cl DS (h)",
+        "2027 4-State Dual-CIP (h)",
     ]
     ws_s3.append([])
     ws_s3.append(s3_hdrs)  # row 4
@@ -764,23 +635,18 @@ def write_workbook(golden_dir, res, ordered_trains):
     for idx, u in enumerate(ordered_trains):
         r = 5 + idx
         tr = res["train_rows"][u]
-        td = res["data"]["trains"][u]
-        sp = sum(td["cnt_pre"])
-        sq = sum(td["cnt_post"])
-        p_pre = [x / sp for x in td["cnt_pre"]]
-        p_post = [x / sq for x in td["cnt_post"]]
-        d3_drop_pp = 100.0 * sum((p_pre[b] - p_post[b]) * core.D3_MASK[b] for b in range(8))
+        obs = tr["s3_obs_drops"]
         ws_s3.cell(r, 1, u)
-        ws_s3.cell(r, 2, len(td["cip_blocks"]))
-        ws_s3.cell(r, 3, round(p_pre[6], 5))
-        ws_s3.cell(r, 4, round(p_post[6], 5))
-        ws_s3.cell(r, 5, round(d3_drop_pp, 3))
-        ws_s3.cell(r, 6, round(tr["s3_pi_f_pre"], 5))
-        ws_s3.cell(r, 7, round(tr["s3_pi_f_post"], 5))
+        ws_s3.cell(r, 2, tr["s3_n_alk"])
+        ws_s3.cell(r, 3, tr["s3_n_acid"])
+        ws_s3.cell(r, 4, round(100.0 * obs["drop_d3_alk"], 2))
+        ws_s3.cell(r, 5, round(100.0 * obs["drop_d3_acid"], 2))
+        ws_s3.cell(r, 6, round(tr["s3_pi_bio_hat"], 5))
+        ws_s3.cell(r, 7, round(tr["s3_pi_min_hat"], 5))
         ws_s3.cell(r, 8, round(tr["s3_pi_s_hat"], 5))
-        ws_s3.cell(r, 9, round(tr["inc_struct_2026_h"], 2))
-        ws_s3.cell(r, 10, round(sum(res["r3_rig"][u]["q"]), 2))
-        ws_s3.cell(r, 11, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$E$5:$E$36)")
+        ws_s3.cell(r, 9, round(tr["s3_raw_2027_h"], 1))
+        ws_s3.cell(r, 10, round(tr["s3_r1_2027_h"], 1))
+        ws_s3.cell(r, 11, round(tr["s3_r2_2027_h"], 1))
         ws_s3.cell(r, 12, f"=SUMIF(Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$K$5:$K$36)")
         for c in range(1, len(s3_hdrs) + 1):
             cell = ws_s3.cell(r, c)
@@ -790,14 +656,14 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.fill = S["zebra_fill"]
             if c == 1:
                 cell.alignment = Alignment(horizontal="center")
-            elif c == 2:
+            elif c in (2, 3):
                 cell.number_format = "#,##0"
                 cell.alignment = Alignment(horizontal="right")
-            elif c in (3, 4, 6, 7, 8):
-                cell.number_format = "0.00%"
-                cell.alignment = Alignment(horizontal="right")
-            elif c == 5:
+            elif c in (4, 5):
                 cell.number_format = "0.00"
+                cell.alignment = Alignment(horizontal="right")
+            elif c in (6, 7, 8):
+                cell.number_format = "0.00%"
                 cell.alignment = Alignment(horizontal="right")
             else:
                 cell.number_format = "#,##0.0"
@@ -805,7 +671,8 @@ def write_workbook(golden_dir, res, ordered_trains):
 
     ws_s3.cell(13, 1, "Plant Total / Mean")
     ws_s3.cell(13, 2, "=SUM(B5:B12)")
-    for c in (3, 4, 5, 6, 7, 8):
+    ws_s3.cell(13, 3, "=SUM(C5:C12)")
+    for c in (4, 5, 6, 7, 8):
         col_l = get_column_letter(c)
         ws_s3.cell(13, c, f"=AVERAGE({col_l}5:{col_l}12)")
     for c in (9, 10, 11, 12):
@@ -816,16 +683,16 @@ def write_workbook(golden_dir, res, ordered_trains):
         cell.font = S["bold_font"]
         cell.fill = S["tot_fill"]
         cell.border = S["tot_border"]
-        if c == 2:
+        if c in (2, 3):
             cell.number_format = "#,##0"
-        elif c in (3, 4, 6, 7, 8):
-            cell.number_format = "0.00%"
-        elif c == 5:
+        elif c in (4, 5):
             cell.number_format = "0.00"
+        elif c in (6, 7, 8):
+            cell.number_format = "0.00%"
         elif c in (9, 10, 11, 12):
             cell.number_format = "#,##0.0"
     ws_s3.freeze_panes = "B5"
-    _set_widths(ws_s3, [18, 15, 17, 17, 15, 15, 15, 15, 16, 16, 16, 19])
+    _set_widths(ws_s3, [18, 14, 15, 16, 17, 15, 16, 14, 16, 19, 19, 19])
     _setup_print(ws_s3, 12, 13, repeat_row=4)
 
     # ==========================================================================
@@ -833,36 +700,36 @@ def write_workbook(golden_dir, res, ordered_trains):
     # ==========================================================================
     ws_fal["A1"] = "Physical Falsification Checks (F1-F3) & Analytical Routes Comparison"
     ws_fal["A1"].font = S["title_font"]
-    ws_fal["A2"] = "Direct physical identities observed across 2026 operational logs (zero anomaly labels required) paired with every shortcut's triage result."
+    ws_fal["A2"] = "Direct native-unit physical identities across 2026 logs (zero anomaly labels required) paired with every alternative model's triage result."
     ws_fal["A2"].font = S["sub_font"]
 
-    # Table 1: F1-F3 physical falsification
     f_hdrs = [
         "Method / Route",
-        "F1 Boron Moment Err (V8/V4 & r1)",
+        "F1 Flux+Moment Err",
         "F2 Cond RMS (mS/cm)",
-        "F3 Fleet CIP Invariance Err (pp)",
+        "F3 Dual-CIP Drop Err (pp)",
         "Flagged Overhaul Set",
         "Total 2027 (h)",
-        "Excess Energy (MWh)",
+        "Energy Penalty (MWh)",
     ]
     ws_fal.append([])
     ws_fal.append(f_hdrs)  # row 4
     _style_header_row(ws_fal, 4, len(f_hdrs), S)
 
     route_lookup = [
-        ("Golden (Per-Train Deconv + Lagrangian V_eff + 3-State CIP LCA)", "golden", res["gold_asm"]),
+        ("Golden (Flux+AR1 + Two-Path Hydraulics + 4-State Dual-CIP EM)", "golden", res["gold_asm"]),
         ("Direct / Raw Monitoring (Raw Comp + Same-Time + 2-of-3 MV)", "direct", res["lattice_asm"]["S1+S2+S3"]),
-        ("Rigorous Standard (Pooled AR1 + Fixed CCF Lag + 2-Class DS)", "rigorous", res["rig_asm"]),
-        ("Cutoff Filter (4h-Only + Steady-Flow Lag + Post-CIP MV)", "cutoff", res["cut_asm"]),
-        ("Generous Upper (i.i.d. sqrt(m) + Comonotonic + 2-Class DS)", "generous", res["gen_asm"]),
+        ("Textbook R1 (Stationary AR1 + 1D Single-Plug V_eff + 3-State Pooled-CIP)", "rigorous_r1", res["rig_r1_asm"]),
+        ("Textbook R2 (Stationary AR1 + 1D Single-Plug V_eff + Post-CIP 2-Class DS)", "rigorous_r2", res["rig_r2_asm"]),
+        ("Cutoff Filter (4h-Only + Fixed Lag + Post-CIP MV)", "cutoff", res["cut_asm"]),
+        ("Generous Upper (i.i.d. sqrt(m) + Comonotonic + Post-CIP 2-Class DS)", "generous", res["gen_asm"]),
         ("Hedge Blend (80% Direct / 20% Physical)", "hedge", res["hedge_asm"]),
         ("Drop S1 Only (Raw Boron + Golden S2 & S3)", "S1_lost", res["lattice_asm"]["S1"]),
         ("Drop S2 Only (Same-Time Scaling + Golden S1 & S3)", "S2_lost", res["lattice_asm"]["S2"]),
         ("Drop S3 Only (2-of-3 MV + Golden S1 & S2)", "S3_lost", res["lattice_asm"]["S3"]),
         ("Over-Correct S1 (i.i.d. sqrt(m) + Golden S2 & S3)", "S1_over", res["over"]["S1"]),
         ("Over-Correct S2 (Comonotonic + Golden S1 & S3)", "S2_over", res["over"]["S2"]),
-        ("Over-Correct S3 (Uninverted Raw D3 + Golden S1 & S2)", "S3_over", res["over"]["S3"]),
+        ("Over-Correct S3 (Uninverted Raw D3 Post-Acid + Golden S1 & S2)", "S3_over", res["over"]["S3"]),
     ]
 
     for idx, (label, fkey, asm) in enumerate(route_lookup):
@@ -875,7 +742,7 @@ def write_workbook(golden_dir, res, ordered_trains):
         ws_fal.cell(r, 4, round(fl["f3_pp"], 3))
         ws_fal.cell(r, 5, sl)
         ws_fal.cell(r, 6, round(asm["A_total_2027"], 1))
-        ws_fal.cell(r, 7, round(asm["A_cost_eur_k"], 1))
+        ws_fal.cell(r, 7, round(asm["A_energy_mwh"], 1))
         for c in range(1, 8):
             cell = ws_fal.cell(r, c)
             cell.font = S["bold_font"] if idx == 0 else S["body_font"]
@@ -891,15 +758,15 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.number_format = "#,##0.0"
                 cell.alignment = Alignment(horizontal="right")
 
-    # Table 2: Per-train figures across major routes (rows 19..31)
-    ws_fal.cell(19, 1, "Per-Train 2027 Forecasted Anomalous Hours Across Routes (Criterion = 400.0 h)").font = S["sec_font"]
+    # Table 2: Per-train figures across major routes (rows 20..34)
+    ws_fal.cell(20, 1, "Per-Train 2027 Forecasted Anomalous Hours Across Routes (Criterion = 400.0 h)").font = S["sec_font"]
     rt_hdrs = ["Method / Route"] + core.TRAINS + ["C1 Boron", "C2 Scaling", "C3 Struct"]
     for c, h in enumerate(rt_hdrs, 1):
-        ws_fal.cell(20, c, h)
-    _style_header_row(ws_fal, 20, len(rt_hdrs), S, fill_key="subhdr_fill")
+        ws_fal.cell(21, c, h)
+    _style_header_row(ws_fal, 21, len(rt_hdrs), S, fill_key="subhdr_fill")
 
     for idx, (label, _fkey, asm) in enumerate(route_lookup):
-        r = 21 + idx
+        r = 22 + idx
         ws_fal.cell(r, 1, label)
         for j, u in enumerate(core.TRAINS):
             ws_fal.cell(r, 2 + j, round(asm["members"][u], 1))
@@ -915,8 +782,77 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.alignment = Alignment(horizontal="right")
 
     ws_fal.freeze_panes = "B5"
-    _set_widths(ws_fal, [52, 22, 16, 22, 28, 14, 15, 11, 11, 13, 13, 13])
-    _setup_print(ws_fal, 12, 33, repeat_row=4)
+    _set_widths(ws_fal, [58, 19, 17, 21, 30, 14, 17, 11, 11, 13, 13, 13])
+    _setup_print(ws_fal, 12, 34, repeat_row=4)
+
+    # ==========================================================================
+    # TAB 7: Sensitivity_And_QA_2026 (26-variant battery + 6 forcing perturbations + QA)
+    # ==========================================================================
+    ws_sens["A1"] = f"Barlavento SWRO {n_var}-Variant Uncertainty Battery, Forcing Perturbations & 2026 Data QA"
+    ws_sens["A1"].font = S["title_font"]
+    ws_sens["A2"] = "Every defensible estimator specification and +/-20% independent mode perturbation preserves the exact 4-of-8 overhaul slate."
+    ws_sens["A2"].font = S["sub_font"]
+
+    v_hdrs = ["Variant / Perturbation", "Overhaul Slate", "TR01", "TR02", "TR03", "TR04", "TR05", "TR06", "TR07", "TR08", "Plant Total", "Matches Golden"]
+    ws_sens.append([])
+    ws_sens.append(v_hdrs)  # row 4
+    _style_header_row(ws_sens, 4, len(v_hdrs), S)
+
+    vr = 5
+    g_sl_str = ", ".join(res["golden_slate"])
+    for nm, asm in res["variants_named"]:
+        sl = ", ".join(sorted(u for u in core.TRAINS if asm["members"][u] >= core.THRESHOLD))
+        ws_sens.cell(vr, 1, nm)
+        ws_sens.cell(vr, 2, sl)
+        for j, u in enumerate(core.TRAINS):
+            ws_sens.cell(vr, 3 + j, round(asm["members"][u], 1))
+        ws_sens.cell(vr, 11, round(asm["A_total_2027"], 1))
+        ws_sens.cell(vr, 12, "HOLD" if sl == g_sl_str else "FLIP")
+        for c in range(1, 13):
+            cell = ws_sens.cell(vr, c)
+            cell.font = S["body_font"]
+            cell.border = S["border"]
+            if vr % 2 == 0:
+                cell.fill = S["zebra_fill"]
+            if 3 <= c <= 11:
+                cell.number_format = "#,##0.0"
+                cell.alignment = Alignment(horizontal="right")
+            elif c == 12:
+                cell.alignment = Alignment(horizontal="center")
+        vr += 1
+
+    for pt in res["perturbations"]:
+        sl = ", ".join(pt["answer"])
+        ws_sens.cell(vr, 1, f"Forcing: {pt['input']}")
+        ws_sens.cell(vr, 2, sl)
+        ws_sens.cell(vr, 3, f"min OV={pt['min_overhaul']:.1f}")
+        ws_sens.cell(vr, 4, f"max MO={pt['max_monitor']:.1f}")
+        ws_sens.cell(vr, 12, "HOLD" if pt["holds"] else "FLIP")
+        for c in range(1, 13):
+            cell = ws_sens.cell(vr, c)
+            cell.font = S["body_font"]
+            cell.border = S["border"]
+            if c == 12:
+                cell.alignment = Alignment(horizontal="center")
+        vr += 1
+
+    # Cleaning & conventions notes
+    nr = vr + 1
+    ws_sens.cell(nr, 1, "2026 Operational Archive Conformance & QA Audit").font = S["sec_font"]
+    cl = res["cleaning"]
+    notes = [
+        f"As-of archive date: {PK.AS_OF}; diagnostics finalized 2027-01-21 under Engineering Protocol SWRO-Q27 (BDM-ENG-Q27-2026).",
+        f"LIMS permeate boron assays cleaned from {cl['boron_raw_rows']:,} raw rows to {cl['boron_clean_rows']:,} unique bottles ({cl['boron_superseded_dropped']} superseded rev-1 rows removed, {cl['boron_ug_rows']:,} South-bay ug/L rows converted to mg/L, {cl['boron_dmy_rows']:,} DD/MM/YYYY dates parsed, {cl['boron_legacy_rows']} legacy LINE tags mapped).",
+        f"15-minute chemistry cleaned from {cl['intake_raw_rows']:,} intake ({cl['intake_dups_dropped']} dup frames removed) and {cl['ro_feed_raw_rows']:,} RO-feed ({cl['ro_feed_dups_dropped']} dup frames removed) to 280,320 exact intervals each; first 32 burn-in intervals excluded per Clause 2.2.",
+        f"Hourly SCADA hydraulics cleaned from {cl['hydraulics_raw_rows']:,} to {cl['hydraulics_clean_rows']:,} rows ({cl['hydraulics_dups_dropped']} retry polls removed, {cl['hydraulics_ls_rows']:,} South-bay L/s rows converted to m3/h). Shift diagnostics (17,520 blocks) and {cl['cip_rows']} CIP washes ({cl['cip_alk_rows']} CIP_ALK_pH11, {cl['cip_acid_rows']} CIP_ACID_pH2) aligned via Europe/Lisbon ISO offsets.",
+        "Out-of-scope regional files (mibel_iberian_power_spot_2026.csv, algarve_reservoir_levels_2026.xlsx) excluded from membrane reliability estimation.",
+    ]
+    for i, txt in enumerate(notes, 1):
+        ws_sens.cell(nr + i, 1, txt).font = S["note_font"]
+
+    ws_sens.freeze_panes = "B5"
+    _set_widths(ws_sens, [50, 22, 14, 13, 13, 13, 13, 13, 13, 13, 15, 15])
+    _setup_print(ws_sens, 12, nr + len(notes), repeat_row=4)
 
     path = os.path.join(golden_dir, GOLDEN_XLSX)
     wb.save(path)
@@ -937,7 +873,6 @@ def build_goldens_and_zips(task_dir=None, res=None):
     csv_path, ordered = write_csv(golden_dir, res)
     xlsx_path = write_workbook(golden_dir, res, ordered)
 
-    # Scrub golden workbook container via postprocess.normalize_ooxml (distinct golden stamps > as_of)
     postprocess.normalize_ooxml(
         xlsx_path,
         PK.PEOPLE["lead"],
@@ -954,7 +889,6 @@ def build_goldens_and_zips(task_dir=None, res=None):
         },
     )
 
-    # Cut target.zip and golden.zip with distinct per-file Europe/Lisbon timestamps
     target_zip = os.path.join(task_dir, "target.zip")
     golden_zip = os.path.join(task_dir, "golden.zip")
     postprocess.zip_folder(target_dir, target_zip, zone="Europe/Lisbon")

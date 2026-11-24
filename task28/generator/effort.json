@@ -17,10 +17,10 @@
       },
       "passes": {
         "quick": {
-          "boron_clean_rows": 15449,
-          "intake_clean_rows": 281095,
+          "boron_clean_rows": 15465,
+          "intake_clean_rows": 281122,
           "ro_feed_clean_rows": 280320,
-          "hydraulics_clean_rows": 70258,
+          "hydraulics_clean_rows": 70278,
           "shift_rows": 17520,
           "cip_rows": 178
         },
@@ -44,17 +44,17 @@
     },
     {
       "id": "R2",
-      "name": "Multi-support composite boron deconvolution (C1)",
+      "name": "Solute-flux coupled composite boron deconvolution (C1)",
       "graded_as": "Component 1",
       "figure": "C1_boron_2027",
       "depends": [
         "R1"
       ],
-      "independent": "permeate_boron_composites_2026.csv and autosampler_schedule_2026.csv",
-      "golden": 1328.7,
+      "independent": "permeate_boron_composites_2026.csv, autosampler_schedule_2026.csv, train_hydraulics_hourly_2026.csv",
+      "golden": 1292.0,
       "band": [
-        1053.9,
-        1390.7
+        1212.4,
+        1315.6
       ],
       "precedent": [
         "L22",
@@ -62,24 +62,24 @@
         "L57"
       ],
       "passes": {
-        "quick": 285.6,
-        "careful": 285.6,
-        "thorough": 1328.7
+        "quick": 76.2,
+        "careful": 76.2,
+        "thorough": 1292.0
       }
     },
     {
       "id": "R3",
-      "name": "Lagrangian cumulative-flow parcel alignment & V_eff (C2)",
+      "name": "Two-path bimodal DAF/DMF hydraulic parcel alignment (C2)",
       "graded_as": "Component 2",
       "figure": "C2_scaling_2027",
       "depends": [
         "R1"
       ],
       "independent": "intake_chemistry_15m_2026.csv, ro_feed_header_15m_2026.csv, train_hydraulics_hourly_2026.csv",
-      "golden": 1652.7,
+      "golden": 1297.1,
       "band": [
-        1539.4,
-        1836.6
+        1154.1,
+        1490.0
       ],
       "precedent": [
         "L26",
@@ -88,24 +88,24 @@
         "N30"
       ],
       "passes": {
-        "quick": 552.1,
-        "careful": 552.1,
-        "thorough": 1652.7
+        "quick": 634.2,
+        "careful": 634.2,
+        "thorough": 1297.1
       }
     },
     {
       "id": "R4",
-      "name": "3-state CIP-invariant latent-class structural faults (C3)",
+      "name": "4-state dual-recipe CIP-invariant structural fault separation (C3)",
       "graded_as": "Component 3",
       "figure": "C3_struct_2027",
       "depends": [
         "R1"
       ],
       "independent": "shift_diagnostics_2026.csv and cip_wash_log_2026.csv",
-      "golden": 1106.9,
+      "golden": 1049.7,
       "band": [
-        1042.6,
-        1251.1
+        975.1,
+        1130.9
       ],
       "precedent": [
         "L03",
@@ -114,9 +114,9 @@
         "N36"
       ],
       "passes": {
-        "quick": 3508.1,
-        "careful": 3508.1,
-        "thorough": 1106.9
+        "quick": 4787.5,
+        "careful": 4787.5,
+        "thorough": 1049.7
       }
     },
     {
@@ -131,22 +131,22 @@
       ],
       "independent": "",
       "golden": {
-        "f1": 0.0479,
-        "f2_ms_cm": 0.523,
-        "f3_pp": 0.455
+        "f1": 0.0579,
+        "f2_ms_cm": 0.34,
+        "f3_pp": 0.668
       },
       "bands": {
         "f1": [
           0.0,
-          0.09
+          0.12
         ],
         "f2_ms_cm": [
-          0.48,
-          0.58
+          0.3,
+          0.4
         ],
         "f3_pp": [
           0.0,
-          0.7
+          1.0
         ]
       },
       "precedent": [
@@ -154,19 +154,19 @@
       ],
       "passes": {
         "quick": {
-          "f1": 1.0045,
-          "f2_ms_cm": 2.473,
-          "f3_pp": 2.741
+          "f1": 1.6411,
+          "f2_ms_cm": 2.045,
+          "f3_pp": 5.346
         },
         "careful": {
-          "f1": 1.0045,
-          "f2_ms_cm": 2.473,
-          "f3_pp": 2.741
+          "f1": 1.6411,
+          "f2_ms_cm": 2.045,
+          "f3_pp": 5.346
         },
         "thorough": {
-          "f1": 0.0479,
-          "f2_ms_cm": 0.523,
-          "f3_pp": 0.455
+          "f1": 0.0579,
+          "f2_ms_cm": 0.34,
+          "f3_pp": 0.668
         }
       }
     },
@@ -183,47 +183,47 @@
       ],
       "independent": "",
       "golden": {
-        "TR01": 514.8,
-        "TR02": 506.3,
-        "TR03": 305.7,
-        "TR04": 318.8,
-        "TR05": 271.0,
-        "TR06": 613.4,
-        "TR07": 1291.9,
-        "TR08": 266.4
+        "TR01": 515.8,
+        "TR02": 520.2,
+        "TR03": 29.8,
+        "TR04": 245.0,
+        "TR05": 266.6,
+        "TR06": 524.8,
+        "TR07": 1471.4,
+        "TR08": 65.2
       },
       "bands": {
         "TR01": [
-          448.7,
-          536.2
+          487.8,
+          541.3
         ],
         "TR02": [
-          480.6,
-          544.3
+          475.2,
+          542.6
         ],
         "TR03": [
-          287.0,
-          336.1
+          21.7,
+          53.4
         ],
         "TR04": [
-          306.2,
-          341.9
+          229.8,
+          269.3
         ],
         "TR05": [
-          230.3,
-          285.5
+          192.4,
+          317.3
         ],
         "TR06": [
-          589.8,
-          661.0
+          498.2,
+          555.7
         ],
         "TR07": [
-          1187.9,
-          1343.6
+          1417.9,
+          1519.5
         ],
         "TR08": [
-          245.9,
-          284.6
+          59.1,
+          79.6
         ]
       },
       "precedent": [
@@ -231,42 +231,42 @@
       ],
       "passes": {
         "quick": {
-          "TR01": 161.5,
-          "TR02": 168.6,
-          "TR03": 949.7,
-          "TR04": 247.8,
-          "TR05": 329.2,
-          "TR06": 493.4,
-          "TR07": 1795.9,
-          "TR08": 199.6
+          "TR01": 277.3,
+          "TR02": 311.0,
+          "TR03": 1521.9,
+          "TR04": 411.7,
+          "TR05": 323.6,
+          "TR06": 496.9,
+          "TR07": 1963.2,
+          "TR08": 192.2
         },
         "careful": {
-          "TR01": 161.5,
-          "TR02": 168.6,
-          "TR03": 949.7,
-          "TR04": 247.8,
-          "TR05": 329.2,
-          "TR06": 493.4,
-          "TR07": 1795.9,
-          "TR08": 199.6
+          "TR01": 277.3,
+          "TR02": 311.0,
+          "TR03": 1521.9,
+          "TR04": 411.7,
+          "TR05": 323.6,
+          "TR06": 496.9,
+          "TR07": 1963.2,
+          "TR08": 192.2
         },
         "thorough": {
-          "TR01": 514.8,
-          "TR02": 506.3,
-          "TR03": 305.7,
-          "TR04": 318.8,
-          "TR05": 271.0,
-          "TR06": 613.4,
-          "TR07": 1291.9,
-          "TR08": 266.4
+          "TR01": 515.8,
+          "TR02": 520.2,
+          "TR03": 29.8,
+          "TR04": 245.0,
+          "TR05": 266.6,
+          "TR06": 524.8,
+          "TR07": 1471.4,
+          "TR08": 65.2
         }
       }
     },
     {
       "id": "R7",
-      "name": "2027 excess desalination energy burden (MWh) & 2026 monitoring discrepancy rate",
-      "graded_as": "Ask 3 (Energy & Bias)",
-      "figure": "R7_energy_and_discrepancy",
+      "name": "2027 excess desalination energy penalty (MWh)",
+      "graded_as": "Ask 3 (Energy Penalty)",
+      "figure": "R7_energy_penalties",
       "depends": [
         "R2",
         "R3",
@@ -275,22 +275,17 @@
       ],
       "independent": "",
       "golden": {
-        "A_energy_mwh": 1750.8,
-        "A_overhaul_mwh": 1253.5,
-        "A_diag_err_pct": 120.8
+        "A_energy_mwh": 1576.4,
+        "A_overhaul_mwh": 1317.9
       },
       "bands": {
         "A_energy_mwh": [
-          1624.1,
-          1841.9
+          1514.4,
+          1656.5
         ],
         "A_overhaul_mwh": [
-          1161.3,
-          1319.1
-        ],
-        "A_diag_err_pct": [
-          112.3,
-          125.4
+          1269.6,
+          1366.0
         ]
       },
       "precedent": [
@@ -298,19 +293,16 @@
       ],
       "passes": {
         "quick": {
-          "A_energy_mwh": 2213.1,
-          "A_overhaul_mwh": 1686.6,
-          "A_diag_err_pct": 0.0
+          "A_energy_mwh": 2845.5,
+          "A_overhaul_mwh": 2306.1
         },
         "careful": {
-          "A_energy_mwh": 2213.1,
-          "A_overhaul_mwh": 1686.6,
-          "A_diag_err_pct": 0.0
+          "A_energy_mwh": 2845.5,
+          "A_overhaul_mwh": 2306.1
         },
         "thorough": {
-          "A_energy_mwh": 1750.8,
-          "A_overhaul_mwh": 1253.5,
-          "A_diag_err_pct": 120.8
+          "A_energy_mwh": 1576.4,
+          "A_overhaul_mwh": 1317.9
         }
       }
     },
@@ -340,11 +332,13 @@
       "passes": {
         "quick": [
           "TR03",
+          "TR04",
           "TR06",
           "TR07"
         ],
         "careful": [
           "TR03",
+          "TR04",
           "TR06",
           "TR07"
         ],
@@ -359,19 +353,19 @@
   ],
   "hints": [
     {
-      "sentence": "Lab boron assays are 4-hour (Thu-Mon) and 8-hour (Tue-Wed) flow-proportional composites whose averaging collapses 1-hour variance by each train's own correlation scale.",
+      "sentence": "Permeate boron follows solution-diffusion flux coupling (alpha + beta/Q_t) inside 4h/8h flow-proportional composites, so stationary AR(1) composite deconvolution misses night-turndown spikes.",
       "rescues": [
         "R2"
       ]
     },
     {
-      "sentence": "Intake precursor and RO-feed stress sensors observe moving seawater parcels separated by an unobserved effective DAF/DMF hydraulic holdup volume under time-varying feed flow.",
+      "sentence": "Aging DAF/DMF basins split flow across a fast short-circuit bypass and a main baffled zone, so 1D single-plug cumulative-volume conductivity matching locks onto the main stream and misses the mix.",
       "rescues": [
         "R3"
       ]
     },
     {
-      "sentence": "Two inline shift alarms co-fire on conditionally-dependent reversible bio-fouling that partially clears after CIP washes while true structural faults persist across CIP.",
+      "sentence": "Alkaline CIP washes clear organic bio-fouling while acid CIP washes clear mineral crust that also triggers acoustic chatter D3, whereas persistent structural faults survive both recipes.",
       "rescues": [
         "R4"
       ]
@@ -379,7 +373,7 @@
   ],
   "routes": [
     {
-      "name": "golden (per-train deconv + Lagrangian V_eff + 3-state CIP LCA)",
+      "name": "golden (flux+AR1 + two-path hydraulics + 4-state dual-CIP EM)",
       "answer": [
         "TR01",
         "TR02",
@@ -392,13 +386,25 @@
       "name": "direct / reflex (raw composites + same-timestamp + 2-of-3 MV)",
       "answer": [
         "TR03",
+        "TR04",
         "TR06",
         "TR07"
       ]
     },
     {
-      "name": "rigorous standard (pooled AR1 + fixed CCF lag + 2-class DS)",
+      "name": "rigorous R1 (stationary AR1 + 1D single-plug V_eff + 3-state pooled-CIP)",
       "answer": [
+        "TR03",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07"
+      ]
+    },
+    {
+      "name": "rigorous R2 (stationary AR1 + 1D single-plug V_eff + post-CIP 2-class DS)",
+      "answer": [
+        "TR01",
         "TR03",
         "TR04",
         "TR05",
@@ -417,6 +423,7 @@
     {
       "name": "drop S2 alone",
       "answer": [
+        "TR01",
         "TR06",
         "TR07"
       ]
@@ -428,20 +435,22 @@
         "TR02",
         "TR03",
         "TR04",
+        "TR05",
         "TR06",
         "TR07"
       ]
     },
     {
-      "name": "cutoff filter (4h-only + steady-flow + post-CIP MV)",
+      "name": "cutoff filter (4h-only + fixed lag + post-CIP MV)",
       "answer": [
         "TR03",
+        "TR05",
         "TR06",
         "TR07"
       ]
     },
     {
-      "name": "generous upper (i.i.d. sqrt(m) + comonotonic + 2-class DS)",
+      "name": "generous upper (i.i.d. sqrt(m) + comonotonic + post-CIP 2-class DS)",
       "answer": [
         "TR01",
         "TR02",
@@ -458,12 +467,9 @@
       "answer": [
         "TR01",
         "TR02",
-        "TR03",
         "TR04",
-        "TR05",
         "TR06",
-        "TR07",
-        "TR08"
+        "TR07"
       ]
     },
     {
@@ -480,7 +486,7 @@
       ]
     },
     {
-      "name": "over-correct S3 (raw uninverted D3)",
+      "name": "over-correct S3 (raw uninverted D3 post-acid)",
       "answer": [
         "TR01",
         "TR02",
@@ -498,7 +504,7 @@
     ],
     "golden_family": [
       {
-        "name": "S1: continuous OU kernel (WLS)",
+        "name": "S1: continuous OU kernel (1h-normalized WLS)",
         "answer": [
           "TR01",
           "TR02",
@@ -516,7 +522,7 @@
         ]
       },
       {
-        "name": "S1: discrete AR(1) lag-1 r1(4) only",
+        "name": "S1: discrete AR(1) lag-1-weighted moments",
         "answer": [
           "TR01",
           "TR02",
@@ -525,7 +531,7 @@
         ]
       },
       {
-        "name": "S1: AR(1) WLS with 0.5% trimming",
+        "name": "S1: AR(1) WLS with 0.5% residual trimming",
         "answer": [
           "TR01",
           "TR02",
@@ -543,7 +549,7 @@
         ]
       },
       {
-        "name": "S1: AR(1) WLS on 4h moments only",
+        "name": "S1: AR(1) WLS on 4h residual moments only",
         "answer": [
           "TR01",
           "TR02",
@@ -552,7 +558,7 @@
         ]
       },
       {
-        "name": "S2: piecewise-constant step flow integration",
+        "name": "S1: span-weighted WLS 1/Q_bar flux regression",
         "answer": [
           "TR01",
           "TR02",
@@ -561,7 +567,25 @@
         ]
       },
       {
-        "name": "S2: piecewise-constant step flow (left endpoint)",
+        "name": "S1: Huber IRLS 1/Q_bar flux regression",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: piecewise-constant step flow (right)",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: piecewise-constant step flow (left)",
         "answer": [
           "TR01",
           "TR02",
@@ -579,7 +603,7 @@
         ]
       },
       {
-        "name": "S2: L1 conductivity profile loss",
+        "name": "S2: L1 two-path conductivity profile loss",
         "answer": [
           "TR01",
           "TR02",
@@ -588,7 +612,7 @@
         ]
       },
       {
-        "name": "S2: Huber conductivity profile loss",
+        "name": "S2: Huber two-path conductivity profile loss",
         "answer": [
           "TR01",
           "TR02",
@@ -597,7 +621,7 @@
         ]
       },
       {
-        "name": "S2: Pearson correlation profile objective",
+        "name": "S2: 2% trimmed L2 two-path conductivity loss",
         "answer": [
           "TR01",
           "TR02",
@@ -606,7 +630,7 @@
         ]
       },
       {
-        "name": "S2: 2% trimmed L2 conductivity loss",
+        "name": "S2: Gaussian OU kriging two-path TEP lookup",
         "answer": [
           "TR01",
           "TR02",
@@ -615,7 +639,7 @@
         ]
       },
       {
-        "name": "S2: Gaussian OU kriging parcel TEP lookup",
+        "name": "S2: PCHIP interpolation two-path TEP lookup",
         "answer": [
           "TR01",
           "TR02",
@@ -624,7 +648,7 @@
         ]
       },
       {
-        "name": "S2: PCHIP interpolation parcel TEP lookup",
+        "name": "S2: nearest 15-min two-path TEP lookup",
         "answer": [
           "TR01",
           "TR02",
@@ -633,7 +657,7 @@
         ]
       },
       {
-        "name": "S2: nearest 15-minute parcel TEP lookup",
+        "name": "S2: cubic spline two-path TEP lookup",
         "answer": [
           "TR01",
           "TR02",
@@ -642,7 +666,7 @@
         ]
       },
       {
-        "name": "S2: cubic spline parcel TEP lookup",
+        "name": "S3: per-train CIP clearing ratios",
         "answer": [
           "TR01",
           "TR02",
@@ -651,25 +675,7 @@
         ]
       },
       {
-        "name": "S3: shared fleet CIP clearing efficiency",
-        "answer": [
-          "TR01",
-          "TR02",
-          "TR06",
-          "TR07"
-        ]
-      },
-      {
-        "name": "S3: free D3 bio-fouling floor (per-train CIP)",
-        "answer": [
-          "TR01",
-          "TR02",
-          "TR06",
-          "TR07"
-        ]
-      },
-      {
-        "name": "S3: free D3 floor + shared CIP clearing",
+        "name": "S3: cross-recipe clearing allowance",
         "answer": [
           "TR01",
           "TR02",
@@ -696,7 +702,7 @@
         ]
       },
       {
-        "name": "S3: shared CIP + inclusive <=120h (31-block) window",
+        "name": "S3: inclusive <=120h (31-block) post-CIP window",
         "answer": [
           "TR01",
           "TR02",
@@ -705,7 +711,7 @@
         ]
       },
       {
-        "name": "Joint A: OU + L1 + shared CIP",
+        "name": "Joint A: OU flux-AR1 + L1 two-path + per-train CIP",
         "answer": [
           "TR01",
           "TR02",
@@ -714,7 +720,7 @@
         ]
       },
       {
-        "name": "Joint B: OLS + Huber + 96h post-CIP",
+        "name": "Joint B: Huber flux + Huber two-path + 96h CIP",
         "answer": [
           "TR01",
           "TR02",
@@ -723,7 +729,7 @@
         ]
       },
       {
-        "name": "Joint C: no-lab-noise + corr + 144h post-CIP",
+        "name": "Joint C: trimmed flux + trimmed-L2 two-path + 144h CIP",
         "answer": [
           "TR01",
           "TR02",
@@ -737,13 +743,25 @@
         "name": "direct / reflex",
         "answer": [
           "TR03",
+          "TR04",
           "TR06",
           "TR07"
         ]
       },
       {
-        "name": "rigorous standard",
+        "name": "rigorous R1",
         "answer": [
+          "TR03",
+          "TR04",
+          "TR05",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "rigorous R2",
+        "answer": [
+          "TR01",
           "TR03",
           "TR04",
           "TR05",
@@ -755,6 +773,7 @@
         "name": "cutoff",
         "answer": [
           "TR03",
+          "TR05",
           "TR06",
           "TR07"
         ]
@@ -791,6 +810,7 @@
       {
         "name": "drop S2",
         "answer": [
+          "TR01",
           "TR06",
           "TR07"
         ]
@@ -802,6 +822,7 @@
           "TR02",
           "TR03",
           "TR04",
+          "TR05",
           "TR06",
           "TR07"
         ]
@@ -874,6 +895,7 @@
     "reflex_route": {
       "answer": [
         "TR03",
+        "TR04",
         "TR06",
         "TR07"
       ]
@@ -881,7 +903,7 @@
     "judgments": [
       {
         "id": "S1",
-        "name": "Per-train multi-support composite boron dispersion-autocovariance deconvolution",
+        "name": "Solute-flux coupled (1/Q_bar) composite boron regression and AR(1) 1h deconvolution",
         "kind": "stump",
         "precedent": [
           "L22",
@@ -906,7 +928,7 @@
           "answer": [
             "TR01",
             "TR03",
-            "TR05",
+            "TR04",
             "TR06",
             "TR07"
           ],
@@ -917,7 +939,7 @@
       },
       {
         "id": "S2",
-        "name": "Cumulative-flow Lagrangian parcel alignment with unobserved V_eff recovery",
+        "name": "Two-path bimodal DAF/DMF hydraulic short-circuiting recovery in cumulative flow",
         "kind": "stump",
         "precedent": [
           "L26",
@@ -927,6 +949,7 @@
         ],
         "dropped": {
           "answer": [
+            "TR01",
             "TR06",
             "TR07"
           ],
@@ -942,6 +965,8 @@
           "answer": [
             "TR02",
             "TR03",
+            "TR04",
+            "TR05",
             "TR06",
             "TR07"
           ],
@@ -952,7 +977,7 @@
       },
       {
         "id": "S3",
-        "name": "3-state CIP-invariant conditionally-dependent latent-class structural fault separation",
+        "name": "4-state dual-recipe CIP-invariant latent-class structural fault separation",
         "kind": "stump",
         "precedent": [
           "L03",
@@ -966,6 +991,7 @@
             "TR02",
             "TR03",
             "TR04",
+            "TR05",
             "TR06",
             "TR07"
           ],
@@ -998,7 +1024,7 @@
       },
       {
         "id": "R_plan",
-        "name": "Uniform 2027 Operating Plan Annex B quarterly scaling",
+        "name": "Uniform 2027 Operating Plan Annex A quarterly scaling",
         "kind": "reflex",
         "precedent": [
           "R01",

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Read ONLY shipped files under target/ (performing full Layer 1 cleaning), recompute every
-physical estimator, all 20 defensible variants, all 6 +/-20% forcing perturbations, the full
-7-corner stump lattice, rigorous/run/extra/over-correction routes, and F1-F3 falsification checks.
+"""task28/generator/analysis.py (v2): Read ONLY shipped files under target/ (performing full
+Layer 1 cleaning), recompute every v2 physical estimator, all 26 defensible variants, all 6
++/-20% forcing perturbations, the full 7-corner stump lattice, Response 1 & Response 2 Round-1
+rigorous routes, run/cutoff/hedge/over-correction routes, and native-unit F1-F3 falsification.
 
-Zero hidden generator constants: every threshold, tariff, and 2027 plan multiplier comes from the
-shipped files (operating_plan_2027.csv, train_asset_register.csv, Standard SWRO-Q27).
+Zero hidden generator constants: every threshold, energy rate, and 2027 plan multiplier comes
+from the shipped files (operating_plan_2027.csv, train_asset_register.csv, Protocol SWRO-Q27).
 """
 import csv
 import datetime as dt
@@ -88,7 +89,40 @@ def load_clean_from_target(target_dir):
     q_15 = [q_h[t // 4] for t in range(n_15)]
     q_sh = [q_h[b * 4] for b in range(n_sh)]
 
-    # 3. Autosampler schedule
+    # 3. Hourly SCADA hydraulics (needed first to compute exact bottle mean flow Q_bar_k!)
+    q_flow_map = {u: [None] * n_h for u in core.TRAINS}
+    hyd_raw = 0
+    hyd_dups = 0
+    hyd_ls = 0
+    with open(os.path.join(target_dir, F["hydraulics_h"]), encoding="utf-8") as f:
+        rd = csv.reader(f)
+        hdr = next(rd)
+        assert hdr[:4] == ["ts_utc", "train_id", "feed_flow", "flow_unit"]
+        h_cache = {}
+        for row in rd:
+            hyd_raw += 1
+            ts_s, u = row[0], row[1]
+            idx = h_cache.get(ts_s)
+            if idx is None:
+                idx = int((_parse_iso_utc(ts_s) - START_2026).total_seconds() // 3600)
+                h_cache[ts_s] = idx
+            if q_flow_map[u][idx] is not None:
+                hyd_dups += 1
+                continue
+            val = float(row[2])
+            unit = row[3].strip()
+            if unit == "L/s":
+                hyd_ls += 1
+                val = val * 3.6
+            elif unit != "m3/h":
+                raise ValueError(f"Unexpected flow unit {unit}")
+            q_flow_map[u][idx] = val
+    cleaning["hydraulics_raw_rows"] = hyd_raw
+    cleaning["hydraulics_clean_rows"] = hyd_raw - hyd_dups
+    cleaning["hydraulics_dups_dropped"] = hyd_dups
+    cleaning["hydraulics_ls_rows"] = hyd_ls
+
+    # 4. Autosampler schedule
     span_map = {}
     auto_legacy = 0
     auto_rows = 0
@@ -104,7 +138,7 @@ def load_clean_from_target(target_dir):
     cleaning["autosampler_rows"] = auto_rows
     cleaning["autosampler_legacy_tags"] = auto_legacy
 
-    # 4. Permeate boron composites (dedup qa_revision, convert ug/L -> mg/L, parse DD/MM/YYYY)
+    # 5. Permeate boron composites (dedup qa_revision, convert ug/L -> mg/L, parse DD/MM/YYYY)
     boron_raw = 0
     boron_ug = 0
     boron_legacy = 0
@@ -146,11 +180,13 @@ def load_clean_from_target(target_dir):
     for _rev, u, day, slot, val in best_by_sid.values():
         m = span_map[(u, day)]
         qd = q_h[day * 24]
-        comp_by_u[u].append((day, slot, m, qd, val))
+        h0 = day * 24 + (slot - 1) * m
+        qbar = sum(q_flow_map[u][h0:h0 + m]) / m
+        comp_by_u[u].append((day, slot, m, qd, val, qbar))
     for u in core.TRAINS:
         comp_by_u[u].sort(key=lambda x: (x[0], x[1]))
 
-    # 5. 15-min intake chemistry
+    # 6. 15-min intake chemistry
     c_in_map = {u: [None] * n_15 for u in core.TRAINS}
     x_in_map = {u: [None] * n_15 for u in core.TRAINS}
     in_raw = 0
@@ -176,7 +212,7 @@ def load_clean_from_target(target_dir):
     cleaning["intake_clean_rows"] = in_raw - in_dups
     cleaning["intake_dups_dropped"] = in_dups
 
-    # 6. 15-min RO-feed header chemistry
+    # 7. 15-min RO-feed header chemistry
     c_out_map = {u: [None] * n_15 for u in core.TRAINS}
     y_out_map = {u: [None] * n_15 for u in core.TRAINS}
     ro_raw = 0
@@ -198,39 +234,6 @@ def load_clean_from_target(target_dir):
     cleaning["ro_feed_clean_rows"] = ro_raw - ro_dups
     cleaning["ro_feed_dups_dropped"] = ro_dups
 
-    # 7. Hourly SCADA hydraulics (convert L/s -> m3/h, dedup retries)
-    q_flow_map = {u: [None] * n_h for u in core.TRAINS}
-    hyd_raw = 0
-    hyd_dups = 0
-    hyd_ls = 0
-    with open(os.path.join(target_dir, F["hydraulics_h"]), encoding="utf-8") as f:
-        rd = csv.reader(f)
-        hdr = next(rd)
-        assert hdr[:4] == ["ts_utc", "train_id", "feed_flow", "flow_unit"]
-        h_cache = {}
-        for row in rd:
-            hyd_raw += 1
-            ts_s, u = row[0], row[1]
-            idx = h_cache.get(ts_s)
-            if idx is None:
-                idx = int((_parse_iso_utc(ts_s) - START_2026).total_seconds() // 3600)
-                h_cache[ts_s] = idx
-            if q_flow_map[u][idx] is not None:
-                hyd_dups += 1
-                continue
-            val = float(row[2])
-            unit = row[3].strip()
-            if unit == "L/s":
-                hyd_ls += 1
-                val = val * 3.6
-            elif unit != "m3/h":
-                raise ValueError(f"Unexpected flow unit {unit}")
-            q_flow_map[u][idx] = val
-    cleaning["hydraulics_raw_rows"] = hyd_raw
-    cleaning["hydraulics_clean_rows"] = hyd_raw - hyd_dups
-    cleaning["hydraulics_dups_dropped"] = hyd_dups
-    cleaning["hydraulics_ls_rows"] = hyd_ls
-
     # 8. 4-hour shift diagnostics (Europe/Lisbon offset -> UTC block index)
     pat_map = {u: [None] * n_sh for u in core.TRAINS}
     sh_raw = 0
@@ -245,10 +248,12 @@ def load_clean_from_target(target_dir):
             pat_map[u][b] = (d1 << 2) | (d2 << 1) | d3
     cleaning["shift_rows"] = sh_raw
 
-    # 9. CIP wash log (Europe/Lisbon offset -> UTC block index, legacy tag resolution)
-    cip_blocks = {u: [] for u in core.TRAINS}
+    # 9. CIP wash log (Europe/Lisbon offset -> UTC block index, legacy tag resolution, dual recipe!)
+    cip_events = {u: [] for u in core.TRAINS}
     cip_raw = 0
     cip_legacy = 0
+    cip_alk = 0
+    cip_acid = 0
     with open(os.path.join(target_dir, F["cip_log"]), encoding="utf-8") as f:
         for r in csv.DictReader(f):
             cip_raw += 1
@@ -257,10 +262,19 @@ def load_clean_from_target(target_dir):
                 cip_legacy += 1
             u = legacy_map[raw_u]
             cb = int((_parse_iso_utc(r["wash_completed_lisbon"]) - START_2026).total_seconds() // 14400)
-            cip_blocks[u].append(cb)
+            recipe = r["chemical_stage"].strip()
+            if recipe == "CIP_ALK_pH11":
+                cip_alk += 1
+            elif recipe == "CIP_ACID_pH2":
+                cip_acid += 1
+            else:
+                raise ValueError(f"Unexpected CIP recipe {recipe}")
+            cip_events[u].append((cb, recipe))
     for u in core.TRAINS:
-        cip_blocks[u].sort()
+        cip_events[u].sort(key=lambda x: x[0])
     cleaning["cip_rows"] = cip_raw
+    cleaning["cip_alk_rows"] = cip_alk
+    cleaning["cip_acid_rows"] = cip_acid
     cleaning["cip_legacy_tags"] = cip_legacy
 
     # Build exact core-compatible data dictionary
@@ -270,23 +284,22 @@ def load_clean_from_target(target_dir):
         assert all(v is not None for v in c_out_map[u]), f"missing ro_feed {u}"
         assert all(v is not None for v in q_flow_map[u]), f"missing hydraulics {u}"
         assert all(v is not None for v in pat_map[u]), f"missing shifts {u}"
-        is_post = [False] * n_sh
-        for cb in cip_blocks[u]:
+        regime_sh = [0] * n_sh
+        for cb, rec in cip_events[u]:
+            code = 1 if rec == "CIP_ALK_pH11" else 2
             for j in range(cb, min(n_sh, cb + 30)):
-                is_post[j] = True
-        cnt_pre = [0.0] * 8
-        cnt_post = [0.0] * 8
+                regime_sh[j] = code
+        cnt_reg = [[0] * 8 for _ in range(3)]
         for b in range(n_sh):
-            if is_post[b]:
-                cnt_post[pat_map[u][b]] += 1.0
-            else:
-                cnt_pre[pat_map[u][b]] += 1.0
+            cnt_reg[regime_sh[b]][pat_map[u][b]] += 1
 
         data["trains"][u] = {
+            "comp_day": [x[0] for x in comp_by_u[u]],
+            "comp_slot": [x[1] for x in comp_by_u[u]],
             "comp_m": [x[2] for x in comp_by_u[u]],
             "comp_q": [x[3] for x in comp_by_u[u]],
             "comp_val": [x[4] for x in comp_by_u[u]],
-            "comp_day": [x[0] for x in comp_by_u[u]],
+            "comp_qbar": [x[5] for x in comp_by_u[u]],
             "q_flow_h": q_flow_map[u],
             "v_nom": v_nom[u],
             "c_in_15": c_in_map[u],
@@ -294,10 +307,9 @@ def load_clean_from_target(target_dir):
             "x_in_15": x_in_map[u],
             "y_out_15": y_out_map[u],
             "pat_sh": pat_map[u],
-            "is_post_cip": is_post,
-            "cip_blocks": cip_blocks[u],
-            "cnt_pre": cnt_pre,
-            "cnt_post": cnt_post,
+            "cip_events": cip_events[u],
+            "regime_sh": regime_sh,
+            "cnt_reg": cnt_reg,
         }
 
     plan = {
@@ -310,34 +322,80 @@ def load_clean_from_target(target_dir):
     return data, plan, cleaning
 
 
+def _project_train(bq26, sq26, stq26, u, plan):
+    sr = plan["sched_ratio"][u]
+    bt = plan["boron_temp_q"]
+    sc = plan["scaling_rec_q"]
+    b27 = [bq26[q] * bt[q] * sr[q] for q in range(4)]
+    s27 = [sq26[q] * sc[q] * sr[q] for q in range(4)]
+    st27 = [stq26[q] * sr[q] for q in range(4)]
+    return b27, s27, st27
+
+
 def run_all(target_dir):
-    """Run complete golden, variant battery, forcing perturbations, lattice, run routes, and F1-F3
+    """Run complete golden, 26-variant battery, forcing perturbations, lattice, Round-1 frontier
+    rivals (R1 & R2), run/cutoff/hedge/over-correction routes, and native-unit F1-F3 checks
     strictly on shipped files under target_dir."""
     data, plan, cleaning = load_clean_from_target(target_dir)
-    inc_2026 = core._incumbent_2026_by_train(data)
 
-    # Golden
+    # Golden estimators
     r1_g = core.estimate_s1(data, mode="golden", kernel="ar1", obj="wls")
     r2_g = core.estimate_s2(data, mode="golden", flow_interp="linear", loss_fn="l2")
-    r3_g = core.estimate_s3(data, mode="golden", foul_model="tied_d3_d12", cip_mode="free_per_train")
-    gold_asm = core.assemble(r1_g, r2_g, r3_g, inc_2026)
+    r3_g = core.estimate_s3(data, mode="golden", post_blocks=30, shared_clear=True)
+    gold_asm = core.assemble(r1_g, r2_g, r3_g)
 
-    # Detailed per-train 2026 & 2027 breakdown for golden
+    # Hurried / Direct
+    r1_h = core.estimate_s1(data, mode="hurried")
+    r2_h = core.estimate_s2(data, mode="hurried")
+    r3_h = core.estimate_s3(data, mode="hurried")
+
+    # Round-1 Frontier Solvers (Response 1 & Response 2 exact architectures!)
+    r1_stat = core.estimate_s1(data, mode="rigorous_stat_ar1")
+    r2_sp = core.estimate_s2(data, mode="single_plug")
+    r3_r1 = core.estimate_s3(data, mode="r1_pooled_cip_3state")
+    r3_r2 = core.estimate_s3(data, mode="post_cip_ds2")
+    rig_r1_asm = core.assemble(r1_stat, r2_sp, r3_r1)
+    rig_r2_asm = core.assemble(r1_stat, r2_sp, r3_r2)
+
+    # Over-corrections (strictly two-sided on all 3 stumps)
+    r1_over = core.estimate_s1(data, mode="over_iid")
+    r2_over = core.estimate_s2(data, mode="over_comonotonic")
+    r3_over = core.estimate_s3(data, mode="over_raw_d3_post_acid")
+    over_s1 = core.assemble(r1_over, r2_g, r3_g)
+    over_s2 = core.assemble(r1_g, r2_over, r3_g)
+    over_s3 = core.assemble(r1_g, r2_g, r3_over)
+
+    # Detailed per-train 2026 & 2027 breakdown for golden + diagnostic comparison columns
     train_rows = {}
     for u in core.TRAINS:
+        td = data["trains"][u]
         bq26, sq26, stq26 = r1_g[u]["q"], r2_g[u]["q"], r3_g[u]["q"]
-        b27, s27, st27 = core.project_2027(bq26, sq26, stq26, u)
+        b27, s27, st27 = _project_train(bq26, sq26, stq26, u, plan)
         hb, hs, hst = sum(b27), sum(s27), sum(st27)
         htot = hb + hs + hst
         hq3 = b27[2] + s27[2] + st27[2]
-        cost_eur = hb * core.TARIFF_BORON + hs * core.TARIFF_SCALING + hst * core.TARIFF_STRUCT
-        bi, si, sti = inc_2026[u]
-        q_mu, st_m = core._comp_moments(data["trains"][u])
+        energy_kwh = hb * core.ENERGY_BORON_KWH + hs * core.ENERGY_SCALING_KWH + hst * core.ENERGY_STRUCT_KWH
+
+        # Mode-level rival projections for backup sheets
+        b27_raw = sum(_project_train(r1_h[u]["q"], [0] * 4, [0] * 4, u, plan)[0])
+        b27_stat = sum(_project_train(r1_stat[u]["q"], [0] * 4, [0] * 4, u, plan)[0])
+        s27_raw = sum(_project_train([0] * 4, r2_h[u]["q"], [0] * 4, u, plan)[1])
+        s27_sp = sum(_project_train([0] * 4, r2_sp[u]["q"], [0] * 4, u, plan)[1])
+        st27_raw = sum(_project_train([0] * 4, [0] * 4, r3_h[u]["q"], u, plan)[2])
+        st27_r1 = sum(_project_train([0] * 4, [0] * 4, r3_r1[u]["q"], u, plan)[2])
+        st27_r2 = sum(_project_train([0] * 4, [0] * 4, r3_r2[u]["q"], u, plan)[2])
+
+        # Flux-residual moments for S1 backup sheet
+        alphas_u, beta_u, res_u = core._fit_flux_ols(td["comp_val"], td["comp_q"], td["comp_qbar"])
+        st_m = core._comp_moments(res_u, td["comp_m"], td["comp_day"], lab_var=0.004 ** 2)
+        n_alk = sum(1 for _, rec in td["cip_events"] if rec == "CIP_ALK_pH11")
+        n_acid = sum(1 for _, rec in td["cip_events"] if rec == "CIP_ACID_pH2")
+
         train_rows[u] = {
             "train_id": u,
             "legacy_tag": PK.TRAIN_META[u]["legacy"],
             "plant_bay": PK.TRAIN_META[u]["bay"],
-            "v_nom_m3": data["trains"][u]["v_nom"],
+            "v_nom_m3": td["v_nom"],
             "boron_2026_q": bq26,
             "scaling_2026_q": sq26,
             "struct_2026_q": stq26,
@@ -345,10 +403,6 @@ def run_all(target_dir):
             "scaling_2026_h": sum(sq26),
             "struct_2026_h": sum(stq26),
             "total_2026_h": sum(bq26) + sum(sq26) + sum(stq26),
-            "inc_boron_2026_h": bi,
-            "inc_scaling_2026_h": si,
-            "inc_struct_2026_h": sti,
-            "inc_total_2026_h": bi + si + sti,
             "boron_2027_q": b27,
             "scaling_2027_q": s27,
             "struct_2027_q": st27,
@@ -357,49 +411,55 @@ def run_all(target_dir):
             "struct_2027_h": hst,
             "total_2027_h": htot,
             "q3_2027_h": hq3,
-            "cost_2027_eur": cost_eur,
-            "energy_2027_kwh": cost_eur,
-            "energy_2027_mwh": cost_eur / 1000.0,
+            "energy_2027_kwh": energy_kwh,
+            "energy_2027_mwh": energy_kwh / 1000.0,
             "designation": "OVERHAUL" if htot >= core.THRESHOLD else "MONITOR",
-            # S1 diagnostics
+            # S1 flux-coupled + AR(1) diagnostics
+            "s1_beta_hat": r1_g[u]["beta_hat"],
+            "s1_alphas": r1_g[u]["alphas"],
             "s1_sd1": r1_g[u]["sd1"],
             "s1_lam_h": r1_g[u]["lam"],
-            "s1_v4": st_m[4]["var"],
-            "s1_v8": st_m[8]["var"],
-            "s1_v8_v4_obs": st_m[8]["var"] / st_m[4]["var"],
+            "s1_v4": st_m[4][0],
+            "s1_v8": st_m[8][0],
+            "s1_v8_v4_obs": r1_g[u]["v8_v4_obs"],
             "s1_v8_v4_pred": r1_g[u]["v8_v4_pred"],
-            "s1_r1_4_obs": st_m[4]["r1"],
+            "s1_r1_4_obs": r1_g[u]["r1_4_obs"],
             "s1_r1_4_pred": r1_g[u]["r1_4_pred"],
-            "s1_q_mu": q_mu,
-            # S2 diagnostics
-            "s2_v_eff_hat": r2_g[u]["v_hat"],
-            "s2_eta_hat": r2_g[u]["v_hat"] / data["trains"][u]["v_nom"],
+            "s1_raw_2026_h": sum(r1_h[u]["q"]),
+            "s1_stat_ar1_2026_h": sum(r1_stat[u]["q"]),
+            "s1_raw_2027_h": b27_raw,
+            "s1_stat_ar1_2027_h": b27_stat,
+            # S2 two-path hydraulic diagnostics
+            "s2_f_fast_hat": r2_g[u]["f_hat"],
+            "s2_v_fast_hat": r2_g[u]["v1_hat"],
+            "s2_v_main_hat": r2_g[u]["v2_hat"],
             "s2_cond_rms": r2_g[u]["c_rms"],
-            # S3 diagnostics
+            "s2_sp_v_hat": r2_sp[u]["v2_hat"],
+            "s2_sp_cond_rms": r2_sp[u]["c_rms"],
+            "s2_raw_cond_rms": r2_h[u]["c_rms"],
+            "s2_raw_2026_h": sum(r2_h[u]["q"]),
+            "s2_sp_2026_h": sum(r2_sp[u]["q"]),
+            "s2_raw_2027_h": s27_raw,
+            "s2_sp_2027_h": s27_sp,
+            # S3 4-state dual-recipe CIP diagnostics
+            "s3_n_alk": n_alk,
+            "s3_n_acid": n_acid,
             "s3_pi_s_hat": r3_g[u]["pi_s"],
-            "s3_pi_f_pre": r3_g[u]["pi_f_pre"],
-            "s3_pi_f_post": r3_g[u]["pi_f_post"],
-            "s3_pred_drop_6_pp": 100.0 * r3_g[u]["pred_drop_6"],
-            "s3_pred_drop_d3_pp": 100.0 * r3_g[u]["pred_drop_d3"],
-            "s3_p2_emissions": r3_g[u]["p2"],
+            "s3_pi_bio_hat": r3_g[u]["pi_bio"],
+            "s3_pi_min_hat": r3_g[u]["pi_min"],
+            "s3_p0": r3_g[u]["p0"],
+            "s3_p_bio": r3_g[u]["p_bio"],
+            "s3_p_min": r3_g[u]["p_min"],
+            "s3_p_str": r3_g[u]["p_str"],
+            "s3_obs_drops": r3_g[u]["obs"],
+            "s3_pred_drops": r3_g[u]["preds"],
+            "s3_raw_2026_h": sum(r3_h[u]["q"]),
+            "s3_r1_2026_h": sum(r3_r1[u]["q"]),
+            "s3_r2_2026_h": sum(r3_r2[u]["q"]),
+            "s3_raw_2027_h": st27_raw,
+            "s3_r1_2027_h": st27_r1,
+            "s3_r2_2027_h": st27_r2,
         }
-
-    # Hurried / Direct / Rigorous / Over-corrections
-    r1_h = core.estimate_s1(data, mode="direct")
-    r2_h = core.estimate_s2(data, mode="direct")
-    r3_h = core.estimate_s3(data, mode="direct")
-
-    r1_rig = core.estimate_s1(data, mode="pooled")
-    r2_rig = core.estimate_s2(data, mode="fixed_lag")
-    r3_rig = core.estimate_s3(data, mode="ds2_ci")
-    rig_asm = core.assemble(r1_rig, r2_rig, r3_rig, inc_2026)
-
-    r1_over = core.estimate_s1(data, mode="iid_over")
-    r2_over = core.estimate_s2(data, mode="comonotonic_over")
-    r3_over = core.estimate_s3(data, mode="d3_raw_over")
-    over_s1 = core.assemble(r1_over, r2_g, r3_g, inc_2026)
-    over_s2 = core.assemble(r1_g, r2_over, r3_g, inc_2026)
-    over_s3 = core.assemble(r1_g, r2_g, r3_over, inc_2026)
 
     # Full 7-corner stump lattice
     lattice_asm = {}
@@ -409,9 +469,9 @@ def run_all(target_dir):
             a1 = r1_h if "S1" in comb else r1_g
             a2 = r2_h if "S2" in comb else r2_g
             a3 = r3_h if "S3" in comb else r3_g
-            lattice_asm[key] = core.assemble(a1, a2, a3, inc_2026)
+            lattice_asm[key] = core.assemble(a1, a2, a3)
 
-    # 26 defensible variants (original 20 + 5 S2 parcel TEP/step-left variants + 1 S3 <=120h shared CIP variant)
+    # 26 defensible honest physical estimator variants (all must hold exact 4-of-8 slate!)
     def _estimate_s2_parcel_variant(kind):
         q_15_arr = np.array(data["q_15"], dtype=int)
         out_v = {}
@@ -423,171 +483,179 @@ def run_all(target_dir):
             c_in = np.array(td["c_in_15"], dtype=float)
             c_out = np.array(td["c_out_15"], dtype=float)
             n_15 = len(x_in)
+
             if kind == "step_left":
                 q15 = np.repeat(q_h, 4)
                 phi = np.concatenate([[0.0], np.cumsum(q15[:-1] * 0.25)])
-                # Profile V_hat on step-left Phi
-                best_v, best_mse = r2_g[u]["v_hat"], 1e18
-                for vc in np.arange(max(350.0, best_v - 120.0), min(1500.0, best_v + 121.0), 4.0):
-                    ca = np.interp(phi[32:] - vc, phi, c_in)
-                    mse = float(np.mean((c_out[32:] - ca) ** 2))
-                    if mse < best_mse:
-                        best_mse, best_v = mse, float(vc)
-                v_hat = best_v
-                xq = np.clip(phi - v_hat, phi[0], phi[-1])
-                x_al = np.interp(xq, phi, x_in)
-                c_al = np.interp(xq, phi, c_in)
-                c_rms = float(np.sqrt(np.mean((c_out[32:] - c_al[32:]) ** 2)))
-                hit = (x_al[32:] > core.SCALING_X_LIM) & (y_out[32:] > core.SCALING_Y_LIM)
+                f_hat, v1_hat, v2_hat, c_rms = core._profile_two_path(phi.tolist(), td["c_in_15"], td["c_out_15"], loss_fn="l2")
+                x1 = np.interp(phi - v1_hat, phi, x_in)
+                x2 = np.interp(phi - v2_hat, phi, x_in)
+                xa = f_hat * x1 + (1.0 - f_hat) * x2
+                hit = (xa[32:] > core.SCALING_X_LIM) & (y_out[32:] > core.SCALING_Y_LIM)
                 q_hrs = [float(np.sum(hit & (q_15_arr[32:] == q)) * 0.25) for q in range(4)]
-                out_v[u] = {"q": q_hrs, "v_hat": v_hat, "c_rms": c_rms}
+                out_v[u] = {"q": q_hrs, "f_hat": f_hat, "v1_hat": v1_hat, "v2_hat": v2_hat, "c_rms": c_rms}
                 continue
 
             phi_list, _ = core._build_phi_hat(td["q_flow_h"], flow_interp="linear")
             phi = np.array(phi_list, dtype=float)
-            v_hat = r2_g[u]["v_hat"]
-            xq = np.clip(phi - v_hat, phi[0], phi[-1])
+            f_hat = r2_g[u]["f_hat"]
+            v1_hat = r2_g[u]["v1_hat"]
+            v2_hat = r2_g[u]["v2_hat"]
+            xq1 = np.clip(phi - v1_hat, phi[0], phi[-1])
+            xq2 = np.clip(phi - v2_hat, phi[0], phi[-1])
 
             if kind == "pchip":
-                x_al = PchipInterpolator(phi, x_in)(xq)
-                hit = (x_al[32:] > core.SCALING_X_LIM) & (y_out[32:] > core.SCALING_Y_LIM)
+                fn = PchipInterpolator(phi, x_in)
+                xa = f_hat * fn(xq1) + (1.0 - f_hat) * fn(xq2)
+                hit = (xa[32:] > core.SCALING_X_LIM) & (y_out[32:] > core.SCALING_Y_LIM)
                 q_hrs = [float(np.sum(hit & (q_15_arr[32:] == q)) * 0.25) for q in range(4)]
             elif kind == "cubic":
-                x_al = CubicSpline(phi, x_in)(xq)
-                hit = (x_al[32:] > core.SCALING_X_LIM) & (y_out[32:] > core.SCALING_Y_LIM)
+                fn = CubicSpline(phi, x_in)
+                xa = f_hat * fn(xq1) + (1.0 - f_hat) * fn(xq2)
+                hit = (xa[32:] > core.SCALING_X_LIM) & (y_out[32:] > core.SCALING_Y_LIM)
                 q_hrs = [float(np.sum(hit & (q_15_arr[32:] == q)) * 0.25) for q in range(4)]
             elif kind == "nearest":
-                idx_r = np.clip(np.searchsorted(phi, xq, side="left"), 1, n_15 - 1)
-                idx_l = idx_r - 1
-                choose_r = np.abs(phi[idx_r] - xq) < np.abs(xq - phi[idx_l])
-                idx_n = np.where(choose_r, idx_r, idx_l)
-                x_al = x_in[idx_n]
-                hit = (x_al[32:] > core.SCALING_X_LIM) & (y_out[32:] > core.SCALING_Y_LIM)
+                def _nn(xq):
+                    ir = np.clip(np.searchsorted(phi, xq, side="left"), 1, n_15 - 1)
+                    il = ir - 1
+                    idx_n = np.where(np.abs(phi[ir] - xq) < np.abs(xq - phi[il]), ir, il)
+                    return x_in[idx_n]
+                xa = f_hat * _nn(xq1) + (1.0 - f_hat) * _nn(xq2)
+                hit = (xa[32:] > core.SCALING_X_LIM) & (y_out[32:] > core.SCALING_Y_LIM)
                 q_hrs = [float(np.sum(hit & (q_15_arr[32:] == q)) * 0.25) for q in range(4)]
             elif kind == "ou_krig":
-                # Empirical Gaussian OU kriging between bracketing parcel grid points in Phi-space
                 q_mu = np.array([float(np.mean(x_in[q_15_arr == q])) for q in range(4)])
                 xr = x_in - q_mu[q_15_arr]
                 var_x = float(np.var(xr, ddof=1))
                 r1_x = float(np.corrcoef(xr[:-1], xr[1:])[0, 1])
                 dv_med = float(np.median(np.diff(phi)))
-                L_hat = max(40.0, -dv_med / math.log(max(0.05, min(0.995, r1_x))))
-                idx_r = np.clip(np.searchsorted(phi, xq, side="left"), 1, n_15 - 1)
-                idx_l = idx_r - 1
-                dL = np.maximum(0.0, xq - phi[idx_l])
-                dR = np.maximum(0.0, phi[idx_r] - xq)
-                dT = np.maximum(1e-6, phi[idx_r] - phi[idx_l])
-                rL = np.exp(-dL / L_hat)
-                rR = np.exp(-dR / L_hat)
-                rT = np.exp(-dT / L_hat)
-                den = np.maximum(1e-9, 1.0 - rT * rT)
-                wL = (rL - rT * rR) / den
-                wR = (rR - rT * rL) / den
-                mu_k = q_mu[q_15_arr] + wL * xr[idx_l] + wR * xr[idx_r]
-                var_k = np.maximum(1e-9, var_x * (1.0 - (rL * rL + rR * rR - 2.0 * rL * rR * rT) / den))
-                sd_k = np.sqrt(var_k)
-                z_k = (core.SCALING_X_LIM - mu_k[32:]) / sd_k[32:]
-                p_exc = np.array([core.norm_sf(float(zv)) for zv in z_k])
+                L_hat = max(35.0, -dv_med / math.log(max(0.05, min(0.995, r1_x))))
+
+                def _krig(xq):
+                    ir = np.clip(np.searchsorted(phi, xq, side="left"), 1, n_15 - 1)
+                    il = ir - 1
+                    dL = np.maximum(0.0, xq - phi[il])
+                    dR = np.maximum(0.0, phi[ir] - xq)
+                    dT = np.maximum(1e-6, phi[ir] - phi[il])
+                    rL = np.exp(-dL / L_hat)
+                    rR = np.exp(-dR / L_hat)
+                    rT = np.exp(-dT / L_hat)
+                    den = np.maximum(1e-9, 1.0 - rT * rT)
+                    wL = (rL - rT * rR) / den
+                    wR = (rR - rT * rL) / den
+                    mu_k = q_mu[q_15_arr] + wL * xr[il] + wR * xr[ir]
+                    var_k = np.maximum(1e-9, var_x * (1.0 - (rL * rL + rR * rR - 2.0 * rL * rR * rT) / den))
+                    return mu_k, var_k
+
+                m1, v1 = _krig(xq1)
+                m2, v2 = _krig(xq2)
+                mu_mix = f_hat * m1 + (1.0 - f_hat) * m2
+                sd_mix = np.sqrt(np.maximum(1e-9, (f_hat ** 2) * v1 + ((1.0 - f_hat) ** 2) * v2))
+                z_k = (core.SCALING_X_LIM - mu_mix[32:]) / sd_mix[32:]
+                p_exc = np.array([core._norm_sf(float(zv)) for zv in z_k])
                 y_hit = (y_out[32:] > core.SCALING_Y_LIM).astype(float)
                 q_hrs = [float(np.sum(p_exc * y_hit * (q_15_arr[32:] == q)) * 0.25) for q in range(4)]
             else:
                 raise ValueError(kind)
-            out_v[u] = {"q": q_hrs, "v_hat": v_hat, "c_rms": r2_g[u]["c_rms"]}
+            out_v[u] = {"q": q_hrs, "f_hat": f_hat, "v1_hat": v1_hat, "v2_hat": v2_hat, "c_rms": r2_g[u]["c_rms"]}
         return out_v
 
     s1_vars = [
-        ("S1: continuous OU kernel (WLS)", core.estimate_s1(data, mode="golden", kernel="ou", obj="wls")),
+        ("S1: continuous OU kernel (1h-normalized WLS)", core.estimate_s1(data, mode="golden", kernel="ou", obj="wls")),
         ("S1: discrete AR(1) OLS moments", core.estimate_s1(data, mode="golden", kernel="ar1", obj="ols")),
-        ("S1: discrete AR(1) lag-1 r1(4) only", core.estimate_s1(data, mode="golden", kernel="ar1", obj="r1_only")),
-        ("S1: AR(1) WLS with 0.5% trimming", core.estimate_s1(data, mode="golden", kernel="ar1", obj="wls", trim_pct=0.5)),
+        ("S1: discrete AR(1) lag-1-weighted moments", core.estimate_s1(data, mode="golden", kernel="ar1", obj="lag1")),
+        ("S1: AR(1) WLS with 0.5% residual trimming", core.estimate_s1(data, mode="golden", kernel="ar1", obj="wls", trim_frac=0.005)),
         ("S1: AR(1) WLS without lab-noise subtraction", core.estimate_s1(data, mode="golden", kernel="ar1", obj="wls", lab_noise=False)),
-        ("S1: AR(1) WLS on 4h moments only", core.estimate_s1(data, mode="golden", kernel="ar1", obj="wls", use_m8=False)),
+        ("S1: AR(1) WLS on 4h residual moments only", core.estimate_s1(data, mode="golden", kernel="ar1", obj="wls", use_8h=False)),
+        ("S1: span-weighted WLS 1/Q_bar flux regression", core.estimate_s1(data, mode="golden", kernel="ar1", obj="wls", flux_fit="wls_span")),
+        ("S1: Huber IRLS 1/Q_bar flux regression", core.estimate_s1(data, mode="golden", kernel="ar1", obj="wls", flux_fit="huber")),
     ]
     s2_vars = [
-        ("S2: piecewise-constant step flow integration", core.estimate_s2(data, mode="golden", flow_interp="step", loss_fn="l2")),
-        ("S2: piecewise-constant step flow (left endpoint)", _estimate_s2_parcel_variant("step_left")),
+        ("S2: piecewise-constant step flow (right)", core.estimate_s2(data, mode="golden", flow_interp="step", loss_fn="l2")),
+        ("S2: piecewise-constant step flow (left)", _estimate_s2_parcel_variant("step_left")),
         ("S2: midpoint flow integration", core.estimate_s2(data, mode="golden", flow_interp="midpoint", loss_fn="l2")),
-        ("S2: L1 conductivity profile loss", core.estimate_s2(data, mode="golden", flow_interp="linear", loss_fn="l1")),
-        ("S2: Huber conductivity profile loss", core.estimate_s2(data, mode="golden", flow_interp="linear", loss_fn="huber")),
-        ("S2: Pearson correlation profile objective", core.estimate_s2(data, mode="golden", flow_interp="linear", loss_fn="corr")),
-        ("S2: 2% trimmed L2 conductivity loss", core.estimate_s2(data, mode="golden", flow_interp="linear", loss_fn="l2", trim_q=2.0)),
-        ("S2: Gaussian OU kriging parcel TEP lookup", _estimate_s2_parcel_variant("ou_krig")),
-        ("S2: PCHIP interpolation parcel TEP lookup", _estimate_s2_parcel_variant("pchip")),
-        ("S2: nearest 15-minute parcel TEP lookup", _estimate_s2_parcel_variant("nearest")),
-        ("S2: cubic spline parcel TEP lookup", _estimate_s2_parcel_variant("cubic")),
+        ("S2: L1 two-path conductivity profile loss", core.estimate_s2(data, mode="golden", flow_interp="linear", loss_fn="l1")),
+        ("S2: Huber two-path conductivity profile loss", core.estimate_s2(data, mode="golden", flow_interp="linear", loss_fn="huber")),
+        ("S2: 2% trimmed L2 two-path conductivity loss", core.estimate_s2(data, mode="golden", flow_interp="linear", loss_fn="trimmed_l2")),
+        ("S2: Gaussian OU kriging two-path TEP lookup", _estimate_s2_parcel_variant("ou_krig")),
+        ("S2: PCHIP interpolation two-path TEP lookup", _estimate_s2_parcel_variant("pchip")),
+        ("S2: nearest 15-min two-path TEP lookup", _estimate_s2_parcel_variant("nearest")),
+        ("S2: cubic spline two-path TEP lookup", _estimate_s2_parcel_variant("cubic")),
     ]
     s3_vars = [
-        ("S3: shared fleet CIP clearing efficiency", core.estimate_s3(data, mode="golden", foul_model="tied_d3_d12", cip_mode="common_clear")),
-        ("S3: free D3 bio-fouling floor (per-train CIP)", core.estimate_s3(data, mode="golden", foul_model="free_d12", cip_mode="free_per_train")),
-        ("S3: free D3 floor + shared CIP clearing", core.estimate_s3(data, mode="golden", foul_model="free_d12", cip_mode="common_clear")),
-        ("S3: 96-hour (24-block) post-CIP window", core.estimate_s3(data, mode="golden", foul_model="tied_d3_d12", cip_mode="free_per_train", post_window_blocks=24)),
-        ("S3: 144-hour (36-block) post-CIP window", core.estimate_s3(data, mode="golden", foul_model="tied_d3_d12", cip_mode="free_per_train", post_window_blocks=36)),
-        ("S3: shared CIP + inclusive <=120h (31-block) window", core.estimate_s3(data, mode="golden", foul_model="tied_d3_d12", cip_mode="common_clear", post_window_blocks=31)),
+        ("S3: per-train CIP clearing ratios", core.estimate_s3(data, mode="golden", post_blocks=30, shared_clear=False)),
+        ("S3: cross-recipe clearing allowance", core.estimate_s3(data, mode="golden", post_blocks=30, shared_clear=True, allow_cross_clear=True)),
+        ("S3: 96-hour (24-block) post-CIP window", core.estimate_s3(data, mode="golden", post_blocks=24)),
+        ("S3: 144-hour (36-block) post-CIP window", core.estimate_s3(data, mode="golden", post_blocks=36)),
+        ("S3: inclusive <=120h (31-block) post-CIP window", core.estimate_s3(data, mode="golden", post_blocks=31)),
     ]
     variants_named = []
     for nm, v1 in s1_vars:
-        variants_named.append((nm, core.assemble(v1, r2_g, r3_g, inc_2026)))
+        variants_named.append((nm, core.assemble(v1, r2_g, r3_g)))
     for nm, v2 in s2_vars:
-        variants_named.append((nm, core.assemble(r1_g, v2, r3_g, inc_2026)))
+        variants_named.append((nm, core.assemble(r1_g, v2, r3_g)))
     for nm, v3 in s3_vars:
-        variants_named.append((nm, core.assemble(r1_g, r2_g, v3, inc_2026)))
-    variants_named.append(("Joint A: OU + L1 + shared CIP", core.assemble(s1_vars[0][1], s2_vars[3][1], s3_vars[0][1], inc_2026)))
-    variants_named.append(("Joint B: OLS + Huber + 96h post-CIP", core.assemble(s1_vars[1][1], s2_vars[4][1], s3_vars[3][1], inc_2026)))
-    variants_named.append(("Joint C: no-lab-noise + corr + 144h post-CIP", core.assemble(s1_vars[4][1], s2_vars[5][1], s3_vars[4][1], inc_2026)))
+        variants_named.append((nm, core.assemble(r1_g, r2_g, v3)))
+    variants_named.append(("Joint A: OU flux-AR1 + L1 two-path + per-train CIP", core.assemble(s1_vars[0][1], s2_vars[3][1], s3_vars[0][1])))
+    variants_named.append(("Joint B: Huber flux + Huber two-path + 96h CIP", core.assemble(s1_vars[7][1], s2_vars[4][1], s3_vars[2][1])))
+    variants_named.append(("Joint C: trimmed flux + trimmed-L2 two-path + 144h CIP", core.assemble(s1_vars[3][1], s2_vars[5][1], s3_vars[3][1])))
 
-    # Run routes + 13 extra cutoff/hedge routes
-    gen_asm = core.assemble(r1_over, r2_over, r3_rig, inc_2026)
+    # Run routes + 16 extra cutoff/hedge/Round-1 rival routes
+    gen_asm = core.assemble(r1_over, r2_over, r3_r2)
     r1_hedge = {
         u: {
-            "q": [0.80 * r1_h[u]["q"][q] + 0.20 * r1_g[u]["q"][q] for q in range(4)],
-            "v8_v4_pred": 0.8 + 0.2 * r1_g[u]["v8_v4_pred"],
-            "r1_4_pred": 0.8 + 0.2 * r1_g[u]["r1_4_pred"],
+            **r1_g[u],
+            "q": [0.8 * r1_h[u]["q"][q] + 0.2 * r1_g[u]["q"][q] for q in range(4)],
+            "beta_hat": 0.2 * r1_g[u]["beta_hat"],
         }
         for u in core.TRAINS
     }
     r2_hedge = {
         u: {
-            "q": [0.80 * r2_h[u]["q"][q] + 0.20 * r2_g[u]["q"][q] for q in range(4)],
+            **r2_g[u],
+            "q": [0.8 * r2_h[u]["q"][q] + 0.2 * r2_g[u]["q"][q] for q in range(4)],
             "c_rms": 0.8 * r2_h[u]["c_rms"] + 0.2 * r2_g[u]["c_rms"],
         }
         for u in core.TRAINS
     }
     r3_hedge = {
         u: {
-            "q": [0.80 * r3_h[u]["q"][q] + 0.20 * r3_g[u]["q"][q] for q in range(4)],
-            "pred_drop_6": 0.2 * r3_g[u]["pred_drop_6"],
-            "pred_drop_d3": 0.2 * r3_g[u]["pred_drop_d3"],
+            **r3_g[u],
+            "q": [0.8 * r3_h[u]["q"][q] + 0.2 * r3_g[u]["q"][q] for q in range(4)],
+            "preds": {k: 0.2 * r3_g[u]["preds"][k] for k in r3_g[u]["preds"]},
         }
         for u in core.TRAINS
     }
-    hedge_asm = core.assemble(r1_hedge, r2_hedge, r3_hedge, inc_2026)
+    hedge_asm = core.assemble(r1_hedge, r2_hedge, r3_hedge)
 
     r1_c4 = core.estimate_s1(data, mode="cutoff_4h")
-    r2_cst = core.estimate_s2(data, mode="steady_flow")
-    r3_cpmv = core.estimate_s3(data, mode="post_cip_mv")
-    cut_asm = core.assemble(r1_c4, r2_cst, r3_cpmv, inc_2026)
-
-    r1_ll = core.estimate_s1(data, mode="loglog")
-    r1_cp = core.estimate_s1(data, mode="comp_param")
+    r1_linq = core.estimate_s1(data, mode="linear_q_no_deconv")
+    r1_fnd = core.estimate_s1(data, mode="flux_only_no_deconv")
+    r1_fiid = core.estimate_s1(data, mode="over_flux_iid")
+    r2_fl = core.estimate_s2(data, mode="fixed_lag")
     r2_nv = core.estimate_s2(data, mode="nom_vol")
-    r3_cpds = core.estimate_s3(data, mode="post_cip_ds2")
+    r3_cpmv = core.estimate_s3(data, mode="post_cip_mv")
+    r3_ds2_all = core.estimate_s3(data, mode="ds2_all")
     r3_un = core.estimate_s3(data, mode="unanimous")
-    r3_nr = core.estimate_s3(data, mode="d3_naive_ratio")
+    cut_asm = core.assemble(r1_c4, r2_fl, r3_cpmv)
 
     extra_routes = {
-        "cutoff:s1_4h_only": core.assemble(r1_c4, r2_g, r3_g, inc_2026),
-        "cutoff:s1_comp_param": core.assemble(r1_cp, r2_g, r3_g, inc_2026),
-        "cutoff:s1_loglog": core.assemble(r1_ll, r2_g, r3_g, inc_2026),
-        "cutoff:s1_pooled": core.assemble(r1_rig, r2_g, r3_g, inc_2026),
-        "cutoff:s2_fixed_lag": core.assemble(r1_g, r2_rig, r3_g, inc_2026),
-        "cutoff:s2_nom_vol": core.assemble(r1_g, r2_nv, r3_g, inc_2026),
-        "cutoff:s2_steady_flow": core.assemble(r1_g, r2_cst, r3_g, inc_2026),
-        "cutoff:s3_post_cip_mv": core.assemble(r1_g, r2_g, r3_cpmv, inc_2026),
-        "cutoff:s3_post_cip_ds2": core.assemble(r1_g, r2_g, r3_cpds, inc_2026),
-        "cutoff:s3_ds2_ci": core.assemble(r1_g, r2_g, r3_rig, inc_2026),
-        "cutoff:s3_unanimous": core.assemble(r1_g, r2_g, r3_un, inc_2026),
-        "cutoff:s3_d3_naive_ratio": core.assemble(r1_g, r2_g, r3_nr, inc_2026),
-        "hedge:history_2026_flat": core.assemble(r1_g, r2_g, r3_g, inc_2026, forward=False),
+        "cutoff:r1_round1_full": rig_r1_asm,
+        "cutoff:r2_round1_full": rig_r2_asm,
+        "cutoff:s1_stationary_ar1_mle": core.assemble(r1_stat, r2_g, r3_g),
+        "cutoff:s1_4h_only": core.assemble(r1_c4, r2_g, r3_g),
+        "cutoff:s1_linear_q_no_deconv": core.assemble(r1_linq, r2_g, r3_g),
+        "cutoff:s1_flux_no_deconv": core.assemble(r1_fnd, r2_g, r3_g),
+        "cutoff:s1_flux_iid_over": core.assemble(r1_fiid, r2_g, r3_g),
+        "cutoff:s2_single_plug_veff": core.assemble(r1_g, r2_sp, r3_g),
+        "cutoff:s2_fixed_lag": core.assemble(r1_g, r2_fl, r3_g),
+        "cutoff:s2_nom_vol": core.assemble(r1_g, r2_nv, r3_g),
+        "cutoff:s3_r1_pooled_cip_3state": core.assemble(r1_g, r2_g, r3_r1),
+        "cutoff:s3_r2_post_cip_ds2": core.assemble(r1_g, r2_g, r3_r2),
+        "cutoff:s3_post_cip_mv": core.assemble(r1_g, r2_g, r3_cpmv),
+        "cutoff:s3_ds2_all": core.assemble(r1_g, r2_g, r3_ds2_all),
+        "cutoff:s3_unanimous": core.assemble(r1_g, r2_g, r3_un),
+        "hedge:history_2026_flat": core.assemble(r1_g, r2_g, r3_g, forward=False),
     }
 
     # Native-unit physical falsification F1, F2, F3
@@ -595,21 +663,26 @@ def run_all(target_dir):
     for label, (x1, x2, x3) in [
         ("golden", (r1_g, r2_g, r3_g)),
         ("direct", (r1_h, r2_h, r3_h)),
-        ("rigorous", (r1_rig, r2_rig, r3_rig)),
-        ("generous", (r1_over, r2_over, r3_rig)),
+        ("rigorous_r1", (r1_stat, r2_sp, r3_r1)),
+        ("rigorous_r2", (r1_stat, r2_sp, r3_r2)),
+        ("generous", (r1_over, r2_over, r3_r2)),
         ("hedge", (r1_hedge, r2_hedge, r3_hedge)),
-        ("cutoff", (r1_c4, r2_cst, r3_cpmv)),
+        ("cutoff", (r1_c4, r2_fl, r3_cpmv)),
+        ("S1_stat_ar1", (r1_stat, r2_g, r3_g)),
+        ("S2_single_plug", (r1_g, r2_sp, r3_g)),
+        ("S3_r1_pooled", (r1_g, r2_g, r3_r1)),
         ("S1_lost", (r1_h, r2_g, r3_g)),
         ("S2_lost", (r1_g, r2_h, r3_g)),
         ("S3_lost", (r1_g, r2_g, r3_h)),
         ("S1_over", (r1_over, r2_g, r3_g)),
         ("S2_over", (r1_g, r2_over, r3_g)),
         ("S3_over", (r1_g, r2_g, r3_over)),
+        ("s2_fixed_lag", (r1_g, r2_fl, r3_g)),
         ("s2_nom_vol", (r1_g, r2_nv, r3_g)),
-        ("s2_steady_flow", (r1_g, r2_cst, r3_g)),
     ]:
         f1, f2, f3 = core.falsification_score(data, x1, x2, x3)
-        fal_by_route[label] = {"f1": f1, "f2_ms_cm": f2, "f3_pp": f3}
+        comb = f1 * 10.0 + max(0.0, f2 - 0.335) * 15.0 + f3 * 2.5
+        fal_by_route[label] = {"f1": f1, "f2_ms_cm": f2, "f3_pp": f3, "combined": comb}
 
     # Six +/-20% forcing perturbations
     g_slate = sorted(u for u in core.TRAINS if gold_asm["members"][u] >= core.THRESHOLD)
@@ -625,7 +698,7 @@ def run_all(target_dir):
         p1 = {u: {"q": [x * f1m for x in r1_g[u]["q"]]} for u in core.TRAINS}
         p2 = {u: {"q": [x * f2m for x in r2_g[u]["q"]]} for u in core.TRAINS}
         p3 = {u: {"q": [x * f3m for x in r3_g[u]["q"]]} for u in core.TRAINS}
-        asm = core.assemble(p1, p2, p3, inc_2026)
+        asm = core.assemble(p1, p2, p3)
         sl = sorted(u for u in core.TRAINS if asm["members"][u] >= core.THRESHOLD)
         min_ov = min(asm["members"][u] for u in g_slate)
         max_mo = max(asm["members"][u] for u in core.TRAINS if u not in g_slate)
@@ -639,7 +712,7 @@ def run_all(target_dir):
             }
         )
 
-    # Variant bands (exact min/max across golden + all 20 variants, plus comfortable reporting bands)
+    # Variant uncertainty ranges (exact min/max across golden + all 26 variants, padded gently)
     all_var_asms = [gold_asm] + [v for _, v in variants_named]
 
     def _band_for(key, is_member=False):
@@ -662,9 +735,8 @@ def run_all(target_dir):
         "A_total_2027",
         "A_overhaul_2027",
         "A_q3_2027",
-        "A_cost_eur_k",
-        "A_overhaul_eur_k",
-        "A_diag_err_pct",
+        "A_energy_mwh",
+        "A_overhaul_mwh",
     ]:
         b, sp = _band_for(fid, is_member=False)
         bands[fid] = b
@@ -673,10 +745,11 @@ def run_all(target_dir):
     return {
         "cleaning": cleaning,
         "plan": plan,
-        "inc_2026": inc_2026,
         "train_rows": train_rows,
         "gold_asm": gold_asm,
-        "rig_asm": rig_asm,
+        "rig_r1_asm": rig_r1_asm,
+        "rig_r2_asm": rig_r2_asm,
+        "rig_asm": rig_r1_asm,
         "gen_asm": gen_asm,
         "hedge_asm": hedge_asm,
         "cut_asm": cut_asm,
@@ -695,9 +768,10 @@ def run_all(target_dir):
         "r1_h": r1_h,
         "r2_h": r2_h,
         "r3_h": r3_h,
-        "r1_rig": r1_rig,
-        "r2_rig": r2_rig,
-        "r3_rig": r3_rig,
+        "r1_stat": r1_stat,
+        "r2_sp": r2_sp,
+        "r3_r1": r3_r1,
+        "r3_r2": r3_r2,
         "data": data,
     }
 
@@ -715,6 +789,6 @@ if __name__ == "__main__":
         )
     print(
         f"Plant 2027: Total={res['gold_asm']['A_total_2027']:.1f} Overhaul={res['gold_asm']['A_overhaul_2027']:.1f} "
-        f"Q3={res['gold_asm']['A_q3_2027']:.1f} Energy={res['gold_asm']['A_cost_eur_k']:.1f} MWh "
-        f"OvEnergy={res['gold_asm']['A_overhaul_eur_k']:.1f} MWh Disc={res['gold_asm']['A_diag_err_pct']:.1f}%"
+        f"Q3={res['gold_asm']['A_q3_2027']:.1f} Energy={res['gold_asm']['A_energy_mwh']:.1f} MWh "
+        f"OvEnergy={res['gold_asm']['A_overhaul_mwh']:.1f} MWh"
     )

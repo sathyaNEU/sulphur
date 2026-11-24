@@ -2,7 +2,7 @@
   "as_of": "2027-01-18",
   "decision": "2027 membrane-train reliability diagnosis and vessel overhaul selection across eight Barlavento SWRO trains under Engineering Protocol SWRO-Q27",
   "deliverables": [
-    "a spreadsheet",
+    "a workbook",
     "a CSV"
   ],
   "distractor_files": [
@@ -31,7 +31,7 @@
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
     },
     "cip_wash_log_2026.csv": {
-      "covers": "2026 routine Clean-in-Place chemical wash completion log by train",
+      "covers": "2026 routine Clean-in-Place alkaline and acid chemical wash completion log by train",
       "license": "proprietary, municipal desalination authority simulation",
       "pulled": "2027-01-12",
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
@@ -85,7 +85,7 @@
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
     },
     "swro_integrity_standard_q27.pdf": {
-      "covers": "Engineering Protocol SWRO-Q27 defining physical excursion modes, overhaul criterion, excess desalination energy rates, Annex B 2027 forecast rules, and Annex C diagnostics output schema",
+      "covers": "Engineering Protocol SWRO-Q27 defining physical excursion modes, overhaul criterion, excess desalination energy rates, Annex A 2027 forecast rules, and Annex B diagnostics output schema",
       "license": "proprietary, municipal desalination authority simulation",
       "pulled": "2026-09-14",
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"

@@ -2,12 +2,12 @@
 """Export the two authentic PDF documents in task28/target/ via LibreOffice Writer (officepdf.build):
 1. swro_integrity_standard_q27.pdf - Governing Engineering Protocol SWRO-Q27 (WHAT only: 400-hour overhaul
    criterion, three physical excursion mode definitions, excess desalination energy rates in kWh/h,
-   Annex B 2027 operating-plan projection rules, Clause 4.1-4.4 definitions, Annex C diagnostics schema).
+   Annex A 2027 operating-plan projection rules, Clause 4.1-4.3 definitions, Annex B diagnostics schema).
 2. lims_qa_certificate_2026.pdf - Accredited 2026 LIMS ICP-OES boron analytical QA certificate (0.004 mg/L
    repeatability SD, North/South bench units and date formats, QA revision precedence, carousel cadences).
 
-Zero hints on composite variance deconvolution, Lagrangian flow coordinates, baffling efficiency, effective
-holdup volume, Dawid-Skene/latent-class EM, conditional alarm dependence, or CIP clearing shares.
+Zero hints on solute-flux flow coupling, composite variance deconvolution, Lagrangian flow coordinates,
+two-path short-circuiting, baffling efficiency, Dawid-Skene/latent-class EM, or dual-recipe CIP separation.
 """
 import datetime as dt
 import os
@@ -120,24 +120,25 @@ def _write_integrity_standard(out_dir):
             body,
         ),
         Paragraph(
-            "2.2 Pretreatment-to-RO Scaling Excursion (Clause 2.2): A scaling excursion occurs on any 15-minute seawater "
-            "parcel (0.25 operating hours) that enters a train's dissolved-air-flotation and dual-media filtration "
-            "(DAF/DMF) pretreatment stage with standardized intake algal-TEP precursor index strictly exceeding 1.50 "
-            "(relative to the 2020-2025 coastal baseline) AND arrives at that train's reverse-osmosis feed header with "
-            "supersaturation-oxidant stress index strictly exceeding 1.50. Because parcels arriving at the RO feed "
-            "header during the opening hours of 1 January 2026 entered the intake prior to midnight on 31 December 2025, "
-            "the initial 8 hours (32 fifteen-minute intervals from 2026-01-01T00:00Z through 2026-01-01T07:45Z) are "
-            "outside the 2026 scaling excursion count.",
+            "2.2 Pretreatment-to-RO Scaling Excursion (Clause 2.2): A scaling excursion occurs during any 15-minute "
+            "operating interval (0.25 hours) in which the pretreated seawater arriving at a train's reverse-osmosis "
+            "feed header carries a standardized algal-TEP precursor index strictly exceeding 1.50 (relative to the "
+            "2020-2025 coastal baseline, following transit through that train's dissolved-air-flotation and dual-media "
+            "filtration stage) AND an RO-feed supersaturation-oxidant stress index strictly exceeding 1.50. Because "
+            "seawater arriving at the RO feed header during the opening hours of 1 January 2026 entered the intake "
+            "prior to midnight on 31 December 2025, the initial 8 hours (32 fifteen-minute intervals from "
+            "2026-01-01T00:00Z through 2026-01-01T07:45Z) are outside the 2026 scaling excursion count.",
             body,
         ),
         Paragraph(
             "2.3 Persistent Structural Membrane Integrity Fault (Clause 2.3): A structural integrity fault occurs during "
             "any 4-hour operating block in which a train operates with a persistent mechanical membrane or vessel breach "
-            "(such as O-ring bypass, interconnector seal failure, or element delamination). Reversible biological fouling "
-            "removed during routine Clean-in-Place (CIP) chemical washes is a normal operational fouling cycle outside "
-            "Clause 2.3 and does not count toward vessel overhaul hours. During the operating year, trains are monitored "
-            "non-destructively via three continuous inline 4-hour shift alarm channels (salt-passage indicator, stage "
-            "differential-pressure indicator, and acoustic-bypass indicator) without intrusive vessel probing.",
+            "(such as O-ring bypass, interconnector seal failure, or element delamination). Reversible membrane fouling "
+            "and surface deposits cleared during routine Clean-in-Place (CIP) chemical washes are normal operational "
+            "cycles outside Clause 2.3 and do not count toward vessel overhaul hours. During the operating year, trains "
+            "are monitored non-destructively via three continuous inline 4-hour shift alarm channels (salt-passage "
+            "indicator, stage differential-pressure indicator, and acoustic-bypass indicator) without intrusive vessel "
+            "probing.",
             body,
         ),
         Paragraph("3. 2027 Vessel Overhaul Engineering Criterion", h2),
@@ -171,7 +172,7 @@ def _write_integrity_standard(out_dir):
             ]
         ),
         PageBreak(),
-        Paragraph("4. Calendar Quarters, Clocks, Excess Desalination Energy Burden, and Monitoring Bias", h2),
+        Paragraph("4. Calendar Quarters, Clocks, and Excess Desalination Energy Penalties", h2),
         Paragraph(
             "4.1 Operational Calendar Quarters: Quarterly aggregations follow exact UTC operational quarter boundaries "
             "for non-leap year 2026: Q1 (1 January through 31 March, 90 days, 2,160 hours), Q2 (1 April through 30 June, "
@@ -193,7 +194,7 @@ def _write_integrity_standard(out_dir):
         KeepTogether(
             [
                 Paragraph(
-                    "4.3 Mode-Specific Excess Desalination Energy Burden: Operating under physical excursion or membrane "
+                    "4.3 Mode-Specific Excess Desalination Energy Penalty: Operating under physical excursion or membrane "
                     "fault conditions imposes incremental electrical energy demand for second-pass permeate polishing, "
                     "elevated feed transmembrane-pressure pumping drag, or high-salinity permeate bypass recirculation. "
                     "Validated 2027 plant energy penalties per forecasted anomalous operating hour are:",
@@ -203,7 +204,7 @@ def _write_integrity_standard(out_dir):
                     [
                         ["Physical Failure Mode", "Protocol Clause", "Excess Energy Rate (kWh / anomalous hour)"],
                         ["Permeate Boron (> 0.50 mg/L, 1-hour basis; 2nd-pass polishing)", "Clause 2.1", "420 kWh/h"],
-                        ["Pretreatment-to-RO Scaling (parcel > 1.50 & > 1.50; TMP drag)", "Clause 2.2", "360 kWh/h"],
+                        ["Pretreatment-to-RO Scaling (RO header > 1.50 & > 1.50; TMP drag)", "Clause 2.2", "360 kWh/h"],
                         ["Persistent Structural Membrane Fault (bypass recirculation)", "Clause 2.3", "540 kWh/h"],
                     ],
                     [82, 32, 60],
@@ -213,29 +214,15 @@ def _write_integrity_standard(out_dir):
             ]
         ),
         Paragraph(
-            "Total 2027 excess desalination energy burden (reported in MWh, dividing kWh by 1,000) sums across all "
+            "Total 2027 excess desalination energy penalty (reported in MWh, dividing kWh by 1,000) sums across all "
             "eight trains and all three failure modes. Overhaul-train subtotals for projected 2027 anomalous hours "
             "and excess desalination energy (MWh) sum strictly over trains designated OVERHAUL under Clause 3.1. "
             "Summer Q3 anomalous hours sum projected 2027 Q3 hours across all eight trains and three modes.",
             body,
         ),
+        Paragraph("Annex A. Uniform 2027 Operating Regime Physical Projection Rules", h2),
         Paragraph(
-            "4.4 2026 Raw Monitoring Screening Discrepancy Rate: Barlavento's legacy 2026 SCADA/LIMS operational "
-            "screening dashboard tallies raw annual alarm hours H_inc_2026(u, m) per train u and mode m from cleaned "
-            "2026 records as: (a) for permeate boron, the fraction of clean lab composite bottles exceeding 0.50 mg/L "
-            "within each quarter multiplied by quarterly operating hours; (b) for scaling, the count of 15-minute "
-            "intervals (excluding the initial 32 burn-in intervals) with same-timestamp intake precursor index > 1.50 "
-            "and RO-feed stress > 1.50 multiplied by 0.25 hours; and (c) for structural faults, the count of 4-hour "
-            "blocks with two or more of the three inline shift alarms active multiplied by 4.0 hours. The plant-wide "
-            "2026 measurement-system screening discrepancy rate (in percent) is defined as "
-            "100 * sum_{u,m} |H_est_2026(u,m) - H_inc_2026(u,m)| / sum_{u,m} H_est_2026(u,m), summed over all 8 trains "
-            "and all 3 modes, where H_est_2026(u,m) denotes each train's estimated true 2026 physical excursion hours "
-            "under Clauses 2.1 through 2.3.",
-            body,
-        ),
-        Paragraph("Annex B. Uniform 2027 Operating Regime Physical Projection Rules", h2),
-        Paragraph(
-            "B.1 Forecasted 2027 anomalous hours carry each train's estimated 2026 quarterly physical mode hours "
+            "A.1 Forecasted 2027 anomalous hours carry each train's estimated 2026 quarterly physical mode hours "
             "forward into the 2027 operating regime uniformly across all eight trains, where R_duty(u, q) is train "
             "u's planned 2027-to-2026 quarterly potable dispatch duty ratio, F_thermal(q) is the quarterly seawater "
             "thermal boron-passage factor, and F_recovery(q) is the quarterly scaling recovery factor:",
@@ -256,7 +243,7 @@ def _write_integrity_standard(out_dir):
         KeepTogether(
             [
                 Paragraph(
-                    "B.2 Planned 2027 seasonal seawater-temperature (boron passage) and recovery-rate (scaling stress) "
+                    "A.2 Planned 2027 seasonal seawater-temperature (boron passage) and recovery-rate (scaling stress) "
                     "process factors are identical across all eight trains:",
                     body,
                 ),
@@ -274,31 +261,30 @@ def _write_integrity_standard(out_dir):
                 ),
             ]
         ),
-        Paragraph("Annex C. 2027 Membrane Reliability Diagnostics Output Schema", h2),
+        Paragraph("Annex B. 2027 Membrane Reliability Diagnostics Output Schema", h2),
         Paragraph(
-            "C.1 Annual reliability diagnostics deliverables for Barlavento process engineering consist of two matched "
-            "files: (1) a diagnostics workbook opening on an executive overhaul summary sheet showing every train's "
-            "forecasted 2027 permeate boron, scaling, structural, total, and Q3 anomalous hours, excess desalination "
-            "energy burden in MWh, overhaul designation, plant-wide and overhaul subtotals, estimation uncertainty "
-            "ranges across modeling assumptions, 2026 raw monitoring screening discrepancy summary, and a train "
-            "comparison chart against the 400-hour criterion, supported by 2026-to-2027 physical model backup sheets; "
-            "and (2) a train-level diagnostics CSV for the plant maintenance historian sorted by projected 2027 total "
-            "anomalous hours descending.",
+            "B.1 Annual reliability diagnostics deliverables for Barlavento process engineering consist of two matched "
+            "files: (1) an engineering diagnostics workbook opening on an executive overhaul summary sheet showing "
+            "every train's forecasted 2027 permeate boron, scaling, structural, total, and Q3 anomalous hours, excess "
+            "desalination energy penalty in MWh, overhaul designation, plant-wide and overhaul subtotals, estimation "
+            "uncertainty ranges across modeling assumptions, and a train comparison chart against the 400-hour "
+            "criterion, supported by 2026-to-2027 physical model backup sheets; and (2) a train-level diagnostics CSV "
+            "for the plant maintenance historian sorted by projected 2027 total anomalous hours descending.",
             body,
         ),
         KeepTogether(
             [
-                Paragraph("C.2 Required column layout for the train-level plant historian diagnostics CSV:", body),
+                Paragraph("B.2 Required column layout for the train-level plant historian diagnostics CSV:", body),
                 _grid(
                     [
                         ["Column Name", "Unit / Format", "Definition"],
                         ["train_id", "TR01..TR08", "Canonical Barlavento SWRO train identifier"],
-                        ["boron_2027_h", "hours", "Forecasted 2027 permeate boron excursion hours (Clause 2.1 + Annex B)"],
-                        ["scaling_2027_h", "hours", "Forecasted 2027 pretreatment-to-RO scaling hours (Clause 2.2 + Annex B)"],
-                        ["struct_2027_h", "hours", "Forecasted 2027 persistent structural fault hours (Clause 2.3 + Annex B)"],
+                        ["boron_2027_h", "hours", "Forecasted 2027 permeate boron excursion hours (Clause 2.1 + Annex A)"],
+                        ["scaling_2027_h", "hours", "Forecasted 2027 pretreatment-to-RO scaling hours (Clause 2.2 + Annex A)"],
+                        ["struct_2027_h", "hours", "Forecasted 2027 persistent structural fault hours (Clause 2.3 + Annex A)"],
                         ["total_2027_h", "hours", "Sum of boron_2027_h + scaling_2027_h + struct_2027_h"],
                         ["q3_2027_h", "hours", "Forecasted 2027 summer Q3 total anomalous hours (all 3 modes)"],
-                        ["energy_2027_mwh", "MWh", "Forecasted 2027 excess desalination process energy burden (Clause 4.3)"],
+                        ["energy_2027_mwh", "MWh", "Forecasted 2027 excess desalination process energy penalty (Clause 4.3)"],
                         ["designation", "OVERHAUL / MONITOR", "Clause 3.1 engineering classification (>= 400.0 h = OVERHAUL)"],
                     ],
                     [38, 36, 100],

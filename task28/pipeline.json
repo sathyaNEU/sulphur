@@ -7,41 +7,41 @@
   "stage": 5,
   "stage_name": "ready",
   "updated": "2026-11-23",
-  "architecture": 1,
-  "loops": 0,
+  "architecture": 2,
+  "loops": 1,
   "doctrine": "throughout",
-  "call": "Schedule four Barlavento SWRO trains for 2027 pressure-vessel overhaul (>= 400 forecasted anomalous hours under Engineering Protocol SWRO-Q27): TR07 (1,291.9 h), TR06 (613.4 h), TR01 (514.8 h), and TR02 (506.3 h), totaling 2,926.4 overhaul hours (1,253.5 MWh excess desalination energy burden); retain TR04 (318.8 h), TR03 (305.7 h), TR05 (271.0 h), and TR08 (266.4 h) on routine monitoring; plant-wide 2027 total 4,088.4 h (C1 boron 1,328.7 h, C2 scaling 1,652.7 h, C3 structural 1,106.9 h; Q3 1,766.5 h; 1,750.8 MWh total excess desalination energy burden; 2026 raw monitoring screening discrepancy 120.8%).",
-  "stump": "Three independent observation-process stumps on three distinct axes: S1 (unit, support_effect) 4h/8h lab boron composite dispersion-autocovariance deconvolution opening TR01 (over-correction i.i.d. sqrt(m) flips TR04); S2 (when, asynchronous_measurement_covariance + non_additive_aggregation) variable-flow Lagrangian parcel alignment via unobserved DAF/DMF holdup volume V_eff opening TR02 (over-correction comonotonic pairing flips TR05); S3 (what, rival_process_by_state_dependence) 3-state CIP-invariant conditionally-dependent latent-class separation of structural faults from bio-fouling opening TR03 (over-correction raw uninverted D3 flips TR06).",
+  "call": "Schedule four Barlavento SWRO trains for 2027 pressure-vessel overhaul (>= 400 forecasted anomalous hours under Engineering Protocol SWRO-Q27): TR07 (1,471.4 h), TR06 (524.8 h), TR02 (520.2 h), and TR01 (515.8 h), totaling 3,032.2 overhaul hours (1,317.9 MWh excess desalination energy penalty); retain TR05 (266.6 h), TR04 (245.0 h), TR08 (65.2 h), and TR03 (29.8 h) on routine monitoring; plant-wide 2027 total 3,638.8 h (C1 boron 1,292.0 h, C2 scaling 1,297.1 h, C3 structural 1,049.7 h; Q3 1,279.1 h; 1,576.4 MWh total excess desalination energy penalty).",
+  "stump": "Three independent physical observation-process stumps on three distinct axes (v2, SEED 2802, Clause 4.4 deleted): S1 (unit, support_effect) Fickian solution-diffusion solute-flux coupling (alpha + beta/Q_t) inside 4h/8h flow-proportional lab boron composites plus 1h-normalized AR(1) residual support deconvolution opening TR01 (over-correction i.i.d. sqrt(m) / flux+i.i.d. flips TR04); S2 (when, asynchronous_measurement_covariance + non_additive_aggregation) two-path bimodal DAF/DMF hydraulic short-circuiting (f_fast at V_fast + (1 - f_fast) at V_main) recovered from conservative seawater conductivity in cumulative-flow space opening TR02 (crushing 1D single-plug V_eff on both TR02 and TR05; over-correction comonotonic pairing flags all 8); S3 (what, rival_process_by_state_dependence) 4-state dual-recipe CIP-invariant EM (CIP_ALK_pH11 vs CIP_ACID_pH2) separating organic bio-fouling, acoustic-chatter mineral crust (D3=0.52), and dual-CIP-invariant structural faults opening TR03 (crushing 3-state pooled-CIP EM and post-CIP 2-class DS on TR03; over-correction raw post-acid D3 drops TR06).",
   "draw": {
     "answer_shape": "flagged-set",
     "weight": "triage",
     "depth_level": 5,
-    "world": "Barlavento Dessalinizacao Municipal (Algarve coast, Portugal): eight parallel SWRO desalination membrane trains (TR01..TR08) diagnosed for 2027 vessel overhaul and excess desalination energy burden (MWh) under Engineering Protocol SWRO-Q27 (400-hour engineering criterion)."
+    "world": "Barlavento Dessalinizacao Municipal (Algarve coast, Portugal): eight parallel SWRO desalination membrane trains (TR01..TR08) diagnosed for 2027 vessel overhaul and excess desalination energy penalty (MWh) under Engineering Protocol SWRO-Q27 (400-hour engineering criterion)."
   },
-  "chain": "R1 reconciled 2026 multi-grain SWRO logs; R2 Matheron/Krige composite boron support deconvolution (C1 = 1,328.7 h); R3 Lagrangian cumulative-flow parcel alignment & V_eff recovery (C2 = 1,652.7 h); R4 3-state CIP-invariant conditionally-dependent latent-class inversion (C3 = 1,106.9 h); R5 native-unit physical falsification checks F1-F3 (golden 1.844 vs rivals 6.320 to 28.014); R6 uniform 2027 Operating Plan train/plant/overhaul/Q3 forecasts; R7 2027 excess desalination energy burden (MWh) & 2026 raw monitoring discrepancy rate; R8 final 2027 overhaul reliability classification & +/-20% forcing verification.",
+  "chain": "R1 reconciled 2026 multi-grain SWRO telemetry, LIMS, flow, and dual-recipe CIP logs; R2 Fickian solute-flux coupled composite boron deconvolution (C1 = 1,292.0 h); R3 two-path bimodal DAF/DMF hydraulic parcel alignment in cumulative-flow space (C2 = 1,297.1 h); R4 4-state dual-recipe CIP-invariant structural fault separation (C3 = 1,049.7 h); R5 native-unit physical falsification checks F1-F3 (golden 2.327 vs rivals 9.296 to 55.431); R6 uniform 2027 Operating Plan train/plant/overhaul/Q3 forecasts; R7 2027 excess desalination energy penalty (1,576.4 MWh total / 1,317.9 MWh overhaul); R8 final 2027 vessel overhaul classification and +/-20% forcing verification.",
   "precut": {
     "exit": 0,
     "date": "2026-11-23",
-    "checks": "PASS  task28: 0 FAIL across precut, corelib level 5, voice-check (0 FAIL, 0 WARN)"
+    "checks": "PASS  task28: 0 FAIL across precut, corelib level 5 (27/27 PASS, SEED 2802), voice-check (0 FAIL, 0 WARN, 71 words, 463 chars)"
   },
   "duplicate_check": {
     "heart": "PASS (0 BLOCK, severity none across all live builds, lineage, and client library; 0 of 4 lessons closed)",
-    "nearest": "guard.py check & surface on 2026-11-23: 0 BLOCK (4 answered WARNs: repeat.deliverables task26, 3 secondary skeleton.house_lesson); surface PASS; nearest driver cosine 0.06 (task27)."
+    "nearest": "guard.py check & surface on 2026-11-23 (v2): 0 BLOCK, surface PASS; nearest driver cosine 0.04 (task27); guard.py validate 49 cards, 0 invalid."
   },
   "effort": {
-    "quick": 13.9,
-    "careful": 20.8,
+    "quick": 13.0,
+    "careful": 20.0,
     "thorough": 100.0,
-    "factorial": "effort.py PASS (quick 13.9, careful/reflex 20.8, thorough 100.0, single-stump lost 36.8) and corelib level 5 (S1/S2/S3 lost alone 26/26/34; fixed alone 23/23/19; reflex 13; rigorous 16; cutoff 24; generous 9; hedge 17; all 13 further cutoff/hedge settings WRONG; all 3 over-corrections WRONG; 26 variants 0 flips; 6 of 6 +/-20% forcing perturbations HOLD)."
+    "factorial": "effort.py PASS and corelib level 5 (27/27 PASS, SEED 2802): S1/S2/S3 lost alone 43/39/26; fixed alone 20/20/24; reflex 13; rigorous R1 Round-1 exact solver 20 (5 of 8 trains wrong); rigorous R2 Round-1 exact solver fails 4 of 8 trains; cutoff 13; generous 9; hedge 13; all 16 extra rivals WRONG; all 3 over-corrections WRONG; 26 variants 0 flips; 6 of 6 +/-20% forcing perturbations HOLD."
   },
   "leak": {
-    "leak_py": "REVIEW (0 LEAK, harmless REVIEW only on swro_integrity_standard_q27.pdf, lims_qa_certificate_2026.pdf, mibel_iberian_power_spot_2026.csv, metadata.json; sweeps 1, 2, 5, 6, 7, 8, 9, 11 CLEAN; container gate PASS 0 FAIL 0 WARN)",
-    "reader": "PASS (Pass 3 isolated read on /tmp/leak-task28-p3/: Q1-Q4 none, zero compliance/EUR/Schedule B contradictions, all REVIEW items harmless)"
+    "leak_py": "REVIEW (0 LEAK, harmless REVIEW only on mibel_iberian_power_spot_2026.csv, swro_integrity_standard_q27.pdf, metadata.json; sweeps 1, 2, 5, 6, 7, 8, 9, 11 CLEAN; container gate PASS 0 FAIL 0 WARN)",
+    "reader": "PASS (Pass 4 grounded isolated read on /tmp/leak-task28-p4/: Q1-Q4 none, Q6 none, zero Clause 4.4 / raw-alarm discrepancy clauses, zero compliance/EUR/Schedule B leftovers, all REVIEW items harmless)"
   },
   "judge": {
     "verdict": "DETERMINISTIC",
     "disposition": "APPROVE",
-    "report": "task28/determinism_check_report_pass3.md"
+    "report": "task28/determinism_check_report_pass4.md"
   },
   "runs": {
     "run1": null,
@@ -54,9 +54,15 @@
     },
     "triage": "",
     "recorded": "",
-    "history": []
+    "history": [
+      {
+        "architecture": 1,
+        "date": "2026-11-23",
+        "note": "Two 2.5h frontier platform runs on v1 (SEED 2801) both solved v1 S1 (stationary AR(1) MLE) and S2 (1D single-plug V_eff CCF), and Response 1 also partially solved v1 S3 (3-state pooled-CIP D3=0 EM), landing the golden call after Clause 4.4 acted as an explicit raw-alarm bias signpost. Triggered v2 3-super-stump redesign."
+      }
+    ]
   },
-  "resume": "Upload prompt.txt, target.zip, golden.zip, and submission.md answer blocks to platform, then run /triage-runs task28",
+  "resume": "Upload new v2 prompt.txt, target.zip, golden.zip, and submission.md answer blocks to platform, then run /triage-runs task28",
   "history": [
     {
       "date": "2026-11-23",
@@ -85,6 +91,10 @@
     {
       "date": "2026-11-23",
       "event": "Prompt polish after NATURAL (2/9) + SOME SIGNS (weak hit) platform check: tightened prompt.txt to 87 words (564 chars, voice-check 0 FAIL 0 WARN) replacing 'excess desalination energy burden' with 'energy penalty in MWh', cutting the S1 telemetry/lab method clause, and anchoring the chart and backup explicitly inside the workbook while keeping 100% of graded asks and Domains Fit physical-sciences framing intact; target.zip, golden.zip, and submission.md unchanged."
+    },
+    {
+      "date": "2026-11-23",
+      "event": "v2 3-super-stump redesign (SEED 2802) defeating both 2.5h Round-1 frontier solvers: deleted Clause 4.4 and prompt alarm-divergence signpost completely (71-word prompt, voice-check 0 FAIL 0 WARN); upgraded S1 to Fickian 1/Q_t solute-flux coupling + 1h-normalized AR(1) support deconvolution, S2 to two-path bimodal DAF/DMF hydraulic short-circuiting across all 8 basins, and S3 to 4-state dual-recipe CIP-invariant EM (CIP_ALK_pH11 vs CIP_ACID_pH2) with acoustic-chatter mineral crust (D3=0.52). Exact Round-1 R1 solver scores 20/100 (5 of 8 trains wrong) and R2 solver misses 4 of 8 trains. Rebuilt pack, 7-tab golden workbook (visual PNG verified unclipped), CSV, submission.md, card, and DESIGN_NOTE.md. Stage 4 Pass 4 isolated verification: leak-reader PASS (0 leaks) and determinism-judge DETERMINISTIC / APPROVE (Gates A-E PASS across 31 single-mode variants, 4 joint combinations, 6 +/-20% perturbations, and direct native-unit refutation of all 11 rivals)."
     }
   ]
 }
