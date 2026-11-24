@@ -66,10 +66,10 @@ KAPPA, LAMBDA, SIG_M, RHO_M, DBAR = 0.55, 1.00, 0.26, 0.25, 0.86
 SCALE = 2.0
 CH = {
     "Meta iOS":         dict(ios=1, complete=0, mu=0.05,  nu=0.10, phi=-5.00, n=330, b0=2046, el=0.78, xs=0.35, plan=1.10, stretch=1.30),
-    "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.00,  n=300, b0=1655, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
-    "Snapchat iOS":     dict(ios=1, complete=0, mu=-0.15, nu=0.08, phi=0.80,  n=250, b0=1295, el=0.76, xs=0.35, plan=1.30, stretch=1.15),
+    "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.80,  n=300, b0=1595, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
+    "Snapchat iOS":     dict(ios=1, complete=0, mu=-0.15, nu=0.08, phi=0.80,  n=250, b0=1268, el=0.76, xs=0.35, plan=1.30, stretch=1.15),
     "Google iOS":       dict(ios=1, complete=0, mu=0.10,  nu=0.10, phi=-1.20, n=260, b0=2250, el=0.70, xs=0.30, plan=1.25, stretch=1.35),
-    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.70,  n=200, b0=1600, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
+    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.70,  n=200, b0=1553, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
     "Apple Search Ads": dict(ios=1, complete=1, mu=0.60,  nu=0.15, phi=-0.80, n=140, b0=1390, el=0.62, xs=0.30, plan=1.40, stretch=1.00),
     "Google Android":   dict(ios=0, complete=1, mu=0.00,  nu=0.10, phi=0.55,  n=420, b0=5300, el=0.66, xs=0.30, plan=0.60, stretch=1.25),
     "AppLovin Android": dict(ios=0, complete=1, mu=-0.55, nu=0.05, phi=1.10,  n=500, b0=3248, el=0.82, xs=0.30, plan=0.72, stretch=1.45),
@@ -1517,25 +1517,18 @@ BESIDE += [("the first-48-hour values grouped by %s" % nm, dict(cells=k))
                          ("tp8", "their trial and purchase bits with the sessions split in two"))]
 BESIDE += [("the value equation fitted on the mature weeks alone", dict(weeks_v=(0, MATURE)))]
 # the second step's fit on a finer grain of rows: each market-week's accounts split by the first-48-hour sessions they
-# carry (their four pairs, or the eight values). The ratios the value needs are the ones that price the accounts with no
-# channel at what they paid, and every way in the battery does (0.997 to 1.000, pool_priced). On the finer rows a
-# row's revenue per account differs several-fold from one sessions value to the next, so one over the accounts is no
-# longer one over the revenue a row is expected to bring: weighted that way the fit prices the pool at 1.027 (pairs)
-# and 1.030 (values) of what it paid, and unweighted at 0.990 and 0.990, and those four are refused by it (the pairs
-# unweighted would file TikTok iOS at 0.8999, and its ratios scaled to price the pool at what it paid file TikTok iOS at
-# 0.905 and the golden's call: its one crossing is its under-pricing); weighted by the revenue the fit expects it prices
-# the pool at 1.000 and 0.999, and those two are held beside the battery for the ranges. POOL_TOL sits just past the
-# largest departure any battery way shows on this record (0.33 per cent) or on three other draws of the people (0.44
-# per cent, seed 74126); on those draws the fits weighted by one over the accounts miss by 2.9 to 4.6 per cent every
-# time, the unweighted ones by 0.05 to 1.0 per cent
+# carry (their four pairs, or the eight values), weighted by one over the accounts, by the revenue the fit expects or
+# unweighted. All six file the golden's call and are held beside the battery for the ranges, every range reaching one
+# per cent of the figure past each of them. pool_priced is a disclosed reading, never a pin: weighted by one over the
+# accounts the finer fits price the accounts with no channel above what they paid and unweighted below it, because a
+# row's revenue per account differs several-fold from one sessions value to the next
 FINER = [("the ratios fitted on each market-week's accounts split by %s, %s" % (gn, wn), dict(rows=rk, **wk))
          for rk, gn in (("market-week-pair", "pairs of first-48-hour sessions values"),
                         ("market-week-bucket", "first-48-hour sessions value"))
          for wn, wk in (("weighted by one over the accounts", {}), ("weighted by the revenue the fit expects",
                                                                   dict(weight="fitted")),
                         ("unweighted", dict(weight="none")))]
-POOL_TOL = 0.005                                                 # how far from what the pool paid a held fit may price it
-BESIDE += [w for w in FINER if w[1].get("weight") == "fitted"]
+BESIDE += FINER
 
 
 # each step made the way a run was seen to make it: the billing records taken as they stand (both runs); the declined
@@ -2089,7 +2082,7 @@ def explore():
     print("referee:", r["slice"], "truth %.4g golden %.4g" % (r["truth"], r["golden"]), r["rivals"], r.get("other"))
     f = spec["falsification"]
     print("falsification: truth %.3f golden %.4f" % (f["truth"], f["golden"]), {k: round(x, 4) for k, x in f["rivals"].items()})
-    print("the pool priced by each way of fitting the second step's ratios, over what it paid (held within %.3f):" % POOL_TOL)
+    print("the pool priced by each way of fitting the second step's ratios, over what it paid (a reading, never a pin):")
     s2k = set(__import__("inspect").signature(s2_fit).parameters) - {"O", "v"}
     for nm, kw in VARIANTS + FINER:
         k2 = {a: b for a, b in kw.items() if a in s2k}
@@ -2097,8 +2090,8 @@ def explore():
             continue
         p = pool_priced(O, vg, **k2)
         r = route(O, **kw)
-        print("    %-100s %.4f %s  TikTok iOS %.3f" % (nm[:100], p, "held" if abs(p - 1) <= POOL_TOL else "REFUSED",
-              r["TikTok iOS"]["roas"]))
+        print("    %-100s %.4f  TikTok iOS %.3f  Pinterest iOS %.3f  call %s" % (nm[:100], p, r["TikTok iOS"]["roas"],
+              r["Pinterest iOS"]["roas"], "".join(band(r[c]["roas"])[0] for c in MEMBERS)))
     print("delivery pins:")
     for c, p in delivery_pins(O).items():
         print("    %-18s share %.3f  whole budget billed in %2d weeks  at share 1 the fit adds up to %.3f  best quarter %.3f"
