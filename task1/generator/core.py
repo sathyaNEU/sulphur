@@ -921,6 +921,37 @@ def s2_equal_test(O, v, names, cov=True):
     return stat, {nm: (float(b[j]), float(np.sqrt(V[j, j]))) for nm, j in zip(names, idx)}
 
 
+def pooled_pins(O, v):
+    """what refutes the second step's ratios fitted on the weeks with the three markets summed, at the adding-up's own
+    grain: each source's ratio fitted on each market's own weeks (the pooled fit assumes one ratio across markets, and
+    each market estimates it alone), and each network's live and dark market-weeks priced at the pooled ratios and at
+    the golden's, over what the accounts with no channel paid there (a network's campaign is live or dark market by
+    market and week by week in the spend export); the Wald distance of the pooled ratios from the market-week fit's
+    on the fit's own spread rides along"""
+    S = s2_strata(O, v)
+    T = S["T"]
+    srcs = S["hidden"] + [S["org"]]
+    X = np.stack([(S["nc"][i] * T["vc"][i][None, None, :]).sum(2) for i in srcs], 0)     # source, market, week
+    y = S["pv"].sum(2)
+    fits = {"golden": s2_fit(O, v), "pooled": s2_fit(O, v, markets="pooled")}
+    alone = [s2_fit(O, v, markets=(m,)) for m in range(3)]
+    out = {"ratio": {}, "split": {}}
+    for i in srcs:
+        out["ratio"][SOURCES[i]] = dict(golden=fits["golden"][i], pooled=fits["pooled"][i],
+                                        markets=[r[i] for r in alone])
+    for i in S["hidden"]:
+        live = CH[SOURCES[i]]["live"][:, :MATURE]
+        sp = {}
+        for nm, r in fits.items():
+            pred = np.tensordot(np.array([r[k] for k in srcs]), X, 1)
+            sp[nm] = (float(pred[live].sum() / y[live].sum()), float(pred[~live].sum() / y[~live].sum()))
+        out["split"][SOURCES[i]] = dict(live=int(live.sum()), dark=int((~live).sum()), **sp)
+    _, bg, V = s2_fit(O, v, cov=True)
+    d = np.array([fits["pooled"][i] for i in srcs]) - np.array(bg)
+    out["wald"] = (float(d @ np.linalg.solve(V, d)), len(srcs))
+    return out
+
+
 def asa_ratio(O, v, cells="fine", rcells="tier2"):
     """on Apple Search Ads, whose every account carries its channel: the declined installs' value over the others',
     by coarse cell, laid on the pricing cells"""
@@ -1826,6 +1857,9 @@ RUNS = {
     "generous:apple-search-ads-ratio": dict(s1="raw", s2="ratio", **R1_CARRY),
     "generous:android-analogue": dict(s1="raw", s2="analogue", **R1_CARRY),
     "generous:one-ratio": dict(s1="raw", s2="common", **R1_CARRY),
+    # Response 1's cohorts had no market: the ratios fitted on the weeks with the three markets summed, a rung that
+    # keeps the second step's estimator and throws away the flights it is identified on
+    "generous:pooled-markets": dict(s1="raw", markets="pooled", **R1_CARRY),
     "hedge": dict(s1="raw", carry="plain", dbar_set=1.0),
     "hedge:full-delivery-rescaled": dict(s1="raw", dbar_set=1.0),
     # the third step's older shortcut, a rung below the full-delivery reading: installs fitted on the billed spend
@@ -2092,6 +2126,16 @@ def explore():
         r = route(O, **kw)
         print("    %-100s %.4f  TikTok iOS %.3f  Pinterest iOS %.3f  call %s" % (nm[:100], p, r["TikTok iOS"]["roas"],
               r["Pinterest iOS"]["roas"], "".join(band(r[c]["roas"])[0] for c in MEMBERS)))
+    pp = pooled_pins(O, vg)
+    print("the ratios fitted on the weeks with the three markets summed, against each market's own fit:")
+    for nm, r in pp["ratio"].items():
+        print("    %-18s golden %.3f  pooled %.3f  Spain, Italy, Portugal alone %s" % (nm, r["golden"], r["pooled"],
+              " ".join("%.3f" % x for x in r["markets"])))
+    print("each network's live and dark market-weeks priced over what the accounts with no channel paid there:")
+    for nm, r in pp["split"].items():
+        print("    %-18s live %3d, dark %3d  golden %.3f and %.3f  pooled %.3f and %.3f" % (nm, r["live"], r["dark"],
+              r["golden"][0], r["golden"][1], r["pooled"][0], r["pooled"][1]))
+    print("    the pooled ratios' Wald distance from the market-week fit's: %.1f on %d degrees of freedom" % pp["wald"])
     print("delivery pins:")
     for c, p in delivery_pins(O).items():
         print("    %-18s share %.3f  whole budget billed in %2d weeks  at share 1 the fit adds up to %.3f  best quarter %.3f"
