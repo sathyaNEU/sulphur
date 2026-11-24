@@ -506,20 +506,42 @@ def battery(O, cross=True):
     counts = dict(singles=len(singles), beside=len(beside), crossings=0,
                   by_step={s: sum(C.step_of(kw) == s for _n, kw in SINGLES) for s in ("S1", "S2", "S3")})
     if not cross:
-        return singles, beside, [], counts
+        return singles, beside, [], counts, []
     bes = {nm for nm, _k in C.BESIDE}
     core_names = {nm for nm, _k in C.crossed_ways()}
     crossed = [(nm, fv, nm.split("; ")[0] in bes, nm in core_names) for (nm, _kw), fv in zip(ways, figs)]
     counts.update(crossings=len(crossed), core_crossings=sum(x[3] for x in crossed),
                   pack_crossings=sum(not x[3] for x in crossed), beside_crossings=sum(x[2] for x in crossed))
-    return singles, beside, crossed, counts
+    # the layered family: each convention only the files carry that moves a figure on this record, put on top of
+    # every way of the family that does not already set it (the singles, the ways beside the battery and every
+    # crossing), one at a time and then all of them together, so a convention also sits on a crossing whose two ways
+    # already take its step's slot
+    g = C.figure_values(route(O))
+    moves = {nm: max(abs(C.figure_values(r)[f] / g[f] - 1.0) for f in g) for (nm, r) in singles[len(C.VARIANTS):]}
+    layer = [(nm, kw) for nm, kw in PACK_VARIANTS if moves[nm] >= 5e-5]
+    combo = ("every convention of the files that moves a figure", {k: v for _n, kw in layer for k, v in kw.items()})
+    members = [(nm, kw, False) for nm, kw in SINGLES] + [(nm, kw, True) for nm, kw in C.BESIDE] + \
+              [(nm, kw, b) for (nm, kw), (_n, _f, b, _c) in zip(ways, crossed)]
+    lways, lmeta = [], []
+    for ln, lk in layer + [combo]:
+        for nm, kw, b in members:
+            if all(k in kw for k in lk):
+                continue                                           # it already sets every key the layer would set
+            both = dict(lk, **kw)                                  # the way's own settings stand where they overlap
+            lways.append((nm + "; layered with " + ln, both))
+            lmeta.append((ln, b))
+    lfigs = crossed_family(O, lways)
+    layered = [(nm, fv, b, ln) for (nm, _kw), fv, (ln, b) in zip(lways, lfigs, lmeta)]
+    counts.update(layered=len(layered), layer_conventions=[nm for nm, _k in layer],
+                  convention_moves={nm: round(x, 6) for nm, x in moves.items()})
+    return singles, beside, crossed, counts, layered
 
 
 def run(target, cross=True, verbose=False):
     """every route the build needs, computed on the shipped files"""
     O = PackObs(target)
     use_plan(O)
-    singles, beside, crossed, counts = battery(O, cross)          # forked before the record's caches fill
+    singles, beside, crossed, counts, layered = battery(O, cross)
     g = route(O)
     keys = [["S1"], ["S2"], ["S3"], ["S1", "S2"], ["S1", "S3"], ["S2", "S3"], ["S1", "S2", "S3"]]
     lat = {"+".join(k): lattice_route(O, k) for k in keys}
@@ -527,7 +549,7 @@ def run(target, cross=True, verbose=False):
     rigorous = route(O, **C.RIGOROUS)
     v = C.values(O)
     refs = dict(S1=C.referee_s1(O), S2=C.referee_s2(O, v), S3=C.referee_s3(O, v))
-    return dict(O=O, golden=g, singles=singles, beside=beside, family=singles + beside, crossed=crossed,
+    return dict(O=O, golden=g, singles=singles, beside=beside, family=singles + beside, crossed=crossed, layered=layered,
                 counts=counts, lattice=lat, direct=direct, rigorous=rigorous, v=v, refs=refs, fits=s1_fit(O))
 
 

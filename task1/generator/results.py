@@ -669,17 +669,26 @@ def figures(X):
     ncore = len(C.VARIANTS)                                    # core's battery first, then the files' conventions
     # each range: core.band_of over the singles and every crossing, the ways beside the battery and every crossing
     # that holds one of them in the beside list (core.build_spec's rule, the files' own conventions crossed in)
-    rng = lambda fid, core_only=False: band_of(
-        fid, gf[fid],
-        [x[fid] for x in (sf[:ncore] if core_only else sf)] + [fv[fid] for _n, fv, b, cc in xr
-                                                               if not b and (cc or not core_only)],
-        [x[fid] for x in bf] + [fv[fid] for _n, fv, b, cc in xr if b and (cc or not core_only)])
+    ly = X.get("layered") or []
+
+    def rng(fid, mode="all"):
+        """core's family (mode core), the files' conventions crossed in by core's rule (crossed), and the layered
+        family on top (all, the stated range)"""
+        core_only = mode == "core"
+        inner = [x[fid] for x in (sf[:ncore] if core_only else sf)] + [fv[fid] for _n, fv, b, cc in xr
+                                                                         if not b and (cc or not core_only)]
+        outer = [x[fid] for x in bf] + [fv[fid] for _n, fv, b, cc in xr if b and (cc or not core_only)]
+        if mode == "all":
+            inner += [fv[fid] for _n, fv, b, _l in ly if not b]
+            outer += [fv[fid] for _n, fv, b, _l in ly if b]
+        return band_of(fid, gf[fid], inner, outer)
     val, band = {}, {}
-    core_band = {}
+    core_band, crossed_band = {}, {}
     for fid in fids:
         val[fid] = stated(fid, gf[fid])
         band[fid] = rng(fid)
-        core_band[fid] = rng(fid, core_only=True)
+        core_band[fid] = rng(fid, "core")
+        crossed_band[fid] = rng(fid, "crossed")
     fig["figure"], fig["figure_band"] = val, band
     # each convention only the files carry, its move on every graded figure (core's PACK_SHIFTS, re-measured on this
     # cut), and what they and their crossings add to core's ranges, figure by figure, with the way
@@ -694,6 +703,23 @@ def figures(X):
             lo = min(ways, key=lambda t: t[1]); hi = max(ways, key=lambda t: t[1])
             fig["pack_widened"][fid] = dict(core=core_band[fid], pack=band[fid],
                                             low=[lo[0], stated(fid, lo[1])], high=[hi[0], stated(fid, hi[1])])
+    # the layered family (each file convention that moves a figure put on top of every way that does not set it,
+    # then all of them together): what it adds to the crossed ranges, and the way that sets each widened edge
+    lw = {}
+    for fid in fids:
+        if band[fid] != crossed_band[fid] and ly:
+            edge = {}
+            for side, pick, k in (("low", min, 0), ("high", max, 1)):
+                if band[fid][k] != crossed_band[fid][k]:
+                    n_, fv_, b_, _l = pick(ly, key=lambda t: t[1][fid] - (1 if k == 0 else -1) * (
+                        BESIDE_PAD if t[2] else BAND_PAD) * abs(gf[fid]))
+                    edge[side] = [n_, stated(fid, fv_[fid]), "beside" if b_ else "battery"]
+            lw[fid] = dict(crossed=crossed_band[fid], layered=band[fid], **edge)
+    fig["layered"] = dict(ways=len(ly), conventions=X["counts"].get("layer_conventions", []),
+                          convention_moves=X["counts"].get("convention_moves", {}),
+                          moved=sorted(n for n, fv, _b, _l in ly if [C.band(fv["return " + c]) for c in MEM]
+                                       != [fig["bands"][c] for c in MEM]),
+                          widened=lw)
     for nm, key in FAM_KEY.items():
         fig[key] = {c: val[nm + c] for c in MEM}
         fig[key + "_band"] = {c: band[nm + c] for c in MEM}
@@ -869,8 +895,8 @@ def spec_of(X, fig, R):
     g, fam, lat, direct, rig, runs, over = (X["golden"], X["family"], X["lattice"], X["direct"], X["rigorous"], X["runs"],
                                             X["over"])
     T = C.truth_at_plan()
-    xf = [fv for _n, fv, _b, _c in X["crossed"]]                  # core.build_spec's family: the singles, the ways
-    ffs = R["ff"] + xf                                             # beside the battery and every crossing
+    xf = [fv for _n, fv, _b, _c in X["crossed"]] + [fv for _n, fv, _b, _l in X.get("layered") or []]
+    ffs = R["ff"] + xf                                             # build_spec's family, the layered family on top
     members = {c: dict(lines=list(C.LINES), truth=float(T[c]["roas"]), golden=float(g[c]["roas"]),
                        family=[float(r[c]["roas"]) for _n, r in fam] + [x["return " + c] for x in xf],
                        routes=dict(direct=float(direct[c]["roas"]), rigorous=float(rig[c]["roas"])))
@@ -993,7 +1019,11 @@ def effort(X, fig, R, pert):
                + [{"name": n, "answer": call_of(r)} for n, r in X["beside"]]
                + [{"name": "every crossing of those ways, core.crossed_ways on the singles (%d)" % len(crossed),
                    "answer": fig["call"] if all(xcall(fv) == fig["call"] for _n, fv, _b, _c in crossed)
-                   else ["a crossed way moves the call"]}],
+                   else ["a crossed way moves the call"]},
+                  {"name": "each convention of the files that moves a figure layered on every one of those ways, alone "
+                           "and all together (%d)" % len(X.get("layered") or []),
+                   "answer": fig["call"] if all(xcall(fv) == fig["call"] for _n, fv, _b, _l in X.get("layered") or [])
+                   else ["a layered way moves the call"]}],
                "shortcuts": [{"name": r["name"], "answer": r["answer"]} for r in routes[1:]],
                "perturbations": [{"input": "%s, times %.3f" % (n, f), "answer": sorted("%s: %s" % (c, C.band(x[c])) for c in MEM)}
                                  for n, f, x, _ok in pert]}
