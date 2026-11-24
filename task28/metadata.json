@@ -15,6 +15,7 @@
     "SWRO",
     "DAF",
     "DMF",
+    "TDS",
     "Algarve"
   ],
   "files": {
@@ -30,8 +31,14 @@
       "pulled": "2027-01-05",
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
     },
+    "bay_permeate_tds_hourly_2026.csv": {
+      "covers": "2026 hourly North Bay and South Bay shared common permeate collector flow and inline TDS telemetry",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-11",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
     "cip_wash_log_2026.csv": {
-      "covers": "2026 routine Clean-in-Place alkaline and acid chemical wash completion log by train",
+      "covers": "2026 routine Clean-in-Place alkaline and acid chemical wash completion log by train (with late-December 2025 carryover baseline)",
       "license": "proprietary, municipal desalination authority simulation",
       "pulled": "2027-01-12",
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
@@ -43,7 +50,7 @@
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
     },
     "lims_qa_certificate_2026.pdf": {
-      "covers": "2026 ISO/IEC 17025 accredited LIMS ICP-OES permeate boron analytical quality assurance certificate",
+      "covers": "2026 ISO/IEC 17025 accredited LIMS ICP-OES permeate boron and inline bay permeate collector TDS probe analytical quality assurance certificate",
       "license": "proprietary, municipal desalination authority simulation",
       "pulled": "2027-01-08",
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
@@ -55,7 +62,7 @@
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
     },
     "operating_plan_2027.csv": {
-      "covers": "2027 quarterly operating plan potable dispatch duty ratios and seasonal temperature and recovery multipliers",
+      "covers": "2027 quarterly operating plan potable dispatch duty ratios and seasonal boron, scaling, and salinity process multipliers",
       "license": "proprietary, municipal desalination authority simulation",
       "pulled": "2026-12-04",
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
@@ -79,13 +86,13 @@
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
     },
     "shift_diagnostics_2026.csv": {
-      "covers": "2026 four-hour shift inline non-destructive membrane integrity alarm logs",
+      "covers": "2026 hourly shift inline non-destructive membrane integrity alarm logs",
       "license": "proprietary, municipal desalination authority simulation",
       "pulled": "2027-01-12",
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
     },
     "swro_integrity_standard_q27.pdf": {
-      "covers": "Engineering Protocol SWRO-Q27 defining physical excursion modes, overhaul criterion, excess desalination energy rates, Annex A 2027 forecast rules, and Annex B diagnostics output schema",
+      "covers": "Engineering Protocol SWRO-Q27 defining four physical excursion modes, overhaul criterion, excess desalination energy rates, Annex A 2027 forecast rules, and Annex B 9-column diagnostics output schema",
       "license": "proprietary, municipal desalination authority simulation",
       "pulled": "2026-09-14",
       "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
@@ -105,6 +112,7 @@
   },
   "stated_inputs": [
     "400",
+    "400.0",
     "2026",
     "2027"
   ]

@@ -6,42 +6,43 @@
   "objective": "anomaly-detection",
   "stage": 5,
   "stage_name": "ready",
-  "updated": "2026-11-23",
-  "architecture": 2,
-  "loops": 1,
+  "updated": "2026-11-24",
+  "architecture": 3,
+  "v4_hardened": true,
+  "loops": 2,
   "doctrine": "throughout",
-  "call": "Schedule four Barlavento SWRO trains for 2027 pressure-vessel overhaul (>= 400 forecasted anomalous hours under Engineering Protocol SWRO-Q27): TR07 (1,471.4 h), TR06 (524.8 h), TR02 (520.2 h), and TR01 (515.8 h), totaling 3,032.2 overhaul hours (1,317.9 MWh excess desalination energy penalty); retain TR05 (266.6 h), TR04 (245.0 h), TR08 (65.2 h), and TR03 (29.8 h) on routine monitoring; plant-wide 2027 total 3,638.8 h (C1 boron 1,292.0 h, C2 scaling 1,297.1 h, C3 structural 1,049.7 h; Q3 1,279.1 h; 1,576.4 MWh total excess desalination energy penalty).",
-  "stump": "Three independent physical observation-process stumps on three distinct axes (v2, SEED 2802, Clause 4.4 deleted): S1 (unit, support_effect) Fickian solution-diffusion solute-flux coupling (alpha + beta/Q_t) inside 4h/8h flow-proportional lab boron composites plus 1h-normalized AR(1) residual support deconvolution opening TR01 (over-correction i.i.d. sqrt(m) / flux+i.i.d. flips TR04); S2 (when, asynchronous_measurement_covariance + non_additive_aggregation) two-path bimodal DAF/DMF hydraulic short-circuiting (f_fast at V_fast + (1 - f_fast) at V_main) recovered from conservative seawater conductivity in cumulative-flow space opening TR02 (crushing 1D single-plug V_eff on both TR02 and TR05; over-correction comonotonic pairing flags all 8); S3 (what, rival_process_by_state_dependence) 4-state dual-recipe CIP-invariant EM (CIP_ALK_pH11 vs CIP_ACID_pH2) separating organic bio-fouling, acoustic-chatter mineral crust (D3=0.52), and dual-CIP-invariant structural faults opening TR03 (crushing 3-state pooled-CIP EM and post-CIP 2-class DS on TR03; over-correction raw post-acid D3 drops TR06).",
+  "call": "Schedule five Barlavento SWRO trains for 2027 pressure-vessel overhaul (>= 400 forecasted anomalous hours under Engineering Protocol SWRO-Q27): TR07 (1,493.0 h), TR06 (931.6 h), TR08 (759.1 h), TR02 (605.1 h), and TR01 (517.9 h), totaling 4,306.6 overhaul hours (1,725.4 MWh excess desalination energy penalty); retain TR04 (352.3 h), TR03 (236.4 h), and TR05 (231.5 h) on routine monitoring; plant-wide 2027 total 5,126.8 h (C1 boron 1,242.6 h, C2 scaling 1,747.8 h, C3 structural 975.3 h, C4 permeate TDS 1,161.1 h; Q3 2,176.3 h; 2,026.1 MWh total excess desalination energy penalty).",
+  "stump": "Four independent physical observation-process stumps on four distinct axes (v3.2, SEED 2803, v4_hardened=True, Clause 4.4 and 120h config hint deleted): S1 (unit, support_effect + conservation_residual_attribution) Spiegler-Kedem solute mass-flux conservation (M_k = Q_bar_k * C_comp_k, SD(C_t) = sigma_J / Q_t) inside 4h/8h flow-proportional lab boron composites opening night-turndown TR01 while refuting homoscedastic a+c/Q AR(1) (dNLL=-898) and flux i.i.d. sqrt(m) (flips TR04); S2 (when, asynchronous_measurement_covariance + non_additive_aggregation) variable-flow cumulative-volume Phi(t) two-path bimodal DAF/DMF hydraulic mixing (f_fast, V_fast, V_main) recovered from conservative seawater conductivity opening VFD-ramp TR02 while refuting fixed wall-clock lag, V_nom, 1D single-plug V_eff (flips TR05), and comonotonic pairing; S3 (what, rival_process_by_state_dependence + latent_structure_estimation) exact converged joint 49-D continuous post-CIP fouling re-growth kinetic LCA across 70,080 1-hour blocks and 551 alternating ~5.5-day alkaline/acid inline flushes where mineral crust shares the exact single-block alarm profile (0.85, 0.16, 0.72) of structural breaches, clearing TR03 while retaining TR06 (profile LRT = 9.24 against 400.0 h) and crushing unconditioned 3-class LCA, static 120h/72h/48h EM, and unanimous 3-of-3; S4 (who, unlabelled_pool_apportioned_by_varying_mix + conservation_residual_attribution) shared North/South Bay common permeate collector TDS heteroscedastic variance-component deconvolution across staggered non-clamped VFD flow shares opening volatile TR08 while keeping steady TR05 monitored (exact 4-state AR(1) Kalman LRT = 7.25-7.46 against 400.0 h, South Bay LRT = 85.23) and refuting direct bay exceedances and equal-variance OLS pooling.",
   "draw": {
     "answer_shape": "flagged-set",
     "weight": "triage",
     "depth_level": 5,
-    "world": "Barlavento Dessalinizacao Municipal (Algarve coast, Portugal): eight parallel SWRO desalination membrane trains (TR01..TR08) diagnosed for 2027 vessel overhaul and excess desalination energy penalty (MWh) under Engineering Protocol SWRO-Q27 (400-hour engineering criterion)."
+    "world": "Barlavento Dessalinizacao Municipal (Algarve coast, Portugal): eight parallel SWRO desalination membrane trains (TR01..TR08) across North and South Bays diagnosed for 2027 vessel overhaul and excess desalination energy penalty (MWh) under Engineering Protocol SWRO-Q27 (400-hour engineering criterion)."
   },
-  "chain": "R1 reconciled 2026 multi-grain SWRO telemetry, LIMS, flow, and dual-recipe CIP logs; R2 Fickian solute-flux coupled composite boron deconvolution (C1 = 1,292.0 h); R3 two-path bimodal DAF/DMF hydraulic parcel alignment in cumulative-flow space (C2 = 1,297.1 h); R4 4-state dual-recipe CIP-invariant structural fault separation (C3 = 1,049.7 h); R5 native-unit physical falsification checks F1-F3 (golden 2.327 vs rivals 9.296 to 55.431); R6 uniform 2027 Operating Plan train/plant/overhaul/Q3 forecasts; R7 2027 excess desalination energy penalty (1,576.4 MWh total / 1,317.9 MWh overhaul); R8 final 2027 vessel overhaul classification and +/-20% forcing verification.",
+  "chain": "R1 reconciled 2026 multi-grain SWRO telemetry, LIMS (min boron 0.0453 mg/L > 0.020 LOQ), non-clamped flow (max repeat 2), bay-TDS, 1h shift, and dual-recipe CIP logs; R2 Spiegler-Kedem mass-flux composite boron deconvolution (C1 = 1,242.6 h); R3 variable-flow two-path bimodal DAF/DMF hydraulic mixing (C2 = 1,747.8 h); R4 exact converged continuous post-CIP fouling re-growth kinetic LCA (C3 = 975.3 h); R5 shared-bay permeate collector TDS heteroscedastic variance-component deconvolution (C4 = 1,161.1 h); R6 native-unit physical falsification checks F1-F4 (golden 2.015 vs rivals 9.839 to 8,185.544); R7 uniform 2027 Operating Plan train/plant/overhaul/Q3 forecasts; R8 2027 excess desalination energy penalty (2,026.1 MWh total / 1,725.4 MWh overhaul); R9 final 2027 vessel overhaul classification (TR01, TR02, TR06, TR07, TR08) and 8-way +/-20% forcing check.",
   "precut": {
     "exit": 0,
-    "date": "2026-11-23",
-    "checks": "PASS  task28: 0 FAIL across precut, corelib level 5 (27/27 PASS, SEED 2802), voice-check (0 FAIL, 0 WARN, 71 words, 463 chars)"
+    "date": "2026-11-24",
+    "checks": "PASS  task28: 0 FAIL, 0 WARN across precut, corelib level 5 v4_hardened=True (36/36 PASS, SEED 2803), construction_tells (0 tells), voice-check (0 FAIL, 0 WARN, 71 words, 463 chars, md5 4b10b0cc7528dc0c3b63afbc52d99eae)"
   },
   "duplicate_check": {
-    "heart": "PASS (0 BLOCK, severity none across all live builds, lineage, and client library; 0 of 4 lessons closed)",
-    "nearest": "guard.py check & surface on 2026-11-23 (v2): 0 BLOCK, surface PASS; nearest driver cosine 0.04 (task27); guard.py validate 49 cards, 0 invalid."
+    "heart": "PASS (0 BLOCK, severity none across all live builds, lineage, and client library; 0 of 6 lessons closed)",
+    "nearest": "guard.py check & surface on 2026-11-24 (v3.2): 0 BLOCK, surface PASS; nearest driver cosine 0.04 (task4 v11); guard.py validate 48 cards, 0 invalid."
   },
   "effort": {
-    "quick": 13.0,
-    "careful": 20.0,
+    "quick": 12.6,
+    "careful": 18.2,
     "thorough": 100.0,
-    "factorial": "effort.py PASS and corelib level 5 (27/27 PASS, SEED 2802): S1/S2/S3 lost alone 43/39/26; fixed alone 20/20/24; reflex 13; rigorous R1 Round-1 exact solver 20 (5 of 8 trains wrong); rigorous R2 Round-1 exact solver fails 4 of 8 trains; cutoff 13; generous 9; hedge 13; all 16 extra rivals WRONG; all 3 over-corrections WRONG; 26 variants 0 flips; 6 of 6 +/-20% forcing perturbations HOLD."
+    "factorial": "effort.py PASS (18.2) and corelib level 5 v4_hardened=True (36/36 PASS, SEED 2803): S1/S2/S3/S4 lost alone 32/32/24/32 house and 50/50/43/50 v4-ECF; fixed alone 18/18/18/18 house and 29/29/29/29 v4-ECF; reflex 9 house / 17 v4-ECF (0 silent figures); rigorous R2 exact 3.5h solver 18 house / 29 v4-ECF (6 of 8 trains wrong); cutoff/generous/hedge 9/17; 90% coupled figure matrix (9/10 non-ECF asks); all 4 coded one_fact_shortcut checks pass; all 21 extra rivals WRONG; all 4 over-corrections WRONG; 39 converged variants 0 call/rank flips; 8 of 8 +/-20% forcing perturbations HOLD."
   },
   "leak": {
-    "leak_py": "REVIEW (0 LEAK, harmless REVIEW only on mibel_iberian_power_spot_2026.csv, swro_integrity_standard_q27.pdf, metadata.json; sweeps 1, 2, 5, 6, 7, 8, 9, 11 CLEAN; container gate PASS 0 FAIL 0 WARN)",
-    "reader": "PASS (Pass 4 grounded isolated read on /tmp/leak-task28-p4/: Q1-Q4 none, Q6 none, zero Clause 4.4 / raw-alarm discrepancy clauses, zero compliance/EUR/Schedule B leftovers, all REVIEW items harmless)"
+    "leak_py": "REVIEW (0 LEAK, harmless REVIEW only on swro_integrity_standard_q27.pdf, lims_qa_certificate_2026.pdf, metadata.json; sweeps 1, 2, 5, 6, 7, 8, 11 CLEAN; container gate PASS 0 FAIL 0 WARN)",
+    "reader": "PASS (Pass 7 grounded isolated read on /tmp/leak-task28-p7/: Q1-Q6 none/clean, zero Clause 4.4 / 120h config hint, LOQ-clean boron composites, smooth non-clamped VFD flows, Lisbon wall-clock shift_code across WET/WEST DST, 0.4-0.9 h inline CIP flushes & separated SCADA supervisor, all REVIEW items harmless)"
   },
   "judge": {
     "verdict": "DETERMINISTIC",
     "disposition": "APPROVE",
-    "report": "task28/determinism_check_report_pass4.md"
+    "report": "task28/determinism_check_report_pass7.md"
   },
   "runs": {
     "run1": null,
@@ -59,10 +60,15 @@
         "architecture": 1,
         "date": "2026-11-23",
         "note": "Two 2.5h frontier platform runs on v1 (SEED 2801) both solved v1 S1 (stationary AR(1) MLE) and S2 (1D single-plug V_eff CCF), and Response 1 also partially solved v1 S3 (3-state pooled-CIP D3=0 EM), landing the golden call after Clause 4.4 acted as an explicit raw-alarm bias signpost. Triggered v2 3-super-stump redesign."
+      },
+      {
+        "architecture": 2,
+        "date": "2026-11-24",
+        "note": "Two 3.5h frontier platform runs on v2 (SEED 2802): Response 2 solved v2 S1 (a+c/Q homoscedastic concentration AR(1)) and v2 S3 (static 120h post-CIP 4-class EM aided by post_cip_monitoring_cycle_hours: 120 in scada_bay_config_2026.json), and BOTH runs used fixed wall-clock lag TEP->stress ARX on S2 yet Response 2 still landed the golden 4-of-8 slate. Triggered v3 4-stump v4_hardened redesign (SEED 2803) defeating both 3.5h solver architectures on every mode."
       }
     ]
   },
-  "resume": "Upload new v2 prompt.txt, target.zip, golden.zip, and submission.md answer blocks to platform, then run /triage-runs task28",
+  "resume": "Upload task28 v3.2 prompt.txt (unchanged md5 4b10b0cc7528dc0c3b63afbc52d99eae), target.zip (436d94cd2e76581db4b8097808e9a735), golden.zip (abc396c886bd3f7b7ccf4e20d6c65524), and submission.md (4400cef5a6d7e12d9f2ae47d8ae80600) to platform, then run /triage-runs task28",
   "history": [
     {
       "date": "2026-11-23",
@@ -74,27 +80,19 @@
     },
     {
       "date": "2026-11-23",
-      "event": "Stage 4 Pass 1 & Pass 2 completed: resolved all 7 leak-reader realism tells (operating_plan_2027.csv dispatch duty ratio, intake_tep_z_index, burn-in smoothing, post_cip_monitoring_cycle_hours, chronological CIP wash IDs, W52 cap, E.M. punctuation), expanded variant battery to 26 variants covering OU-kriging/PCHIP/nearest/cubic S2 + step-left + shared <=120h S3, added explicit Steps 3-5 base specifications in submission.md, polished Tab 1 bar chart. Pass 2 leak-reader PASS (0 leaks, all realism tells resolved) and Pass 2 determinism-judge DETERMINISTIC / APPROVE (0 open forks across 36 forks)."
+      "event": "Stage 4 Pass 1 & Pass 2 completed: resolved all 7 leak-reader realism tells, expanded variant battery to 26 variants, polished Tab 1 bar chart. Pass 2 leak-reader PASS and Pass 2 determinism-judge DETERMINISTIC / APPROVE."
     },
     {
       "date": "2026-11-23",
-      "event": "Stage 5 READY: final gates.py --full PASS (11/11, 0 FAIL) and audit_containers.py PASS (0 FAIL, 0 WARN)."
+      "event": "Physical & Environmental Sciences domain-fit reframing & Pass 3 verification: replaced all administrative/compliance/Schedule B EUR framing with Engineering Protocol SWRO-Q27 excess desalination energy penalties (MWh); Pass 3 leak-reader PASS and determinism-judge DETERMINISTIC / APPROVE."
     },
     {
       "date": "2026-11-23",
-      "event": "Prompt de-templating pass 2: balanced natural 86-word (534-char) prompt.txt preserving every ask explicitly while dropping regulation/threshold/tariff labels; voice-check.py PASS (0 FAIL, 0 WARN), precut.py PASS (0 FAIL), leak.py 0 LEAK."
+      "event": "v2 3-super-stump redesign (SEED 2802) defeating Round-1 2.5h solvers: deleted Clause 4.4 and prompt alarm-divergence signpost (locked 71-word prompt.txt md5 4b10b0cc7528dc0c3b63afbc52d99eae); Pass 4 leak-reader PASS and determinism-judge DETERMINISTIC / APPROVE."
     },
     {
-      "date": "2026-11-23",
-      "event": "Physical & Environmental Sciences domain-fit reframing & Pass 3 verification: replaced all administrative/compliance/Schedule B EUR framing across prompt.txt (96 words, 630 chars, voice-check 0 FAIL 0 WARN, zero chart-slicing, zero triplets), Engineering Protocol SWRO-Q27 (BDM-ENG-Q27-2026, Clause 4.3 excess desalination energy rates 420/360/540 kWh/h in MWh, Annex C energy_2027_mwh), golden XLSX/CSV, submission.md, metadata.json, DESIGN_NOTE.md, and cards/task28.json while keeping core.py (seed 2801) and every single number bit-for-bit identical (1,750.8 MWh total / 1,253.5 MWh overhaul). Stage 4 Pass 3 leak-reader PASS (0 leaks, all REVIEW harmless) and determinism-judge DETERMINISTIC / APPROVE (Gates A-E PASS across 36 forks & 6 +/-20% perturbations)."
-    },
-    {
-      "date": "2026-11-23",
-      "event": "Prompt polish after NATURAL (2/9) + SOME SIGNS (weak hit) platform check: tightened prompt.txt to 87 words (564 chars, voice-check 0 FAIL 0 WARN) replacing 'excess desalination energy burden' with 'energy penalty in MWh', cutting the S1 telemetry/lab method clause, and anchoring the chart and backup explicitly inside the workbook while keeping 100% of graded asks and Domains Fit physical-sciences framing intact; target.zip, golden.zip, and submission.md unchanged."
-    },
-    {
-      "date": "2026-11-23",
-      "event": "v2 3-super-stump redesign (SEED 2802) defeating both 2.5h Round-1 frontier solvers: deleted Clause 4.4 and prompt alarm-divergence signpost completely (71-word prompt, voice-check 0 FAIL 0 WARN); upgraded S1 to Fickian 1/Q_t solute-flux coupling + 1h-normalized AR(1) support deconvolution, S2 to two-path bimodal DAF/DMF hydraulic short-circuiting across all 8 basins, and S3 to 4-state dual-recipe CIP-invariant EM (CIP_ALK_pH11 vs CIP_ACID_pH2) with acoustic-chatter mineral crust (D3=0.52). Exact Round-1 R1 solver scores 20/100 (5 of 8 trains wrong) and R2 solver misses 4 of 8 trains. Rebuilt pack, 7-tab golden workbook (visual PNG verified unclipped), CSV, submission.md, card, and DESIGN_NOTE.md. Stage 4 Pass 4 isolated verification: leak-reader PASS (0 leaks) and determinism-judge DETERMINISTIC / APPROVE (Gates A-E PASS across 31 single-mode variants, 4 joint combinations, 6 +/-20% perturbations, and direct native-unit refutation of all 11 rivals)."
+      "date": "2026-11-24",
+      "event": "v3 -> v3.1 -> v3.2 4-stump v4_hardened redesign (SEED 2803) defeating both 3.5h Round-2 frontier solvers and hardened across Stage 4 Passes 5, 6, and 7: added S4 shared-bay permeate TDS variance-component deconvolution, upgraded S1 to conserved solute mass-flux heteroscedasticity (SD=sigma_J/Q_t, all 15,024 clean composites strictly above 0.020 mg/L LOQ, min 0.0453 mg/L), upgraded S2 to variable-flow cumulative-volume two-path mixing across identical coastal TEP baselines, upgraded S3 to 70,080 1-hour shift blocks and 551 alternating ~5.5-day inline CIP flushes (0.4-0.9 h, zero 120h config hint, Lisbon wall-clock shift_code, separated SCADA supervisor) solved by bit-deterministic converged 49-D joint L-BFGS-B MLE (TR06 profile LRT = 9.24), eliminated flow clamping with C-infinity softplus VFD flows (max flow repeat = 2), widened TR05 Gate C headroom (231.5 h, exact 4-state AR(1) Kalman LRT = 7.25-7.46), expanded battery to 39 converged variants (incl. exact continuous 1h OU MLE and exact 2-stage & GLS 4-state AR(1) Kalman MLE), and verified 13/13 gates PASS (0 FAIL, 0 construction tells, 0 FAIL/0 WARN containers, byte-identical rebuild). Stage 4 Pass 7 parallel isolated verification: grounded leak-reader PASS (0 leaks, all realism checks clean) and Holistic Audit v4 determinism-judge-p7 DETERMINISTIC / APPROVE (0 mismatches, 0 unpinned forks, Step 0 + Gates A-E ALL PASS across 36 single-mode forks, 5 joint rebuilds, 8 +/-20% perturbations, and 11 refuted rivals; report at task28/determinism_check_report_pass7.md)."
     }
   ]
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Run the complete Stage 3 build pipeline for task28 in one deterministic pass:
-  1. build.py -> task28/target/ (14 files, LibreOffice PDFs, postprocess XLSX, distinct mtimes)
+  1. build.py -> task28/target/ (15 files, LibreOffice PDFs, postprocess XLSX, distinct mtimes)
   2. analysis.run_all -> recompute all golden, variant, lattice, forcing, and falsification numbers
   3. deliver.build_goldens_and_zips -> golden/ (XLSX + CSV), target.zip, golden.zip
   4. writeup.emit_all -> figures.json, effort.json, metadata.json, submission.md

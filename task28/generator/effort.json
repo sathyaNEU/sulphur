@@ -2,7 +2,7 @@
   "results": [
     {
       "id": "R1",
-      "name": "Reconciled 2026 multi-grain SWRO logs",
+      "name": "Reconciled 2026 multi-grain SWRO logs across 15 shipped files",
       "graded_as": "Ask 0 (Assembly)",
       "figure": "R1_clean_totals",
       "depends": [],
@@ -12,74 +12,79 @@
         "intake_clean_rows": 280320,
         "ro_feed_clean_rows": 280320,
         "hydraulics_clean_rows": 70080,
-        "shift_rows": 17520,
-        "cip_rows": 178
+        "bay_tds_clean_rows": 17520,
+        "shift_rows": 70080,
+        "cip_rows": 551
       },
       "passes": {
         "quick": {
-          "boron_clean_rows": 15465,
-          "intake_clean_rows": 281122,
+          "boron_clean_rows": 15456,
+          "intake_clean_rows": 281169,
           "ro_feed_clean_rows": 280320,
-          "hydraulics_clean_rows": 70278,
-          "shift_rows": 17520,
-          "cip_rows": 178
+          "hydraulics_clean_rows": 70254,
+          "bay_tds_clean_rows": 17520,
+          "shift_rows": 70080,
+          "cip_rows": 551
         },
         "careful": {
           "boron_clean_rows": 15024,
           "intake_clean_rows": 280320,
           "ro_feed_clean_rows": 280320,
           "hydraulics_clean_rows": 70080,
-          "shift_rows": 17520,
-          "cip_rows": 178
+          "bay_tds_clean_rows": 17520,
+          "shift_rows": 70080,
+          "cip_rows": 551
         },
         "thorough": {
           "boron_clean_rows": 15024,
           "intake_clean_rows": 280320,
           "ro_feed_clean_rows": 280320,
           "hydraulics_clean_rows": 70080,
-          "shift_rows": 17520,
-          "cip_rows": 178
+          "bay_tds_clean_rows": 17520,
+          "shift_rows": 70080,
+          "cip_rows": 551
         }
       }
     },
     {
       "id": "R2",
-      "name": "Solute-flux coupled composite boron deconvolution (C1)",
+      "name": "Spiegler-Kedem mass-flux composite boron deconvolution (C1)",
       "graded_as": "Component 1",
       "figure": "C1_boron_2027",
       "depends": [
         "R1"
       ],
       "independent": "permeate_boron_composites_2026.csv, autosampler_schedule_2026.csv, train_hydraulics_hourly_2026.csv",
-      "golden": 1292.0,
+      "golden": 1242.6,
       "band": [
-        1212.4,
-        1315.6
+        1066.1,
+        1268.9
       ],
       "precedent": [
         "L22",
         "L56",
-        "L57"
+        "L57",
+        "L28"
       ],
       "passes": {
-        "quick": 76.2,
-        "careful": 76.2,
-        "thorough": 1292.0
+        "quick": 145.9,
+        "careful": 662.4,
+        "thorough": 1242.6
       }
     },
     {
       "id": "R3",
-      "name": "Two-path bimodal DAF/DMF hydraulic parcel alignment (C2)",
+      "name": "Variable-flow two-path bimodal DAF/DMF hydraulic mixing (C2)",
       "graded_as": "Component 2",
       "figure": "C2_scaling_2027",
       "depends": [
         "R1"
       ],
       "independent": "intake_chemistry_15m_2026.csv, ro_feed_header_15m_2026.csv, train_hydraulics_hourly_2026.csv",
-      "golden": 1297.1,
+      "golden": 1747.8,
       "band": [
-        1154.1,
-        1490.0
+        1666.7,
+        1754.2
       ],
       "precedent": [
         "L26",
@@ -88,24 +93,24 @@
         "N30"
       ],
       "passes": {
-        "quick": 634.2,
-        "careful": 634.2,
-        "thorough": 1297.1
+        "quick": 856.5,
+        "careful": 1841.6,
+        "thorough": 1747.8
       }
     },
     {
       "id": "R4",
-      "name": "4-state dual-recipe CIP-invariant structural fault separation (C3)",
+      "name": "Continuous post-CIP fouling re-growth kinetic LCA (C3)",
       "graded_as": "Component 3",
       "figure": "C3_struct_2027",
       "depends": [
         "R1"
       ],
       "independent": "shift_diagnostics_2026.csv and cip_wash_log_2026.csv",
-      "golden": 1049.7,
+      "golden": 975.3,
       "band": [
-        975.1,
-        1130.9
+        801.2,
+        1090.2
       ],
       "precedent": [
         "L03",
@@ -114,67 +119,42 @@
         "N36"
       ],
       "passes": {
-        "quick": 4787.5,
-        "careful": 4787.5,
-        "thorough": 1049.7
+        "quick": 8453.4,
+        "careful": 3726.0,
+        "thorough": 975.3
       }
     },
     {
       "id": "R5",
-      "name": "Native-unit physical falsification checks F1-F3",
-      "graded_as": "Ask 1 (Validation)",
-      "figure": "R5_falsification",
+      "name": "Shared-bay permeate collector TDS heteroscedastic variance deconvolution (C4)",
+      "graded_as": "Component 4",
+      "figure": "C4_tds_2027",
       "depends": [
-        "R2",
-        "R3",
-        "R4"
+        "R1"
       ],
-      "independent": "",
-      "golden": {
-        "f1": 0.0579,
-        "f2_ms_cm": 0.34,
-        "f3_pp": 0.668
-      },
-      "bands": {
-        "f1": [
-          0.0,
-          0.12
-        ],
-        "f2_ms_cm": [
-          0.3,
-          0.4
-        ],
-        "f3_pp": [
-          0.0,
-          1.0
-        ]
-      },
+      "independent": "bay_permeate_tds_hourly_2026.csv and train_hydraulics_hourly_2026.csv",
+      "golden": 1161.1,
+      "band": [
+        1151.9,
+        1293.9
+      ],
       "precedent": [
-        "L28"
+        "L22",
+        "L33",
+        "L28",
+        "N36"
       ],
       "passes": {
-        "quick": {
-          "f1": 1.6411,
-          "f2_ms_cm": 2.045,
-          "f3_pp": 5.346
-        },
-        "careful": {
-          "f1": 1.6411,
-          "f2_ms_cm": 2.045,
-          "f3_pp": 5.346
-        },
-        "thorough": {
-          "f1": 0.0579,
-          "f2_ms_cm": 0.34,
-          "f3_pp": 0.668
-        }
+        "quick": 0.0,
+        "careful": 1308.3,
+        "thorough": 1161.1
       }
     },
     {
       "id": "R6",
-      "name": "2027 Operating Plan train projections",
-      "graded_as": "Ask 2 (Projections)",
-      "figure": "R6_train_totals_2027",
+      "name": "Four native-unit physical falsification checks F1-F4",
+      "graded_as": "Ask 1 (Validation)",
+      "figure": "R6_falsification",
       "depends": [
         "R2",
         "R3",
@@ -183,147 +163,214 @@
       ],
       "independent": "",
       "golden": {
-        "TR01": 515.8,
-        "TR02": 520.2,
-        "TR03": 29.8,
-        "TR04": 245.0,
-        "TR05": 266.6,
-        "TR06": 524.8,
-        "TR07": 1471.4,
-        "TR08": 65.2
+        "f1": 0.0891,
+        "f2_ms_cm": 0.341,
+        "f3_pp": 0.091,
+        "f4_mg_l": 0.149
       },
       "bands": {
-        "TR01": [
-          487.8,
-          541.3
+        "f1": [
+          0.0,
+          0.14
         ],
-        "TR02": [
-          475.2,
-          542.6
+        "f2_ms_cm": [
+          0.3,
+          0.4
         ],
-        "TR03": [
-          21.7,
-          53.4
+        "f3_pp": [
+          0.0,
+          0.5
         ],
-        "TR04": [
-          229.8,
-          269.3
-        ],
-        "TR05": [
-          192.4,
-          317.3
-        ],
-        "TR06": [
-          498.2,
-          555.7
-        ],
-        "TR07": [
-          1417.9,
-          1519.5
-        ],
-        "TR08": [
-          59.1,
-          79.6
+        "f4_mg_l": [
+          0.0,
+          0.25
         ]
       },
       "precedent": [
-        "L11"
+        "L28",
+        "L30"
       ],
       "passes": {
         "quick": {
-          "TR01": 277.3,
-          "TR02": 311.0,
-          "TR03": 1521.9,
-          "TR04": 411.7,
-          "TR05": 323.6,
-          "TR06": 496.9,
-          "TR07": 1963.2,
-          "TR08": 192.2
+          "f1": 1.65,
+          "f2_ms_cm": 1.857,
+          "f3_pp": 5.5,
+          "f4_mg_l": 12.0
         },
         "careful": {
-          "TR01": 277.3,
-          "TR02": 311.0,
-          "TR03": 1521.9,
-          "TR04": 411.7,
-          "TR05": 323.6,
-          "TR06": 496.9,
-          "TR07": 1963.2,
-          "TR08": 192.2
+          "f1": 0.3839,
+          "f2_ms_cm": 1.088,
+          "f3_pp": 1.154,
+          "f4_mg_l": 0.47
         },
         "thorough": {
-          "TR01": 515.8,
-          "TR02": 520.2,
-          "TR03": 29.8,
-          "TR04": 245.0,
-          "TR05": 266.6,
-          "TR06": 524.8,
-          "TR07": 1471.4,
-          "TR08": 65.2
+          "f1": 0.0891,
+          "f2_ms_cm": 0.341,
+          "f3_pp": 0.091,
+          "f4_mg_l": 0.149
         }
       }
     },
     {
       "id": "R7",
-      "name": "2027 excess desalination energy penalty (MWh)",
-      "graded_as": "Ask 3 (Energy Penalty)",
-      "figure": "R7_energy_penalties",
+      "name": "2027 Operating Plan train projections",
+      "graded_as": "Ask 2 (Projections)",
+      "figure": "R7_train_totals_2027",
       "depends": [
         "R2",
         "R3",
         "R4",
+        "R5",
         "R6"
       ],
       "independent": "",
       "golden": {
-        "A_energy_mwh": 1576.4,
-        "A_overhaul_mwh": 1317.9
+        "TR01": 517.9,
+        "TR02": 605.1,
+        "TR03": 236.4,
+        "TR04": 352.3,
+        "TR05": 231.5,
+        "TR06": 931.6,
+        "TR07": 1493.0,
+        "TR08": 759.1
       },
       "bands": {
-        "A_energy_mwh": [
-          1514.4,
-          1656.5
+        "TR01": [
+          473.7,
+          529.1
         ],
-        "A_overhaul_mwh": [
-          1269.6,
-          1366.0
+        "TR02": [
+          567.4,
+          623.0
+        ],
+        "TR03": [
+          216.9,
+          299.3
+        ],
+        "TR04": [
+          327.7,
+          365.4
+        ],
+        "TR05": [
+          207.0,
+          252.8
+        ],
+        "TR06": [
+          845.5,
+          967.1
+        ],
+        "TR07": [
+          1393.5,
+          1670.3
+        ],
+        "TR08": [
+          684.8,
+          773.1
         ]
       },
       "precedent": [
-        "L11"
+        "L32",
+        "L33"
       ],
       "passes": {
         "quick": {
-          "A_energy_mwh": 2845.5,
-          "A_overhaul_mwh": 2306.1
+          "TR01": 207.6,
+          "TR02": 241.7,
+          "TR03": 3216.2,
+          "TR04": 424.3,
+          "TR05": 987.1,
+          "TR06": 1910.6,
+          "TR07": 2129.7,
+          "TR08": 338.6
         },
         "careful": {
-          "A_energy_mwh": 2845.5,
-          "A_overhaul_mwh": 2306.1
+          "TR01": 385.7,
+          "TR02": 366.7,
+          "TR03": 2296.2,
+          "TR04": 591.6,
+          "TR05": 924.1,
+          "TR06": 1210.7,
+          "TR07": 1386.2,
+          "TR08": 377.1
         },
         "thorough": {
-          "A_energy_mwh": 1576.4,
-          "A_overhaul_mwh": 1317.9
+          "TR01": 517.9,
+          "TR02": 605.1,
+          "TR03": 236.4,
+          "TR04": 352.3,
+          "TR05": 231.5,
+          "TR06": 931.6,
+          "TR07": 1493.0,
+          "TR08": 759.1
         }
       }
     },
     {
       "id": "R8",
-      "name": "Final 2027 vessel overhaul reliability classification",
-      "graded_as": "Recommendation",
-      "figure": "R8_overhaul_slate",
+      "name": "2027 excess desalination energy penalty (MWh)",
+      "graded_as": "Ask 3 (Energy Penalty)",
+      "figure": "R8_energy_penalties",
       "depends": [
         "R2",
         "R3",
         "R4",
-        "R6",
+        "R5",
         "R7"
+      ],
+      "independent": "",
+      "golden": {
+        "A_energy_mwh": 2026.1,
+        "A_overhaul_mwh": 1725.4
+      },
+      "bands": {
+        "A_energy_mwh": [
+          1932.1,
+          2088.1
+        ],
+        "A_overhaul_mwh": [
+          1631.4,
+          1767.8
+        ]
+      },
+      "precedent": [
+        "L32",
+        "L33"
+      ],
+      "passes": {
+        "quick": {
+          "A_energy_mwh": 4934.4,
+          "A_overhaul_mwh": 4543.6
+        },
+        "careful": {
+          "A_energy_mwh": 3345.7,
+          "A_overhaul_mwh": 2903.3
+        },
+        "thorough": {
+          "A_energy_mwh": 2026.1,
+          "A_overhaul_mwh": 1725.4
+        }
+      }
+    },
+    {
+      "id": "R9",
+      "name": "Final 2027 vessel overhaul reliability classification",
+      "graded_as": "Recommendation",
+      "figure": "R9_overhaul_slate",
+      "depends": [
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R7",
+        "R8"
       ],
       "independent": "",
       "golden": [
         "TR01",
         "TR02",
         "TR06",
-        "TR07"
+        "TR07",
+        "TR08"
       ],
       "precedent": [
         "L26",
@@ -333,12 +380,14 @@
         "quick": [
           "TR03",
           "TR04",
+          "TR05",
           "TR06",
           "TR07"
         ],
         "careful": [
           "TR03",
           "TR04",
+          "TR05",
           "TR06",
           "TR07"
         ],
@@ -346,53 +395,52 @@
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       }
     }
   ],
   "hints": [
     {
-      "sentence": "Permeate boron follows solution-diffusion flux coupling (alpha + beta/Q_t) inside 4h/8h flow-proportional composites, so stationary AR(1) composite deconvolution misses night-turndown spikes.",
+      "sentence": "Permeate boron obeys Spiegler-Kedem solute mass-flux conservation (C_t = alpha + J_B(t)/Q_t), scaling hourly concentration SD as sigma_J/Q_t inside 4h/8h flow-proportional composites.",
       "rescues": [
         "R2"
       ]
     },
     {
-      "sentence": "Aging DAF/DMF basins split flow across a fast short-circuit bypass and a main baffled zone, so 1D single-plug cumulative-volume conductivity matching locks onto the main stream and misses the mix.",
+      "sentence": "Variable diurnal flows and two-path bimodal DAF/DMF short-circuiting require cumulative-volume Phi(t) two-path mixing recovered from conservative seawater conductivity.",
       "rescues": [
         "R3"
       ]
     },
     {
-      "sentence": "Alkaline CIP washes clear organic bio-fouling while acid CIP washes clear mineral crust that also triggers acoustic chatter D3, whereas persistent structural faults survive both recipes.",
+      "sentence": "Reversible mineral crust shares the exact single-block alarm profile of persistent structural breaches and re-grows rapidly after acid CIP, requiring continuous post-CIP kinetic LCA.",
       "rescues": [
         "R4"
+      ]
+    },
+    {
+      "sentence": "Individual train permeate TDS (> 450 mg/L) is observed only via shared bay collectors, requiring heteroscedastic variance-component deconvolution across staggered flow shares.",
+      "rescues": [
+        "R5"
       ]
     }
   ],
   "routes": [
     {
-      "name": "golden (flux+AR1 + two-path hydraulics + 4-state dual-CIP EM)",
+      "name": "golden (all 4 physical models)",
       "answer": [
         "TR01",
         "TR02",
         "TR06",
-        "TR07"
+        "TR07",
+        "TR08"
       ],
       "golden": true
     },
     {
-      "name": "direct / reflex (raw composites + same-timestamp + 2-of-3 MV)",
-      "answer": [
-        "TR03",
-        "TR04",
-        "TR06",
-        "TR07"
-      ]
-    },
-    {
-      "name": "rigorous R1 (stationary AR1 + 1D single-plug V_eff + 3-state pooled-CIP)",
+      "name": "direct / reflex (raw monitoring across all 4 modes)",
       "answer": [
         "TR03",
         "TR04",
@@ -402,9 +450,20 @@
       ]
     },
     {
-      "name": "rigorous R2 (stationary AR1 + 1D single-plug V_eff + post-CIP 2-class DS)",
+      "name": "rigorous R1 (Round-2 3.5h solver 1)",
       "answer": [
-        "TR01",
+        "TR02",
+        "TR03",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07",
+        "TR08"
+      ]
+    },
+    {
+      "name": "rigorous R2 (Round-2 3.5h solver 2)",
+      "answer": [
         "TR03",
         "TR04",
         "TR05",
@@ -417,7 +476,8 @@
       "answer": [
         "TR02",
         "TR06",
-        "TR07"
+        "TR07",
+        "TR08"
       ]
     },
     {
@@ -425,7 +485,8 @@
       "answer": [
         "TR01",
         "TR06",
-        "TR07"
+        "TR07",
+        "TR08"
       ]
     },
     {
@@ -437,20 +498,33 @@
         "TR04",
         "TR05",
         "TR06",
-        "TR07"
+        "TR07",
+        "TR08"
       ]
     },
     {
-      "name": "cutoff filter (4h-only + fixed lag + post-CIP MV)",
+      "name": "drop S4 alone",
       "answer": [
-        "TR03",
-        "TR05",
+        "TR01",
+        "TR02",
         "TR06",
         "TR07"
       ]
     },
     {
-      "name": "generous upper (i.i.d. sqrt(m) + comonotonic + post-CIP 2-class DS)",
+      "name": "cutoff run route",
+      "answer": [
+        "TR02",
+        "TR03",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07",
+        "TR08"
+      ]
+    },
+    {
+      "name": "generous run route",
       "answer": [
         "TR01",
         "TR02",
@@ -463,13 +537,25 @@
       ]
     },
     {
-      "name": "over-correct S1 (i.i.d. sqrt(m))",
+      "name": "hedge run route",
+      "answer": [
+        "TR03",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07",
+        "TR08"
+      ]
+    },
+    {
+      "name": "over-correct S1 (flux i.i.d. sqrt(m))",
       "answer": [
         "TR01",
         "TR02",
         "TR04",
         "TR06",
-        "TR07"
+        "TR07",
+        "TR08"
       ]
     },
     {
@@ -477,7 +563,6 @@
       "answer": [
         "TR01",
         "TR02",
-        "TR03",
         "TR04",
         "TR05",
         "TR06",
@@ -486,11 +571,25 @@
       ]
     },
     {
-      "name": "over-correct S3 (raw uninverted D3 post-acid)",
+      "name": "over-correct S3 (unanimous 3-of-3 alarms)",
       "answer": [
         "TR01",
         "TR02",
-        "TR07"
+        "TR03",
+        "TR07",
+        "TR08"
+      ]
+    },
+    {
+      "name": "over-correct S4 (unweighted residual inflation)",
+      "answer": [
+        "TR01",
+        "TR02",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07",
+        "TR08"
       ]
     }
   ],
@@ -500,241 +599,398 @@
       "TR01",
       "TR02",
       "TR06",
-      "TR07"
+      "TR07",
+      "TR08"
     ],
     "golden_family": [
       {
-        "name": "S1: continuous OU kernel (1h-normalized WLS)",
+        "name": "S1_exact_flux_mle",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S1: discrete AR(1) OLS moments",
+        "name": "S1_exact_ou_mle",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S1: discrete AR(1) lag-1-weighted moments",
+        "name": "S1_ou_wls",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S1: AR(1) WLS with 0.5% residual trimming",
+        "name": "S1_ou_wls_var",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S1: AR(1) WLS without lab-noise subtraction",
+        "name": "S1_ar1_ols",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S1: AR(1) WLS on 4h residual moments only",
+        "name": "S1_ar1_lag1",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S1: span-weighted WLS 1/Q_bar flux regression",
+        "name": "S1_ar1_trim05",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S1: Huber IRLS 1/Q_bar flux regression",
+        "name": "S1_ar1_no_lab_noise",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: piecewise-constant step flow (right)",
+        "name": "S1_ar1_4h_only",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: piecewise-constant step flow (left)",
+        "name": "S1_huber_flux_reg",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: midpoint flow integration",
+        "name": "S1_quarterly_mu_j",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: L1 two-path conductivity profile loss",
+        "name": "S2_flow_step_left",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: Huber two-path conductivity profile loss",
+        "name": "S2_flow_step_right",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: 2% trimmed L2 two-path conductivity loss",
+        "name": "S2_flow_midpoint",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: Gaussian OU kriging two-path TEP lookup",
+        "name": "S2_flow_trapz",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: PCHIP interpolation two-path TEP lookup",
+        "name": "S2_loss_l1",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: nearest 15-min two-path TEP lookup",
+        "name": "S2_loss_huber",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S2: cubic spline two-path TEP lookup",
+        "name": "S2_loss_trimmed_l2",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S3: per-train CIP clearing ratios",
+        "name": "S2_tep_nearest",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S3: cross-recipe clearing allowance",
+        "name": "S3_kinetics_exp_vol",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S3: 96-hour (24-block) post-CIP window",
+        "name": "S3_kinetics_michaelis",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S3: 144-hour (36-block) post-CIP window",
+        "name": "S3_kinetics_weibull_115",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "S3: inclusive <=120h (31-block) post-CIP window",
+        "name": "S3_kinetics_weibull_090",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "Joint A: OU flux-AR1 + L1 two-path + per-train CIP",
+        "name": "S3_midpoint_half_h",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "Joint B: Huber flux + Huber two-path + 96h CIP",
+        "name": "S3_jeffreys_map",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "name": "Joint C: trimmed flux + trimmed-L2 two-path + 144h CIP",
+        "name": "S3_laplace_map",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S3_bic_pruned",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S3_two_step_static",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S4_var_ols_sq",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S4_var_wls_sq",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S4_var_mle_no_meter",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S4_mean_huber_mle",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S4_joint_gls_mle",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S4_ar1_mle",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S4_kalman_ar1_mle",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "S4_gls_kalman_mle",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "Joint_MLE_Mid_ExpVol_GLSKalman",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "Joint_OUMLE_NearTEP_Weib115_Kalman",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "Joint_Huber_StepL_Jeffreys_WLS",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
         ]
       }
     ],
@@ -744,6 +1000,7 @@
         "answer": [
           "TR03",
           "TR04",
+          "TR05",
           "TR06",
           "TR07"
         ]
@@ -751,17 +1008,18 @@
       {
         "name": "rigorous R1",
         "answer": [
+          "TR02",
           "TR03",
           "TR04",
           "TR05",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
         "name": "rigorous R2",
         "answer": [
-          "TR01",
           "TR03",
           "TR04",
           "TR05",
@@ -772,10 +1030,13 @@
       {
         "name": "cutoff",
         "answer": [
+          "TR02",
           "TR03",
+          "TR04",
           "TR05",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
@@ -795,8 +1056,11 @@
         "name": "hedge",
         "answer": [
           "TR03",
+          "TR04",
+          "TR05",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
@@ -804,7 +1068,8 @@
         "answer": [
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
@@ -812,7 +1077,8 @@
         "answer": [
           "TR01",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
@@ -824,63 +1090,99 @@
           "TR04",
           "TR05",
           "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "drop S4",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
           "TR07"
         ]
       }
     ],
     "perturbations": [
       {
-        "input": "S1 boron -20%",
+        "input": "S1_boron_-20pct",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "input": "S1 boron +20%",
+        "input": "S1_boron_+20pct",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "input": "S2 scaling -20%",
+        "input": "S2_scaling_-20pct",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "input": "S2 scaling +20%",
+        "input": "S2_scaling_+20pct",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "input": "S3 structural -20%",
+        "input": "S3_struct_-20pct",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
         ]
       },
       {
-        "input": "S3 structural +20%",
+        "input": "S3_struct_+20pct",
         "answer": [
           "TR01",
           "TR02",
           "TR06",
-          "TR07"
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "input": "S4_tds_-20pct",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "input": "S4_tds_+20pct",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07",
+          "TR08"
         ]
       }
     ]
@@ -890,12 +1192,14 @@
       "TR01",
       "TR02",
       "TR06",
-      "TR07"
+      "TR07",
+      "TR08"
     ],
     "reflex_route": {
       "answer": [
         "TR03",
         "TR04",
+        "TR05",
         "TR06",
         "TR07"
       ]
@@ -903,7 +1207,7 @@
     "judgments": [
       {
         "id": "S1",
-        "name": "Solute-flux coupled (1/Q_bar) composite boron regression and AR(1) 1h deconvolution",
+        "name": "Spiegler-Kedem solute mass-flux boron conservation and AR(1) support deconvolution",
         "kind": "stump",
         "precedent": [
           "L22",
@@ -914,14 +1218,15 @@
           "answer": [
             "TR02",
             "TR06",
-            "TR07"
+            "TR07",
+            "TR08"
           ],
           "results_moved": [
             "R2",
-            "R5",
             "R6",
             "R7",
-            "R8"
+            "R8",
+            "R9"
           ]
         },
         "alone": {
@@ -929,8 +1234,10 @@
             "TR01",
             "TR03",
             "TR04",
+            "TR05",
             "TR06",
-            "TR07"
+            "TR07",
+            "TR08"
           ],
           "results_rescued": [
             "R2"
@@ -939,7 +1246,7 @@
       },
       {
         "id": "S2",
-        "name": "Two-path bimodal DAF/DMF hydraulic short-circuiting recovery in cumulative flow",
+        "name": "Variable-flow cumulative-volume two-path bimodal DAF/DMF hydraulic mixing",
         "kind": "stump",
         "precedent": [
           "L26",
@@ -951,14 +1258,15 @@
           "answer": [
             "TR01",
             "TR06",
-            "TR07"
+            "TR07",
+            "TR08"
           ],
           "results_moved": [
             "R3",
-            "R5",
             "R6",
             "R7",
-            "R8"
+            "R8",
+            "R9"
           ]
         },
         "alone": {
@@ -968,7 +1276,8 @@
             "TR04",
             "TR05",
             "TR06",
-            "TR07"
+            "TR07",
+            "TR08"
           ],
           "results_rescued": [
             "R3"
@@ -977,7 +1286,7 @@
       },
       {
         "id": "S3",
-        "name": "4-state dual-recipe CIP-invariant latent-class structural fault separation",
+        "name": "Continuous post-CIP fouling re-growth kinetic LCA separating identical-emission mineral crust",
         "kind": "stump",
         "precedent": [
           "L03",
@@ -993,23 +1302,61 @@
             "TR04",
             "TR05",
             "TR06",
-            "TR07"
+            "TR07",
+            "TR08"
           ],
           "results_moved": [
             "R4",
-            "R5",
             "R6",
             "R7",
-            "R8"
+            "R8",
+            "R9"
           ]
         },
         "alone": {
           "answer": [
-            "TR06",
-            "TR07"
+            "TR06"
           ],
           "results_rescued": [
             "R4"
+          ]
+        }
+      },
+      {
+        "id": "S4",
+        "name": "Shared-bay permeate collector TDS heteroscedastic variance-component deconvolution",
+        "kind": "stump",
+        "precedent": [
+          "L22",
+          "L33",
+          "N36"
+        ],
+        "dropped": {
+          "answer": [
+            "TR01",
+            "TR02",
+            "TR06",
+            "TR07"
+          ],
+          "results_moved": [
+            "R5",
+            "R6",
+            "R7",
+            "R8",
+            "R9"
+          ]
+        },
+        "alone": {
+          "answer": [
+            "TR03",
+            "TR04",
+            "TR05",
+            "TR06",
+            "TR07",
+            "TR08"
+          ],
+          "results_rescued": [
+            "R5"
           ]
         }
       },
@@ -1035,8 +1382,8 @@
   },
   "weights": {
     "recommendation": 14,
-    "components": 24,
-    "asks": 55,
+    "components": 34,
+    "asks": 45,
     "instruction": 7
   }
 }

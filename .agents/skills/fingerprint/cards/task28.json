@@ -1,19 +1,19 @@
 {
   "task": "task28",
   "project": "sulfur",
-  "architecture": "v2",
-  "drawn": "2026-11-23",
-  "slot_note": "v2 Level 5 draw in physical-environmental-sciences (process-control-measurement-systems) x anomaly-detection: Barlavento SWRO desalination plant (Algarve, Portugal) 2027 membrane-train reliability anomaly diagnostics across 8 parallel trains (TR01..TR08) under Engineering Protocol SWRO-Q27 (400-hour overhaul criterion and MWh excess desalination energy penalty), redesigned after empirical x-ray of two 2.5h platform runs to defeat stationary AR(1) composite MLE, 1D single-plug V_eff conductivity CCF, 3-state pooled-CIP EM, and post-CIP 2-class Dawid-Skene, proved in task28/generator/core.py (seed 2802, CORE PASS level 5, 6 of 6 +/-20% forcing perturbations HOLD, 16 of 16 cutoff/hedge/Round-1 rival routes WRONG).",
+  "architecture": "v3.2",
+  "drawn": "2026-11-24",
+  "slot_note": "v3.2 Level 5 v4-hardened draw in physical-environmental-sciences (process-control-measurement-systems) x anomaly-detection: Barlavento SWRO desalination plant (Algarve, Portugal) 2027 membrane-train reliability anomaly diagnostics across 8 parallel trains (TR01..TR08) and 4 physical failure modes under Engineering Protocol SWRO-Q27 (400-hour overhaul criterion and MWh excess desalination energy penalty), redesigned after empirical x-ray of two 3.5h Round-2 platform runs and hardened through Pass 6 with C-infinity non-clamped VFD hydraulic flows (max flow repeat = 2 across 70,080 rows), LOQ-clean boron composites (min 0.0453 mg/L > 0.020 LOQ, zero negative or sub-LOQ samples), 1-hour shift diagnostics (70,080 rows, Lisbon wall-clock shift_code, 551 ~5.5-day alternating inline CIP flushes 0.4-0.9 h) solved by exact converged joint 49-D analytic-gradient L-BFGS-B MLE (unconstrained tau, TR06 profile LRT = 9.24 against 400.0 h), and exact 4-state AR(1) Kalman-verified TR05 headroom (TR05 231.5 h, Kalman LRT = 7.25 against 400.0 h), proved in task28/generator/core.py (seed 2803, CORE PASS level 5, 36/36 PASS, v4_hardened=True, 0 construction tells, 39 converged variants 0 call/rank flips, 8 of 8 +/-20% forcing perturbations HOLD, 21 of 21 run/cutoff/hedge/Round-2 rival routes WRONG).",
   "domain": "physical-environmental-sciences",
   "client_domain": "physical-environmental-sciences",
   "subdomain": "process-control-measurement-systems",
-  "niche": "Coastal seawater reverse-osmosis (SWRO) desalination membrane-train reliability diagnostics: estimating 2026 failure rates and forecasting 2027 vessel overhaul needs and energy penalty (MWh) across eight parallel RO trains when flow-proportional 4h/8h lab boron composites suffer Fickian 1/Q_t solute-flux Jensen dilution bias, aging DAF/DMF pretreatment basins split flow across a fast short-circuit bypass and a main baffled path, and 4h inline shift alarms mix organic bio-fouling (cleared by alkaline CIP), acoustic-chatter mineral crust (cleared by acid CIP), and CIP-invariant persistent structural breaches",
+  "niche": "Coastal seawater reverse-osmosis (SWRO) desalination membrane-train reliability diagnostics across four independent physical observation processes: Spiegler-Kedem solute mass-flux conservation (C_t = alpha + J_B(t)/Q_t) inside 4h/8h flow-proportional lab boron composites, variable-flow cumulative-volume two-path DAF/DMF hydraulic short-circuiting, continuous post-CIP fouling re-growth kinetics across dual alkaline/acid washes on 1-hour shift diagnostics where mineral crust shares the exact single-block alarm profile of structural breaches, and shared North/South Bay permeate collector TDS heteroscedastic variance-component deconvolution across staggered flow shares",
   "objective": "anomaly-detection",
   "shape": "14",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "Schedule four SWRO trains for 2027 vessel overhaul (>= 400 forecasted anomalous operating hours): TR07 (1,471.4 h), TR06 (524.8 h), TR02 (520.2 h), and TR01 (515.8 h), totaling 3,032.2 overhaul-train anomalous hours (1,317.9 MWh energy penalty); retain TR05 (266.6 h), TR04 (245.0 h), TR08 (65.2 h), and TR03 (29.8 h) on routine monitoring; plant-wide 2027 total 3,638.8 h (1,292.0 boron, 1,297.1 scaling, 1,049.7 structural; Q3 1,279.1 h; 1,576.4 MWh total energy penalty). From task28/generator/make.py and verify.py on target.zip (seed 2802, CORE PASS level 5).",
-  "answer_source": "task28/generator/verify.py on task28/target.zip (seed 2802, CORE PASS level 5)",
+  "answer": "Schedule five SWRO trains for 2027 vessel overhaul (>= 400 forecasted anomalous operating hours): TR07 (1,493.0 h), TR06 (931.6 h), TR08 (759.1 h), TR02 (605.1 h), and TR01 (517.9 h), totaling 4,306.6 overhaul-train anomalous hours (1,725.4 MWh energy penalty); retain TR04 (352.3 h), TR03 (236.4 h), and TR05 (231.5 h) on routine monitoring; plant-wide 2027 total 5,126.8 h (1,242.6 boron, 1,747.8 scaling, 975.3 structural, 1,161.1 permeate TDS; Q3 2,176.3 h; 2,026.1 MWh total energy penalty). From task28/generator/core.py and verify.py on target.zip (seed 2803, CORE PASS level 5).",
+  "answer_source": "task28/generator/verify.py on task28/target.zip (seed 2803, CORE PASS level 5)",
   "gap": [
     "objective",
     "time"
@@ -34,13 +34,13 @@
   "validated_decoy": false,
   "context_artifact": "filed_standard",
   "stump_class": "analytical",
-  "analyst_test": "A careful analyst (even executing full 2.5-hour textbook models) cleans every SCADA, lab, hydraulic, and CIP log, runs raw monitoring OR stationary Gaussian AR(1) flow-weighted composite MLE without Fickian 1/Q_t flux coupling, runs 1D single-plug cumulative-volume V_eff conductivity CCF instead of two-path bimodal mixing, and fits 2-of-3 majority vote, post-CIP 2-class Dawid-Skene, or 3-state pooled-CIP D3=0 EM without separating alkaline vs acid CIP regimes, missing TR01 (277.3 to 346.7 h) and TR02 (277.8 to 311.0 h) while mis-flagging TR03 (1,107.0 to 2,261.7 h), TR04 (411.7 to 671.2 h), and TR05 (712.7 to 1,012.3 h).",
-  "domain_test": "Every decisive step is physical desalination process engineering and measurement theory: inverting Fickian solution-diffusion solute-flux coupling (alpha + beta/Q_t) and AR(1) composite variance-autocovariance from 4h/8h flow-proportional lab boron bottles to 1h permeate excursions, recovering two-path bimodal DAF/DMF hydraulic short-circuiting (f_fast at V_fast + (1-f_fast) at V_main) from conservative ambient tidal seawater conductivity in cumulative-flow coordinates, and separating alkaline-cleared organic bio-fouling, acid-cleared acoustic-chatter mineral crust, and dual-CIP-invariant mechanical O-ring breaches across 192 shift-alarm cells; swapping SWRO desalination trains for clinics or retail stores breaks every physical equation.",
+  "analyst_test": "A careful analyst (even executing full 3.5-hour Round-2 frontier models) cleans every SCADA, lab, hydraulic, CIP, and bay-collector log, fits (a + c/Q) homoscedastic concentration AR(1) instead of conserved mass-flux variance (sigma_J/Q_t)^2 on S1, fits fixed wall-clock lag TEP->stress ARX or 1D single-plug V_eff instead of cumulative-volume two-path mixing on S2, fits unconditioned 3-class LCA or static 120h/72h/48h post-CIP 4-class EM instead of continuous post-CIP re-growth kinetics on S3, and fits OLS train means with equal-variance pooling instead of heteroscedastic bay-collector variance deconvolution on S4, missing TR01 (385.7 h), TR02 (366.7 h), and TR08 (377.1 h) while mis-flagging TR03 (2,296.2 h), TR04 (591.6 h), and TR05 (924.1 h).",
+  "domain_test": "Every decisive step is physical desalination process engineering and measurement theory: inverting Spiegler-Kedem solute mass-flux conservation (C_t = alpha_{u,q} + (mu_J + eta_t)/Q_t) inside 4h/8h flow-proportional ICP-OES boron composites, recovering variable-flow two-path bimodal DAF/DMF hydraulic mixing from conservative tidal seawater conductivity in cumulative-flow coordinates, fitting exact converged continuous post-CIP alkaline/acid fouling re-growth kinetics where mineral crust shares the exact single-block alarm profile of persistent structural breaches, and deconvolving shared North/South Bay common permeate collector TDS flow-share mixtures by heteroscedastic variance-component MLE; swapping SWRO desalination trains for clinics or retail stores breaks every physical conservation law.",
   "layer2_family": "field_method",
-  "layer2_pattern": "own:swro-membrane-train-diagnostics-across-fickian-flux-composite-deconvolution-two-path-bimodal-hydraulics-and-dual-recipe-cip-4state-lca",
+  "layer2_pattern": "own:swro-4mode-membrane-diagnostics-mass-flux-boron-two-path-hydraulics-kinetic-cip-lca-and-bay-tds-variance-deconvolution",
   "layer1": [
     "mixed Portuguese European (DD/MM/YYYY) and ISO-8601 timestamps across LIMS, SCADA, and maintenance extracts",
-    "UTC SCADA historian telemetry against WET/WEST (Europe/Lisbon) local plant shift and CIP logs",
+    "UTC SCADA historian and bay-collector telemetry against WET/WEST (Europe/Lisbon) local plant shift and CIP logs",
     "duplicate LIMS assay re-transmission batches with superseded QA revision stamps",
     "mixed mg/L and ug/L boron assay units and m3/h vs L/s flow telemetry across two train bays",
     "re-keyed legacy train tags (LINE-A..H to TR01..TR08) mapped in the asset register",
@@ -50,11 +50,11 @@
   "role_family": "field_unit_lead",
   "scoring_unit": "other",
   "spine": {
-    "file": "intake_chemistry_15m_2026.csv, ro_feed_header_15m_2026.csv, permeate_boron_composites_2026.csv, and shift_diagnostics_2026.csv",
+    "file": "intake_chemistry_15m_2026.csv, ro_feed_header_15m_2026.csv, permeate_boron_composites_2026.csv, shift_diagnostics_2026.csv, and bay_permeate_tds_hourly_2026.csv",
     "rows": 280320,
-    "entity": "one coastal SWRO desalination membrane train monitored across 15-minute hydraulic parcels, 4h/8h flow-proportional lab boron composites, and 4-hour diagnostic shift blocks",
-    "grain": "multi-grain train telemetry (15-min inlet/RO-feed chemistry, hourly SCADA flow, 4h/8h lab composite assays, 4h shift alarm triples, and alkaline/acid CIP wash events)",
-    "source": "synthetic (seeded physical process simulation of 8 SWRO trains across 365 days of 2026 in task28/generator/core.py, seed 2802)"
+    "entity": "one coastal SWRO desalination membrane train monitored across 15-minute hydraulic parcels, 4h/8h flow-proportional lab boron composites, 1-hour diagnostic shift blocks, and hourly shared-bay permeate collectors",
+    "grain": "multi-grain train and bay telemetry (15-min inlet/RO-feed chemistry, hourly SCADA flow, hourly shared-bay permeate TDS, 4h/8h lab composite boron assays, 1h shift alarm triples, and ~5.5-day alternating alkaline/acid CIP wash events)",
+    "source": "synthetic (seeded physical process simulation of 8 SWRO trains and 2 bays across 365 days of 2026 in task28/generator/core.py, seed 2803)"
   },
   "forum": "line_manager_or_team",
   "forcing_event": "other",
@@ -85,9 +85,9 @@
   ],
   "opening_move": "question-first",
   "question_form": "which",
-  "driver": "A fleet of parallel continuous-process units is diagnosed for physical overhaul against a forecasted annual anomalous-hour criterion when three independent physical observation processes defeat both raw monitoring and single-stream textbook models in opposite directions: flow-proportional multi-hour composite assays cancel inverse-flow solute spikes via Jensen arithmetic/harmonic dilution so stationary AR(1) deconvolution misses night-turndown units while inflating high-swing units; parallel fast-bypass and main-baffled basin short-circuiting splits moving parcels so 1D single-plug cumulative-volume alignment locks onto the majority stream, missing fast-bypass units while over-flagging diluted units; and two distinct chemical rinse recipes clear separate reversible fouling states (one triggering acoustic chatter) while persistent structural faults survive both without destructive inspection labels.",
-  "driver_concrete": "Barlavento Dessalinizacao Municipal schedules four of its eight Algarve SWRO membrane trains (TR01, TR02, TR06, TR07) for 2027 vessel overhaul at 400 or more forecasted anomalous hours under Engineering Protocol SWRO-Q27: fitting Fickian 1/Q_bar solute-flux coupling plus AR(1) residual support deconvolution on 4h/8h flow-proportional lab boron composites opens night-turndown train TR01 (515.8 h vs 277.3 h raw and 346.7 h stationary AR(1) textbook) while keeping smooth TR04 monitored (245.0 h vs 515.4 h stationary AR(1) and 1,958 h i.i.d.); profiling two-path bimodal DAF/DMF mixing (f_fast at V_fast + (1-f_fast) at V_main) from conservative seawater conductivity opens fast-bypass TR02 (520.2 h vs 311.0 h same-time and 277.8 h 1D single-plug) while keeping diluted TR05 monitored (266.6 h vs 712.7 h 1D single-plug and 1,144 h comonotonic); and fitting a 4-state dual-recipe CIP-invariant EM across 192 pre/post-ALK/post-ACID cells separates alkaline-cleared bio-fouling and acid-cleared acoustic-chatter mineral crust from persistent structural breaches, clearing TR03 (29.8 h vs 1,107.0 h 3-state pooled-CIP EM and 2,261.7 h post-CIP 2-class DS) while retaining damaged TR06 (524.8 h vs raw uninverted D3).",
-  "stump": "A careful analyst running either raw monitoring or full single-stream textbook models (stationary AR(1) composite MLE, 1D single-plug V_eff conductivity CCF, 3-state pooled-CIP D3=0 EM or post-CIP 2-class Dawid-Skene) misses flux-coupled TR01 and two-path TR02 while mis-flagging mineral-crusted TR03, diurnal-swing TR04, and diluted TR05, whereas over-correcting any mode (i.i.d. sqrt(m), comonotonic pairing, or uninverted post-acid D3) flips TR04, TR05, or TR06 across the 400-hour criterion.",
+  "driver": "A fleet of parallel continuous-process units is diagnosed for physical overhaul against a forecasted annual anomalous-hour criterion when four independent physical observation processes defeat both raw monitoring and 3.5-hour frontier textbook models on four separate axes: flow-proportional multi-hour composite assays obey conserved solute mass-flux variance (sigma_J/Q_t)^2 so homoscedastic a+c/Q concentration models miss night-turndown units while flux-space i.i.d. over-correction flips narrow-trough units; variable-flow two-path short-circuiting in pretreatment basins defeats both fixed wall-clock lag CCF and 1D single-plug cumulative-volume alignment; continuous post-CIP fouling re-growth kinetics where mineral crust shares the exact single-block alarm profile of structural damage defeat both unconditioned LCA and static post-CIP window EM; and shared bay permeate collectors blend staggered train flows so equal-variance OLS pooling misses volatile units while false-flagging steady high-mean units.",
+  "driver_concrete": "Barlavento Dessalinizacao Municipal schedules five of its eight Algarve SWRO membrane trains (TR01, TR02, TR06, TR07, TR08) for 2027 vessel overhaul at 400 or more forecasted anomalous hours under Engineering Protocol SWRO-Q27 across four failure modes (Boron, Scaling, Structural, Permeate TDS): solving Spiegler-Kedem solute mass-flux conservation (M_k = Q_bar_k * C_comp_k, SD(C_t) = sigma_J / Q_t) opens night-turndown TR01 (517.9 h vs 350.7 h under homoscedastic a+c/Q AR(1)) while keeping TR04 monitored (352.3 h vs 978.8 h under flux i.i.d.); profiling variable-flow cumulative-volume two-path mixing on conservative seawater conductivity opens VFD-ramp TR02 (605.1 h vs 301.9 h V_nom and 366.7 h R2) while keeping diluted TR05 monitored (231.5 h vs 466.3 h fixed-lag and 442.6 h 1D single-plug); fitting exact converged 49-D joint continuous post-CIP re-growth kinetics across 70,080 1-hour blocks and 551 alternating ~5.5-day alkaline/acid washes separates fast-regrowing mineral crust (tau_min = 25.4 h) from structural damage sharing identical single-block emissions (0.857, 0.169, 0.716), clearing TR03 (236.4 h vs 2,328.1 h static 120h EM) while retaining TR06 (931.6 h, profile LRT = 9.24 vs 329.3 h unanimous 3-of-3); and deconvolving shared North/South Bay permeate collector TDS via heteroscedastic variance-component MLE opens volatile TR08 (759.1 h vs 368.3 h direct bay and 377.1 h R2) while keeping steady TR05 monitored (231.5 h, exact 4-state AR(1) Kalman LRT = 7.25 vs 645.0 h equal-variance).",
+  "stump": "Four independent physical observation-process stumps on four distinct axes (unit, when, what, who) defeat both raw monitoring and 3.5-hour frontier textbook models (homoscedastic a+c/Q boron AR(1), fixed wall-clock lag TEP->stress and 1D single-plug V_eff, unconditioned 3-class LCA and static 120h post-CIP 4-class EM, and equal-variance bay-collector TDS pooling), missing TR01, TR02, and TR08 while mis-flagging TR03, TR04, and TR05 (R2 exact 3.5h solver misses 6 of 8 trains, scoring 18/100 house and 29/100 v4-ECF).",
   "answer_shape": "flagged-set",
   "weight": "triage",
   "chain_signature": [
@@ -95,18 +95,19 @@
     "missingness-measurement",
     "modeling",
     "investigation-loops",
+    "uncertainty",
     "validation",
     "forecasting",
     "decomposition-attribution",
     "synthesis"
   ],
-  "results": "R1 reconciled 2026 multi-grain SWRO plant logs (280,320 15-min inlet/RO-feed rows, 70,080 hourly flow rows, 15,024 4h/8h boron composites, 17,520 4h shift diagnostic triples, and dual-recipe CIP_ALK_pH11/CIP_ACID_pH2 washes); R2 Fickian 1/Q_bar flux-coupled composite boron deconvolution (C1 = 1,292.0 h, opens TR01); R3 two-path bimodal DAF/DMF cumulative-flow hydraulic alignment (C2 = 1,297.1 h, opens TR02); R4 4-state dual-recipe CIP-invariant latent-class separation of structural faults from bio-fouling and mineral crust (C3 = 1,049.7 h, opens TR03); R5 three native-unit physical falsification checks F1-F3 across disjoint logs (golden 2.33 vs rivals 9.30 to 55.43); R6 uniform 2027 Operating Plan forecast across all 8 trains, plant total (3,638.8 h), overhaul subset (3,032.2 h), and summer Q3 peak (1,279.1 h); R7 2027 excess desalination energy penalty (1,576.4 MWh total, 1,317.9 MWh overhaul); R8 final 2027 vessel overhaul classification (TR01, TR02, TR06, TR07) and +/-20% forcing check.",
-  "one_fact_test": "Telling the solver that permeate boron obeys solution-diffusion flux coupling (alpha + beta/Q_t) inside 4h/8h flow-proportional composites still requires aligning hourly SCADA flow Q_bar_k to composite bottles, estimating per-train (alpha_q, beta), deconvolving residual AR(1) 1h variance, and integrating across 8,760 hourly flows into 2027; it rescues only S1 (C1_boron_2027, lifting reflex from 13 to 20/100, delta +7, while TR02 and TR03 remain wrong).",
+  "results": "R1 reconciled 2026 multi-grain SWRO plant logs across 15 shipped files (280,320 15-min inlet/RO-feed rows, 70,080 hourly flow rows with zero flat clamping, 17,520 hourly shared-bay permeate TDS rows, 15,024 4h/8h boron composites strictly above 0.020 mg/L LOQ, 70,080 1h shift alarm triples, and 551 alternating ~5.5-day alkaline/acid CIP wash logs); R2 Spiegler-Kedem mass-flux composite boron deconvolution (C1 = 1,242.6 h, opens TR01); R3 variable-flow two-path DAF/DMF hydraulic alignment (C2 = 1,747.8 h, opens TR02); R4 exact converged continuous post-CIP fouling re-growth kinetic LCA (C3 = 975.3 h, opens TR03); R5 shared-bay permeate collector TDS heteroscedastic variance-component deconvolution (C4 = 1,161.1 h, opens TR08); R6 four native-unit physical falsification checks F1-F4 across disjoint logs (golden 2.015 vs rivals 9.839 to 8,185.544); R7 uniform 2027 Operating Plan forecast across all 8 trains, plant total (5,126.8 h), overhaul subset (4,306.6 h), and summer Q3 peak (2,176.3 h); R8 2027 excess desalination energy penalty (2,026.1 MWh total, 1,725.4 MWh overhaul); R9 final 2027 vessel overhaul classification (TR01, TR02, TR06, TR07, TR08) and 8-way +/-20% forcing check.",
+  "one_fact_test": "Telling the solver any single stump's core sentence still leaves 4 multi-step physical modeling steps and misses the call on all four stumps under its coded 1-step post-hint shortcut (S1 a+c/Q homoscedastic AR(1), S2 1D single-plug V_eff, S3 static 120h post-CIP 4-class EM, S4 equal-variance OLS bay pooling, also missing C1-C3 on S1-S3), while fixing any one stump alone on the reflex route lifts house score from 9 to 18/100 (v4-ECF 17 to 29/100, delta +9 house / +12 v4-ECF).",
   "strategy_label": "own",
   "mechanism_source": "design_note",
   "differentiation": {},
   "lineage": [],
-  "notes": "task28 v2 READY (2026-11-23): redesigned after empirical x-ray of two 2.5h platform runs on v1 (deleting Clause 4.4 raw-alarm signpost and upgrading S1/S2/S3 to defeat stationary AR(1) MLE, 1D single-plug V_eff CCF, 3-state pooled-CIP D3=0 EM, and post-CIP 2-class DS). core.py CORE PASS level 5 (seed 2802, 27/27 PASS), all 6 +/-20% forcing perturbations HOLD (min_overhaul 423.4, max_monitor 305.1), 26 variants 0 flips, S1/S2/S3 lost alone 43/39/26, S1/S2/S3 fixed alone 20/20/24, reflex 13, rigorous R1 (Response 1 exact 2.5h solver) 20, cutoff 13, generous 9, hedge 13, all 16 further cutoff/hedge/Round-1 rival routes WRONG, all 3 over-corrections WRONG (strictly two-sided), native-unit falsification golden 2.33 vs rivals 9.30 to 55.43 (4.0x to 23.8x). All skeleton lessons open (0 closed); decision_form per_unit_diagnosis has 0 live builds and 0 client skeletons.",
+  "notes": "task28 v3.2 READY (2026-11-24): 4-stump v4-hardened redesign (SEED 2803) hardened through Pass 6 with C-infinity softplus VFD hydraulic flows (max flow repeat = 2 across 70,080 rows), LOQ-clean boron composites (min 0.0453 mg/L > 0.020 LOQ, 0 sub-LOQ), Lisbon wall-clock shift_code, separated CIP technicians & 0.4-0.9 h inline flushes, 1-hour shift diagnostics (70,080 rows, 551 alternating ~5.5-day washes) solved by exact converged joint 49-D analytic-gradient L-BFGS-B MLE (unconstrained tau, TR06 profile LRT = 9.24 against 400.0 h), and exact 4-state AR(1) Kalman-verified TR05 headroom (TR05 231.5 h, Kalman LRT = 7.25 against 400.0 h). core.py CORE PASS level 5 (36/36 PASS, v4_hardened=True), construction_tells.py PASS (0 tells), 8 of 8 +/-20% forcing perturbations HOLD (min_ov >= 464.9, max_mo <= 382.2), 39 converged variants (incl. exact continuous 1h OU MLE and exact 2-stage & GLS 4-state AR(1) Kalman MLE) 0 call/rank flips (min_ov >= 473.7 on TR01, max_mo <= 365.4 on TR04, TR07 > TR06 > TR08 everywhere), 4 distinct open members (TR01 by S1, TR02 by S2, TR03 by S3, TR08 by S4), S1/S2/S3/S4 lost alone 32/32/24/32 house and 50/50/43/50 v4-ECF, fixed alone 18/18/18/18 house and 29/29/29/29 v4-ECF, reflex 9 house / 17 v4-ECF (0 silent figures), rigorous R2 exact 3.5h solver 18 house / 29 v4-ECF (6 of 8 trains wrong), 90% coupled figure matrix (9/10 non-ECF asks), all 4 coded one_fact_shortcut checks pass, all 21 run/cutoff/hedge/Round-2 rival routes WRONG, all 4 stumps strictly two-sided, native-unit falsification golden 2.015 vs rivals 9.839 to 8,185.544 (4.9x to 4,062x golden). Zero 120h window hint in scada_bay_config_2026.json; zero Clause 4.4 signpost.",
   "depth_level": 5,
   "doctrine": "throughout",
   "skeleton": {
@@ -114,14 +115,17 @@
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
       "support_effect",
+      "conservation_residual_attribution",
       "asynchronous_measurement_covariance",
       "non_additive_aggregation",
-      "rival_process_by_state_dependence"
+      "rival_process_by_state_dependence",
+      "unlabelled_pool_apportioned_by_varying_mix"
     ],
     "mechanisms": [
-      "fickian_flux_coupled_composite_boron_support_deconvolution",
-      "two_path_bimodal_lagrangian_hydraulic_short_circuit_mixing",
-      "dual_recipe_alkaline_acid_cip_4state_latent_class_inversion"
+      "spiegler_kedem_mass_flux_composite_boron_heteroscedastic_deconvolution",
+      "variable_flow_two_path_bimodal_hydraulic_short_circuit_mixing",
+      "continuous_post_cip_regrowth_kinetic_lca_identical_emission_separation",
+      "shared_bay_permeate_tds_heteroscedastic_variance_component_deconvolution"
     ],
     "detection": [
       "second_source_at_other_grain",
@@ -132,6 +136,8 @@
     "moves": [
       "compute_on_joint_path",
       "em_latent_fit",
+      "variance_components",
+      "source_rates_fitted_to_pool_totals",
       "variant_sweep_holds_call"
     ],
     "file_roles": [

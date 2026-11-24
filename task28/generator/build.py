@@ -37,6 +37,7 @@ EXPORTED = {
     F["intake_15m"]:   dt.datetime(2027,  1, 11,  6, 15,  8, tzinfo=UTC),
     F["ro_feed_15m"]:  dt.datetime(2027,  1, 11,  6, 48, 33, tzinfo=UTC),
     F["hydraulics_h"]: dt.datetime(2027,  1, 11,  7, 19, 54, tzinfo=UTC),
+    F["bay_tds_h"]:    dt.datetime(2027,  1, 11,  7, 52, 16, tzinfo=UTC),
     F["shift_diag"]:   dt.datetime(2027,  1, 12, 10,  4, 17, tzinfo=UTC),
     F["cip_log"]:      dt.datetime(2027,  1, 12, 15, 42,  9, tzinfo=UTC),
     F["scada_cfg"]:    dt.datetime(2026, 10, 21, 13,  8, 51, tzinfo=UTC),
