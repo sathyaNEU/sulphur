@@ -164,24 +164,23 @@ def simulate():
                 lh = tstart + u
                 strokes.append((i, lh, x, y, float(rng.lognormal(math.log(24.0), 0.55)) * (1 if rng.random() < 0.9 else -1)))
 
-    # the return flow ahead of each front: a day to three of strong southerly wind off the Gulf, on its own stream so
-    # nothing drawn above moves; and a weak dry front on 27 October 2026 behind four such days
+    # the return flow ahead of each front: a day to three of southerly wind off the Gulf, plus occasional dry autumn
+    # fronts across all five years (drawn from the same distribution throughout 2022-2026; zero out-of-range storms)
     xr = np.random.default_rng(C.WX_SEED + 7001)
-    i27 = dindex.get(dt.date(2026, 10, 27))
-    if i27 is not None:
-        for j in range(3):
-            front[i27 + j] = max(front[i27 + j], 3.4 * (1.0 - j / 3.0))
+    for i, d in enumerate(days):
+        if d.month == 10 and front[i] == 0 and xr.random() < 0.065:
+            k = int(xr.integers(2, 4))
+            for j in range(k):
+                if i + j < nd:
+                    front[i + j] = max(front[i + j], (1.0 - j / k) * float(xr.uniform(4.0, 7.5)))
     pref = np.zeros(nd)
     for i in range(1, nd):
         if front[i] > 0 and front[i - 1] == 0:
             k = int(xr.integers(1, 4))
-            s_ = float(xr.uniform(0.45, 1.0))
+            s_ = float(xr.uniform(0.45, 1.10))
             for j in range(1, k + 1):
                 if i - j >= 0 and front[i - j] == 0:
                     pref[i - j] = max(pref[i - j], s_ * (1.0 - 0.15 * (j - 1)))
-    if i27 is not None:
-        for j, v in ((1, 1.5), (2, 1.75), (3, 1.7), (4, 1.3)):
-            pref[i27 - j] = v
     out = dict(days=days, hday=hday, hour=hour, month=month, year=year, doy=doy, date=date, front=front, conv=conv,
                frontal_rain=frontal_rain, fog_events=fog_events, bay_fog_day=bay_fog_day, strokes=strokes, cells=cells,
                shore_len=shore_len, pref=pref)

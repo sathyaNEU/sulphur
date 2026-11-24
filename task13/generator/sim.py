@@ -1,5 +1,4 @@
-"""The simulated world in one pass: the network, the weather, the loading, the crews' washing, every fault, and (in
-relays.py and ops.py) what each instrument and system recorded. world() caches the result outside the task folder."""
+"""The simulated world in one pass (architecture 7, Level 5): network, weather, loads, washes, faults, relays, ops."""
 import os
 import pickle
 import tempfile
@@ -11,9 +10,9 @@ import loads as L
 import network as N
 import weather as W
 
-CACHE = os.path.join(tempfile.gettempdir(), 'task13_v6_world_cache')
+CACHE = os.path.join(tempfile.gettempdir(), 'task13_v7_world_cache')
 SIM_FILES = ('common', 'network', 'weather', 'loads', 'faults', 'field', 'relays', 'ops', 'sim')
-CRIT = 0.052          # the deposit (mg per cm2 ESDD) past which the Gulf lines' porcelain flashes over in fog
+CRIT = F.CEFF_CRIT
 
 
 def simulate():
@@ -30,8 +29,8 @@ def simulate():
     tests, test_series = FD.test_readings(wx)
     w = dict(net=net, wx=wx, ld=ld, sections=secs, washes=washes, faults=fl['faults'], deposits=fl['deposits'],
              replaced=fl['replaced'], trims=fl['trims'], strings=fl['strings'], tests=tests, test_series=test_series)
-    import relays as R
     import ops as O
+    import relays as R
     R.record(w)
     O.operate(w)
     return w
@@ -43,7 +42,7 @@ def world(refresh=False):
     src = max(os.path.getmtime(os.path.join(C.HERE, f + '.py')) for f in SIM_FILES if os.path.exists(os.path.join(C.HERE, f + '.py')))
     if not refresh and os.path.exists(p) and os.path.getmtime(p) > src:
         w = pickle.load(open(p, 'rb'))
-        F.fill_sources(w['net'])        # the module's own list, which a cached world does not carry
+        F.fill_sources(w['net'])
         return w
     w = simulate()
     pickle.dump(w, open(p, 'wb'))

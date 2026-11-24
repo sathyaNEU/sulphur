@@ -1,8 +1,8 @@
-"""Shared constants for the task13 generator (architecture 5): paths, the cooperative, its people, the pack's files and
-each file's save times, the seeds and the clock helpers. The world runs on UTC. Each record is written on the clock
-its system keeps: the EventRecall relays and the SCADA master in UTC, the GridVue relays and the control room in
-Central prevailing time, the solar farm's plant controller in Central Standard Time all year, the outage system in
-Central prevailing time."""
+"""Shared constants for the task13 generator (architecture 7, Level 5): paths, the cooperative, its people, the pack's
+files and each file's save times, the seeds and the clock helpers. The world runs on UTC. Each record is written on the
+clock its system keeps: the EventRecall relays and the SCADA master in UTC, the GridVue relays and the control room in
+Central prevailing time, both independent power producers' plant controllers in Central Standard Time all year, the
+outage system in Central prevailing time."""
 import datetime as dt
 import os
 from zoneinfo import ZoneInfo
@@ -16,24 +16,37 @@ TZ = ZoneInfo(ZONE)
 CST = dt.timezone(dt.timedelta(hours=-6))
 UTC = dt.timezone.utc
 
-SEED = 51301          # the network, its structures, sources, taps and members
-WX_SEED = 51302       # weather, fog, rain and lightning
-EV_SEED = 51303       # faults, relays, operations and the field records
+SEED = 51311          # the network, its structures, sources, taps and members
+WX_SEED = 51312       # weather, fog, rain and lightning
+EV_SEED = 51313       # faults, relays, operations and the field records
 
 ORG = 'Laguna Prieta Electric Cooperative'
 ORG_SHORT = 'Laguna Prieta EC'
 TOWN = 'Port Alcorn'
 IPP = 'Coyote Draw Solar LLC'
 IPP_SHORT = 'Coyote Draw Solar'
+IPP2 = 'Brushy Creek BESS LLC'
+IPP2_SHORT = 'Brushy Creek BESS'
 
 PEOPLE = {
     'reliability': 'Brittany Melton',      # reliability engineer (the golden's author)
-    'engineering': 'Thomas Evans',         # manager of engineering (the memo's reader)
+    'engineering': 'Charles Ortiz',        # manager of engineering (the memo's reader)
     'operations': 'Derek Hart',            # system operations supervisor (the control room log)
     'environment': 'Joanna Choi',          # environmental compliance specialist (the roost survey)
     'vegetation': 'Allison Ward',          # vegetation management coordinator
     'planning': 'Andrew Russell',          # transmission planning engineer (the protection studies)
     'lines': 'Julie Peterson',             # line superintendent (patrols, washing, maintenance)
+}
+
+# RP-04 Rev 5 Priority 1 (winter/spring) crew-day budget and standard job durations
+CREW_BUDGET_DAYS = 36
+CREW_DAYS = {
+    'wash': 1,
+    'bird': 1,
+    'insulator': 2,
+    'growin': 2,
+    'fallin': 3,
+    'hardware': 3,
 }
 
 FILES = {
@@ -62,7 +75,8 @@ FILES = {
     'veg': 'vegetation_work_orders_2022-2026.csv',
     'maint': 'line_maintenance_work_orders_2022-2026.csv',
     'ipp': 'coyote_draw_solar_protection_events_2023-2026.csv',
-    'procedure': 'reliability_reporting_procedure_rev4.docx',
+    'ipp2': 'brushy_creek_bess_protection_events_2023-2026.csv',
+    'procedure': 'reliability_reporting_procedure_rev5.docx',
     'corrosion': 'tower_and_pole_condition_survey_2025.xlsx',
     'easements': 'row_easement_register.csv',
 }
@@ -92,11 +106,12 @@ STAMP = {
     'patrols': (dt.datetime(2020, 3, 2, 7, 55, 18), dt.datetime(2026, 10, 30, 16, 41, 29)),
     'avian': (dt.datetime(2021, 11, 8, 10, 27, 40), dt.datetime(2026, 3, 12, 14, 9, 52)),
     'esdd': (dt.datetime(2021, 12, 6, 15, 33, 4), dt.datetime(2026, 10, 27, 11, 18, 37)),
-    'washing': (dt.datetime(2021, 10, 19, 8, 12, 56), dt.datetime(2026, 10, 23, 15, 47, 10)),
+    'washing': (dt.datetime(2021, 10, 19, 8, 12, 56), dt.datetime(2026, 10, 29, 15, 47, 10)),
     'veg': (dt.datetime(2026, 11, 2, 12, 16, 8), dt.datetime(2026, 11, 2, 12, 16, 8)),
     'maint': (dt.datetime(2026, 11, 2, 12, 31, 45), dt.datetime(2026, 11, 2, 12, 31, 45)),
     'ipp': (dt.datetime(2026, 10, 30, 9, 2, 17), dt.datetime(2026, 10, 30, 9, 2, 17)),
-    'procedure': (dt.datetime(2023, 1, 9, 9, 40, 13), dt.datetime(2024, 2, 27, 16, 5, 41)),
+    'ipp2': (dt.datetime(2026, 10, 30, 10, 14, 52), dt.datetime(2026, 10, 30, 10, 14, 52)),
+    'procedure': (dt.datetime(2023, 1, 9, 9, 40, 13), dt.datetime(2025, 3, 4, 15, 22, 19)),
     'corrosion': (dt.datetime(2025, 4, 14, 8, 28, 30), dt.datetime(2025, 9, 3, 13, 12, 6)),
     'easements': (dt.datetime(2026, 6, 23, 10, 54, 19), dt.datetime(2026, 6, 23, 10, 54, 19)),
 }
@@ -113,6 +128,7 @@ AS_OF = dt.date(2026, 11, 3)
 YEAR26_0 = dt.datetime(2026, 1, 1, 6, 0, tzinfo=UTC)
 INLAND_NEW_AUTO = dt.datetime(2024, 3, 14, 19, 30, tzinfo=UTC)   # Inland T2 (150 MVA) energized; T1 (75 MVA) retired
 SOLAR_ENERGIZED = dt.datetime(2023, 2, 20, 17, 0, tzinfo=UTC)    # Coyote Draw Solar's GSU first energized
+BESS_ENERGIZED = dt.datetime(2023, 5, 15, 16, 0, tzinfo=UTC)     # Brushy Creek BESS's GSU first energized
 STATIONS_FROM = dt.datetime(2023, 3, 14, 6, 0, tzinfo=UTC)       # the substation weather stations' first readings
 FOG_SEASON = (dt.date(2026, 12, 1), dt.date(2027, 3, 31))
 LETTER_MM = (215.9, 279.4)

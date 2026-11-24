@@ -1,8 +1,9 @@
-"""task13 architecture 6, the independent verifier: the graded figures recomputed from target/ by code that shares
-nothing with golden.py or passes.py (its own sequence builder, member walk, study parser, residual-split solver, tap
-infeed correction, wind-driven deposit model and conductor heat balance), each checked against figures.json inside its band. The one input taken from the
-golden deliverables is the fault table's grouping of faults into repeat locations and its causes, which checks.py
-holds against the simulated world; every place and the washing list are re-derived here from the pack.
+"""task13 architecture 7 (Level 5), independent verifier: recomputes all graded figures directly from target/ using
+independent code that shares nothing with golden.py or passes.py (independent SCADA sequence builder, chronological
+ALT SRC / NORM SW switching state machine, PDF Z0m and source-impedance parser, first-principles 2-line coupled
+zero-sequence nodal solver, dual CST YNd1 IPP infeed inversion, 2D (ESDD, NSDD) daily recurrence and logistic
+fog-flashover frontier, IEEE 738 bisection heat balance, RP-04 Rev 5 greedy 36-crew-day allocation, and golden
+deliverable checks).
 
     python3 task13/generator/verify.py
 """
@@ -20,18 +21,25 @@ from zoneinfo import ZoneInfo
 import numpy as np
 import openpyxl
 import pandas as pd
+from scipy.optimize import minimize
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TASK = os.path.dirname(HERE)
 T = os.path.join(TASK, 'target')
 FIG = json.load(open(os.path.join(HERE, 'figures.json')))
 sys.path.insert(0, HERE)
-import common as C  # noqa: E402  (file names only)
+import common as C  # noqa: E402  (filenames only)
 
 CENTRAL = ZoneInfo('America/Chicago')
 CST = dt.timezone(dt.timedelta(hours=-6))
 MI = 1.609344
 N = {'pass': 0, 'fail': 0}
+
+CREW_DAYS = {
+    'wash': 1, 'bird or other animal': 1, 'insulator failure': 2,
+    'vegetation grown into the line': 2, 'vegetation from outside the right of way': 3,
+    'equipment or hardware other than insulators': 3,
+}
 
 
 def ok(label, cond, detail=''):
@@ -44,7 +52,7 @@ def path(key):
 
 
 def sheet(key, name, first):
-    """a sheet's rows as dicts, from the header row whose first cell reads `first`"""
+    """Read an Excel sheet from the header row whose first cell equals `first`."""
     ws = openpyxl.load_workbook(path(key), read_only=True, data_only=True)[name]
     rows = [r for r in ws.iter_rows(values_only=True)]
     i = next(k for k, r in enumerate(rows) if r and r[0] == first)
@@ -52,42 +60,58 @@ def sheet(key, name, first):
     return [dict(zip(hdr, x)) for x in rows[i + 1:] if any(c is not None for c in x)]
 
 
-# ---------------------------------------------------------------------------------------------- the network
+def _polar(mag, deg):
+    return float(mag) * complex(math.cos(math.radians(float(deg))), math.sin(math.radians(float(deg))))
+
+
+# ---------------------------------------------------------------------------------------------- Network & Studies
 
 
 def network():
     lines = {}
     for r in sheet('lines', 'Lines', 'Line'):
         n = int(str(r['Line']).split()[1])
-        lines[n] = dict(a=r['Terminal A'], b=r['Terminal B'], length=float(r['Length (km)']), conductor=r['Conductor'],
-                        z1=complex(float(r['R1 (ohm/km)']), float(r['X1 (ohm/km)'])),
-                        z0=complex(float(r['R0 (ohm/km)']), float(r['X0 (ohm/km)'])))
+        lines[n] = dict(
+            a=r['Terminal A'], b=r['Terminal B'], length=float(r['Length (km)']), conductor=r['Conductor'],
+            z1=complex(float(r['R1 (ohm/km)']), float(r['X1 (ohm/km)'])),
+            z0=complex(float(r['R0 (ohm/km)']), float(r['X0 (ohm/km)'])),
+        )
     code = {r['Station']: r['Code'] for r in sheet('subs', 'Stations', 'Code')}
     for L in lines.values():
         L['ca'], L['cb'] = code[L['a']], code[L['b']]
     st = pd.read_csv(path('structures'))
     st['n'] = st['line'].str.split().str[1].astype(int)
-    taps = defaultdict(list)
+    taps = {}
     for r in sheet('lines', 'Taps', 'Tap substation'):
-        taps[int(str(r['Line']).split()[1])].append(r['Tap substation'])
-    solar = {str(r['Item']): r['Value'] for r in sheet('lines', 'Solar tap', 'Item')}
-    tap_km = float([v for k, v in solar.items() if k.startswith('Tap point')][0])
+        taps[r['Tap substation']] = dict(
+            normal=int(str(r['Line']).split()[1]),
+            alt=int(str(r['Second 69 kV source']).split()[1]) if r.get('Second 69 kV source') else None,
+        )
+    ipp_taps = {}
+    for r in sheet('lines', 'IPP taps', 'Facility'):
+        ln = int(str(r['Line']).split()[1])
+        ipp_taps[ln] = dict(facility=str(r['Facility']), tap_km=float(r['Tap distance from terminal A (km)']))
     retired = [r for r in sheet('subs', 'Transformers', 'Location') if r['Location'] == 'Inland' and r.get('Retired')]
     change = dt.date.fromisoformat(str(retired[0]['Retired'])[:10])
-    return lines, st, taps, tap_km, change
+    return lines, st, taps, ipp_taps, change
 
 
 def study(key):
     txt = subprocess.run(['pdftotext', '-layout', path(key), '-'], capture_output=True, text=True).stdout
-    out = {}
+    src = {}
     for m in re.finditer(r'^\s*Line (\d+)\s+(.+?)\s{2,}([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*$', txt, re.M):
         n, term = int(m.group(1)), m.group(2).strip()
-        z = lambda mag, ang: mag * complex(math.cos(math.radians(ang)), math.sin(math.radians(ang)))
-        out[(n, term)] = (z(float(m.group(3)), float(m.group(4))), z(float(m.group(5)), float(m.group(6))))
-    return out
+        src[(n, term)] = (_polar(m.group(3), m.group(4)), _polar(m.group(5), m.group(6)))
+    zm = re.search(r'Z0m\s*=\s*([\d.]+)\s*\+\s*j([\d.]+)\s*ohm/km', txt)
+    z0m = complex(float(zm.group(1)), float(zm.group(2))) if zm else None
+    cm = re.search(r'to the\s+([\d.]+)\s*km corridor junction', txt)
+    cor_km = float(cm.group(1)) if cm else 14.5
+    bm = re.search(r'bus zero-sequence source impedance is\s+([\d.]+)\s*ohm at\s+([\d.]+)\s*degrees', txt)
+    z_bus = _polar(bm.group(1), bm.group(2)) if bm else None
+    return dict(src=src, z0m=z0m, cor_km=cor_km, z_bus=z_bus)
 
 
-# ---------------------------------------------------------------------------------------------- R1 and R5
+# ---------------------------------------------------------------------------------------------- SCADA Sequences & Switching
 
 
 def sequences():
@@ -110,41 +134,85 @@ def sequences():
             seq = dict(ln=ln, t0=r['t'], first={r['end']: r['t']})
         if seq is not None:
             faults.append(seq)
-    two = [f for f in faults if {'52', '62'} <= set(f['first']) and
-           abs((f['first']['52'] - f['first']['62']).total_seconds()) <= 1.0]
+    two = [f for f in faults if {'52', '62'} <= set(f['first'])
+           and abs((f['first']['52'] - f['first']['62']).total_seconds()) <= 1.0]
     for f in two:
         f['t'] = pd.Timestamp(min(f['first'].values()))
     return soe, lb, two
 
 
+def parse_switching(soe, code_to_tap):
+    """Independent state machine for planned supervisory switching windows: NORM SW OPEN -> NORM SW CLOSE."""
+    sw = soe[soe['point'].str.contains(' 69KV (?:NORM SW|ALT SRC) ', regex=True)].sort_values('t')
+    windows = []
+    open_norm = {}
+    last_alt = {}
+    for r in sw.itertuples():
+        m_alt = re.match(r'^(\w+) 69KV ALT SRC L(\d+)$', r.point)
+        m_norm = re.match(r'^(\w+) 69KV NORM SW L(\d+)$', r.point)
+        if m_alt and r.state == 'CLOSE':
+            last_alt[m_alt.group(1)] = (int(m_alt.group(2)), r.t)
+        elif m_norm:
+            rtu, n_ln = m_norm.group(1), int(m_norm.group(2))
+            if r.state == 'OPEN':
+                alt_ln = last_alt.get(rtu, (None, None))[0]
+                open_norm[rtu] = dict(tap=code_to_tap.get(rtu, rtu), rtu=rtu, normal=n_ln, alt=alt_ln, start=r.t)
+            elif r.state == 'CLOSE' and rtu in open_norm:
+                w = open_norm.pop(rtu)
+                w['end'] = r.t
+                windows.append(w)
+    return windows
+
+
 def member_walk(soe, lb, faults, taps):
+    """Independent 2022-2026 & 2026 chronological as-operated member impact walk."""
     mem = pd.read_csv(path('members'))
-    by = mem.groupby(['month', 'substation'])['members'].sum().to_dict()
-    code = {s: re.sub(r'\d+$', '', fdr) for fdr, s in zip(mem['feeder'], mem['substation'])}
-    alt = soe[soe['point'].str.contains(' 69KV ALT SRC ') & (soe['state'] == 'CLOSE')]
-    out = defaultdict(lambda: [0, 0.0])
+    by_ym = mem.groupby(['month', 'substation'])['members'].sum().to_dict()
+    tap_code = {s: re.sub(r'\d+$', '', fdr) for fdr, s in zip(mem['feeder'], mem['substation'])}
+    code_tap = {v: k for k, v in tap_code.items()}
+    windows = parse_switching(soe, code_tap)
+    alt_close = soe[soe['point'].str.contains(' 69KV ALT SRC ') & (soe['state'] == 'CLOSE')]
+
+    def active_line_for(tap, t):
+        for w in windows:
+            if w['tap'] == tap and w['start'] <= t <= w['end'] and w['alt'] is not None:
+                return w['alt'], True
+        return taps[tap]['normal'], False
+
+    out26 = defaultdict(lambda: [0, 0.0])
+    per_fault = {}
     for f in faults:
         lt = f['t'].tz_convert(CENTRAL)
-        if lt.year != 2026:
-            continue
-        own = lb[(lb['ln'] == f['ln']) & (lb['t'] >= f['t'] - pd.Timedelta(seconds=1)) & (lb['t'] <= f['t'] + pd.Timedelta(days=3))]
+        own = lb[(lb['ln'] == f['ln']) & (lb['t'] >= f['t'] - pd.Timedelta(seconds=1))
+                 & (lb['t'] <= f['t'] + pd.Timedelta(days=3))]
         locked = ((own['state'] == 'LOCKOUT') & (own['t'] <= f['t'] + pd.Timedelta(seconds=60))).any()
         later = own[(own['state'] == 'CLOSE') & (own['t'] > f['t'] + pd.Timedelta(seconds=60))]['t']
-        for tap in taps.get(f['ln'], []):
-            m = by.get(('%d-%02d' % (lt.year, lt.month), tap), 0)
-            if not locked:
+        mm_f = 0.0
+        for tap in taps:
+            cur_ln, abnormal = active_line_for(tap, f['t'])
+            if cur_ln != f['ln'] or not locked:
                 continue
-            a = alt[alt['point'].str.startswith(code.get(tap, '?') + ' 69KV') & (alt['t'] > f['t']) &
-                    (alt['t'] <= f['t'] + pd.Timedelta(days=3))]['t']
-            ends = [x for x in (a.min() if len(a) else None, later.min() if len(later) else None) if x is not None]
+            m = by_ym.get(('%d-%02d' % (lt.year, lt.month), tap), 0)
+            ends = []
+            if len(later):
+                ends.append(later.min())
+            if not abnormal:
+                a = alt_close[alt_close['point'].str.startswith(tap_code.get(tap, '?') + ' 69KV')
+                              & (alt_close['t'] > f['t']) & (alt_close['t'] <= f['t'] + pd.Timedelta(days=3))]['t']
+                if len(a):
+                    ends.append(a.min())
             secs = (min(ends) - f['t']).total_seconds() if ends else 0.0
             if secs > 300:
-                out[f['ln']][0] += m
-                out[f['ln']][1] += m * secs / 60.0
-    return out
+                mm = m * secs / 60.0
+                mm_f += mm
+                if lt.year == 2026:
+                    out26[f['ln']][0] += m
+                    out26[f['ln']][1] += mm
+        per_fault[(f['ln'], round(f['t'].timestamp()))] = mm_f
+    return windows, out26, per_fault
 
 
-# ---------------------------------------------------------------------------------------------- the relay records
+# ---------------------------------------------------------------------------------------------- Relays, IPPs & Coupled Z0m
 
 
 def relay_records():
@@ -155,204 +223,293 @@ def relay_records():
             continue
         t = dt.datetime.strptime(r['Date'] + ' ' + r['Time'], '%m/%d/%Y %H:%M:%S.%f').replace(tzinfo=dt.timezone.utc)
         loc = r['Location'] if isinstance(r['Location'], str) and re.fullmatch(r'-?[\d.]+', r['Location']) else None
-        recs.append(dict(st=r['Station'], ln=int(r['Relay'].split('-L')[1]), t=t, type=r['Type'],
-                         dist=float(loc) * MI if loc else None,
-                         I={'A': float(r['IA']), 'B': float(r['IB']), 'C': float(r['IC'])}, IG=float(r['IG'])))
+        recs.append(dict(
+            st=r['Station'], ln=int(r['Relay'].split('-L')[1]), t=t, type=r['Type'],
+            dist=float(loc) * MI if loc else None,
+            I={'A': float(r['IA']), 'B': float(r['IB']), 'C': float(r['IC'])}, IG=float(r['IG']),
+        ))
     gv = json.load(open(path('gv')))['records']
     for r in gv:
         if not r['trip'] or r['reclose_shot'] != 0:
             continue
         st, ln = re.match(r'^(\w+?)_L(\d+)_', r['device']).groups()
         t = dt.datetime.strptime(r['time_local'], '%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=CENTRAL).astimezone(dt.timezone.utc)
-        recs.append(dict(st=st, ln=int(ln), t=t, type=r['fault_type'], dist=r['distance_km'],
-                         I={'A': r['ia_ka'] * 1000, 'B': r['ib_ka'] * 1000, 'C': r['ic_ka'] * 1000}, IG=r['in_ka'] * 1000))
+        recs.append(dict(
+            st=st, ln=int(ln), t=t, type=r['fault_type'], dist=r['distance_km'],
+            I={'A': r['ia_ka'] * 1000, 'B': r['ib_ka'] * 1000, 'C': r['ic_ka'] * 1000}, IG=r['in_ka'] * 1000,
+        ))
     return recs
 
 
-def nearest(recs, st, ln, t, window=900):
+def nearest_rec(recs, st, ln, t, window=900):
     c = [r for r in recs if r['st'] == st and r['ln'] == ln and abs((r['t'] - t).total_seconds()) <= window]
     return min(c, key=lambda r: abs((r['t'] - t).total_seconds())) if c else None
 
 
-def split_location(L, za0, zb0, iga, igb):
-    """the distance from terminal A at which the residual current divides between the ends as recorded"""
+def ipp_records(key):
+    df = pd.read_csv(path(key))
+    df = df[df['in_ka'].notna()].copy()
+    df['t'] = [dt.datetime.strptime(x, '%m/%d/%Y %H:%M:%S.%f').replace(tzinfo=CST).astimezone(dt.timezone.utc)
+               for x in df['timestamp']]
+    return df
+
+
+def split_uncoupled(L, za0, zb0, iga, igb):
     f = lambda x: abs(zb0 + (L['length'] - x) * L['z0']) / abs(za0 + x * L['z0']) - iga / igb
     xs = np.linspace(0.01, L['length'] - 0.01, 600)
-    v = [f(x) for x in xs]
+    vals = [f(x) for x in xs]
     for i in range(len(xs) - 1):
-        if v[i] * v[i + 1] <= 0:
+        if vals[i] * vals[i + 1] <= 0:
             lo, hi = xs[i], xs[i + 1]
-            for _ in range(60):
-                mid = (lo + hi) / 2
+            for _ in range(50):
+                mid = 0.5 * (lo + hi)
                 if f(lo) * f(mid) <= 0:
                     hi = mid
                 else:
                     lo = mid
-            return (lo + hi) / 2
+            return 0.5 * (lo + hi)
     return None
 
 
-def solar_records():
-    ipp = pd.read_csv(path('ipp'))
-    ipp = ipp[ipp['in_ka'].notna()].copy()
-    ipp['t'] = [dt.datetime.strptime(x, '%m/%d/%Y %H:%M:%S.%f').replace(tzinfo=CST).astimezone(dt.timezone.utc) for x in ipp['timestamp']]
-    return ipp
+def coupled_ratio(Lf, Lp, z_bus, z_bf, z_bp, z0m, L_cor, x):
+    """First-principles coupled 2-line zero-sequence current ratio |I_A|/|I_B| on faulted line Lf at distance x."""
+    z0f, z0p = Lf['z0'], Lp['z0']
+    Lf_len, Lp_len = Lf['length'], Lp['length']
+    c = min(x, L_cor)
+    d = max(0.0, L_cor - x)
+    # Unknowns: [I_A, I_B, I_p] where I_A flows A->f on Lf, I_B flows B->f on Lf, I_p flows A->B on healthy Lp.
+    # KVL equations (reference node: fault voltage Vf = 1.0):
+    # 1) Loop A->f: -z_bus*(I_A + I_p) - x*z0f*I_A - c*z0m*I_p = 1
+    # 2) Loop B->f: -z_bf*I_B - (Lf_len - x)*z0f*I_B + d*z0m*I_p = 1
+    # 3) Loop on healthy Lp (A->B->ground): z_bus*(I_A + I_p) + (Lp_len*z0p + z_bp)*I_p + c*z0m*I_A - d*z0m*I_B = 0
+    A = np.array([
+        [-(z_bus + x * z0f), 0.0, -(z_bus + c * z0m)],
+        [0.0, -(z_bf + (Lf_len - x) * z0f), d * z0m],
+        [z_bus + c * z0m, -d * z0m, z_bus + Lp_len * z0p + z_bp],
+    ], dtype=complex)
+    b = np.array([1.0, 1.0, 0.0], dtype=complex)
+    ia, ib, _ = np.linalg.solve(A, b)
+    return abs(ia) / abs(ib)
 
 
-# ---------------------------------------------------------------------------------------------- the deposits
+def coupled_location(Lf, Lp, z_bus, z_bf, z_bp, z0m, L_cor, iga, igb):
+    target = iga / igb
+    xs = np.linspace(0.05, Lf['length'] - 0.05, 400)
+    vals = [coupled_ratio(Lf, Lp, z_bus, z_bf, z_bp, z0m, L_cor, x) - target for x in xs]
+    for i in range(len(xs) - 1):
+        if vals[i] * vals[i + 1] <= 0:
+            lo, hi = xs[i], xs[i + 1]
+            for _ in range(50):
+                mid = 0.5 * (lo + hi)
+                if (coupled_ratio(Lf, Lp, z_bus, z_bf, z_bp, z0m, L_cor, lo) - target) * \
+                   (coupled_ratio(Lf, Lp, z_bus, z_bf, z_bp, z0m, L_cor, mid) - target) <= 0:
+                    hi = mid
+                else:
+                    lo = mid
+            return 0.5 * (lo + hi)
+    return float(xs[int(np.argmin(np.abs(vals)))])
 
 
-def onshore_days(pos):
-    """each Central day's onshore exposure at each coastal substation station: the mean squared wind component from the
-    south-east (the Gulf's side of this shore, 140 degrees), the Port Alcorn airport scaled in before the station reads"""
-    sw = pd.read_csv(path('stations'), usecols=['station', 'hour_local', 'wind_ms', 'wind_dir_deg'])
+# ---------------------------------------------------------------------------------------------- 2D (ESDD, NSDD) Model
+
+
+def deposit_2d(lines, st, gold_rows):
+    sw = pd.read_csv(path('stations'), usecols=['station', 'hour_local', 'wind_ms', 'wind_dir_deg', 'rain_mm'])
     sw['day'] = sw['hour_local'].str[:10]
-    sw['e'] = (sw['wind_ms'] * np.maximum(0.0, np.cos(np.radians(sw['wind_dir_deg'] - 140.0)))) ** 2
-    st_e = sw.groupby(['station', 'day'])['e'].mean()
-    ap = pd.read_csv(path('apt'), usecols=['valid', 'drct', 'sknt'], na_values=['M'])
+    sw['on'] = (sw['wind_ms'] * np.maximum(0.0, np.cos(np.radians(sw['wind_dir_deg'] - 140.0)))) ** 2
+    sw['in'] = (sw['wind_ms'] * np.maximum(0.0, np.cos(np.radians(sw['wind_dir_deg'] - 315.0)))) ** 2
+    st_agg = sw.groupby(['station', 'day']).agg(on=('on', 'mean'), dry=('in', 'mean'), rain=('rain_mm', 'sum'))
+
+    ap = pd.read_csv(path('apt'), usecols=['valid', 'drct', 'sknt', 'p01i'], na_values=['M'])
     ap['t'] = pd.to_datetime(ap['valid']).dt.tz_localize('UTC').dt.tz_convert(CENTRAL)
     ap['day'] = ap['t'].dt.strftime('%Y-%m-%d')
-    ap['e'] = (pd.to_numeric(ap['sknt'], errors='coerce').fillna(0) * 0.514444 *
-               np.maximum(0.0, np.cos(np.radians(pd.to_numeric(ap['drct'], errors='coerce').fillna(0) - 140.0)))) ** 2
-    ap_e = ap.groupby('day')['e'].mean().to_dict()
-    out = {}
-    for n in pos:
-        if n not in st_e.index.get_level_values(0):
-            continue
-        se = st_e.loc[n].to_dict()
-        both = [k for k in se if k in ap_e]
-        sc = float(np.mean([se[k] for k in both]) / np.mean([ap_e[k] for k in both]))
-        ser = {k: v * sc for k, v in ap_e.items()}
-        ser.update(se)
-        m = float(np.mean(list(ser.values())))
-        out[n] = {k: v / m for k, v in ser.items()}
-    return out
+    v_ms = pd.to_numeric(ap['sknt'], errors='coerce').fillna(0.0) * 0.514444
+    dr = pd.to_numeric(ap['drct'], errors='coerce').fillna(0.0)
+    ap['on'] = (v_ms * np.maximum(0.0, np.cos(np.radians(dr - 140.0)))) ** 2
+    ap['dry'] = (v_ms * np.maximum(0.0, np.cos(np.radians(dr - 315.0)))) ** 2
+    ap['rain'] = pd.to_numeric(ap['p01i'].replace('T', '0'), errors='coerce').fillna(0.0) * 25.4
+    ap_agg = ap.groupby('day').agg(on=('on', 'mean'), dry=('dry', 'mean'), rain=('rain', 'sum'))
 
-
-def deposit_list(lines, st, gold_rows):
-    sw = pd.read_csv(path('stations'), usecols=['station', 'hour_local', 'rain_mm'])
-    sw['day'] = sw['hour_local'].str[:10]
-    st_rain = sw.groupby(['station', 'day'])['rain_mm'].sum().to_dict()
-    ap = pd.read_csv(path('apt'), usecols=['valid', 'p01i'])
-    ap['t'] = pd.to_datetime(ap['valid']).dt.tz_localize('UTC').dt.tz_convert(CENTRAL)
-    ap['day'] = ap['t'].dt.strftime('%Y-%m-%d')
-    ap['mm'] = pd.to_numeric(ap['p01i'].replace('T', '0'), errors='coerce').fillna(0) * 25.4
-    ap_rain = ap.groupby('day')['mm'].sum().to_dict()
-    # each weather station sits at its substation: the substation's end structure in the inventory
     pos = {}
     for n, L in lines.items():
         s = st[st['n'] == n].sort_values('km_from_terminal_a')
         pos.setdefault(L['a'].upper() + ' SUB', (s.iloc[0]['latitude'], s.iloc[0]['longitude']))
         pos.setdefault(L['b'].upper() + ' SUB', (s.iloc[-1]['latitude'], s.iloc[-1]['longitude']))
-    stations = sorted(set(sw['station']))
-    pos = {k: v for k, v in pos.items() if k in stations}
     coastal = {k: v for k, v in pos.items() if k in ('PORT ALCORN SUB', 'SHELL RIDGE SUB', 'SEDGE POINT SUB', 'TULE MARSH SUB')}
     km = lambda a, b: math.hypot((a[1] - b[1]) * 111.32 * math.cos(math.radians(28.2)), (a[0] - b[0]) * 110.95)
-    expo = onshore_days(coastal)
 
-    def rain(names, day):
-        v = [st_rain.get((n, day)) for n in names]
-        v = [x for x in v if x is not None]
-        return float(np.mean(v)) if v else float(ap_rain.get(day, 0.0))
+    days = [dt.date(2022, 1, 1) + dt.timedelta(days=k) for k in range((dt.date(2026, 10, 31) - dt.date(2022, 1, 1)).days + 1)]
+    day_s = [d.isoformat() for d in days]
+    day_i = {d: i for i, d in enumerate(days)}
 
-    def fac(names, day):
-        v = [expo[n].get(day) for n in names if n in expo]
-        v = [x for x in v if x is not None]
-        return float(np.mean(v)) if v else 1.0
+    wx_st = {}
+    for cname in coastal:
+        sub = st_agg.loc[cname] if cname in st_agg.index.get_level_values(0) else pd.DataFrame()
+        on_a, dry_a, rain_a = [], [], []
+        both = [k for k in sub.index if k in ap_agg.index]
+        sc_on = float(sub.loc[both, 'on'].mean() / max(1e-6, ap_agg.loc[both, 'on'].mean())) if both else 1.0
+        sc_dr = float(sub.loc[both, 'dry'].mean() / max(1e-6, ap_agg.loc[both, 'dry'].mean())) if both else 1.0
+        for ds in day_s:
+            if ds in sub.index:
+                r = sub.loc[ds]
+                on_a.append(float(r['on']))
+                dry_a.append(float(r['dry']))
+                rain_a.append(float(r['rain']))
+            elif ds in ap_agg.index:
+                r = ap_agg.loc[ds]
+                on_a.append(float(r['on']) * sc_on)
+                dry_a.append(float(r['dry']) * sc_dr)
+                rain_a.append(float(r['rain']))
+            else:
+                on_a.append(0.0); dry_a.append(0.0); rain_a.append(0.0)
+        on_a = np.array(on_a) / max(1e-6, float(np.mean(on_a)))
+        dry_a = np.array(dry_a) / max(1e-6, float(np.mean(dry_a)))
+        wx_st[cname] = (on_a, dry_a, np.array(rain_a))
 
-    BG = 0.25
     sites = sheet('esdd', 'Sites', 'Site')
     reads = pd.DataFrame(sheet('esdd', 'Readings', 'Site'))
     reads['day'] = pd.to_datetime(reads['Date sampled']).dt.date
-    near_site = {r['Site']: [min(coastal, key=lambda k: km(coastal[k], (r['Latitude'], r['Longitude'])))] for r in sites}
-    shore = {r['Site']: float(r['Gulf shore (km)']) for r in sites}
-    rates, keeps = {}, []
-    for site, g in reads.groupby('Site'):
-        g = g.sort_values('day')
-        vals = list(zip(g['day'], g['ESDD (mg/cm2)'].astype(float)))
-        num = den = 0.0
-        for (d0, e0), (d1, e1) in zip(vals, vals[1:]):
-            days = (d1 - d0).days
-            span = [(d0 + dt.timedelta(days=k)).isoformat() for k in range(1, days + 1)]
-            rr = [rain(near_site[site], x) for x in span]
-            if days >= 10 and max(rr) < 5.0 and e1 > e0:
-                x = sum(BG + (1 - BG) * fac(near_site[site], y) for y in span)
-                num += (e1 - e0) * x
-                den += x * x
-        if den:
-            rates[site] = num / den
-    for site, g in reads.groupby('Site'):
-        g = g.sort_values('day')
-        vals = list(zip(g['day'], g['ESDD (mg/cm2)'].astype(float)))
-        for (d0, e0), (d1, e1) in zip(vals, vals[1:]):
-            days = (d1 - d0).days
-            span = [(d0 + dt.timedelta(days=k)).isoformat() for k in range(1, days + 1)]
-            rr = [rain(near_site[site], x) for x in span]
-            if sum(x >= 12.0 for x in rr) == 1 and not any(5.0 <= x < 12.0 for x in rr):
-                acc = rates.get(site, 0.0) * sum(BG + (1 - BG) * fac(near_site[site], y) for y in span)
-                keeps.append(max(0.0, e1 - acc) / e0)
-    keep = float(np.median(keeps))
-    # the rate between the coastal sites, log-linear in distance on those within 5 km of the Gulf
-    cs = [k for k in rates if shore[k] <= 5.0]
-    b1, b0 = np.polyfit([shore[k] for k in cs], np.log([rates[k] for k in cs]), 1)
+    near_site = {r['Site']: min(coastal, key=lambda k: km(coastal[k], (r['Latitude'], r['Longitude']))) for r in sites}
+    site_info = {r['Site']: (float(r['Gulf shore (km)']), str(r['Corridor surface'])) for r in sites}
+
+    # Independent MLE/nonlinear least-squares fit of (k_esdd, bg_esdd, site_rates) and (k_nsdd, bg_nsdd, site_rates)
+    def fit_species(col_name, wind_idx):
+        grouped = []
+        for s_id, g in reads.groupby('Site'):
+            g = g.sort_values('day')
+            on_a, dry_a, rain_a = wx_st[near_site[s_id]]
+            w_a = on_a if wind_idx == 0 else dry_a
+            pts = [(day_i[d], float(v)) for d, v in zip(g['day'], g[col_name]) if d in day_i]
+            grouped.append((s_id, w_a, rain_a, pts))
+
+        def loss(params):
+            k_r, bg = params[0], params[1]
+            if k_r <= 0 or k_r > 0.25 or bg < 0.05 or bg > 0.85:
+                return 1e9
+            tot = 0.0
+            for s_id, w_a, rain_a, pts in grouped:
+                # Linear in site rate -> solve optimal site rate analytically per (k_r, bg)
+                xs, ys = [], []
+                for (i0, v0), (i1, v1) in zip(pts, pts[1:]):
+                    decay = 1.0
+                    gain = 0.0
+                    for j in range(i0 + 1, i1 + 1):
+                        dr = math.exp(-k_r * rain_a[j])
+                        decay *= dr
+                        gain = (gain + (bg + (1.0 - bg) * w_a[j])) * dr
+                    xs.append(gain)
+                    ys.append(v1 - v0 * decay)
+                xs, ys = np.array(xs), np.array(ys)
+                rate = max(1e-6, float(np.dot(xs, ys) / max(1e-12, np.dot(xs, xs))))
+                pred = np.array([v0 * math.exp(-k_r * rain_a[i0 + 1:i1 + 1].sum()) for (i0, v0), (i1, _) in zip(pts, pts[1:])]) + rate * xs
+                obs = np.array([v1 for _, (_, v1) in zip(pts, pts[1:])])
+                tot += float(np.sum((np.log(np.maximum(pred, 1e-5)) - np.log(np.maximum(obs, 1e-5))) ** 2))
+            return tot
+
+        res = minimize(loss, [0.05 if wind_idx == 0 else 0.005, 0.25], method='Nelder-Mead')
+        k_r, bg = float(res.x[0]), float(res.x[1])
+        rates = {}
+        for s_id, w_a, rain_a, pts in grouped:
+            xs, ys = [], []
+            for (i0, v0), (i1, v1) in zip(pts, pts[1:]):
+                decay, gain = 1.0, 0.0
+                for j in range(i0 + 1, i1 + 1):
+                    dr = math.exp(-k_r * rain_a[j])
+                    decay *= dr
+                    gain = (gain + (bg + (1.0 - bg) * w_a[j])) * dr
+                xs.append(gain); ys.append(v1 - v0 * decay)
+            xs, ys = np.array(xs), np.array(ys)
+            rates[s_id] = max(1e-6, float(np.dot(xs, ys) / max(1e-12, np.dot(xs, xs))))
+        return k_r, bg, rates
+
+    k_e, bg_e, r_e = fit_species('ESDD (mg/cm2)', 0)
+    k_n, bg_n, r_n = fit_species('NSDD (mg/cm2)', 1)
+
+    # Spatial ESDD rate (exponential in gulf_shore_km) and NSDD rate (by surface type)
+    sh = np.array([site_info[k][0] for k in r_e])
+    ev = np.array([r_e[k] for k in r_e])
+    re_fit = minimize(lambda p: float(np.sum((np.log(np.maximum(p[0] * np.exp(-sh / p[1]) + p[2], 1e-7)) - np.log(ev)) ** 2))
+                      if p[0] > 0 and 0.3 < p[1] < 10 and p[2] >= 0 else 1e9, [0.006, 1.5, 0.0002], method='Nelder-Mead').x
+    surf_n = defaultdict(list)
+    for k, v in r_n.items():
+        surf_n[site_info[k][1]].append(v)
+    surf_n = {k: float(np.mean(v)) for k, v in surf_n.items()}
+
+    # Simulate all 21 sections daily from washes
     secs = sheet('washing', 'Sections', 'Line')
     log = sheet('washing', 'Log', 'Date')
     washed = defaultdict(set)
     for r in log:
         if isinstance(r.get('Date'), dt.datetime):
             washed[(r['Line'], r['Section'])].add(r['Date'].date())
-    fog_days = defaultdict(list)
-    ins_days = defaultdict(list)
+
+    fog_events = defaultdict(set)
     for r in gold_rows:
-        if r['structure'] and r['cause'] in ('salt contamination', 'insulator failure'):
-            (fog_days if r['cause'] == 'salt contamination' else ins_days)[int(r['line'].split()[1])].append(
-                (int(r['structure']), dt.date.fromisoformat(r['date'])))
-    series, at_flash, at_ins = {}, [], []
+        if r['structure'] and r['cause'] == 'salt contamination':
+            fog_events[int(r['line'].split()[1])].add((int(r['structure']), dt.date.fromisoformat(r['date'])))
+
+    # Fog nights from coastal weather stations (RH >= 93% or T-Td <= 0.6 C)
+    sw_fog = pd.read_csv(path('stations'), usecols=['station', 'hour_local', 'air_temp_c', 'dewpoint_c'])
+    sw_fog = sw_fog[sw_fog['station'].isin(coastal)]
+    fog_days = set(dt.date.fromisoformat(x[:10]) for x in sw_fog.loc[(sw_fog['air_temp_c'] - sw_fog['dewpoint_c']) <= 0.6, 'hour_local'])
+
+    sec_end = {}
+    X_fog, y_fog = [], []
     for r in secs:
         n = int(str(r['Line']).split()[1])
         s0, s1 = int(r['From structure']), int(r['To structure'])
         sub = st[(st['n'] == n) & (st['structure_no'] >= s0) & (st['structure_no'] <= s1)]
-        rate = math.exp(b0 + b1 * float(sub['gulf_shore_km'].mean()))
-        names = [k for k in (L.upper() + ' SUB' for L in (lines[n]['a'], lines[n]['b'])) if k in coastal]
-        if not names:
-            centre = (float(sub['latitude'].mean()), float(sub['longitude'].mean()))
-            names = sorted(coastal, key=lambda k: km(coastal[k], centre))[:1]
-        dep, day, ser = rate * 60.0, dt.date(2022, 1, 1), {}
-        while day <= dt.date(2026, 10, 31):
-            dep += rate * (BG + (1 - BG) * fac(names, day.isoformat()))
-            x = rain(names, day.isoformat())
-            dep *= keep if x >= 12.0 else (0.85 if x >= 5.0 else 1.0)
-            if day in washed[(r['Line'], r['Section'])]:
-                dep = 0.003
-            ser[day] = dep
-            day += dt.timedelta(days=1)
-        name = '%s, %s' % (r['Line'], r['Section'])
-        series[name] = ser
-        at_flash += [ser[d] for s, d in fog_days[n] if s0 <= s <= s1]
-        at_ins += [(n, s, ser[d]) for s, d in ins_days[n] if s0 <= s <= s1]
-    level = float(np.percentile(at_flash, 10))
-    med = float(np.median(at_flash))
-    due = sorted(k for k, ser in series.items() if ser[dt.date(2026, 10, 31)] >= level)
-    ratio = {k: ser[dt.date(2026, 10, 31)] / level for k, ser in series.items()}
-    low_ins = Counter((n, s) for n, s, v in at_ins if v < 0.6 * med)
-    return due, level, keep, ratio, low_ins
+        d_km = float(sub['gulf_shore_km'].mean())
+        surf = str(sub['corridor_surface'].mode().iloc[0])
+        re_s = max(1e-5, float(re_fit[0] * math.exp(-d_km / re_fit[1]) + re_fit[2]))
+        rn_s = surf_n.get(surf, float(np.mean(list(surf_n.values()))))
+        centre = (float(sub['latitude'].mean()), float(sub['longitude'].mean()))
+        cn = min(coastal, key=lambda k: km(coastal[k], centre))
+        on_a, dry_a, rain_a = wx_st[cn]
+        e, ns = re_s * 20.0, rn_s * 60.0
+        wset = washed[(r['Line'], r['Section'])]
+        f_dates = {d for s_no, d in fog_events[n] if s0 <= s_no <= s1}
+        for i, day in enumerate(days):
+            e = (e + re_s * (bg_e + (1.0 - bg_e) * on_a[i])) * math.exp(-k_e * rain_a[i])
+            ns = (ns + rn_s * (bg_n + (1.0 - bg_n) * dry_a[i])) * math.exp(-k_n * rain_a[i])
+            if day in wset:
+                e, ns = 0.002, 0.015
+            if day in fog_days or day in f_dates:
+                X_fog.append((math.log(max(e, 1e-5)), math.log(max(ns / 0.20, 1e-5))))
+                y_fog.append(1.0 if day in f_dates else 0.0)
+        sec_end['%s, %s' % (r['Line'], r['Section'])] = (e, ns)
+
+    X_fog, y_fog = np.array(X_fog), np.array(y_fog)
+    def nll(p):
+        z = np.clip(p[0] + p[1] * X_fog[:, 0] + p[2] * X_fog[:, 1], -30, 30)
+        return float(np.sum(np.logaddexp(0.0, z) - y_fog * z))
+    opt = minimize(nll, [-5.0, 2.0, 1.2], method='BFGS').x
+    beta = float(opt[2] / opt[1])
+    fl_ceff = [math.exp(x[0] + beta * x[1]) for x, y in zip(X_fog, y_fog) if y > 0.5]
+    level = float(np.percentile(fl_ceff, 10))
+    ratios = {k: (e * ((ns / 0.20) ** beta)) / level for k, (e, ns) in sec_end.items()}
+    due = sorted(k for k, rat in ratios.items() if rat >= 1.0)
+    return due, beta, level, k_e, k_n, ratios
 
 
-IEEE = dict(r25={'477 ACSR Hawk': 0.1196, '795 ACSR Drake': 0.0727, '336.4 ACSR Linnet': 0.1702},
-            r75={'477 ACSR Hawk': 0.1430, '795 ACSR Drake': 0.0869, '336.4 ACSR Linnet': 0.2035},
-            d={'477 ACSR Hawk': 21.8, '795 ACSR Drake': 28.1, '336.4 ACSR Linnet': 18.3})
+# ---------------------------------------------------------------------------------------------- IEEE 738 Conductor Heat
+
+
+IEEE = dict(
+    r25={'477 ACSR Hawk': 0.1196, '795 ACSR Drake': 0.0727, '336.4 ACSR Linnet': 0.1702},
+    r75={'477 ACSR Hawk': 0.1430, '795 ACSR Drake': 0.0869, '336.4 ACSR Linnet': 0.2035},
+    d={'477 ACSR Hawk': 21.8, '795 ACSR Drake': 28.1, '336.4 ACSR Linnet': 18.3},
+)
 
 
 def conductor(i, cond, ta, v, q=850.0):
-    """an IEEE 738-style steady state: joule heat on the conductor's own resistance and the sun against forced
-    convection and radiation, by bisection"""
     d = IEEE['d'][cond] / 1000.0
     a = (IEEE['r75'][cond] / IEEE['r25'][cond] - 1.0) / 50.0
     v = max(0.3, v)
     lo, hi = ta, ta + 150.0
     for _ in range(40):
-        tc = (lo + hi) / 2.0
-        tf = (tc + ta) / 2.0
+        tc = 0.5 * (lo + hi)
+        tf = 0.5 * (tc + ta)
         kf = 2.424e-2 + 7.477e-5 * tf
         mu = 1.458e-6 * (tf + 273.0) ** 1.5 / (tf + 383.4)
         re_ = d * 1.165 * v / mu
@@ -363,109 +520,131 @@ def conductor(i, cond, ta, v, q=850.0):
             lo = tc
         else:
             hi = tc
-    return (lo + hi) / 2.0
+    return 0.5 * (lo + hi)
+
+
+# ---------------------------------------------------------------------------------------------- Main Verifier
 
 
 def main():
-    lines, st, taps, tap_km, change = network()
+    lines, st, taps, ipp_taps, change = network()
     s22, s25 = study('study22'), study('study25')
-    ok('both studies parsed: two terminals on each of the 16 lines', len(s22) == 32 and len(s25) == 32, (len(s22), len(s25)))
+    ok('studies parsed: 32 terminals + Z0m + Inland bus Z0 in both PDFs',
+       len(s22['src']) == 32 and len(s25['src']) == 32 and s22['z0m'] is not None and s25['z0m'] is not None
+       and s22['z_bus'] is not None and s25['z_bus'] is not None,
+       (len(s22['src']), len(s25['src']), s22['z0m'], s25['z_bus']))
 
+    # R1: fault sequences
     soe, lb, faults = sequences()
     yr = Counter(str(f['t'].tz_convert(CENTRAL).year) for f in faults)
-    ok('R1 the faults by year from the two-ended trip sequences', dict(yr) == FIG['faults_by_year'], (dict(yr), FIG['faults_by_year']))
+    ok('R1 conformed faults by year from SCADA two-ended sequences',
+       dict(yr) == FIG['faults_by_year'], (dict(yr), FIG['faults_by_year']))
 
-    walk = member_walk(soe, lb, faults, taps)
-    tot = [sum(v[0] for v in walk.values()), sum(v[1] for v in walk.values())]
-    g = FIG['member_impact_2026']
-    ok('R5 the 2026 member interruptions within 2 per cent', abs(tot[0] - g['sustained']) <= 0.02 * g['sustained'], (tot[0], g['sustained']))
-    ok('R5 the 2026 member-minutes within 2 per cent', abs(tot[1] - g['member_minutes']) <= 0.02 * g['member_minutes'], (round(tot[1]), g['member_minutes']))
-    bad = []
+    # R6 (S5): chronological SCADA switching state machine & 2026 member impact
+    windows, walk26, per_fault = member_walk(soe, lb, faults, taps)
+    tot26 = [sum(v[0] for v in walk26.values()), sum(v[1] for v in walk26.values())]
+    g6 = FIG['member_impact_2026']
+    ok('R6 (S5) 26 planned SCADA ALT SRC / NORM SW windows recovered independently',
+       len(windows) == FIG['switching_windows_count'], (len(windows), FIG['switching_windows_count']))
+    ok('R6 (S5) 2026 sustained member interruptions within 2 percent',
+       abs(tot26[0] - g6['sustained']) <= 0.02 * g6['sustained'], (tot26[0], g6['sustained']))
+    ok('R6 (S5) 2026 conformed member-minutes within 2 percent',
+       abs(tot26[1] - g6['member_minutes']) <= 0.02 * g6['member_minutes'], (round(tot26[1]), g6['member_minutes']))
+    bad_l = []
     for name, v in FIG['member_impact_2026_by_line'].items():
         n = int(name.split()[1])
-        w = walk.get(n, [0, 0.0])
+        w = walk26.get(n, [0, 0.0])
         if abs(w[0] - v['sustained']) > 0.02 * v['sustained'] + 1 or abs(w[1] - v['member_minutes']) > 0.02 * v['member_minutes'] + 1:
-            bad.append((name, w, v))
-    ok('R5 every line\'s 2026 figures within 2 per cent', not bad, bad)
+            bad_l.append((name, w, v))
+    ok('R6 (S5) every line 2026 member impact within 2 percent', not bad_l, bad_l)
 
-    gold_csv = [x for x in os.listdir(os.path.join(TASK, 'golden')) if x.endswith('.csv')][0]
-    rows = list(csv.DictReader(open(os.path.join(TASK, 'golden', gold_csv))))
-    ok('the golden fault table carries the faults by year', dict(Counter(r['date'][:4] for r in rows)) == FIG['faults_by_year'])
+    # Read golden CSV deliverable
+    gold_csv = os.path.join(TASK, 'golden', C.DELIVERABLES[0])
+    rows = list(csv.DictReader(open(gold_csv)))
+    ok('golden CSV row count and annual distribution match figures.json',
+       len(rows) == FIG['faults_total'] and dict(Counter(r['date'][:4] for r in rows)) == FIG['faults_by_year'])
+    names = {'lightning': 'lightning', 'bird': 'bird or other animal', 'fog': 'salt contamination',
+             'insulator': 'insulator failure', 'growin': 'vegetation grown into the line',
+             'fallin': 'vegetation from outside the right of way', 'vehicle': 'vehicle or other third party',
+             'hardware': 'equipment or hardware other than insulators', 'unknown': 'other or unknown'}
     c26 = Counter(r['cause'] for r in rows if r['date'].startswith('2026'))
-    names = {'lightning': 'lightning', 'bird': 'bird or other animal', 'fog': 'salt contamination', 'insulator': 'insulator failure',
-             'growin': 'vegetation grown into the line', 'fallin': 'vegetation from outside the right of way',
-             'vehicle': 'vehicle or other third party', 'hardware': 'equipment or hardware other than insulators',
-             'unknown': 'other or unknown'}
-    ok('R2 the golden fault table carries the 2026 causes', {k: c26.get(v, 0) for k, v in names.items()} == FIG['faults_2026_by_cause'])
+    ok('golden CSV 2026 causes match figures.json',
+       {k: c26.get(v, 0) for k, v in names.items()} == FIG['faults_2026_by_cause'])
 
-    # the places: every repeat location's faults re-located from the two ends' residual currents, or on Line 9 past the
-    # tap from Shell Ridge's distance corrected with the solar farm's own record
+    # R3 (S2) & R4 (S3): independent re-location of all repeat locations (coupled Z0m + dual YNd1 IPP infeed)
     recs = relay_records()
-    ipp = solar_records()
+    ipp_dfs = {9: ipp_records('ipp'), 8: ipp_records('ipp2')}
     groups = defaultdict(list)
     for r in rows:
         if r['repeat_location']:
             groups[r['repeat_location']].append(r)
-    far = []
+
+    far, dc_ok, ipp_ok = [], {}, {}
     for rl, fs in sorted(groups.items()):
         n = int(fs[0]['line'].split()[1])
         L = lines[n]
-        src = s22 if dt.date.fromisoformat(fs[0]['date']) < change else s25
         placed = []
         for r in fs:
             if r['fault_type'] not in ('AG', 'BG', 'CG'):
                 continue
             t = dt.datetime.fromisoformat(r['date'] + 'T' + r['time']).replace(tzinfo=CENTRAL).astimezone(dt.timezone.utc)
-            src = s22 if t.date() < change else s25
-            ra, rb = nearest(recs, L['ca'], n, t), nearest(recs, L['cb'], n, t)
+            st_info = s22 if t.date() < change else s25
+            ra, rb = nearest_rec(recs, L['ca'], n, t), nearest_rec(recs, L['cb'], n, t)
             x = None
             if ra and rb:
-                x = split_location(L, src[(n, L['a'])][1], src[(n, L['b'])][1], ra['IG'], rb['IG'])
-            elif ra and ra['dist'] is not None and n == 9 and ra['dist'] > tap_km:
-                j = ipp.iloc[int(np.argmin([abs((u - t).total_seconds()) for u in ipp['t']]))]
+                if n in (10, 11):
+                    Lp = lines[11 if n == 10 else 10]
+                    x = coupled_location(
+                        L, Lp, st_info['z_bus'],
+                        st_info['src'][(n, L['b'])][1], st_info['src'][(11 if n == 10 else 10, Lp['b'])][1],
+                        st_info['z0m'], st_info['cor_km'], ra['IG'], rb['IG'],
+                    )
+                else:
+                    x = split_uncoupled(L, st_info['src'][(n, L['a'])][1], st_info['src'][(n, L['b'])][1], ra['IG'], rb['IG'])
+            elif ra and ra['dist'] is not None and n in ipp_taps and ra['dist'] > ipp_taps[n]['tap_km']:
+                idf = ipp_dfs[n]
+                j = idf.iloc[int(np.argmin([abs((u - t).total_seconds()) for u in idf['t']]))]
                 if abs((j['t'] - t).total_seconds()) <= 2.0:
                     k0 = abs((L['z0'] - L['z1']) / (3 * L['z1']))
                     p = r['fault_type'][0]
-                    it = {'A': j['ia_ka'], 'B': j['ib_ka'], 'C': j['ic_ka']}[p] * 1000
-                    k = (it + k0 * j['in_ka'] * 1000) / (ra['I'][p] + k0 * ra['IG'])
-                    x = tap_km + (ra['dist'] - tap_km) / (1.0 + k)
-            elif n != 9 and (ra is None) != (rb is None):
-                # one end keeps no record (Ponder Creek's electromechanical relays): the recording end's own distance, fair for
-                # the low-resistance arc of a string
+                    it = {'A': j['ia_ka'], 'B': j['ib_ka'], 'C': j['ic_ka']}[p] * 1000.0
+                    k = (it + k0 * j['in_ka'] * 1000.0) / (ra['I'][p] + k0 * ra['IG'])
+                    tk = ipp_taps[n]['tap_km']
+                    x = tk + (ra['dist'] - tk) / (1.0 + k)
+            elif (ra is None) != (rb is None):
                 rr_ = ra or rb
                 if rr_['dist'] is not None:
                     x = rr_['dist'] if rr_ is ra else L['length'] - rr_['dist']
             if x is not None:
-                s = st[st['n'] == n]
-                placed.append(int(s.iloc[int(np.argmin(np.abs(s['km_from_terminal_a'].to_numpy() - x)))]['structure_no']))
-        mine = int(np.median(placed)) if placed else None
-        gold = Counter(int(r['structure']) for r in fs if r['structure']).most_common(1)[0][0]
-        if mine is None or abs(mine - gold) > 2:
-            far.append((rl, fs[0]['line'], gold, mine, placed))
-    ok('R8 every repeat location re-located within 2 structures from the pack', not far, far)
-    tapl = [g_ for g_ in groups.values() if g_[0]['line'] == 'Line 9' and g_[0]['cause'] == 'insulator failure']
-    tap_no = int([x for x in FIG['work_list'] if x.startswith('replace the string: Line 9')][0].split()[-1])
-    ok('X5 the tap line\'s string re-located within 2 of structure %d' % tap_no, len(tapl) == 1 and
-       abs(Counter(int(r['structure']) for r in tapl[0]).most_common(1)[0][0] - tap_no) <= 2)
+                s_df = st[st['n'] == n]
+                placed.append(int(s_df.iloc[int(np.argmin(np.abs(s_df['km_from_terminal_a'].to_numpy() - x)))]['structure_no']))
+        mine = int(round(float(np.median(placed)))) if placed else None
+        gold_s = Counter(int(r['structure']) for r in fs if r['structure']).most_common(1)[0][0]
+        if mine is None or abs(mine - gold_s) > 2:
+            far.append((rl, fs[0]['line'], fs[0]['cause'], gold_s, mine))
+        if n in (8, 9) and fs[0]['cause'] == 'insulator failure':
+            ipp_ok[n] = (mine, gold_s)
+        if (n == 11 and fs[0]['cause'] == 'insulator failure') or (n == 10 and fs[0]['cause'] == 'vegetation grown into the line' and gold_s < 85):
+            dc_ok[(n, fs[0]['cause'])] = (mine, gold_s)
+    ok('R3 (S2) both YNd1 IPP strings independently inverted within 2 structures (Line 8 str 93, Line 9 str 137)',
+       8 in ipp_ok and 9 in ipp_ok and abs(ipp_ok[8][0] - FIG['ipp_details']['Line 8']['golden_structure']) <= 2
+       and abs(ipp_ok[9][0] - FIG['ipp_details']['Line 9']['golden_structure']) <= 2, ipp_ok)
+    ok('R4 (S3) both double-circuit corridor targets independently inverted with Z0m within 2 structures',
+       (11, 'insulator failure') in dc_ok and (10, 'vegetation grown into the line') in dc_ok
+       and abs(dc_ok[(11, 'insulator failure')][0] - FIG['dc_corridor_details']['Line 11 insulator']['golden_structure']) <= 2
+       and abs(dc_ok[(10, 'vegetation grown into the line')][0] - FIG['dc_corridor_details']['Line 10 growin']['golden_structure']) <= 2,
+       dc_ok)
+    ok('all 27 repeat locations independently re-located within 2 structures from target/', not far, far)
 
-    due, level, keep, ratio, low_ins = deposit_list(lines, st, rows)
+    # R5 (S4): independent 2D (ESDD, NSDD) coastal washing standing
+    due, beta, level, k_e, k_n, ratios = deposit_2d(lines, st, rows)
     gw = sorted(x.replace('wash: ', '') for x in FIG['wash_due'])
-    ok('R6 the washing list from an independent wind-driven deposit model', due == gw, (sorted(set(due) ^ set(gw))))
-    ok('R6 Line 2 sections 1 and 6 due again, 1.12 times the level or more', min(ratio['Line 2, Section 1'], ratio['Line 2, Section 6']) >= 1.12,
-       (round(ratio['Line 2, Section 1'], 2), round(ratio['Line 2, Section 6'], 2)))
-    ok('R7 the flashover level within 15 per cent of the golden\'s', abs(level - FIG['flashover_level']) <= 0.15 * FIG['flashover_level'],
-       (round(level, 4), FIG['flashover_level']))
-    ok('R7 a soaking rain\'s keep within 0.08 of the golden\'s', abs(keep - FIG['soaking_rain_keep']) <= 0.08, (round(keep, 2), FIG['soaking_rain_keep']))
-    gs = FIG['gulf_string']
-    gn = int(gs['line'].split()[1])
-    here = sum(v for (n, s_), v in low_ins.items() if n == gn and abs(s_ - gs['structure']) <= 1)
-    elsewhere = [(n, s_, v) for (n, s_), v in low_ins.items() if not (n == gn and abs(s_ - gs['structure']) <= 1) and v >= 2
-                 and n in (1, 2, 3, 4)]
-    ok('R4 the Gulf string flashed over below 0.6 of the median salt deposit three times or more, and no other place twice',
-       here >= 3 and not elsewhere, (here, elsewhere))
+    ok('R5 (S4) independent 2D (ESDD, NSDD) model reproduces exact 9 due coastal washing sections',
+       due == gw, (sorted(set(due) ^ set(gw)), round(beta, 3), round(level, 4)))
+    ok('R5 (S4) independent k_ESDD / k_NSDD differential washout confirmed (k_ESDD > 3 * k_NSDD)',
+       k_e > 3.0 * k_n and 0.30 <= beta <= 1.0, (round(k_e, 4), round(k_n, 4), round(beta, 3)))
 
-    # the summer contacts: each place's conductor temperature at its contacts since its last trim, from the loading and
-    # the nearest station's weather (the nearer airport away from the stations)
+    # R2 (S1): independent IEEE 738 thermal sag trajectories on underbuilt spans
     load = pd.read_csv(path('loading'))
     load['h'] = pd.to_datetime(load['hour_utc']).dt.tz_localize('UTC')
     load = load.set_index('h')
@@ -485,10 +664,15 @@ def main():
         spos.setdefault(L['b'].upper() + ' SUB', (s_.iloc[-1]['latitude'], s_.iloc[-1]['longitude']))
     spos = {k: v for k, v in spos.items() if k in set(sw['station'])}
     kmf = lambda a, b: math.hypot((a[1] - b[1]) * 111.32 * math.cos(math.radians(28.2)), (a[0] - b[0]) * 110.95)
-    town = {'APT': spos['PORT ALCORN SUB'], 'INA': (float(st[st['n'] == 10].sort_values('km_from_terminal_a').iloc[0]['latitude']),
-                                                   float(st[st['n'] == 10].sort_values('km_from_terminal_a').iloc[0]['longitude']))}
+    town = {
+        'APT': spos['PORT ALCORN SUB'],
+        'INA': (float(st[st['n'] == 10].sort_values('km_from_terminal_a').iloc[0]['latitude']),
+                float(st[st['n'] == 10].sort_values('km_from_terminal_a').iloc[0]['longitude'])),
+    }
     veg = pd.read_csv(path('veg'))
-    slopes = {}
+    ub_set = set(zip(st.loc[st['underbuild'].fillna('').astype(str).str.len() > 0, 'n'],
+                     st.loc[st['underbuild'].fillna('').astype(str).str.len() > 0, 'structure_no']))
+    hw_slopes, ub_grow_slopes = {}, {}
     for rl, fs in sorted(groups.items()):
         if fs[0]['cause'] not in ('vegetation grown into the line', 'equipment or hardware other than insulators'):
             continue
@@ -496,10 +680,13 @@ def main():
         L = lines[n]
         nos = [int(r['structure']) for r in fs if r['structure']]
         lo, hi = min(nos) - 1, max(nos) + 1
+        if not any((n, s_no) in ub_set for s_no in range(lo, hi + 1)):
+            continue
         last = max(dt.date.fromisoformat(r['date']) for r in fs)
         vv = veg[(veg['line'] == 'Line %d' % n) & veg['work_type'].isin(['HOT SPOT', 'CYCLE TRIM'])]
         trims = [dt.date.fromisoformat(str(x.completed)[:10]) for x in vv.itertuples()
-                 if int(x.from_structure) <= hi and lo <= int(x.to_structure) and dt.date.fromisoformat(str(x.completed)[:10]) <= last]
+                 if int(x.from_structure) <= hi and lo <= int(x.to_structure)
+                 and dt.date.fromisoformat(str(x.completed)[:10]) <= last]
         tt = max(trims) if trims else None
         xs, ys = [], []
         for r in fs:
@@ -507,6 +694,8 @@ def main():
             if tt is not None and dd <= tt:
                 continue
             t = dt.datetime.fromisoformat(r['date'] + 'T' + r['time']).replace(tzinfo=CENTRAL)
+            if not (5 <= dd.month <= 9 and 11 <= t.hour <= 20):
+                continue
             h = t.astimezone(dt.timezone.utc).replace(minute=0, second=0, microsecond=0)
             col = [c for c in load.columns if c.endswith('_L%d_AMPS' % n)]
             if not col or h not in load.index:
@@ -514,26 +703,57 @@ def main():
             amps = float(load.loc[h, col[0]])
             sub = st[(st['n'] == n) & (st['structure_no'] == int(r['structure']))]
             p = (float(sub.iloc[0]['latitude']), float(sub.iloc[0]['longitude']))
-            near_s = sorted(spos, key=lambda k: kmf(spos[k], p))[:2]
             wx = None
-            for k in near_s:
+            for k in sorted(spos, key=lambda k: kmf(spos[k], p))[:2]:
                 if kmf(spos[k], p) <= 18.0 and (k, t.strftime('%Y-%m-%d %H:00')) in swi:
                     wx = swi[(k, t.strftime('%Y-%m-%d %H:00'))]
                     break
             if wx is None:
-                ap_ = inad if kmf(town['INA'], p) < kmf(town['APT'], p) else apd
-                wx = ap_.get(h)
+                wx = (inad if kmf(town['INA'], p) < kmf(town['APT'], p) else apd).get(h)
             if wx is None:
                 continue
             xs.append(dd.year + dd.timetuple().tm_yday / 365.25)
             ys.append(conductor(amps, L['conductor'], float(wx[0]), float(wx[1])))
-        if len(xs) >= 4 and len(set(int(x) for x in xs)) >= 3:
-            slopes[(fs[0]['line'], lo + 1, fs[0]['cause'])] = float(np.polyfit(xs, ys, 1)[0])
-    hw = {k: v for k, v in slopes.items() if k[2].startswith('equipment')}
-    vg = {k: v for k, v in slopes.items() if k[2].startswith('vegetation')}
-    ok('R5 the clearance contact\'s temperature flat since its trim, every grow-in falling (each by its own heat balance)',
-       len(hw) == 1 and all(v >= -0.8 for v in hw.values()) and vg and all(v <= -1.2 for v in vg.values()),
-       ({k: round(v, 2) for k, v in hw.items()}, {k: round(v, 2) for k, v in vg.items()}))
+        if len(xs) >= 3 and len(set(int(x) for x in xs)) >= 2:
+            slp = float(np.polyfit(xs, ys, 1)[0])
+            if fs[0]['cause'].startswith('equipment'):
+                hw_slopes[fs[0]['line']] = round(slp, 2)
+            else:
+                ub_grow_slopes[fs[0]['line']] = round(slp, 2)
+    ok('R2 (S1) independent IEEE 738 slopes separate Line 6 & Line 15 clearance (> -0.5) from Line 12 & Line 14 grow-ins (< -1.8)',
+       set(hw_slopes) == {'Line 6', 'Line 15'} and all(v > -0.5 for v in hw_slopes.values())
+       and {'Line 12', 'Line 14'} <= set(ub_grow_slopes) and all(ub_grow_slopes[k] < -1.8 for k in ('Line 12', 'Line 14')),
+       (hw_slopes, ub_grow_slopes))
+
+    # R10 & Golden XLSX / DOCX consistency: independent greedy 36-crew-day Priority 1 allocation
+    wb = openpyxl.load_workbook(os.path.join(TASK, 'golden', C.DELIVERABLES[1]), data_only=True)
+    ok('golden workbook carries all 10 required review sheets', len(wb.sheetnames) == 10, wb.sheetnames)
+    rep_rows = [r for r in wb['Repeat locations'].iter_rows(values_only=True)]
+    hdr_i = next(i for i, r in enumerate(rep_rows) if r and r[0] == 'Ref')
+    open_items = []
+    for r in rep_rows[hdr_i + 1:]:
+        if not r or not r[0] or str(r[11]).startswith('Fixed'):
+            continue
+        open_items.append(dict(rid=r[0], line=r[1], str=str(r[2]), cause=r[3], days=int(r[7]), mmd=int(r[9]), status=str(r[11])))
+    rem = 36 - len(due)
+    p1_ind, p2_ind = [], []
+    for item in sorted(open_items, key=lambda x: (-x['mmd'], x['line'], x['str'])):
+        if item['days'] <= rem:
+            p1_ind.append(item)
+            rem -= item['days']
+        else:
+            p2_ind.append(item)
+    ok('R10 independent greedy 36-crew-day allocation matches golden workbook Priority 1 (13 funded, 6 deferred, 0 unused)',
+       rem == 0 and len(p1_ind) == 13 and len(p2_ind) == 6
+       and all(x['status'].startswith('Priority 1') for x in p1_ind)
+       and all(x['status'].startswith('Priority 2') for x in p2_ind),
+       (rem, len(p1_ind), len(p2_ind)))
+
+    memo_xml = subprocess.run(['unzip', '-p', os.path.join(TASK, 'golden', C.DELIVERABLES[2]), 'word/document.xml'],
+                              capture_output=True, text=True).stdout
+    memo_txt = re.sub(r'<[^>]+>', ' ', memo_xml)
+    ok('golden one-page Word memo addresses C. Ortiz and cites 36 crew-days and 5,376,602 member-minutes',
+       'C. Ortiz' in memo_txt and '36 crew-days' in memo_txt and f"{FIG['member_impact_2026']['member_minutes']:,}" in memo_txt)
 
     print('%d passed, %d failed' % (N['pass'], N['fail']))
     return 1 if N['fail'] else 0

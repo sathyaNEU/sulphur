@@ -77,8 +77,33 @@ def build_rows(w):
                 row = dict(station=st, relay=relay, line=f['line'], t=t, type=ftype, dist=dist, I=I, IG=IG, shot=shot,
                            trip=True, zone=zone, family=rec['family'], no=next_no(relay))
                 (er if rec['family'] == 'ER' else gv).append(row)
-        # backup zones on the neighbouring lines see the fault without tripping
+        # exact coupled double-circuit zero-sequence pickup on the healthy parallel line (Lines 10 and 11)
+        par = f['records'].get('par')
+        if par:
+            plid = par['line']
+            pl = net['lines'][plid]
+            import relays as R
+            for pend, ig_val in (('a', par['IG_a']), ('b', par['IG_b'])):
+                st = pl[pend]
+                fam = N.ST[st]['relay']
+                if fam == 'EM' or ig_val < 20.0:
+                    continue
+                relay = relay_name(st, plid)
+                off = 0.0
+                for (sc, sl), (t0, t1, rate) in R.CLOCK_FAULTS.items():
+                    if sc == st and t0 <= f['t'] <= t1:
+                        off = rate * (f['t'] - t0).total_seconds() / 86400.0
+                t = f['t'] + dt.timedelta(seconds=0.015 + off + 0.004 * rng.random())
+                base_a = float(w['ld']['amps'][plid][min(f['h'], C.NH - 1)])
+                i0_ph = ig_val / 3.0
+                I = {p: math.hypot(base_a, i0_ph) * (1.0 + rng.normal(0, 0.005)) for p in 'ABC'}
+                row = dict(station=st, relay=relay, line=plid, t=t, type=ftype, dist=None, I=I, IG=ig_val,
+                           shot=0, trip=False, zone='51N PU', family=fam, no=next_no(relay))
+                (er if fam == 'ER' else gv).append(row)
+        # backup zones on the other neighbouring lines see the fault without tripping
         for other, end in neighbours(net, f['line']):
+            if par and other == par['line']:
+                continue
             ol = net['lines'][other]
             st = ol[end]
             fam = N.ST[st]['relay']
@@ -182,16 +207,21 @@ def write_gv(rows, path):
 def legacy_rows(w, em, rng=None):
     """Ponder Creek: the technicians' visits, each listing the targets found and the breaker counter"""
     rng = rng or np.random.default_rng(C.EV_SEED + 707)
+    staged = []
+    for item in sorted(em, key=lambda x: x['f']['t']):
+        f = item['f']
+        visit = C.to_local(f['t']) + dt.timedelta(hours=float(rng.uniform(2, 30)))
+        staged.append((visit, item, rng.random() < 0.7, ['JRM', 'DLT', 'AKW', 'RSP'][int(rng.integers(0, 4))]))
+    staged.sort(key=lambda x: x[0])
     counters = {}
     rows = []
-    for item in sorted(em, key=lambda x: x['f']['t']):
+    for visit, item, has_time, tech in staged:
         f = item['f']
         lid = f['line']
         brk = 'PND-B62%02d' % int(lid[1:])
         counters[brk] = counters.get(brk, 310 + int(rng.integers(0, 200))) + item['n_trips']
-        visit = C.to_local(f['t']) + dt.timedelta(hours=float(rng.uniform(2, 30)))
         tg = ('21G Z1' if len(f['phases']) == 1 else '21P Z1') + (', 79 LO' if f['permanent'] else '')
-        rows.append(dict(date=visit.date(), time=visit.strftime('%H:%M') if rng.random() < 0.7 else '', breaker=brk,
-                         line=lid, targets=tg, counter=counters[brk], tech=['JRM', 'DLT', 'AKW', 'RSP'][int(rng.integers(0, 4))],
+        rows.append(dict(date=visit.date(), time=visit.strftime('%H:%M') if has_time else '', breaker=brk,
+                         line=lid, targets=tg, counter=counters[brk], tech=tech,
                          remark=('lockout, line patrolled' if f['permanent'] else 'targets reset')))
     return rows

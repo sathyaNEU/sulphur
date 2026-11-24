@@ -77,7 +77,8 @@ def build_target(target, w, quiet=False):
         wr.writerow(['work_order', 'opened', 'completed', 'line', 'structure', 'work_type', 'description', 'crew'])
         for r in mr:
             wr.writerow(r)
-    n['ipp'] = E.write_ipp(E.ipp_rows(w, rng(9)), f('ipp'))
+    n['ipp'] = E.write_ipp(E.ipp_rows(w, rng(9), key='ipp', t0=C.SOLAR_ENERGIZED, n_inv=24, max_mw=55, base_eid=70412, kind='solar'), f('ipp'))
+    n['ipp2'] = E.write_ipp(E.ipp_rows(w, rng(10), key='ipp2', t0=C.BESS_ENERGIZED, n_inv=18, max_mw=42, base_eid=83104, kind='bess'), f('ipp2'))
     PD.write_procedure(f('procedure'))
     PD.write_distractors(w, f('corrosion'), f('easements'))
     PP.own_mtimes(target, {C.FILES[k]: C.local(C.STAMP[k][1]) for k in C.FILES

@@ -1,8 +1,7 @@
-"""Hourly load on the 69 kV lines: each tap's member demand from its own temperature and the hour (air conditioning
-on summer afternoons, electric heat on winter mornings), the flows that carry it from the two bulk stations, the solar
-farm's output on the Shell Ridge-Ponder Creek tap, each line's current at its A terminal (signed by direction) and the
-power angle across it, and the conductor's temperature from a steady-state heat balance (current squared on the
-conductor's resistance at its temperature, the sun, convection on the wind across it, radiation)."""
+"""Hourly load on the 69 kV lines (architecture 7): each tap's member demand from its own temperature and the hour,
+the flows that carry it from the two bulk stations, Coyote Draw Solar's output on Line 9, Brushy Creek BESS's charge/
+discharge dispatch on Line 8, each line's current at its A terminal and the power angle across it, and steady-state
+IEEE 738 conductor temperature."""
 import math
 
 import numpy as np
@@ -15,7 +14,7 @@ V_LL = 69.0e3
 PF = 0.96
 # meshed through-flow the taps alone do not show: each line's current scaled by the flow the 69 kV mesh routes over it
 MESH = {'L01': 1.05, 'L02': 1.0, 'L03': 1.35, 'L04': 1.6, 'L05': 2.3, 'L06': 2.6, 'L07': 1.6, 'L08': 1.3, 'L09': 1.0,
-        'L10': 1.25, 'L11': 2.6, 'L12': 2.5, 'L13': 2.2, 'L14': 2.6, 'L15': 1.9, 'L16': 6.0}
+        'L10': 1.35, 'L11': 2.5, 'L12': 2.4, 'L13': 2.2, 'L14': 2.6, 'L15': 2.2, 'L16': 6.0}
 # which lines carry each line's flow: the downstream lines each line also feeds (a share of their load), and the
 # direction the flow runs (+1 A to B)
 THROUGH = {
@@ -42,9 +41,7 @@ def simulate(net, wx):
     growth = 1.0 + 0.016 * (year - 2022) + 0.016 * (wx['doy'] / 365.0)
     tap_mw = {}
     for tp in net['taps']:
-        line = net['lines'][tp['line']]
         st = N.structure_at(net, tp['line'], tp['km'])
-        # the tap's temperature: the nearest simulated place
         best = min(W.PLACES, key=lambda c: math.hypot(W.PLACES[c][0] - st['x'], W.PLACES[c][1] - st['y']))
         temp = wx['series'][best]['temp']
         kw = member_kw(temp, hour, month) * (1.0 + rng.normal(0, 0.03, nh))
@@ -52,7 +49,7 @@ def simulate(net, wx):
     line_load = {lid: np.zeros(nh) for lid in net['lines']}
     for tp in net['taps']:
         line_load[tp['line']] += tap_mw[tp['name']]
-    # the solar farm: clear-sky shape times a cloud factor, 60 MW AC, from its energization
+    # Coyote Draw Solar on Line 9: clear-sky shape times a cloud factor, 60 MW AC, from its energization
     solar = np.zeros(nh)
     e0 = C.hour_index(C.SOLAR_ENERGIZED)
     doy = wx['doy']
@@ -64,6 +61,17 @@ def simulate(net, wx):
         if 0 < x < 1:
             cloud = 1.0 - 0.6 * min(1.0, wx['series']['SHR']['precip'][h] / 2.0) - 0.15 * rng.random()
             solar[h] = 60.0 * math.sin(math.pi * x) ** 1.3 * max(0.1, cloud)
+    # Brushy Creek BESS on Line 8: 45 MW AC, peak discharge 15-20 local, overnight charge 1-5 local
+    bess = np.zeros(nh)
+    b0 = C.hour_index(C.BESS_ENERGIZED)
+    for h in range(b0, nh):
+        lh = hour[h]
+        if 15 <= lh <= 20:
+            bess[h] = 45.0 * (0.55 + 0.45 * rng.random()) * (1.0 if month[h] in (5, 6, 7, 8, 9) else 0.55)
+        elif 1 <= lh <= 5:
+            bess[h] = -28.0 * (0.5 + 0.5 * rng.random())
+        else:
+            bess[h] = float(rng.normal(0, 3.0))
     flow = {}
     order = ['L03', 'L08', 'L09', 'L12', 'L13', 'L16', 'L02', 'L05', 'L07', 'L14', 'L15', 'L11', 'L01', 'L04', 'L06', 'L10']
     for lid in order:
@@ -72,11 +80,13 @@ def simulate(net, wx):
         for d in down:
             mw += share * flow.get(d, line_load[d])
         if lid == 'L09':
-            mw = mw - 0.65 * solar          # the farm's output runs toward Shell Ridge
+            mw = mw - 0.65 * solar
+        if lid == 'L08':
+            mw = mw - 0.60 * bess
         if lid == 'L02':
             mw = mw - 0.25 * solar
         flow[lid] = mw
-    out = dict(tap_mw=tap_mw, solar=solar, mw={}, amps={}, delta={})
+    out = dict(tap_mw=tap_mw, solar=solar, bess=bess, mw={}, amps={}, delta={})
     for lid in net['lines']:
         down, share, sign = THROUGH[lid]
         mw = flow[lid] * sign * MESH[lid]
@@ -85,7 +95,7 @@ def simulate(net, wx):
         za1, _ = N.source(lid, line['a'])
         zb1, _ = N.source(lid, line['b'])
         x_tot = (za1 + line['z1'] * line['length'] + zb1).imag
-        delta = np.degrees(mw * 1e6 * x_tot / V_LL ** 2)     # power angle across the two-source equivalent, A ahead
+        delta = np.degrees(mw * 1e6 * x_tot / V_LL ** 2)
         out['mw'][lid] = mw
         out['amps'][lid] = amps * (1.0 + rng.normal(0, 0.012, nh))
         out['delta'][lid] = delta
@@ -93,7 +103,7 @@ def simulate(net, wx):
 
 
 def conductor_temp(i_amps, cond, t_air, wind, solar_wm2):
-    """steady-state conductor temperature (deg C) from the heat balance, solved by bisection"""
+    """steady-state IEEE 738 conductor temperature (deg C) from the heat balance, solved by bisection"""
     cd = N.CONDUCTORS[cond]
     d = cd['d_mm'] / 1000.0
     alpha = (cd['r75'] / cd['r25'] - 1.0) / 50.0

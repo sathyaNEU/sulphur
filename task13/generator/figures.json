@@ -1,587 +1,1197 @@
 {
- "faults_by_year": {
-  "2022": 103,
-  "2023": 104,
-  "2024": 78,
-  "2025": 85,
-  "2026": 74
+ "faults_summary_conformed": {
+  "year_2022": 93,
+  "year_2023": 108,
+  "year_2024": 121,
+  "year_2025": 102,
+  "year_2026": 95,
+  "2026_lightning": 12,
+  "2026_bird": 8,
+  "2026_fog": 12,
+  "2026_insulator": 19,
+  "2026_growin": 22,
+  "2026_fallin": 6,
+  "2026_vehicle": 2,
+  "2026_hardware": 6,
+  "2026_unknown": 8
  },
- "faults_total": 444,
- "faults_2026": 74,
+ "faults_by_year": {
+  "2022": 93,
+  "2023": 108,
+  "2024": 121,
+  "2025": 102,
+  "2026": 95
+ },
+ "faults_total": 519,
+ "faults_2026": 95,
+ "faults_lockouts_total": 130,
+ "faults_lockouts_2026": 21,
  "faults_by_line_year": {
   "Line 1": {
-   "2022": 2,
+   "2022": 5,
    "2023": 3,
-   "2024": 1,
-   "2025": 2,
-   "2026": 1
-  },
-  "Line 2": {
-   "2022": 14,
-   "2023": 17,
-   "2024": 5,
-   "2025": 19,
-   "2026": 18
-  },
-  "Line 3": {
-   "2022": 3,
-   "2023": 6,
-   "2024": 2,
-   "2025": 7,
-   "2026": 1
-  },
-  "Line 4": {
-   "2022": 3,
-   "2023": 5,
-   "2024": 1,
-   "2026": 2
-  },
-  "Line 5": {
-   "2022": 3,
-   "2023": 5,
-   "2024": 6,
-   "2025": 4,
-   "2026": 5
-  },
-  "Line 6": {
-   "2022": 2,
-   "2023": 4,
-   "2024": 8,
-   "2025": 3,
-   "2026": 5
-  },
-  "Line 7": {
-   "2022": 12,
-   "2023": 11,
-   "2024": 10,
-   "2025": 4,
-   "2026": 2
-  },
-  "Line 8": {
-   "2022": 8,
-   "2023": 2,
-   "2024": 4,
+   "2024": 3,
    "2025": 4,
    "2026": 4
   },
-  "Line 9": {
-   "2022": 4,
-   "2023": 6,
-   "2024": 3,
-   "2025": 4,
-   "2026": 5
+  "Line 2": {
+   "2022": 14,
+   "2023": 22,
+   "2024": 17,
+   "2025": 7,
+   "2026": 8
   },
-  "Line 10": {
-   "2022": 7,
-   "2023": 7,
-   "2024": 5,
-   "2025": 6,
+  "Line 3": {
+   "2022": 3,
+   "2023": 8,
+   "2024": 8,
    "2026": 7
   },
-  "Line 11": {
-   "2022": 8,
-   "2023": 6,
+  "Line 4": {
+   "2022": 1,
+   "2023": 3,
+   "2024": 3,
+   "2025": 3
+  },
+  "Line 5": {
+   "2022": 4,
+   "2023": 2,
    "2024": 7,
-   "2025": 8,
+   "2025": 12,
+   "2026": 6
+  },
+  "Line 6": {
+   "2022": 5,
+   "2023": 4,
+   "2024": 7,
+   "2025": 2,
+   "2026": 5
+  },
+  "Line 7": {
+   "2022": 9,
+   "2023": 9,
+   "2024": 8,
+   "2025": 7,
    "2026": 3
+  },
+  "Line 8": {
+   "2022": 3,
+   "2023": 1,
+   "2024": 6,
+   "2025": 7,
+   "2026": 8
+  },
+  "Line 9": {
+   "2022": 1,
+   "2023": 3,
+   "2024": 2,
+   "2025": 8,
+   "2026": 6
+  },
+  "Line 10": {
+   "2022": 3,
+   "2023": 5,
+   "2024": 5,
+   "2025": 8,
+   "2026": 10
+  },
+  "Line 11": {
+   "2022": 11,
+   "2023": 5,
+   "2024": 8,
+   "2025": 13,
+   "2026": 11
   },
   "Line 12": {
-   "2022": 8,
-   "2023": 11,
-   "2024": 6,
-   "2025": 1,
-   "2026": 3
+   "2022": 11,
+   "2023": 4,
+   "2024": 11,
+   "2025": 10,
+   "2026": 10
   },
   "Line 13": {
-   "2022": 12,
-   "2023": 7,
+   "2022": 9,
+   "2023": 12,
    "2024": 11,
-   "2025": 6,
-   "2026": 6
+   "2025": 5,
+   "2026": 5
   },
   "Line 14": {
-   "2022": 6,
-   "2023": 7,
-   "2024": 6,
-   "2025": 8,
-   "2026": 6
+   "2022": 3,
+   "2023": 10,
+   "2024": 9,
+   "2025": 5,
+   "2026": 5
   },
   "Line 15": {
-   "2022": 4,
-   "2023": 5,
-   "2024": 1,
+   "2022": 7,
+   "2023": 11,
+   "2024": 12,
    "2025": 6,
    "2026": 3
   },
   "Line 16": {
-   "2022": 7,
-   "2023": 2,
-   "2024": 2,
-   "2025": 3,
-   "2026": 3
+   "2022": 4,
+   "2023": 6,
+   "2024": 4,
+   "2025": 5,
+   "2026": 4
   }
  },
  "faults_2026_by_cause": {
-  "lightning": 11,
-  "bird": 6,
-  "fog": 8,
-  "insulator": 17,
-  "growin": 11,
-  "fallin": 8,
-  "vehicle": 4,
-  "hardware": 4,
-  "unknown": 5
+  "lightning": 12,
+  "bird": 8,
+  "fog": 12,
+  "insulator": 19,
+  "growin": 22,
+  "fallin": 6,
+  "vehicle": 2,
+  "hardware": 6,
+  "unknown": 8
  },
+ "clearance_items": [
+  "restore clearance: Line 15, structures 48-49",
+  "restore clearance: Line 6, structures 57-58"
+ ],
+ "clearance_details": [
+  {
+   "line": "Line 6",
+   "structures": "57-58",
+   "contacts_since_trim": 5,
+   "trim": "2022-09-14",
+   "slope_c_per_year": 0.34,
+   "contact_temperature": [
+    41.4,
+    44.0
+   ]
+  },
+  {
+   "line": "Line 15",
+   "structures": "47-50",
+   "contacts_since_trim": 14,
+   "trim": "2022-07-24",
+   "slope_c_per_year": -0.25,
+   "contact_temperature": [
+    44.6,
+    54.2
+   ]
+  }
+ ],
+ "vegetation_slopes": {
+  "Line 10 str 68-69": -1.88,
+  "Line 10 str 101-104": -1.63,
+  "Line 14 str 62-64": -2.33,
+  "Line 11 str 112-113": -1.42,
+  "Line 12 str 44-45": -2.52
+ },
+ "vegetation_slope_range": [
+  -2.52,
+  -1.42
+ ],
+ "underbuilt_veg_slopes": {
+  "Line 14 str 62-64": -2.33,
+  "Line 12 str 44-45": -2.52
+ },
+ "underbuilt_veg_slope_range": [
+  -2.52,
+  -2.33
+ ],
+ "underbuilt_veg_slope_abs": [
+  2.33,
+  2.52
+ ],
+ "ipp_strings": [
+  "replace string: Line 8, structure 93",
+  "replace string: Line 9, structure 137"
+ ],
+ "ipp_details": {
+  "Line 8": {
+   "facility": "Brushy Creek BESS LLC",
+   "tap_km": 13.8,
+   "golden_km": 18.29,
+   "golden_structure": 93,
+   "beyond_tap_km": 4.49,
+   "raw_km": 20.9,
+   "raw_structure": 106,
+   "structure_shift": 13
+  },
+  "Line 9": {
+   "facility": "Coyote Draw Solar LLC",
+   "tap_km": 23.4,
+   "golden_km": 26.5,
+   "golden_structure": 137,
+   "beyond_tap_km": 3.1,
+   "raw_km": 28.7,
+   "raw_structure": 148,
+   "structure_shift": 11
+  }
+ },
+ "dc_corridor_repeats": [
+  "clear span: Line 10, structures 68-69",
+  "replace string: Line 11, structure 71"
+ ],
+ "dc_corridor_details": {
+  "Line 11 insulator": {
+   "line": "Line 11",
+   "cause": "insulator",
+   "golden_km": 13.92,
+   "golden_structure": 71,
+   "golden_span": [
+    71,
+    72
+   ],
+   "uncoupled_km": 12.12,
+   "uncoupled_structure": 62,
+   "uncoupled_span": [
+    62,
+    63
+   ],
+   "structure_shift": 9
+  },
+  "Line 10 growin": {
+   "line": "Line 10",
+   "cause": "growin",
+   "golden_km": 13.38,
+   "golden_structure": 68,
+   "golden_span": [
+    68,
+    69
+   ],
+   "uncoupled_km": 12.0,
+   "uncoupled_structure": 61,
+   "uncoupled_span": [
+    61,
+    62
+   ],
+   "structure_shift": 7
+  }
+ },
+ "dc_details": {
+  "Line 10 str 68 growin": {
+   "line": "Line 10",
+   "cause": "growin",
+   "golden_km": 13.38,
+   "golden_structure": 68,
+   "golden_span": [
+    68,
+    69
+   ],
+   "uncoupled_km": 12.0,
+   "uncoupled_structure": 61,
+   "uncoupled_span": [
+    61,
+    62
+   ],
+   "structure_shift": 7
+  },
+  "Line 10 str 102 growin": {
+   "line": "Line 10",
+   "cause": "growin",
+   "golden_km": 20.2,
+   "golden_structure": 102,
+   "golden_span": [
+    102,
+    103
+   ],
+   "uncoupled_km": 18.99,
+   "uncoupled_structure": 96,
+   "uncoupled_span": [
+    93,
+    94
+   ],
+   "structure_shift": 6
+  },
+  "Line 11 str 71 insulator": {
+   "line": "Line 11",
+   "cause": "insulator",
+   "golden_km": 13.92,
+   "golden_structure": 71,
+   "golden_span": [
+    71,
+    72
+   ],
+   "uncoupled_km": 12.12,
+   "uncoupled_structure": 62,
+   "uncoupled_span": [
+    62,
+    63
+   ],
+   "structure_shift": 9
+  },
+  "Line 11 str 112 growin": {
+   "line": "Line 11",
+   "cause": "growin",
+   "golden_km": 22.28,
+   "golden_structure": 112,
+   "golden_span": [
+    112,
+    113
+   ],
+   "uncoupled_km": 20.97,
+   "uncoupled_structure": 106,
+   "uncoupled_span": [
+    105,
+    106
+   ],
+   "structure_shift": 6
+  },
+  "Line 11 str 125 fallin": {
+   "line": "Line 11",
+   "cause": "fallin",
+   "golden_km": 24.84,
+   "golden_structure": 125,
+   "golden_span": [
+    125,
+    126
+   ],
+   "uncoupled_km": 23.49,
+   "uncoupled_structure": 118,
+   "uncoupled_span": [
+    119,
+    120
+   ],
+   "structure_shift": 7
+  }
+ },
+ "dc_referee": {
+  "slice": "14 patrol-confirmed two-ended ground lockouts on Lines 10 and 11 (outside the target repeat structures L10 str 68 and L11 str 71)",
+  "covers_target": false,
+  "truth": 0.0,
+  "golden": 0.0974,
+  "rivals": {
+   "direct": 5.2321,
+   "rigorous": 1.4705
+  }
+ },
+ "dc_referee_ratio": 15.1,
+ "wash_due": [
+  "wash: Line 1, Section 1",
+  "wash: Line 1, Section 4",
+  "wash: Line 1, Section 5",
+  "wash: Line 2, Section 1",
+  "wash: Line 2, Section 4",
+  "wash: Line 2, Section 6",
+  "wash: Line 2, Section 7",
+  "wash: Line 3, Section 2",
+  "wash: Line 3, Section 4"
+ ],
+ "wash_due_count": 9,
+ "wash_not_due_count": 12,
+ "wash_due_min_ratio": 1.52,
+ "wash_clean_max_ratio": 0.59,
+ "wash_sections": {
+  "Line 1, Section 1": {
+   "esdd": 0.0344,
+   "nsdd": 0.9583,
+   "ceff": 0.0641,
+   "ratio": 1.87,
+   "surface": "caliche / cropland",
+   "gulf_km": 3.37,
+   "due": true,
+   "last_wash": "2026-03-14",
+   "esdd_only_due": true
+  },
+  "Line 1, Section 2": {
+   "esdd": 0.0106,
+   "nsdd": 0.048,
+   "ceff": 0.006,
+   "ratio": 0.18,
+   "surface": "pasture",
+   "gulf_km": 3.69,
+   "due": false,
+   "last_wash": "2026-10-16",
+   "esdd_only_due": false
+  },
+  "Line 1, Section 3": {
+   "esdd": 0.0084,
+   "nsdd": 0.0286,
+   "ceff": 0.0039,
+   "ratio": 0.11,
+   "surface": "pasture",
+   "gulf_km": 3.84,
+   "due": false,
+   "last_wash": "2026-10-19",
+   "esdd_only_due": false
+  },
+  "Line 1, Section 4": {
+   "esdd": 0.0268,
+   "nsdd": 1.0581,
+   "ceff": 0.052,
+   "ratio": 1.52,
+   "surface": "caliche / cropland",
+   "gulf_km": 3.81,
+   "due": true,
+   "last_wash": "2026-02-22",
+   "esdd_only_due": true
+  },
+  "Line 1, Section 5": {
+   "esdd": 0.0305,
+   "nsdd": 0.7971,
+   "ceff": 0.0527,
+   "ratio": 1.54,
+   "surface": "caliche / cropland",
+   "gulf_km": 3.58,
+   "due": true,
+   "last_wash": "2026-04-12",
+   "esdd_only_due": true
+  },
+  "Line 2, Section 1": {
+   "esdd": 0.0676,
+   "nsdd": 0.1304,
+   "ceff": 0.0571,
+   "ratio": 1.67,
+   "surface": "pasture",
+   "gulf_km": 1.95,
+   "due": true,
+   "last_wash": "2026-07-15",
+   "esdd_only_due": true
+  },
+  "Line 2, Section 2": {
+   "esdd": 0.0479,
+   "nsdd": 0.0183,
+   "ceff": 0.0185,
+   "ratio": 0.54,
+   "surface": "coastal marsh",
+   "gulf_km": 1.56,
+   "due": false,
+   "last_wash": "2026-10-11",
+   "esdd_only_due": true
+  },
+  "Line 2, Section 3": {
+   "esdd": 0.0397,
+   "nsdd": 0.0291,
+   "ceff": 0.0185,
+   "ratio": 0.54,
+   "surface": "pasture",
+   "gulf_km": 1.28,
+   "due": false,
+   "last_wash": "2026-10-16",
+   "esdd_only_due": true
+  },
+  "Line 2, Section 4": {
+   "esdd": 0.1109,
+   "nsdd": 0.6702,
+   "ceff": 0.1791,
+   "ratio": 5.23,
+   "surface": "caliche / cropland",
+   "gulf_km": 1.23,
+   "due": true,
+   "last_wash": "2026-04-18",
+   "esdd_only_due": true
+  },
+  "Line 2, Section 5": {
+   "esdd": 0.0529,
+   "nsdd": 0.018,
+   "ceff": 0.0204,
+   "ratio": 0.59,
+   "surface": "coastal marsh",
+   "gulf_km": 1.34,
+   "due": false,
+   "last_wash": "2026-10-12",
+   "esdd_only_due": true
+  },
+  "Line 2, Section 6": {
+   "esdd": 0.0836,
+   "nsdd": 0.1782,
+   "ceff": 0.0799,
+   "ratio": 2.33,
+   "surface": "pasture",
+   "gulf_km": 1.66,
+   "due": true,
+   "last_wash": "2026-05-20",
+   "esdd_only_due": true
+  },
+  "Line 2, Section 7": {
+   "esdd": 0.0685,
+   "nsdd": 0.1462,
+   "ceff": 0.0605,
+   "ratio": 1.77,
+   "surface": "pasture",
+   "gulf_km": 1.95,
+   "due": true,
+   "last_wash": "2026-06-25",
+   "esdd_only_due": true
+  },
+  "Line 3, Section 1": {
+   "esdd": 0.0147,
+   "nsdd": 0.0278,
+   "ceff": 0.0067,
+   "ratio": 0.2,
+   "surface": "pasture",
+   "gulf_km": 2.53,
+   "due": false,
+   "last_wash": "2026-10-21",
+   "esdd_only_due": false
+  },
+  "Line 3, Section 2": {
+   "esdd": 0.0356,
+   "nsdd": 1.0132,
+   "ceff": 0.0677,
+   "ratio": 1.98,
+   "surface": "caliche / cropland",
+   "gulf_km": 3.29,
+   "due": true,
+   "last_wash": "2026-03-08",
+   "esdd_only_due": true
+  },
+  "Line 3, Section 3": {
+   "esdd": 0.0091,
+   "nsdd": 0.0281,
+   "ceff": 0.0042,
+   "ratio": 0.12,
+   "surface": "pasture",
+   "gulf_km": 3.47,
+   "due": false,
+   "last_wash": "2026-10-22",
+   "esdd_only_due": false
+  },
+  "Line 3, Section 4": {
+   "esdd": 0.0336,
+   "nsdd": 0.7729,
+   "ceff": 0.0574,
+   "ratio": 1.68,
+   "surface": "caliche / cropland",
+   "gulf_km": 3.38,
+   "due": true,
+   "last_wash": "2026-04-15",
+   "esdd_only_due": true
+  },
+  "Line 3, Section 5": {
+   "esdd": 0.0233,
+   "nsdd": 0.1397,
+   "ceff": 0.0202,
+   "ratio": 0.59,
+   "surface": "caliche / cropland",
+   "gulf_km": 3.03,
+   "due": false,
+   "last_wash": "2026-10-08",
+   "esdd_only_due": true
+  },
+  "Line 3, Section 6": {
+   "esdd": 0.0185,
+   "nsdd": 0.0325,
+   "ceff": 0.009,
+   "ratio": 0.26,
+   "surface": "pasture",
+   "gulf_km": 2.45,
+   "due": false,
+   "last_wash": "2026-10-18",
+   "esdd_only_due": false
+  },
+  "Line 3, Section 7": {
+   "esdd": 0.036,
+   "nsdd": 0.0424,
+   "ceff": 0.0195,
+   "ratio": 0.57,
+   "surface": "pasture",
+   "gulf_km": 2.03,
+   "due": false,
+   "last_wash": "2026-10-13",
+   "esdd_only_due": true
+  },
+  "Line 4, Section 1": {
+   "esdd": 0.0144,
+   "nsdd": 0.0492,
+   "ceff": 0.0083,
+   "ratio": 0.24,
+   "surface": "pasture",
+   "gulf_km": 3.31,
+   "due": false,
+   "last_wash": "2026-10-15",
+   "esdd_only_due": false
+  },
+  "Line 4, Section 2": {
+   "esdd": 0.0309,
+   "nsdd": 0.0379,
+   "ceff": 0.016,
+   "ratio": 0.47,
+   "surface": "coastal marsh",
+   "gulf_km": 3.4,
+   "due": false,
+   "last_wash": "2026-08-01",
+   "esdd_only_due": true
+  }
+ },
+ "wash_ceff": {
+  "Line 1, Section 1": 0.0641,
+  "Line 1, Section 2": 0.006,
+  "Line 1, Section 3": 0.0039,
+  "Line 1, Section 4": 0.052,
+  "Line 1, Section 5": 0.0527,
+  "Line 2, Section 1": 0.0571,
+  "Line 2, Section 2": 0.0185,
+  "Line 2, Section 3": 0.0185,
+  "Line 2, Section 4": 0.1791,
+  "Line 2, Section 5": 0.0204,
+  "Line 2, Section 6": 0.0799,
+  "Line 2, Section 7": 0.0605,
+  "Line 3, Section 1": 0.0067,
+  "Line 3, Section 2": 0.0677,
+  "Line 3, Section 3": 0.0042,
+  "Line 3, Section 4": 0.0574,
+  "Line 3, Section 5": 0.0202,
+  "Line 3, Section 6": 0.009,
+  "Line 3, Section 7": 0.0195,
+  "Line 4, Section 1": 0.0083,
+  "Line 4, Section 2": 0.016
+ },
+ "wash_ceff_bands": {
+  "Line 1, Section 1": [
+   0.062,
+   0.0657
+  ],
+  "Line 1, Section 2": [
+   0.0057,
+   0.0061
+  ],
+  "Line 1, Section 3": [
+   0.0036,
+   0.0039
+  ],
+  "Line 1, Section 4": [
+   0.0496,
+   0.0533
+  ],
+  "Line 1, Section 5": [
+   0.0509,
+   0.0541
+  ],
+  "Line 2, Section 1": [
+   0.0551,
+   0.059
+  ],
+  "Line 2, Section 2": [
+   0.0172,
+   0.0201
+  ],
+  "Line 2, Section 3": [
+   0.0182,
+   0.0188
+  ],
+  "Line 2, Section 4": [
+   0.1739,
+   0.1828
+  ],
+  "Line 2, Section 5": [
+   0.0189,
+   0.0222
+  ],
+  "Line 2, Section 6": [
+   0.0773,
+   0.0823
+  ],
+  "Line 2, Section 7": [
+   0.0585,
+   0.0625
+  ],
+  "Line 3, Section 1": [
+   0.0066,
+   0.0068
+  ],
+  "Line 3, Section 2": [
+   0.0656,
+   0.069
+  ],
+  "Line 3, Section 3": [
+   0.004,
+   0.0042
+  ],
+  "Line 3, Section 4": [
+   0.0557,
+   0.0587
+  ],
+  "Line 3, Section 5": [
+   0.019,
+   0.0216
+  ],
+  "Line 3, Section 6": [
+   0.0088,
+   0.0091
+  ],
+  "Line 3, Section 7": [
+   0.0181,
+   0.0211
+  ],
+  "Line 4, Section 1": [
+   0.0079,
+   0.0087
+  ],
+  "Line 4, Section 2": [
+   0.0151,
+   0.0167
+  ]
+ },
+ "flashover_level": 0.0343,
+ "flashover_level_band": [
+  0.0301,
+  0.0393
+ ],
+ "beta_nsdd": 0.397,
+ "beta_nsdd_band": [
+  0.39,
+  0.406
+ ],
+ "k_esdd": 0.0399,
+ "k_nsdd": 0.008,
+ "esdd_only_due_count": 15,
+ "esdd_only_extra": [
+  "Line 2, Section 2",
+  "Line 2, Section 3",
+  "Line 2, Section 5",
+  "Line 3, Section 5",
+  "Line 3, Section 7",
+  "Line 4, Section 2"
+ ],
  "member_impact_2026": {
-  "sustained": 52306,
-  "member_minutes": 1502951,
-  "momentary": 337786
+  "sustained": 73363,
+  "member_minutes": 5376602,
+  "momentary": 360990
+ },
+ "member_impact_2026_band": {
+  "sustained": [
+   71895,
+   74831
+  ],
+  "member_minutes": [
+   5269069,
+   5484135
+  ],
+  "momentary": [
+   353770,
+   368210
+  ]
  },
  "member_impact_2026_by_line": {
   "Line 1": {
-   "sustained": 0,
-   "member_minutes": 0,
-   "momentary": 7750
+   "sustained": 7204,
+   "member_minutes": 62222,
+   "momentary": 15546
   },
   "Line 2": {
-   "sustained": 8067,
-   "member_minutes": 85090,
-   "momentary": 136513
+   "sustained": 2839,
+   "member_minutes": 29747,
+   "momentary": 19881
   },
   "Line 3": {
-   "sustained": 0,
-   "member_minutes": 0,
-   "momentary": 4232
-  },
-  "Line 4": {
-   "sustained": 0,
-   "member_minutes": 0,
-   "momentary": 5439
+   "sustained": 2289,
+   "member_minutes": 186078,
+   "momentary": 15693
   },
   "Line 5": {
-   "sustained": 11171,
-   "member_minutes": 167070,
-   "momentary": 16799
+   "sustained": 3130,
+   "member_minutes": 36406,
+   "momentary": 33546
   },
   "Line 6": {
    "sustained": 0,
    "member_minutes": 0,
-   "momentary": 19317
+   "momentary": 11556
   },
   "Line 7": {
-   "sustained": 1621,
-   "member_minutes": 82952,
-   "momentary": 1625
+   "sustained": 0,
+   "member_minutes": 0,
+   "momentary": 4869
   },
   "Line 8": {
-   "sustained": 10259,
-   "member_minutes": 472247,
-   "momentary": 10318
+   "sustained": 12581,
+   "member_minutes": 765890,
+   "momentary": 22800
   },
   "Line 9": {
-   "sustained": 1168,
-   "member_minutes": 25732,
-   "momentary": 21365
+   "sustained": 7389,
+   "member_minutes": 143544,
+   "momentary": 23664
   },
   "Line 10": {
-   "sustained": 14894,
-   "member_minutes": 258643,
-   "momentary": 37231
+   "sustained": 0,
+   "member_minutes": 0,
+   "momentary": 61232
   },
   "Line 11": {
-   "sustained": 0,
-   "member_minutes": 0,
-   "momentary": 13344
+   "sustained": 8871,
+   "member_minutes": 460856,
+   "momentary": 38140
   },
   "Line 12": {
-   "sustained": 0,
-   "member_minutes": 0,
-   "momentary": 17220
+   "sustained": 6006,
+   "member_minutes": 70655,
+   "momentary": 62173
   },
   "Line 13": {
-   "sustained": 5126,
-   "member_minutes": 411217,
-   "momentary": 5132
+   "sustained": 7212,
+   "member_minutes": 581557,
+   "momentary": 7023
   },
   "Line 14": {
-   "sustained": 0,
-   "member_minutes": 0,
-   "momentary": 23999
+   "sustained": 8341,
+   "member_minutes": 78421,
+   "momentary": 23605
   },
   "Line 15": {
-   "sustained": 0,
-   "member_minutes": 0,
-   "momentary": 17502
+   "sustained": 2302,
+   "member_minutes": 36829,
+   "momentary": 16076
+  },
+  "Line 16": {
+   "sustained": 5199,
+   "member_minutes": 2924399,
+   "momentary": 5186
   }
  },
- "gulf_string": {
-  "line": "Line 2",
-  "structure": 63,
-  "flashovers": 11,
-  "first": "2025-09-25",
-  "last": "2026-05-17",
-  "below_level": 9,
-  "below_cut": 5,
-  "lowest_deposit": 0.0083,
-  "median_fog_deposit": 0.0635,
-  "section": "Line 2, Section 4",
-  "section_washes_2025_26": [
-   "2025-11-18",
-   "2025-12-15",
-   "2026-01-26",
-   "2026-02-23",
-   "2026-03-24"
-  ]
+ "member_impact_2026_static": {
+  "sustained": 76736,
+  "member_minutes": 2751283,
+  "momentary": 401306
  },
- "gulf_strings": [
-  "replace the string: Line 2, structure 63"
- ],
- "clearance_items": [
-  "restore the clearance: Line 6, structures 57-58"
- ],
- "clearance_contact": {
-  "line": "Line 6",
-  "structures": "57-58",
-  "contacts_since_trim": 6,
-  "trim": "2022-08-09",
-  "slope_c_per_year": -0.3,
-  "contact_temperature": [
-   41.4,
-   43.2
-  ],
-  "vegetation_slopes": [
-   -2.9,
-   -1.7
-  ]
+ "member_impact_2026_over_both": {
+  "sustained": 101477,
+  "member_minutes": 6178056,
+  "momentary": 439516
  },
- "spans_to_clear": [
-  "clear the span: Line 10, structures 47-48",
-  "clear the span: Line 10, structures 88-89",
-  "clear the span: Line 11, structures 64-65",
-  "clear the span: Line 14, structures 62-63"
- ],
- "resalted_due": [
-  "wash: Line 2, Section 1",
-  "wash: Line 2, Section 6"
- ],
- "repeat_locations_open": [
-  "clear the span: Line 10, structures 47-48",
-  "clear the span: Line 10, structures 88-89",
-  "clear the span: Line 11, structures 64-65",
-  "clear the span: Line 14, structures 62-63",
-  "perch guards: Line 12, structure 104",
-  "perch guards: Line 14, structure 118",
-  "perch guards: Line 16, structure 23",
-  "perch guards: Line 6, structure 79",
-  "perch guards: Line 7, structure 31",
-  "perch guards: Line 7, structure 52",
-  "remove the hazard trees: Line 11, structures 118-120",
-  "remove the hazard trees: Line 13, structures 103-107",
-  "replace the string: Line 15, structure 57",
-  "replace the string: Line 2, structure 63",
-  "replace the string: Line 5, structure 88",
-  "replace the string: Line 9, structure 136",
-  "restore the clearance: Line 6, structures 57-58"
- ],
- "wash_due": [
-  "wash: Line 1, Section 1",
-  "wash: Line 1, Section 5",
-  "wash: Line 2, Section 1",
-  "wash: Line 2, Section 2",
-  "wash: Line 2, Section 3",
-  "wash: Line 2, Section 4",
-  "wash: Line 2, Section 5",
-  "wash: Line 2, Section 6",
-  "wash: Line 2, Section 7",
-  "wash: Line 3, Section 4",
-  "wash: Line 3, Section 5",
-  "wash: Line 3, Section 7",
-  "wash: Line 4, Section 1"
- ],
- "wash_due_count": 13,
- "work_list": [
-  "clear the span: Line 10, structures 47-48",
-  "clear the span: Line 10, structures 88-89",
-  "clear the span: Line 11, structures 64-65",
-  "clear the span: Line 14, structures 62-63",
-  "perch guards: Line 12, structure 104",
-  "perch guards: Line 14, structure 118",
-  "perch guards: Line 16, structure 23",
-  "perch guards: Line 6, structure 79",
-  "perch guards: Line 7, structure 31",
-  "perch guards: Line 7, structure 52",
-  "remove the hazard trees: Line 11, structures 118-120",
-  "remove the hazard trees: Line 13, structures 103-107",
-  "replace the string: Line 15, structure 57",
-  "replace the string: Line 2, structure 63",
-  "replace the string: Line 5, structure 88",
-  "replace the string: Line 9, structure 136",
-  "restore the clearance: Line 6, structures 57-58",
-  "wash: Line 1, Section 1",
-  "wash: Line 1, Section 5",
-  "wash: Line 2, Section 1",
-  "wash: Line 2, Section 2",
-  "wash: Line 2, Section 3",
-  "wash: Line 2, Section 4",
-  "wash: Line 2, Section 5",
-  "wash: Line 2, Section 6",
-  "wash: Line 2, Section 7",
-  "wash: Line 3, Section 4",
-  "wash: Line 3, Section 5",
-  "wash: Line 3, Section 7",
-  "wash: Line 4, Section 1"
- ],
- "work_list_counts": {
-  "guards": 6,
-  "strings": 4,
-  "spans": 4,
-  "stands": 2,
-  "clearance": 1,
-  "wash": 13
+ "member_impact_2026_oms": {
+  "sustained": 48622,
+  "member_minutes": 2825675,
+  "momentary": 0
  },
+ "static_2026_pct_diff": -48.8,
+ "static_2026_pct_diff_abs": 48.8,
+ "over_both_2026_pct_diff": 14.9,
+ "switching_windows_count": 26,
+ "switching_windows_2026_count": 11,
  "repeat_locations": [
   {
-   "line": "Line 6",
-   "cause": "bird",
-   "structure": 79,
-   "s_min": 78,
-   "s_max": 80,
-   "span": [
-    79,
-    80
-   ],
-   "faults": 4,
-   "first": "2024-01-02",
-   "last": "2026-01-08",
-   "fixed": false
-  },
-  {
-   "line": "Line 7",
-   "cause": "bird",
-   "structure": 31,
-   "s_min": 30,
-   "s_max": 31,
-   "span": [
-    31,
-    32
-   ],
-   "faults": 10,
-   "first": "2022-11-24",
-   "last": "2026-03-07",
-   "fixed": false
-  },
-  {
-   "line": "Line 7",
-   "cause": "bird",
-   "structure": 38,
-   "s_min": 37,
-   "s_max": 39,
-   "span": [
-    37,
-    38
-   ],
-   "faults": 8,
-   "first": "2022-02-12",
-   "last": "2023-03-18",
-   "fixed": true
-  },
-  {
-   "line": "Line 7",
-   "cause": "bird",
-   "structure": 52,
-   "s_min": 51,
-   "s_max": 53,
-   "span": [
-    52,
-    53
-   ],
-   "faults": 15,
-   "first": "2022-01-28",
-   "last": "2025-11-05",
-   "fixed": false
-  },
-  {
-   "line": "Line 12",
-   "cause": "bird",
-   "structure": 96,
-   "s_min": 95,
-   "s_max": 97,
-   "span": [
-    96,
-    97
-   ],
-   "faults": 7,
-   "first": "2022-01-19",
-   "last": "2023-11-21",
-   "fixed": true
-  },
-  {
-   "line": "Line 12",
-   "cause": "bird",
-   "structure": 104,
-   "s_min": 104,
-   "s_max": 105,
-   "span": [
-    103,
-    104
-   ],
-   "faults": 7,
-   "first": "2022-03-25",
-   "last": "2026-02-02",
-   "fixed": false
-  },
-  {
-   "line": "Line 14",
-   "cause": "bird",
-   "structure": 118,
-   "s_min": 118,
-   "s_max": 119,
-   "span": [
-    118,
-    119
-   ],
-   "faults": 8,
-   "first": "2022-01-28",
-   "last": "2025-12-09",
-   "fixed": false
-  },
-  {
    "line": "Line 16",
+   "line_id": "L16",
    "cause": "bird",
    "structure": 23,
-   "s_min": 22,
+   "s_min": 23,
    "s_max": 24,
    "span": [
     23,
     24
    ],
-   "faults": 8,
-   "first": "2022-11-27",
-   "last": "2026-02-27",
-   "fixed": false
+   "km": 4.26,
+   "faults": 15,
+   "first": "2022-03-11",
+   "last": "2026-02-19",
+   "fixed": false,
+   "crew_days": 1,
+   "hist_mm": 1198130,
+   "mm_per_day": 1198130,
+   "priority": "P1",
+   "label": "perch guards: Line 16, structure 23"
   },
   {
    "line": "Line 11",
-   "cause": "fallin",
-   "structure": 119,
-   "s_min": 118,
-   "s_max": 120,
+   "line_id": "L11",
+   "cause": "insulator",
+   "structure": 71,
+   "s_min": 70,
+   "s_max": 72,
    "span": [
-    119,
-    120
+    71,
+    72
    ],
-   "faults": 10,
-   "first": "2022-02-04",
-   "last": "2025-12-13",
-   "fixed": false
+   "km": 13.92,
+   "faults": 14,
+   "first": "2024-03-03",
+   "last": "2026-10-26",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 1473723,
+   "mm_per_day": 736862,
+   "priority": "P1",
+   "label": "replace string: Line 11, structure 71"
+  },
+  {
+   "line": "Line 11",
+   "line_id": "L11",
+   "cause": "fallin",
+   "structure": 125,
+   "s_min": 123,
+   "s_max": 126,
+   "span": [
+    125,
+    126
+   ],
+   "km": 24.84,
+   "faults": 13,
+   "first": "2022-01-15",
+   "last": "2026-01-30",
+   "fixed": false,
+   "crew_days": 3,
+   "hist_mm": 1900981,
+   "mm_per_day": 633660,
+   "priority": "P1",
+   "label": "remove hazard trees: Line 11, structures 123-126"
+  },
+  {
+   "line": "Line 8",
+   "line_id": "L08",
+   "cause": "insulator",
+   "structure": 93,
+   "s_min": 92,
+   "s_max": 94,
+   "span": [
+    93,
+    94
+   ],
+   "km": 18.29,
+   "faults": 13,
+   "first": "2024-04-18",
+   "last": "2026-10-26",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 992312,
+   "mm_per_day": 496156,
+   "priority": "P1",
+   "label": "replace string: Line 8, structure 93"
   },
   {
    "line": "Line 13",
+   "line_id": "L13",
    "cause": "fallin",
    "structure": 105,
    "s_min": 103,
-   "s_max": 107,
+   "s_max": 106,
    "span": [
-    104,
-    105
+    105,
+    106
    ],
-   "faults": 24,
-   "first": "2022-06-26",
-   "last": "2026-08-15",
-   "fixed": false
+   "km": 20.12,
+   "faults": 19,
+   "first": "2022-08-02",
+   "last": "2026-09-06",
+   "fixed": false,
+   "crew_days": 3,
+   "hist_mm": 1111717,
+   "mm_per_day": 370572,
+   "priority": "P1",
+   "label": "remove hazard trees: Line 13, structures 103-106"
+  },
+  {
+   "line": "Line 7",
+   "line_id": "L07",
+   "cause": "bird",
+   "structure": 31,
+   "s_min": 30,
+   "s_max": 32,
+   "span": [
+    31,
+    32
+   ],
+   "km": 5.8,
+   "faults": 12,
+   "first": "2022-12-26",
+   "last": "2026-02-18",
+   "fixed": false,
+   "crew_days": 1,
+   "hist_mm": 291146,
+   "mm_per_day": 291146,
+   "priority": "P1",
+   "label": "perch guards: Line 7, structure 31"
+  },
+  {
+   "line": "Line 11",
+   "line_id": "L11",
+   "cause": "growin",
+   "structure": 112,
+   "s_min": 112,
+   "s_max": 113,
+   "span": [
+    112,
+    113
+   ],
+   "km": 22.28,
+   "faults": 8,
+   "first": "2024-06-28",
+   "last": "2026-08-13",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 375468,
+   "mm_per_day": 187734,
+   "priority": "P1",
+   "label": "clear span: Line 11, structures 112-113"
+  },
+  {
+   "line": "Line 15",
+   "line_id": "L15",
+   "cause": "hardware",
+   "structure": 48,
+   "s_min": 47,
+   "s_max": 50,
+   "span": [
+    48,
+    49
+   ],
+   "km": 9.52,
+   "faults": 16,
+   "first": "2022-06-16",
+   "last": "2026-07-24",
+   "fixed": false,
+   "crew_days": 3,
+   "hist_mm": 476906,
+   "mm_per_day": 158969,
+   "priority": "P1",
+   "label": "restore clearance: Line 15, structures 48-49"
+  },
+  {
+   "line": "Line 10",
+   "line_id": "L10",
+   "cause": "growin",
+   "structure": 68,
+   "s_min": 68,
+   "s_max": 69,
+   "span": [
+    68,
+    69
+   ],
+   "km": 13.38,
+   "faults": 10,
+   "first": "2024-08-04",
+   "last": "2026-08-29",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 313114,
+   "mm_per_day": 156557,
+   "priority": "P1",
+   "label": "clear span: Line 10, structures 68-69"
   },
   {
    "line": "Line 5",
-   "cause": "growin",
-   "structure": 102,
-   "s_min": 101,
-   "s_max": 102,
-   "span": [
-    101,
-    102
-   ],
-   "faults": 4,
-   "first": "2023-07-31",
-   "last": "2026-06-06",
-   "fixed": true
-  },
-  {
-   "line": "Line 10",
-   "cause": "growin",
-   "structure": 48,
-   "s_min": 47,
-   "s_max": 49,
-   "span": [
-    47,
-    48
-   ],
-   "faults": 6,
-   "first": "2022-06-22",
-   "last": "2026-08-23",
-   "fixed": false
-  },
-  {
-   "line": "Line 10",
-   "cause": "growin",
+   "line_id": "L05",
+   "cause": "insulator",
    "structure": 88,
    "s_min": 87,
    "s_max": 89,
    "span": [
-    88,
-    89
+    87,
+    88
    ],
-   "faults": 6,
-   "first": "2022-06-25",
-   "last": "2026-08-23",
-   "fixed": false
+   "km": 16.87,
+   "faults": 13,
+   "first": "2024-11-11",
+   "last": "2026-09-02",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 218302,
+   "mm_per_day": 109151,
+   "priority": "P1",
+   "label": "replace string: Line 5, structure 88"
   },
   {
-   "line": "Line 11",
-   "cause": "growin",
-   "structure": 65,
-   "s_min": 64,
-   "s_max": 66,
+   "line": "Line 9",
+   "line_id": "L09",
+   "cause": "insulator",
+   "structure": 137,
+   "s_min": 136,
+   "s_max": 138,
    "span": [
-    64,
-    65
+    137,
+    138
    ],
-   "faults": 5,
-   "first": "2023-07-30",
-   "last": "2026-08-22",
-   "fixed": false
+   "km": 26.5,
+   "faults": 9,
+   "first": "2024-05-25",
+   "last": "2026-10-01",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 156717,
+   "mm_per_day": 78359,
+   "priority": "P1",
+   "label": "replace string: Line 9, structure 137"
+  },
+  {
+   "line": "Line 10",
+   "line_id": "L10",
+   "cause": "growin",
+   "structure": 102,
+   "s_min": 101,
+   "s_max": 104,
+   "span": [
+    102,
+    103
+   ],
+   "km": 20.2,
+   "faults": 9,
+   "first": "2022-08-05",
+   "last": "2026-08-16",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 133845,
+   "mm_per_day": 66922,
+   "priority": "P1",
+   "label": "clear span: Line 10, structures 102-103"
+  },
+  {
+   "line": "Line 12",
+   "line_id": "L12",
+   "cause": "growin",
+   "structure": 44,
+   "s_min": 44,
+   "s_max": 45,
+   "span": [
+    44,
+    45
+   ],
+   "km": 8.51,
+   "faults": 6,
+   "first": "2024-08-08",
+   "last": "2026-08-11",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 114697,
+   "mm_per_day": 57348,
+   "priority": "P1",
+   "label": "clear span: Line 12, structures 44-45"
+  },
+  {
+   "line": "Line 12",
+   "line_id": "L12",
+   "cause": "bird",
+   "structure": 103,
+   "s_min": 103,
+   "s_max": 105,
+   "span": [
+    103,
+    104
+   ],
+   "km": 20.36,
+   "faults": 20,
+   "first": "2022-01-01",
+   "last": "2026-03-11",
+   "fixed": false,
+   "crew_days": 1,
+   "hist_mm": 52996,
+   "mm_per_day": 52996,
+   "priority": "P2",
+   "label": "perch guards: Line 12, structure 103"
   },
   {
    "line": "Line 14",
+   "line_id": "L14",
    "cause": "growin",
    "structure": 62,
    "s_min": 62,
-   "s_max": 63,
+   "s_max": 64,
    "span": [
     62,
     63
    ],
-   "faults": 4,
-   "first": "2023-07-30",
-   "last": "2026-07-12",
-   "fixed": false
-  },
-  {
-   "line": "Line 14",
-   "cause": "growin",
-   "structure": 131,
-   "s_min": 130,
-   "s_max": 132,
-   "span": [
-    130,
-    131
-   ],
-   "faults": 4,
-   "first": "2023-07-18",
-   "last": "2026-06-11",
-   "fixed": true
+   "km": 12.3,
+   "faults": 6,
+   "first": "2024-06-28",
+   "last": "2026-07-27",
+   "fixed": false,
+   "crew_days": 2,
+   "hist_mm": 40962,
+   "mm_per_day": 20481,
+   "priority": "P2",
+   "label": "clear span: Line 14, structures 62-63"
   },
   {
    "line": "Line 6",
+   "line_id": "L06",
    "cause": "hardware",
    "structure": 57,
    "s_min": 57,
@@ -590,88 +1200,174 @@
     57,
     58
    ],
-   "faults": 7,
-   "first": "2022-06-25",
-   "last": "2026-08-25",
-   "fixed": false
+   "km": 11.11,
+   "faults": 6,
+   "first": "2022-08-06",
+   "last": "2026-07-05",
+   "fixed": false,
+   "crew_days": 3,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "P2",
+   "label": "restore clearance: Line 6, structures 57-58"
   },
   {
-   "line": "Line 2",
-   "cause": "insulator",
-   "structure": 63,
-   "s_min": 62,
-   "s_max": 64,
+   "line": "Line 6",
+   "line_id": "L06",
+   "cause": "bird",
+   "structure": 78,
+   "s_min": 78,
+   "s_max": 80,
    "span": [
-    63,
-    64
+    78,
+    79
    ],
+   "km": 15.24,
+   "faults": 8,
+   "first": "2022-02-01",
+   "last": "2026-01-11",
+   "fixed": false,
+   "crew_days": 1,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "P2",
+   "label": "perch guards: Line 6, structure 78"
+  },
+  {
+   "line": "Line 7",
+   "line_id": "L07",
+   "cause": "bird",
+   "structure": 52,
+   "s_min": 51,
+   "s_max": 53,
+   "span": [
+    52,
+    53
+   ],
+   "km": 10.06,
    "faults": 11,
-   "first": "2025-09-25",
-   "last": "2026-05-17",
-   "fixed": false
+   "first": "2022-01-22",
+   "last": "2026-03-06",
+   "fixed": false,
+   "crew_days": 1,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "P2",
+   "label": "perch guards: Line 7, structure 52"
+  },
+  {
+   "line": "Line 14",
+   "line_id": "L14",
+   "cause": "bird",
+   "structure": 118,
+   "s_min": 117,
+   "s_max": 119,
+   "span": [
+    118,
+    119
+   ],
+   "km": 22.93,
+   "faults": 6,
+   "first": "2023-02-23",
+   "last": "2026-02-01",
+   "fixed": false,
+   "crew_days": 1,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "P2",
+   "label": "perch guards: Line 14, structure 118"
   },
   {
    "line": "Line 5",
-   "cause": "insulator",
-   "structure": 88,
-   "s_min": 87,
-   "s_max": 88,
+   "line_id": "L05",
+   "cause": "growin",
+   "structure": 101,
+   "s_min": 101,
+   "s_max": 102,
    "span": [
-    87,
-    88
+    101,
+    102
    ],
-   "faults": 6,
-   "first": "2024-10-21",
-   "last": "2026-08-19",
-   "fixed": false
+   "km": 19.53,
+   "faults": 5,
+   "first": "2024-06-28",
+   "last": "2026-05-18",
+   "fixed": true,
+   "crew_days": 2,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "Fixed",
+   "label": "clear span: Line 5, structures 101-102"
   },
   {
-   "line": "Line 8",
-   "cause": "insulator",
-   "structure": 49,
-   "s_min": 48,
-   "s_max": 49,
+   "line": "Line 7",
+   "line_id": "L07",
+   "cause": "bird",
+   "structure": 38,
+   "s_min": 38,
+   "s_max": 38,
    "span": [
-    48,
-    49
+    37,
+    38
    ],
-   "faults": 4,
-   "first": "2022-03-18",
-   "last": "2022-05-11",
-   "fixed": true
+   "km": 7.21,
+   "faults": 5,
+   "first": "2022-02-16",
+   "last": "2024-03-18",
+   "fixed": true,
+   "crew_days": 1,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "Fixed",
+   "label": "perch guards: Line 7, structure 38"
   },
   {
-   "line": "Line 9",
+   "line": "Line 7",
+   "line_id": "L07",
    "cause": "insulator",
-   "structure": 136,
-   "s_min": 135,
-   "s_max": 137,
-   "span": [
-    136,
-    137
-   ],
-   "faults": 6,
-   "first": "2024-11-15",
-   "last": "2026-04-19",
-   "fixed": false
-  },
-  {
-   "line": "Line 11",
-   "cause": "insulator",
-   "structure": 40,
-   "s_min": 40,
+   "structure": 41,
+   "s_min": 41,
    "s_max": 41,
    "span": [
-    40,
-    41
+    41,
+    42
    ],
+   "km": 7.79,
    "faults": 4,
-   "first": "2023-10-15",
-   "last": "2024-09-23",
-   "fixed": true
+   "first": "2022-07-13",
+   "last": "2022-11-13",
+   "fixed": true,
+   "crew_days": 2,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "Fixed",
+   "label": "replace string: Line 7, structure 41"
+  },
+  {
+   "line": "Line 12",
+   "line_id": "L12",
+   "cause": "bird",
+   "structure": 96,
+   "s_min": 96,
+   "s_max": 97,
+   "span": [
+    96,
+    97
+   ],
+   "km": 18.79,
+   "faults": 3,
+   "first": "2022-12-14",
+   "last": "2023-02-22",
+   "fixed": true,
+   "crew_days": 1,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "Fixed",
+   "label": "perch guards: Line 12, structure 96"
   },
   {
    "line": "Line 13",
+   "line_id": "L13",
    "cause": "insulator",
    "structure": 72,
    "s_min": 71,
@@ -680,455 +1376,331 @@
     72,
     73
    ],
+   "km": 13.97,
    "faults": 4,
-   "first": "2022-02-27",
-   "last": "2022-08-10",
-   "fixed": true
+   "first": "2022-02-07",
+   "last": "2022-09-27",
+   "fixed": true,
+   "crew_days": 2,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "Fixed",
+   "label": "replace string: Line 13, structure 72"
+  },
+  {
+   "line": "Line 14",
+   "line_id": "L14",
+   "cause": "growin",
+   "structure": 131,
+   "s_min": 130,
+   "s_max": 132,
+   "span": [
+    130,
+    131
+   ],
+   "km": 25.5,
+   "faults": 5,
+   "first": "2024-07-17",
+   "last": "2026-06-09",
+   "fixed": true,
+   "crew_days": 2,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "Fixed",
+   "label": "clear span: Line 14, structures 130-131"
   },
   {
    "line": "Line 15",
-   "cause": "insulator",
-   "structure": 57,
-   "s_min": 56,
-   "s_max": 58,
+   "line_id": "L15",
+   "cause": "growin",
+   "structure": 33,
+   "s_min": 33,
+   "s_max": 34,
    "span": [
-    56,
-    57
+    33,
+    34
    ],
+   "km": 6.57,
+   "faults": 7,
+   "first": "2022-08-06",
+   "last": "2024-08-24",
+   "fixed": true,
+   "crew_days": 2,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "Fixed",
+   "label": "clear span: Line 15, structures 33-34"
+  },
+  {
+   "line": "Line 15",
+   "line_id": "L15",
+   "cause": "insulator",
+   "structure": 93,
+   "s_min": 92,
+   "s_max": 93,
+   "span": [
+    92,
+    93
+   ],
+   "km": 18.44,
    "faults": 4,
-   "first": "2025-05-27",
-   "last": "2026-05-17",
-   "fixed": false
+   "first": "2023-05-18",
+   "last": "2023-12-30",
+   "fixed": true,
+   "crew_days": 2,
+   "hist_mm": 0,
+   "mm_per_day": 0,
+   "priority": "Fixed",
+   "label": "replace string: Line 15, structure 93"
   }
  ],
- "flashover_level": 0.0531,
- "soaking_rain_keep": 0.45,
- "salt_background": 0.28,
- "wash_sections": {
-  "Line 1, Section 1": {
-   "deposit": 0.1638,
-   "ratio": 3.08,
-   "gulf_km": 3.38,
-   "due": true,
-   "last_wash": "2026-03-12"
-  },
-  "Line 1, Section 2": {
-   "deposit": 0.0065,
-   "ratio": 0.12,
-   "gulf_km": 3.69,
-   "due": false,
-   "last_wash": "2026-10-28"
-  },
-  "Line 1, Section 3": {
-   "deposit": 0.0051,
-   "ratio": 0.1,
-   "gulf_km": 3.84,
-   "due": false,
-   "last_wash": "2026-10-29"
-  },
-  "Line 1, Section 4": {
-   "deposit": 0.0052,
-   "ratio": 0.1,
-   "gulf_km": 3.8,
-   "due": false,
-   "last_wash": "2026-10-29"
-  },
-  "Line 1, Section 5": {
-   "deposit": 0.1517,
-   "ratio": 2.86,
-   "gulf_km": 3.53,
-   "due": true,
-   "last_wash": "2026-03-13"
-  },
-  "Line 2, Section 1": {
-   "deposit": 0.1033,
-   "ratio": 1.95,
-   "gulf_km": 1.95,
-   "due": true,
-   "last_wash": "2026-10-17"
-  },
-  "Line 2, Section 2": {
-   "deposit": 0.3,
-   "ratio": 5.65,
-   "gulf_km": 1.53,
-   "due": true,
-   "last_wash": "2026-08-11"
-  },
-  "Line 2, Section 3": {
-   "deposit": 0.3411,
-   "ratio": 6.42,
-   "gulf_km": 1.27,
-   "due": true,
-   "last_wash": "2026-08-12"
-  },
-  "Line 2, Section 4": {
-   "deposit": 0.564,
-   "ratio": 10.62,
-   "gulf_km": 1.21,
-   "due": true,
-   "last_wash": "2026-03-24"
-  },
-  "Line 2, Section 5": {
-   "deposit": 0.3129,
-   "ratio": 5.89,
-   "gulf_km": 1.36,
-   "due": true,
-   "last_wash": "2026-08-18"
-  },
-  "Line 2, Section 6": {
-   "deposit": 0.1105,
-   "ratio": 2.08,
-   "gulf_km": 1.66,
-   "due": true,
-   "last_wash": "2026-10-20"
-  },
-  "Line 2, Section 7": {
-   "deposit": 0.2539,
-   "ratio": 4.78,
-   "gulf_km": 1.93,
-   "due": true,
-   "last_wash": "2026-08-04"
-  },
-  "Line 3, Section 1": {
-   "deposit": 0.0114,
-   "ratio": 0.22,
-   "gulf_km": 2.5,
-   "due": false,
-   "last_wash": "2026-10-27"
-  },
-  "Line 3, Section 2": {
-   "deposit": 0.007,
-   "ratio": 0.13,
-   "gulf_km": 3.28,
-   "due": false,
-   "last_wash": "2026-10-28"
-  },
-  "Line 3, Section 3": {
-   "deposit": 0.0041,
-   "ratio": 0.08,
-   "gulf_km": 3.47,
-   "due": false,
-   "last_wash": "2026-10-30"
-  },
-  "Line 3, Section 4": {
-   "deposit": 0.2166,
-   "ratio": 4.08,
-   "gulf_km": 3.38,
-   "due": true,
-   "last_wash": "2026-03-19"
-  },
-  "Line 3, Section 5": {
-   "deposit": 0.261,
-   "ratio": 4.91,
-   "gulf_km": 3.02,
-   "due": true,
-   "last_wash": "2025-09-17"
-  },
-  "Line 3, Section 6": {
-   "deposit": 0.0049,
-   "ratio": 0.09,
-   "gulf_km": 2.45,
-   "due": false,
-   "last_wash": "2026-10-30"
-  },
-  "Line 3, Section 7": {
-   "deposit": 0.2147,
-   "ratio": 4.04,
-   "gulf_km": 2.06,
-   "due": true,
-   "last_wash": "2026-08-20"
-  },
-  "Line 4, Section 1": {
-   "deposit": 0.169,
-   "ratio": 3.18,
-   "gulf_km": 3.32,
-   "due": true,
-   "last_wash": "2026-03-16"
-  },
-  "Line 4, Section 2": {
-   "deposit": 0.0088,
-   "ratio": 0.17,
-   "gulf_km": 3.38,
-   "due": false,
-   "last_wash": "2026-10-27"
-  },
-  "Line 4, Section 3": {
-   "deposit": 0.0103,
-   "ratio": 0.19,
-   "gulf_km": 2.25,
-   "due": false,
-   "last_wash": "2026-10-28"
+ "open_repeats_count": 19,
+ "fixed_repeats_count": 8,
+ "p1_mix_and_corridor": [
+  "bird=2d",
+  "clear span: Line 10, structures 102-103",
+  "clear span: Line 10, structures 68-69",
+  "clear span: Line 11, structures 112-113",
+  "fallin=6d",
+  "growin=8d",
+  "hardware=3d",
+  "insulator=8d",
+  "perch guards: Line 16, structure 23",
+  "remove hazard trees: Line 11, structures 123-126",
+  "replace string: Line 11, structure 71",
+  "replace string: Line 8, structure 93",
+  "replace string: Line 9, structure 137",
+  "restore clearance: Line 15, structures 48-49",
+  "wash=9d"
+ ],
+ "ranked_open_register": [
+  "clear span: Line 10, structures 102-103 [P1]",
+  "clear span: Line 10, structures 68-69 [P1]",
+  "clear span: Line 11, structures 112-113 [P1]",
+  "clear span: Line 12, structures 44-45 [P1]",
+  "clear span: Line 14, structures 62-63 [P2]",
+  "perch guards: Line 12, structure 103 [P2]",
+  "perch guards: Line 14, structure 118 [P2]",
+  "perch guards: Line 16, structure 23 [P1]",
+  "perch guards: Line 6, structure 78 [P2]",
+  "perch guards: Line 7, structure 31 [P1]",
+  "perch guards: Line 7, structure 52 [P2]",
+  "remove hazard trees: Line 11, structures 123-126 [P1]",
+  "remove hazard trees: Line 13, structures 103-106 [P1]",
+  "replace string: Line 11, structure 71 [P1]",
+  "replace string: Line 5, structure 88 [P1]",
+  "replace string: Line 8, structure 93 [P1]",
+  "replace string: Line 9, structure 137 [P1]",
+  "restore clearance: Line 15, structures 48-49 [P1]",
+  "restore clearance: Line 6, structures 57-58 [P2]"
+ ],
+ "p1_repeat_slate": [
+  "clear span: Line 10, structures 102-103",
+  "clear span: Line 10, structures 68-69",
+  "clear span: Line 11, structures 112-113",
+  "clear span: Line 12, structures 44-45",
+  "perch guards: Line 16, structure 23",
+  "perch guards: Line 7, structure 31",
+  "remove hazard trees: Line 11, structures 123-126",
+  "remove hazard trees: Line 13, structures 103-106",
+  "replace string: Line 11, structure 71",
+  "replace string: Line 5, structure 88",
+  "replace string: Line 8, structure 93",
+  "replace string: Line 9, structure 137",
+  "restore clearance: Line 15, structures 48-49"
+ ],
+ "p2_deferred_backlog": [
+  "clear span: Line 14, structures 62-63",
+  "perch guards: Line 12, structure 103",
+  "perch guards: Line 14, structure 118",
+  "perch guards: Line 6, structure 78",
+  "perch guards: Line 7, structure 52",
+  "restore clearance: Line 6, structures 57-58"
+ ],
+ "work_list": [
+  "clear span: Line 10, structures 102-103",
+  "clear span: Line 10, structures 68-69",
+  "clear span: Line 11, structures 112-113",
+  "clear span: Line 12, structures 44-45",
+  "perch guards: Line 16, structure 23",
+  "perch guards: Line 7, structure 31",
+  "remove hazard trees: Line 11, structures 123-126",
+  "remove hazard trees: Line 13, structures 103-106",
+  "replace string: Line 11, structure 71",
+  "replace string: Line 5, structure 88",
+  "replace string: Line 8, structure 93",
+  "replace string: Line 9, structure 137",
+  "restore clearance: Line 15, structures 48-49",
+  "wash: Line 1, Section 1",
+  "wash: Line 1, Section 4",
+  "wash: Line 1, Section 5",
+  "wash: Line 2, Section 1",
+  "wash: Line 2, Section 4",
+  "wash: Line 2, Section 6",
+  "wash: Line 2, Section 7",
+  "wash: Line 3, Section 2",
+  "wash: Line 3, Section 4"
+ ],
+ "programme": {
+  "budget_days": 36,
+  "wash_days": 9,
+  "repeat_budget": 27,
+  "repeat_days_used": 27,
+  "unused_days": 0,
+  "funded_count": 13,
+  "deferred_count": 6,
+  "cutoff_mm_per_day": 57348,
+  "first_deferred_mm_per_day": 52996,
+  "crew_day_mix": {
+   "bird": 2,
+   "fallin": 6,
+   "growin": 8,
+   "hardware": 3,
+   "insulator": 8,
+   "wash": 9
   }
  },
- "wash_deposits": {
-  "Line 1, Section 1": 0.1638,
-  "Line 1, Section 2": 0.0065,
-  "Line 1, Section 3": 0.0051,
-  "Line 1, Section 4": 0.0052,
-  "Line 1, Section 5": 0.1517,
-  "Line 2, Section 1": 0.1033,
-  "Line 2, Section 2": 0.3,
-  "Line 2, Section 3": 0.3411,
-  "Line 2, Section 4": 0.564,
-  "Line 2, Section 5": 0.3129,
-  "Line 2, Section 6": 0.1105,
-  "Line 2, Section 7": 0.2539,
-  "Line 3, Section 1": 0.0114,
-  "Line 3, Section 2": 0.007,
-  "Line 3, Section 3": 0.0041,
-  "Line 3, Section 4": 0.2166,
-  "Line 3, Section 5": 0.261,
-  "Line 3, Section 6": 0.0049,
-  "Line 3, Section 7": 0.2147,
-  "Line 4, Section 1": 0.169,
-  "Line 4, Section 2": 0.0088,
-  "Line 4, Section 3": 0.0103
- },
- "wash_deposit_bands": {
-  "Line 1, Section 1": [
-   0.1401,
-   0.2337
-  ],
-  "Line 1, Section 2": [
-   0.006,
-   0.0085
-  ],
-  "Line 1, Section 3": [
-   0.0047,
-   0.0065
-  ],
-  "Line 1, Section 4": [
-   0.0047,
-   0.0065
-  ],
-  "Line 1, Section 5": [
-   0.1293,
-   0.2271
-  ],
-  "Line 2, Section 1": [
-   0.0682,
-   0.1641
-  ],
-  "Line 2, Section 2": [
-   0.2333,
-   0.3741
-  ],
-  "Line 2, Section 3": [
-   0.2434,
-   0.4255
-  ],
-  "Line 2, Section 4": [
-   0.3929,
-   0.6689
-  ],
-  "Line 2, Section 5": [
-   0.2298,
-   0.3936
-  ],
-  "Line 2, Section 6": [
-   0.0697,
-   0.1813
-  ],
-  "Line 2, Section 7": [
-   0.2161,
-   0.3145
-  ],
-  "Line 3, Section 1": [
-   0.0093,
-   0.0121
-  ],
-  "Line 3, Section 2": [
-   0.0064,
-   0.0085
-  ],
-  "Line 3, Section 3": [
-   0.004,
-   0.0047
-  ],
-  "Line 3, Section 4": [
-   0.1876,
-   0.3091
-  ],
-  "Line 3, Section 5": [
-   0.2281,
-   0.332
-  ],
-  "Line 3, Section 6": [
-   0.0044,
-   0.005
-  ],
-  "Line 3, Section 7": [
-   0.1781,
-   0.2729
-  ],
-  "Line 4, Section 1": [
-   0.1448,
-   0.2365
-  ],
-  "Line 4, Section 2": [
-   0.0079,
-   0.0113
-  ],
-  "Line 4, Section 3": [
-   0.0078,
-   0.0109
-  ]
- },
- "resalted": {
-  "Line 2, Section 1": {
-   "deposit": 0.1033,
-   "ratio": 1.95,
-   "gulf_km": 1.95,
-   "due": true,
-   "last_wash": "2026-10-17"
-  },
-  "Line 2, Section 6": {
-   "deposit": 0.1105,
-   "ratio": 2.08,
-   "gulf_km": 1.66,
-   "due": true,
-   "last_wash": "2026-10-20"
-  }
- },
- "resalted_lowest_family_ratio": 1.14,
  "careful": {
   "work_list": [
-   "clear the span: Line 10, structures 47-48",
-   "clear the span: Line 10, structures 88-89",
-   "clear the span: Line 11, structures 64-65",
-   "clear the span: Line 14, structures 62-63",
-   "clear the span: Line 6, structures 57-58",
-   "perch guards: Line 12, structure 104",
-   "perch guards: Line 14, structure 118",
-   "perch guards: Line 16, structure 23",
-   "perch guards: Line 6, structure 79",
+   "clear span: Line 10, structures 61-62",
+   "clear span: Line 10, structures 93-94",
+   "clear span: Line 11, structures 105-106",
+   "clear span: Line 15, structures 48-49",
    "perch guards: Line 7, structure 31",
-   "perch guards: Line 7, structure 52",
-   "remove the hazard trees: Line 11, structures 118-120",
-   "remove the hazard trees: Line 13, structures 103-107",
-   "replace the string: Line 15, structure 57",
-   "replace the string: Line 5, structure 88",
-   "replace the string: Line 9, structure 136",
+   "remove hazard trees: Line 11, structures 123-126",
+   "remove hazard trees: Line 13, structures 103-106",
+   "replace string: Line 11, structure 62",
+   "replace string: Line 5, structure 88",
+   "replace string: Line 8, structure 106",
    "wash: Line 1, Section 1",
-   "wash: Line 1, Section 5",
-   "wash: Line 2, Section 2",
-   "wash: Line 2, Section 3",
-   "wash: Line 2, Section 4",
-   "wash: Line 2, Section 5",
-   "wash: Line 2, Section 7",
-   "wash: Line 3, Section 4",
-   "wash: Line 3, Section 5",
-   "wash: Line 3, Section 7",
-   "wash: Line 4, Section 1"
-  ],
-  "R2": {
-   "lightning": 11,
-   "bird": 6,
-   "fog": 15,
-   "insulator": 9,
-   "growin": 14,
-   "fallin": 8,
-   "vehicle": 4,
-   "hardware": 1,
-   "unknown": 6
-  },
-  "R4": [],
-  "R5": [],
-  "R6": [],
-  "wash": [
-   "wash: Line 1, Section 1",
-   "wash: Line 1, Section 5",
-   "wash: Line 2, Section 2",
-   "wash: Line 2, Section 3",
-   "wash: Line 2, Section 4",
-   "wash: Line 2, Section 5",
-   "wash: Line 2, Section 7",
-   "wash: Line 3, Section 4",
-   "wash: Line 3, Section 5",
-   "wash: Line 3, Section 7",
-   "wash: Line 4, Section 1"
-  ],
-  "R7": {
-   "Line 2, Section 1": 0.0324,
-   "Line 2, Section 6": 0.0309
-  },
-  "resalted_ratio": [
-   0.63,
-   0.6
-  ]
- },
- "direct": {
-  "work_list": [
-   "clear the span: Line 10, structures 47-48",
-   "clear the span: Line 10, structures 88-89",
-   "clear the span: Line 11, structures 64-65",
-   "clear the span: Line 14, structures 62-63",
-   "clear the span: Line 6, structures 57-58",
-   "perch guards: Line 12, structure 104",
-   "perch guards: Line 14, structure 118",
-   "perch guards: Line 16, structure 23",
-   "perch guards: Line 6, structure 79",
-   "perch guards: Line 7, structure 31",
-   "perch guards: Line 7, structure 52",
-   "remove the hazard trees: Line 11, structures 118-120",
-   "remove the hazard trees: Line 13, structures 103-107",
-   "replace the string: Line 15, structure 57",
-   "replace the string: Line 5, structure 88",
-   "replace the string: Line 9, structure 136",
-   "wash: Line 1, Section 1",
+   "wash: Line 1, Section 4",
    "wash: Line 1, Section 5",
    "wash: Line 2, Section 1",
    "wash: Line 2, Section 2",
    "wash: Line 2, Section 3",
    "wash: Line 2, Section 4",
    "wash: Line 2, Section 5",
+   "wash: Line 2, Section 6",
    "wash: Line 2, Section 7",
+   "wash: Line 3, Section 2",
    "wash: Line 3, Section 4",
    "wash: Line 3, Section 5",
    "wash: Line 3, Section 7",
-   "wash: Line 4, Section 1"
-  ]
+   "wash: Line 4, Section 2"
+  ],
+  "R2": [],
+  "R3": [
+   "replace string: Line 8, structure 106",
+   "replace string: Line 9, structure 148"
+  ],
+  "R4": [
+   "clear span: Line 10, structures 61-62",
+   "replace string: Line 11, structure 62"
+  ],
+  "R5": [
+   "wash: Line 1, Section 1",
+   "wash: Line 1, Section 4",
+   "wash: Line 1, Section 5",
+   "wash: Line 2, Section 1",
+   "wash: Line 2, Section 2",
+   "wash: Line 2, Section 3",
+   "wash: Line 2, Section 4",
+   "wash: Line 2, Section 5",
+   "wash: Line 2, Section 6",
+   "wash: Line 2, Section 7",
+   "wash: Line 3, Section 2",
+   "wash: Line 3, Section 4",
+   "wash: Line 3, Section 5",
+   "wash: Line 3, Section 7",
+   "wash: Line 4, Section 2"
+  ],
+  "R6": {
+   "sustained": 76736,
+   "member_minutes": 2751283,
+   "momentary": 401306
+  },
+  "p1_repeat_slate": [
+   "clear span: Line 10, structures 61-62",
+   "clear span: Line 10, structures 93-94",
+   "clear span: Line 11, structures 105-106",
+   "clear span: Line 15, structures 48-49",
+   "perch guards: Line 7, structure 31",
+   "remove hazard trees: Line 11, structures 123-126",
+   "remove hazard trees: Line 13, structures 103-106",
+   "replace string: Line 11, structure 62",
+   "replace string: Line 5, structure 88",
+   "replace string: Line 8, structure 106"
+  ],
+  "wash_due_count": 15
+ },
+ "direct": {
+  "work_list": [
+   "clear span: Line 10, structures 45-46",
+   "clear span: Line 10, structures 48-49",
+   "clear span: Line 15, structures 4-5",
+   "perch guards: Line 12, structure 103",
+   "perch guards: Line 7, structure 31",
+   "remove hazard trees: Line 11, structures 108-111",
+   "remove hazard trees: Line 13, structures 91-98",
+   "replace string: Line 11, structure 66",
+   "replace string: Line 5, structure 88",
+   "replace string: Line 8, structure 106",
+   "replace string: Line 9, structure 148",
+   "wash: Line 1, Section 1",
+   "wash: Line 1, Section 4",
+   "wash: Line 1, Section 5",
+   "wash: Line 2, Section 1",
+   "wash: Line 2, Section 2",
+   "wash: Line 2, Section 3",
+   "wash: Line 2, Section 4",
+   "wash: Line 2, Section 5",
+   "wash: Line 2, Section 6",
+   "wash: Line 2, Section 7",
+   "wash: Line 3, Section 1",
+   "wash: Line 3, Section 2",
+   "wash: Line 3, Section 4",
+   "wash: Line 4, Section 2"
+  ],
+  "R6": {
+   "sustained": 48622,
+   "member_minutes": 2825675,
+   "momentary": 0
+  }
  },
  "quick": {
   "R1": {
-   "2022": 103,
-   "2023": 104,
-   "2024": 86,
-   "2025": 88,
-   "2026": 78
-  },
-  "R5": {
-   "sustained": 52306,
-   "member_minutes": 2548579,
-   "momentary": 0
+   "year_2022": 96,
+   "year_2023": 110,
+   "year_2024": 120,
+   "year_2025": 104,
+   "year_2026": 98,
+   "2026_lightning": 19,
+   "2026_bird": 0,
+   "2026_fog": 4,
+   "2026_insulator": 0,
+   "2026_growin": 5,
+   "2026_fallin": 15,
+   "2026_vehicle": 3,
+   "2026_hardware": 8,
+   "2026_unknown": 44
   },
   "R6": {
-   "lightning": 15,
-   "bird": 0,
-   "fog": 14,
-   "insulator": 0,
-   "growin": 6,
-   "fallin": 10,
-   "vehicle": 4,
-   "hardware": 1,
-   "unknown": 28
+   "sustained": 73363,
+   "member_minutes": 6721957,
+   "momentary": 0
   }
  },
- "tap_string_beyond_tap_km": 3.1,
- "tap_km": 23.4,
+ "family_size": 23,
  "filed": {
   "system_kv": 69,
   "repeat_location_m": 400,
-  "underbuild_kv": 12.47
- },
- "deposit_fit": {
-  "wind_error": 3.31,
-  "constant_error": 5.26,
-  "constant_worse_pct": 59
- },
- "family_size": 34,
- "flashover_level_band": [
-  0.028,
-  0.064
- ]
+  "underbuild_kv": 12.47,
+  "crew_budget_days": 36,
+  "dc_corridor_km": 14.5,
+  "sequence_window_s": 60,
+  "ieee_standard": 738,
+  "z0m_ohm_per_km": 0.725,
+  "z0m_r_ohm_per_km": 0.118,
+  "z0m_x_ohm_per_km": 0.715
+ }
 }

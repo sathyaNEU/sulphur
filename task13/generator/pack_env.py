@@ -243,11 +243,12 @@ def avian_rows(w, rng):
 
 # ------------------------------------------------------------------------------------------------ solar farm export
 
-def ipp_rows(w, rng):
+def ipp_rows(w, rng, key='ipp', t0=None, n_inv=24, max_mw=55, base_eid=70412, kind='solar'):
     rows = []
-    eid = 70412
+    eid = base_eid
+    t0 = t0 or (C.SOLAR_ENERGIZED if key == 'ipp' else C.BESS_ENERGIZED)
     for f in w['faults']:
-        rec = f['records'].get('ipp')
+        rec = f['records'].get(key)
         if not rec or len(f['phases']) > 1 and rec['IG'] < 50:
             continue
         if rec['IG'] < 120:
@@ -257,23 +258,29 @@ def ipp_rows(w, rng):
         rows.append([eid, t.strftime('%m/%d/%Y %H:%M:%S.') + '%03d' % (t.microsecond // 1000), '69kV BKR 52-1 RELAY',
                      '51N PICKUP - GND FAULT ON 69KV SYSTEM, NO TRIP', round(rec['I']['A'] / 1000.0, 3),
                      round(rec['I']['B'] / 1000.0, 3), round(rec['I']['C'] / 1000.0, 3), round(rec['IG'] / 1000.0, 3)])
-    # the plant's own events: inverter trips, controller curtailments, communications
-    t0 = C.SOLAR_ENERGIZED
+    # the plant's own events: inverter/PCS trips, controller curtailments, communications
     span_h = int((C.T_END - t0).total_seconds() // 3600)
-    for _ in range(int(rng.poisson(780))):
+    for _ in range(int(rng.poisson(720 if kind == 'solar' else 640))):
         t = C.to_cst(t0 + dt.timedelta(hours=float(rng.uniform(0, span_h))))
-        kind = rng.random()
+        kind_r = rng.random()
         eid += int(rng.integers(1, 40))
-        if kind < 0.55:
-            inv = int(rng.integers(1, 25))
-            rows.append([eid, t.strftime('%m/%d/%Y %H:%M:%S.000'), 'INV-%02d' % inv,
-                         'INV-%02d FAULT %d' % (inv, int(rng.choice([3412, 2207, 1150, 4102, 3390]))), '', '', '', ''])
-        elif kind < 0.85:
-            rows.append([eid, t.strftime('%m/%d/%Y %H:%M:%S.000'), 'PPC', 'PPC CURTAILMENT TO %d MW' % int(rng.integers(10, 55)),
-                         '', '', '', ''])
+        if kind_r < 0.55:
+            inv = int(rng.integers(1, n_inv + 1))
+            pfx = 'INV' if kind == 'solar' else 'PCS'
+            rows.append([0, t.strftime('%m/%d/%Y %H:%M:%S.000'), '%s-%02d' % (pfx, inv),
+                         '%s-%02d FAULT %d' % (pfx, inv, int(rng.choice([3412, 2207, 1150, 4102, 3390]))), '', '', '', ''])
+        elif kind_r < 0.85:
+            if kind == 'solar' and not (7 <= t.hour <= 18):
+                t = t.replace(hour=int(rng.integers(8, 17)))
+            msg = ('PPC CURTAILMENT TO %d MW' if kind == 'solar' else 'BMS DISPATCH LIMIT %d MW') % int(rng.integers(8, max_mw))
+            rows.append([0, t.strftime('%m/%d/%Y %H:%M:%S.000'), 'PPC' if kind == 'solar' else 'EMS', msg, '', '', '', ''])
         else:
-            rows.append([eid, t.strftime('%m/%d/%Y %H:%M:%S.000'), 'RTU', 'COMMS LOSS TO ISO', '', '', '', ''])
+            rows.append([0, t.strftime('%m/%d/%Y %H:%M:%S.000'), 'RTU', 'COMMS LOSS TO ISO', '', '', '', ''])
     rows.sort(key=lambda r: dt.datetime.strptime(r[1][:19], '%m/%d/%Y %H:%M:%S'))
+    eid = base_eid
+    for r in rows:
+        eid += int(rng.integers(1, 35))
+        r[0] = eid
     return rows
 
 
@@ -291,24 +298,22 @@ def write_ipp(rows, path):
 def _plate(lid, no, day):
     """the structure number on the plate that day: rebuilt lines carried their former numbers before the rebuild"""
     if lid in N.REBUILT and day < N.REBUILT[lid][0]:
-        return no + N.REBUILT[lid][1]
-    return no
+        return max(1, no + N.REBUILT[lid][1])
+    return max(1, no)
 
 
 def maint_rows(w, rng):
     net = w['net']
     rows = []
-    wo = 260000
+    cutoff = dt.date(2026, 10, 31)
     for (lid, no), t in sorted(w['replaced'].items(), key=lambda kv: kv[1]):
         lt = C.to_local(t)
-        wo += int(rng.integers(3, 60))
-        rows.append([wo, lt.date(), lt.date(), 'Line %d' % int(lid[1:]), _plate(lid, no, lt.date()), 'INSULATOR', 'replace 69 kV post insulator string, cracked bell', 'Crew 4'])
+        rows.append([0, lt.date(), lt.date(), 'Line %d' % int(lid[1:]), _plate(lid, no, lt.date()), 'INSULATOR', 'replace 69 kV post insulator string, cracked bell', 'Crew 4'])
     for lid, no, site, birds, guarded in F.ROOSTS:
         if guarded is None:
             continue
         lt = C.to_local(guarded)
-        wo += int(rng.integers(3, 60))
-        rows.append([wo, (lt - dt.timedelta(days=int(rng.integers(10, 40)))).date(), lt.date(), 'Line %d' % int(lid[1:]), no,
+        rows.append([0, (lt - dt.timedelta(days=int(rng.integers(10, 40)))).date(), lt.date(), 'Line %d' % int(lid[1:]), no,
                      'AVIAN', 'install perch guards and streamer shields on the crossarm', 'Crew 2'])
     for f in w['faults']:
         if not f['permanent']:
@@ -322,28 +327,33 @@ def maint_rows(w, rng):
             typ, desc = 'ARRESTER', 'replace failed line arrester / flashed insulator'
         else:
             continue
-        wo += int(rng.integers(3, 60))
-        rows.append([wo, lt.date(), (lt + dt.timedelta(days=float(rng.uniform(0, 3)))).date(), 'Line %d' % int(f['line'][1:]),
+        comp = min((lt + dt.timedelta(days=float(rng.uniform(0, 3)))).date(), cutoff)
+        rows.append([0, lt.date(), comp, 'Line %d' % int(f['line'][1:]),
                      _plate(f['line'], f['structure'], lt.date()), typ, desc, str(rng.choice(['Crew 2', 'Crew 4', 'Crew 5']))])
-    # routine work
+    # routine work across all months (Jan-Dec 2022-2025, Jan-Oct 2026; completed <= 31 Oct 2026)
     for _ in range(320):
         lid = sorted(net['lines'])[int(rng.integers(0, 16))]
         line = net['lines'][lid]
-        d = dt.date(int(rng.integers(2022, 2027)), int(rng.integers(1, 11)), int(rng.integers(1, 28)))
+        yr = int(rng.integers(2022, 2027))
+        mo = int(rng.integers(1, 11 if yr == 2026 else 13))
+        d = dt.date(yr, mo, int(rng.integers(1, 28)))
         typ = str(rng.choice(['CROSSARM', 'GUY', 'INSPECTION', 'SWITCH', 'GROUND', 'SIGNAGE'], p=[0.2, 0.15, 0.3, 0.1, 0.15, 0.1]))
         desc = {'CROSSARM': 'replace split crossarm', 'GUY': 'retension guy', 'INSPECTION': 'climbing inspection',
                 'SWITCH': 'line switch maintenance', 'GROUND': 'repair ground wire', 'SIGNAGE': 'replace structure number plate'}[typ]
-        wo += int(rng.integers(3, 60))
-        rows.append([wo, d, d + dt.timedelta(days=int(rng.integers(0, 20))), 'Line %d' % int(lid[1:]),
+        comp = min(d + dt.timedelta(days=int(rng.integers(0, 20))), cutoff)
+        rows.append([0, d, comp, 'Line %d' % int(lid[1:]),
                      int(rng.integers(1, len(line['structures']) + 1)), typ, desc, str(rng.choice(['Crew 2', 'Crew 4', 'Crew 5', 'Crew 7']))])
-    rows.sort(key=lambda r: (r[1], r[0]))
+    rows.sort(key=lambda r: (r[1], r[2], r[3], r[4]))
+    wo = 260000
+    for r in rows:
+        wo += int(rng.integers(3, 55))
+        r[0] = wo
     return rows
 
 
 def veg_rows(w, rng):
     net = w['net']
     rows = []
-    wo = 410000
     # spans the grow-ins still reach: no cycle trim may cover them after their last contact
     last_contact = {}
     for f in w['faults']:
@@ -354,13 +364,12 @@ def veg_rows(w, rng):
                if (lid, no) not in w['trims'] or last_contact[(lid, no)] > w['trims'][(lid, no)]]
     for (lid, no), t in sorted(w['trims'].items(), key=lambda kv: kv[1]):
         lt = C.to_local(t)
-        cyc = [g for g in F.GROWIN if g[0] == lid and g[1] == no and any(abs((td - t).total_seconds()) < 86400 for td, r in g[3])]
-        wo += int(rng.integers(2, 30))
+        cyc = [g for g in F.GROWIN if g[0] == lid and g[1] == no and any(abs((td - t).total_seconds()) < 86400 for td, r in g[5])]
         if cyc:
-            rows.append([wo, lt.date(), 'Line %d' % int(lid[1:]), _plate(lid, max(1, no - 9), lt.date()), _plate(lid, no + 12, lt.date()),
+            rows.append([0, lt.date(), 'Line %d' % int(lid[1:]), _plate(lid, max(1, no - 9), lt.date()), _plate(lid, no + 12, lt.date()),
                          'CYCLE TRIM', 'four-year cycle trim, side and under trimming', int(rng.integers(60, 180))])
         else:
-            rows.append([wo, lt.date(), 'Line %d' % int(lid[1:]), _plate(lid, no, lt.date()), _plate(lid, no + 1, lt.date()), 'HOT SPOT',
+            rows.append([0, lt.date(), 'Line %d' % int(lid[1:]), _plate(lid, no, lt.date()), _plate(lid, no + 1, lt.date()), 'HOT SPOT',
                          'trim tree after contact', int(rng.integers(1, 4))])
     for lid in sorted(net['lines']):
         line = net['lines'][lid]
@@ -373,20 +382,24 @@ def veg_rows(w, rng):
             if covered:
                 # the cycle trim on this segment was in the winter before the trees reached the line
                 d = dt.date(2022, 1, int(rng.integers(5, 28)))
-            wo += int(rng.integers(2, 30))
-            rows.append([wo, d, 'Line %d' % int(lid[1:]), _plate(lid, a, d), _plate(lid, b, d), 'CYCLE TRIM', 'four-year cycle trim',
+            rows.append([0, d, 'Line %d' % int(lid[1:]), _plate(lid, a, d), _plate(lid, b, d), 'CYCLE TRIM', 'four-year cycle trim',
                          int(rng.integers(40, 220))])
     for _ in range(140):
         lid = sorted(net['lines'])[int(rng.integers(0, 16))]
         line = net['lines'][lid]
         a = int(rng.integers(1, len(line['structures'])))
-        d = dt.date(int(rng.integers(2022, 2027)), int(rng.integers(1, 11)), int(rng.integers(1, 28)))
+        yr = int(rng.integers(2022, 2027))
+        mo = int(rng.integers(1, 11 if yr == 2026 else 13))
+        d = dt.date(yr, mo, int(rng.integers(1, 28)))
         typ = str(rng.choice(['MOWING', 'HERBICIDE', 'HAZARD TREE'], p=[0.45, 0.35, 0.2]))
         if typ != 'MOWING' and F._near_source(lid, line['structures'][a - 1]['km'], 3.5):
             typ = 'MOWING'
-        wo += int(rng.integers(2, 30))
-        rows.append([wo, d, 'Line %d' % int(lid[1:]), a, min(a + int(rng.integers(1, 15)), len(line['structures'])), typ,
+        rows.append([0, d, 'Line %d' % int(lid[1:]), a, min(a + int(rng.integers(1, 15)), len(line['structures'])), typ,
                      {'MOWING': 'mow right of way', 'HERBICIDE': 'basal herbicide', 'HAZARD TREE': 'remove leaning dead tree'}[typ],
                      int(rng.integers(1, 40))])
-    rows.sort(key=lambda r: (r[1], r[0]))
+    rows.sort(key=lambda r: (r[1], r[2], r[3]))
+    wo = 410000
+    for r in rows:
+        wo += int(rng.integers(2, 28))
+        r[0] = wo
     return rows

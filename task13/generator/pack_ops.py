@@ -61,11 +61,24 @@ def soe_rows(w, fds):
                 tp = taps[name_key[0]]
                 how = 'AUTO XFER' if tp['backup'] == 'auto' else 'SUPV'
                 rows.append((t, tap_code(tp['name']), '%s 69KV ALT SRC %s' % (tap_code(tp['name']), 'L%d' % int(tp['alt'][1:])), 'CLOSE', how))
+                t_ret = f['ops'].get('t_rep')
+                if t_ret is not None:
+                    rows.append((t_ret + dt.timedelta(seconds=120), tap_code(tp['name']),
+                                 '%s 69KV ALT SRC %s' % (tap_code(tp['name']), 'L%d' % int(tp['alt'][1:])), 'OPEN', 'SUPV'))
             else:
                 cause = {'TRIP': 'PROT', 'LOCKOUT': '79 LO', 'CLOSE': '79 RECL'}[state]
                 if state == 'CLOSE' and (t - f['t']).total_seconds() > 60:
                     cause = 'SUPV'
                 rows.append((t, st, '%s 69KV BKR %s' % (st, dev.split('-')[1]), 'OPEN' if state == 'TRIP' else state, cause))
+    # planned multi-week supervisory alternate-source tap transfers (as-operated 69 kV topology)
+    for sw in w.get('switch_windows', ()):
+        code = tap_code(sw['tap'])
+        norm_lbl = 'L%d' % int(sw['normal'][1:])
+        alt_lbl = 'L%d' % int(sw['alt'][1:])
+        rows.append((sw['start'], code, '%s 69KV ALT SRC %s' % (code, alt_lbl), 'CLOSE', 'SUPV'))
+        rows.append((sw['start'] + dt.timedelta(seconds=45), code, '%s 69KV NORM SW %s' % (code, norm_lbl), 'OPEN', 'SUPV'))
+        rows.append((sw['end'], code, '%s 69KV NORM SW %s' % (code, norm_lbl), 'CLOSE', 'SUPV'))
+        rows.append((sw['end'] + dt.timedelta(seconds=45), code, '%s 69KV ALT SRC %s' % (code, alt_lbl), 'OPEN', 'SUPV'))
     # planned outages and relay trip tests on the 69 kV lines
     for lid, line in net['lines'].items():
         for yr in range(2022, 2027):
@@ -179,8 +192,9 @@ def crlog_rows(w):
         rows.append(dict(date=tl.date(), time=tl.strftime('%H:%M'), line='Line %d' % int(f['line'][1:]),
                          event=ev, cause=cause, remarks=rem, members=members if members else '', operator=op, ref=f['id']))
         if rng.random() < 0.03:
+            others = [x for x in ops_names if x != op]
             rows.append(dict(rows[-1], time=(tl + dt.timedelta(minutes=float(rng.uniform(1, 9)))).strftime('%H:%M'),
-                             operator=ops_names[int(rng.integers(0, len(ops_names)))], remarks=rem + ' (shift change)'))
+                             operator=others[int(rng.integers(0, len(others)))], remarks=rem + ' (shift change)'))
         if f['permanent']:
             ts = C.to_local(f['ops']['t_sect']) + dt.timedelta(minutes=float(rng.uniform(0, 6)))
             moab = any(taps[i['tap']]['moab'] for i in f['ops']['impact']) or not f['ops']['impact']
@@ -292,7 +306,7 @@ FINDINGS = {
                'live oak reaching the bottom phase in span {s}, scorched, cut back'],
     'fallin': ['dead pine limb across the conductors between {s}, removed', 'tree from outside the right of way on the line near {s}'],
     'insulator': ['flashed and cracked porcelain on {s}, string replaced', 'broken bell, flash marks, {s}, replaced'],
-    'vehicle': ['pole {s} broken by a vehicle, replaced', 'truck hit {s}, pole changed out'],
+    'vehicle': ['{s} broken by a vehicle, pole replaced', 'truck hit {s}, pole changed out'],
     'hardware': ['failed jumper connector at {s}, repaired', 'burnt clamp at {s}, repaired'],
     'bird': ['flash marks on the crossarm at {s}, droppings on the insulators', 'dead bird at the base of {s}, flash marks'],
     'fog': ['flash marks on the insulators at {s}, heavy salt film', 'tracking on the porcelain at {s}'],
@@ -301,7 +315,8 @@ FINDINGS = {
 }
 # what a crew writes at the span where the conductor reaches the circuit below: the live oak in the span is what it sees
 UNDERBUILD_FIRST = 'live oak under the conductors in span {s}, top limbs about 10 ft below the bottom phase, referred to vegetation'
-UNDERBUILD_LATER = 'patrolled {s}, oak in the span cut back last year, nothing found'
+UNDERBUILD_LATER = 'patrolled {s}, oak in the span cut back in {yr}, nothing found'
+UNDERBUILD_SAME_YR = 'patrolled {s}, oak in the span trimmed earlier this year, nothing found'
 
 
 def _str_txt(no, rng):
@@ -330,17 +345,21 @@ def patrol_rows(w):
             lt = C.to_local(f['t'])
             no = f['span'][0]
             stxt = '%s-%s' % (_str_txt(no, rng), no + 1)
+            tr_t = w['trims'].get((f['line'], no))
+            tr_yr = C.to_local(tr_t).year if tr_t is not None else lt.year
             if f['id'] == first_ub[f['line']]:
                 d = lt + dt.timedelta(days=float(rng.uniform(0.6, 2.5)))
                 rows.append(dict(date=d.date(), line='Line %d' % int(f['line'][1:]), frm=no - 6, to=no + 7,
                                  crew=str(rng.choice(['Crew 2', 'Crew 4', 'Crew 5', 'Crew 7'])),
                                  find=UNDERBUILD_FIRST.format(s=stxt), ref=f['id']))
-            elif rng.random() < 0.3:
-                d = lt + dt.timedelta(days=float(rng.uniform(0.6, 6)))
+            elif f['permanent'] or rng.random() < 0.35:
+                d = lt + dt.timedelta(days=float(rng.uniform(0.4, 5.0)))
+                later_txt = UNDERBUILD_SAME_YR.format(s=stxt) if d.year == tr_yr else UNDERBUILD_LATER.format(s=stxt, yr=tr_yr)
+                find = (later_txt if (tr_t is not None and d.date() > C.to_local(tr_t).date() and rng.random() < 0.55)
+                        else 'patrolled %s to %s, nothing found from ground' % (_str_txt(no - 6, rng), no + 7))
                 rows.append(dict(date=d.date(), line='Line %d' % int(f['line'][1:]), frm=no - 6, to=no + 7,
                                  crew=str(rng.choice(['Crew 2', 'Crew 4', 'Crew 5', 'Crew 7'])),
-                                 find=(UNDERBUILD_LATER.format(s=stxt) if rng.random() < 0.5 else
-                                       'patrolled %s to %s, nothing found' % (_str_txt(no - 6, rng), no + 7)), ref=f['id']))
+                                 find=find, ref=f['id']))
             continue
         rel = f['records'].get('a') if f['records'].get('a', {}).get('family') not in (None, 'EM') else f['records'].get('b')
         rep_km = None
@@ -351,6 +370,21 @@ def patrol_rows(w):
         lt = C.to_local(f['t'])
         if f['permanent']:
             d = lt + dt.timedelta(hours=float(rng.uniform(0.5, 5)))
+            # Unfound active-repeat lockouts (cracked string without visible shattered bell, or unburned grow-in)
+            # patrol around the relay's printed distance and find nothing broken from the ground before re-energizing
+            unfound_active = (
+                (f['cause'] == 'insulator' and not f.get('visible_break', False)) or
+                (f['cause'] == 'growin' and not f.get('burned_clear', False))
+            )
+            if unfound_active:
+                ckm = rep_km if rep_km is not None else f['km']
+                s0 = _as_numbered(f['line'], N.structure_at(net, f['line'], max(0.0, ckm - 1.5))['no'], d.date())
+                s1 = _as_numbered(f['line'], N.structure_at(net, f['line'], min(line['length'], ckm + 1.5))['no'], d.date())
+                find = 'patrolled %s to %s after lockout, no broken hardware or tree contact found from ground, line re-energized' % (
+                    _str_txt(min(s0, s1), rng), max(s0, s1))
+                rows.append(dict(date=d.date(), line='Line %d' % int(f['line'][1:]), frm=min(s0, s1), to=max(s0, s1),
+                                 crew=str(rng.choice(['Crew 2', 'Crew 4', 'Crew 5', 'Crew 7'])), find=find, ref=f['id']))
+                continue
             no = _as_numbered(f['line'], f['structure'], d.date())
             if f['cause'] in ('growin', 'fallin'):
                 no2 = no + 1 if no < len(line['structures']) else no - 1

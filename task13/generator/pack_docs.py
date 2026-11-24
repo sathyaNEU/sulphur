@@ -43,13 +43,17 @@ def write_lines(w, path):
                      line_no(tp['alt']) if tp['alt'] else '', {'auto': 'automatic throw-over', 'manual': 'by control room (SCADA)',
                                                               'none': ''}[tp['backup']],
                      'motor-operated, SCADA' if tp['moab'] else 'manual'])
-    tapl = [['Item', 'Value'], ['Line', line_no(N.TAP_LINE)], ['Tap point, distance from Shell Ridge (km)', N.TAP_KM],
-            ['Tap line to the solar farm substation (km)', N.TAP_LEN], ['Tap line conductor', '477 ACSR Hawk'],
-            ['Interconnection', 'Coyote Draw Solar LLC, 60 MW AC, in service 20 Feb 2023']]
+    tapl = [['Facility', 'Line', 'Tap distance from terminal A (km)', 'Tap line length (km)', 'Conductor',
+             'Capacity', 'In service']]
+    for lid in ('L09', 'L08'):
+        info = N.IPP_TAPS[lid]
+        cap = '60 MW AC (solar)' if info['kind'] == 'solar' else '45 MW AC / 90 MWh (BESS)'
+        tapl.append([info['name'], line_no(lid), info['tap_km'], info['tap_len'], info['conductor'],
+                     cap, info['energized'].strftime('%Y-%m-%d')])
     O.xlsx(path, [('Lines', [C.ORG + ' 69 kV line register', 'Sequence impedances per km at 50 C, from the conductor tables'],
                    rows, [8, 34, 16, 16, 10, 16, 7, 14, 46, 10, 10, 10, 10], {7: 'yyyy-mm-dd'}),
                   ('Taps', [], taps, [20, 8, 14, 12, 8, 12, 24, 20], {}),
-                  ('Solar tap', [], tapl, [40, 40], {})],
+                  ('IPP taps', [], tapl, [28, 8, 28, 18, 18, 26, 12], {})],
            'lines', '69 kV line register', C.PEOPLE['planning'])
 
 
@@ -58,7 +62,7 @@ def write_structures(w, path):
     with open(path, 'w', newline='') as fh:
         wr = csv.writer(fh)
         wr.writerow(['structure_id', 'line', 'structure_no', 'former_no', 'km_from_terminal_a', 'structure_type', 'insulator',
-                     'insulator_installed', 'underbuild', 'latitude', 'longitude', 'gulf_shore_km'])
+                     'insulator_installed', 'underbuild', 'corridor_surface', 'latitude', 'longitude', 'gulf_shore_km'])
         for lid in sorted(net['lines']):
             for s in net['lines'][lid]['structures']:
                 la, lo = E.latlon(s['x'], s['y'])
@@ -66,7 +70,8 @@ def write_structures(w, path):
                 if lid in REBUILT:
                     former = s['no'] + REBUILT[lid][1] if s['no'] + REBUILT[lid][1] > 0 else ''
                 wr.writerow(['%s-%03d' % (lid, s['no']), line_no(lid), s['no'], former, '%.2f' % s['km'], s['kind'],
-                             s['insulator'], s['ins_year'], s['underbuild'], '%.5f' % la, '%.5f' % lo, '%.2f' % s['shore_km']])
+                             s['insulator'], s['ins_year'], s['underbuild'], s['surface'],
+                             '%.5f' % la, '%.5f' % lo, '%.2f' % s['shore_km']])
     return len(net['structures'])
 
 
@@ -82,8 +87,10 @@ def write_subs(w, path):
            ['Bayside', 'T2 138/69 kV autotransformer', 150, 8.3, 'YNa0 with delta tertiary', 'solid', '2014-10-02', ''],
            ['Inland', 'T1 138/69 kV autotransformer', 75, 7.6, 'YNa0', 'solid', '1994-06-20', '2024-03-14'],
            ['Inland', 'T2 138/69 kV autotransformer', 150, 8.0, 'YNa0 with delta tertiary', 'solid', '2024-03-14', ''],
-           ['Coyote Draw Solar', 'GSU 69/34.5 kV', N.GSU['mva'], N.GSU['z_pct'], 'YNd1 (69 kV side grounded wye)',
-            'reactor, %.0f ohm' % N.GSU['ngr_ohm'], '2023-02-20', '']]
+           ['Coyote Draw Solar', 'GSU 69/34.5 kV', N.IPP_TAPS['L09']['mva'], N.IPP_TAPS['L09']['z_pct'],
+            'YNd1 (69 kV side grounded wye)', 'reactor, %.0f ohm' % N.IPP_TAPS['L09']['ngr_ohm'], '2023-02-20', ''],
+           ['Brushy Creek BESS', 'GSU 69/34.5 kV', N.IPP_TAPS['L08']['mva'], N.IPP_TAPS['L08']['z_pct'],
+            'YNd1 (69 kV side grounded wye)', 'reactor, %.0f ohm' % N.IPP_TAPS['L08']['ngr_ohm'], '2023-05-15', '']]
     for tp in sorted(net['taps'], key=lambda t: t['name']):
         mva = 12.5 if tp['members'] < 2500 else (20.0 if tp['members'] < 4000 else 28.0)
         xf.append([tp['name'], 'T1 69/12.47 kV', mva, 7.2 + (mva > 15) * 0.8, 'Dyn1 (69 kV side delta)', 'solid (12.47 kV)',
@@ -117,8 +124,8 @@ def write_settings(w, path):
                 continue
             units = 'mi' if fam == 'ER' else 'km'
             length = L['length'] / MI if fam == 'ER' else L['length']
-            issued = '2024-03-12' if stc == 'INL' else ('2023-02-14' if lid == 'L09' else
-                                                        '%d-%02d-%02d' % (2016 + int(lid[1:]) % 7, 1 + int(lid[1:]) % 12, 9))
+            issued = '2024-03-12' if stc == 'INL' else ('2023-05-08' if lid == 'L08' else ('2023-02-14' if lid == 'L09' else
+                                                        '%d-%02d-%02d' % (2016 + int(lid[1:]) % 7, 1 + int(lid[1:]) % 12, 9)))
             rows.append([N.ST[stc]['name'], '%s-L%d' % (stc, int(lid[1:])), line_no(lid), 'EventRecall R-421' if fam == 'ER' else 'GridVue D60',
                          '1200:5' if L['conductor'] == '795 ACSR Drake' else '800:5', round(length, 2), units,
                          round(abs(z1), 2), round(math.degrees(cmath.phase(z1)), 1), round(abs(z0), 2), round(math.degrees(cmath.phase(z0)), 1),
@@ -136,19 +143,31 @@ def _study(w, path, key, year, when, note):
     for lid in sorted(net['lines']):
         L = net['lines'][lid]
         for end in ('a', 'b'):
-            z1, z0 = N.source(lid, L[end], when)
+            z1, z0 = N.source(lid, L[end], when, net=net)
             rows.append([Paragraph(x, O.CELL) for x in [line_no(lid), N.ST[L[end]]['name'], '%.2f' % abs(z1),
                                                         '%.1f' % math.degrees(cmath.phase(z1)), '%.2f' % abs(z0),
                                                         '%.1f' % math.degrees(cmath.phase(z0))]])
     t = Table(rows, colWidths=[52, 92, 74, 46, 74, 46])
-    extra = []
+    z0_inl = N.inl_bus_z0(when)
+    extra = [
+        P('Double-circuit mutual coupling (Lines 10 and 11): Line 10 (Inland-Mesquite Flat) and Line 11 (Inland-Granger Gap) '
+          'share double-circuit steel poles from Inland (0.0 km) to the %.1f km corridor junction. Zero-sequence mutual '
+          'impedance along the shared corridor is Z0m = %.4f + j%.4f ohm/km (%.3f ohm/km at %.1f degrees). Behind the Inland '
+          '69 kV bus with both lines out of service, the bus zero-sequence source impedance is %.2f ohm at %.1f degrees.'
+          % (N.DC_KM, N.DC_Z0M.real, N.DC_Z0M.imag, abs(N.DC_Z0M), math.degrees(cmath.phase(N.DC_Z0M)),
+             abs(z0_inl), math.degrees(cmath.phase(z0_inl))))
+    ]
     if year == 2025:
-        zg = N.gsu_z(0)
-        extra = [P('Coyote Draw Solar (tap on Line 9 at %.1f km from Shell Ridge): step-up transformer %.0f MVA, %.1f per cent, '
-                   'YNd1 with a %.0f ohm neutral reactor; zero-sequence impedance seen from the 69 kV tap point %.2f ohm at %.1f '
-                   'degrees including the %.1f km tap line. Inverter fault current limited to %.1f per unit of rated current.'
-                   % (N.TAP_KM, N.GSU['mva'], N.GSU['z_pct'], N.GSU['ngr_ohm'], abs(zg + net['lines']['L09']['z0'] * N.TAP_LEN),
-                      math.degrees(cmath.phase(zg + net['lines']['L09']['z0'] * N.TAP_LEN)), N.TAP_LEN, N.INV_I_PU))]
+        for lid, term_name in (('L09', 'Shell Ridge'), ('L08', 'Caney Bend')):
+            info = N.IPP_TAPS[lid]
+            zg = N.gsu_z(0, line=lid)
+            zt = zg + net['lines'][lid]['z0'] * info['tap_len']
+            extra.append(P(
+                '%s (tap on %s at %.1f km from %s): step-up transformer %.0f MVA, %.1f percent, '
+                'YNd1 with a %.0f ohm neutral reactor; zero-sequence impedance seen from the 69 kV tap point %.2f ohm at %.1f '
+                'degrees including the %.1f km tap line. Inverter fault current limited to %.1f per unit of rated current.'
+                % (info['name'], line_no(lid), info['tap_km'], term_name, info['mva'], info['z_pct'], info['ngr_ohm'],
+                   abs(zt), math.degrees(cmath.phase(zt)), info['tap_len'], info['inv_i_pu'])))
     story = [P(C.ORG + '<br/>Engineering, Transmission Planning', O.TITLE),
              P('69 kV System Protection Study, %d' % year, O.HEAD),
              P(note),
@@ -174,11 +193,11 @@ def write_studies(w, p22, p25):
 def write_procedure(path):
     blocks = [
         ('title', C.ORG),
-        ('h', 'Reliability Reporting Procedure RP-04, Revision 4'),
-        ('p', 'Engineering. Issued February 2024. Supersedes Revision 3 (January 2023).'),
+        ('h', 'Reliability Reporting Procedure RP-04, Revision 5'),
+        ('p', 'Engineering. Issued February 2025. Supersedes Revision 4 (February 2024).'),
         ('h', '1. Purpose'),
         ('p', 'How the cooperative keeps its record of faults on the 69 kV system and of the member interruptions they cause, '
-              'and how the yearly 69 kV work list is drawn from it.'),
+              'and how the yearly Priority 1 69 kV winter and spring work program is drawn from it.'),
         ('h', '2. Definitions'),
         ('p', 'Fault. One protection operation sequence on one 69 kV line: the trips, the reclosing and any lockout that follow '
               'one initiation within 60 seconds count as one fault. Breaker operations for switching, testing or maintenance '
@@ -190,47 +209,60 @@ def write_procedure(path):
               'insulators; other or unknown.'),
         ('p', 'Member interruption. A member account without power for more than five minutes because of a fault. Five minutes '
               'or less is a momentary event. Member-minutes are the sum, over the members interrupted, of the minutes each '
-              'was without power, from the fault to the restoration of supply to the member\'s substation.'),
+              'was without power, from the fault to the restoration of supply to the member\'s substation, attributed to the '
+              '69 kV line energizing that substation at the time of the fault.'),
         ('p', 'Year. The calendar year. In a report made in November, the current year runs from 1 January to 31 October.'),
-        ('p', 'Repeat location. A structure or span, or a run of adjacent structures no more than 400 m long, at which three '
-              'or more faults of one cause have occurred on one line since 1 January 2022. Salt contamination is dealt with by '
-              'the washing programme section by section and is not entered as a repeat location.'),
+        ('p', 'Repeat location. A structure, a span, or a contiguous run of adjacent structures (no more than 400 m long, or up '
+              'to 800 m along a single outside-right-of-way timber stand) at which three or more faults of one cause have '
+              'occurred on one line since 1 January 2022; faults of the same cause falling within 400 m of another fault in '
+              'the same run belong to that single repeat location. Salt contamination is dealt with by the washing program '
+              'section by section and is not entered as a repeat location.'),
         ('p', 'Work list. Each repeat location whose cause has not been fixed since its last fault, with the fix for its '
               'cause: perch guards and streamer shields for birds; replacement for an insulator failure; clearing the span '
               'for vegetation grown into the line; removal of the hazard trees for vegetation from outside the right of way; '
               'for any other cause, the repair that removes it. And each washing section due for washing before the fog season.'),
-        ('p', 'Due for washing before the fog season. A washing section is due when the salt deposit on its porcelain '
-              'insulators on 31 October is at or above the deposit at which the cooperative\'s 69 kV porcelain line posts '
-              'have flashed over in fog. The fog season runs from 1 December to 31 March.'),
+        ('p', 'Due for washing before the fog season. A washing section is due when the contamination state on its porcelain '
+              'insulators on 31 October is at or above the contamination level at which the cooperative\'s 69 kV porcelain line '
+              'posts have flashed over in fog. The fog season runs from 1 December to 31 March.'),
+        ('p', 'Priority 1 winter and spring work program. When open work exceeds the cooperative\'s fixed winter and spring '
+              '69 kV line-crew allowance (%d crew-days), all coastal washing sections due before 1 December are scheduled first '
+              '(1 crew-day per section). The remaining crew-days are allocated to qualifying unfixed repeat locations in '
+              'descending order of cumulative historical member-minutes since 1 January 2022 through the reporting cutoff per '
+              'crew-day using standard crew allowances: avian guards 1 crew-day; insulator string replacement 2 crew-days; '
+              'vegetation grow-in clearing 2 crew-days; outside-right-of-way hazard-tree removal 3 crew-days; equipment or '
+              'hardware repair 3 crew-days. Any location whose crew allowance exceeds the remaining crew-days is skipped and '
+              'deferred to the Priority 2 backlog; exact ties are broken by total fault count, then line and structure number.'
+              % C.CREW_BUDGET_DAYS),
         ('h', '3. Records'),
         ('p', 'Relay event records are retrieved from the line relays by System Protection each month. The SCADA master keeps '
-              'the sequence of events. The system operators keep the control room 69 kV log on each shift. The outage '
-              'management system keeps member outages by feeder. The line superintendent books line patrols, insulator '
-              'washing and maintenance; the vegetation management coordinator books vegetation work. The line crews sample '
-              'the test insulators each month.'),
+              'the sequence of events. The system operators keep the control room 69 kV log on each shift. The outage management '
+              'system keeps member outages by feeder. The line superintendent books line patrols, insulator washing and '
+              'maintenance; the vegetation management coordinator books vegetation work. The line crews sample the test '
+              'insulators each month.'),
         ('h', '4. Revision history'),
         ('p', 'Revision 3 (January 2023): repeat locations added. Revision 4 (February 2024): the work list and the washing '
-              'definition added.'),
-        ('small', 'Approved: T. Evans, Manager of Engineering'),
+              'definition added. Revision 5 (February 2025): washing definition updated to overall porcelain contamination and '
+              'Priority 1 crew-day allocation added.'),
+        ('small', 'Approved: C. Ortiz, Manager of Engineering'),
     ]
-    O.docx(path, blocks, 'procedure', 'Reliability Reporting Procedure RP-04 Rev 4', C.PEOPLE['reliability'], seed='rp04')
+    O.docx(path, blocks, 'procedure', 'Reliability Reporting Procedure RP-04 Rev 5', C.PEOPLE['reliability'], seed='rp04v5')
 
 
 def write_esdd(w, path):
     rows = [['Site', 'Date sampled', 'ESDD (mg/cm2)', 'NSDD (mg/cm2)', 'Sampled by', 'Remarks']]
     rng = np.random.default_rng(C.EV_SEED + 1212)
     for r in sorted(w['tests'], key=lambda r: (r['date'], r['site'])):
-        rows.append([r['site'], r['date'], round(r['esdd'], 4), round(r['esdd'] * rng.uniform(4, 9), 3),
+        rows.append([r['site'], r['date'], round(r['esdd'], 4), round(r['nsdd'], 4),
                      str(rng.choice(['Crew 2', 'Crew 4', 'Crew 5'])), ''])
-    sites = [['Site', 'Location', 'Latitude', 'Longitude', 'Gulf shore (km)', 'Test string', 'Installed']]
+    sites = [['Site', 'Location', 'Corridor surface', 'Latitude', 'Longitude', 'Gulf shore (km)', 'Test string', 'Installed']]
     import field as FD
-    for code, desc, (x, y) in FD.TEST_SITES:
+    for code, desc, (x, y), surf in FD.TEST_SITES:
         la, lo = E.latlon(x, y)
-        sites.append([code, desc, round(la, 5), round(lo, 5), round(N._shore_dist(x, y), 2),
+        sites.append([code, desc, surf, round(la, 5), round(lo, 5), round(N._shore_dist(x, y), 2),
                       'same porcelain line post as the 69 kV lines, not energized, never washed', '2019-11-04'])
-    O.xlsx(path, [('Readings', [C.ORG + ' test insulator deposits', 'Equivalent salt deposit density; each string sampled in place without cleaning'],
-                   rows, [6, 12, 12, 12, 10, 20], {1: 'yyyy-mm-dd'}),
-                  ('Sites', [], sites, [6, 26, 10, 11, 10, 60, 11], {})],
+    O.xlsx(path, [('Readings', [C.ORG + ' test insulator deposits', 'Equivalent salt and non-soluble deposit density; each string sampled in place without cleaning'],
+                   rows, [6, 12, 14, 14, 10, 20], {1: 'yyyy-mm-dd'}),
+                  ('Sites', [], sites, [6, 26, 20, 10, 11, 12, 60, 11], {})],
            'esdd', 'Test insulator deposits', C.PEOPLE['lines'])
 
 
@@ -242,12 +274,12 @@ def write_washing(w, path):
             continue
         rows.append([wsh['date'], line_no(wsh['line']), wsh['section'].split('-')[1].replace('W', 'Section '), wsh['s0'], wsh['s1'],
                      str(rng.choice(['Crew 5', 'Crew 7'])), int(rng.integers(2600, 4200)), ''])
-    secs = [['Line', 'Section', 'From structure', 'To structure']]
+    secs = [['Line', 'Section', 'From structure', 'To structure', 'Corridor surface']]
     for s in w['sections']:
-        secs.append([line_no(s['line']), s['id'].split('-')[1].replace('W', 'Section '), s['s0'], s['s1']])
+        secs.append([line_no(s['line']), s['id'].split('-')[1].replace('W', 'Section '), s['s0'], s['s1'], s['surface']])
     O.xlsx(path, [('Log', [C.ORG + ' 69 kV insulator washing log', 'Live-line high-pressure water'], rows,
                    [11, 8, 10, 10, 10, 8, 14, 20], {0: 'yyyy-mm-dd'}),
-                  ('Sections', [], secs, [8, 10, 12, 12], {})],
+                  ('Sections', [], secs, [8, 10, 12, 12, 20], {})],
            'washing', 'Insulator washing log', C.PEOPLE['lines'])
 
 
@@ -293,12 +325,16 @@ def write_distractors(w, p_corr, p_ease):
         for s in net['lines'][lid]['structures']:
             if rng.random() < 0.55:
                 continue
-            rows.append(['%s-%03d' % (lid, s['no']), line_no(lid), int(rng.choice([1, 2, 2, 3, 3, 4, 5], p=[0.2, 0.25, 0.2, 0.15, 0.1, 0.07, 0.03])),
-                         int(max(0, rng.normal(6, 5))), int(rng.poisson(0.4)), str(rng.choice(['good', 'good', 'fair', 'checked', 'split'])),
-                         str(rng.choice(['good', 'good', 'good', 'dirty', 'chipped skirt'])), ''])
-    O.xlsx(p_corr, [('Survey', [C.ORG + ' tower and pole condition survey 2025', 'Ground-line and visual inspection, about half the structures'],
+            decay = int(max(0, rng.normal(6, 5)))
+            holes = int(rng.poisson(0.4))
+            xarm = str(rng.choice(['good', 'good', 'fair', 'checked', 'split']))
+            ins = str(rng.choice(['good', 'good', 'good', 'dirty', 'chipped skirt']))
+            score = 1 + (decay >= 10) + (decay >= 18) + (holes >= 2) + (xarm in ('checked', 'split')) + (ins == 'chipped skirt')
+            rating = min(5, max(1, int(score)))
+            rows.append(['%s-%03d' % (lid, s['no']), line_no(lid), rating, decay, holes, xarm, ins, ''])
+    O.xlsx(p_corr, [('Survey', [C.ORG + ' tower and pole condition survey 2025', 'Ground-line and visual wood-pole inspection (2025 cycle)'],
                      rows, [11, 8, 12, 12, 10, 10, 14, 20], {})],
-           'corrosion', 'Tower and pole condition survey 2025', 'Osmose-style inspection contractor')
+           'corrosion', 'Tower and pole condition survey 2025', 'Brazos Pole Inspection Services')
     with open(p_ease, 'w', newline='') as fh:
         wr = csv.writer(fh)
         wr.writerow(['easement_id', 'line', 'from_structure', 'to_structure', 'width_ft', 'recorded', 'grantor', 'restrictions'])

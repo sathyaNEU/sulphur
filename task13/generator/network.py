@@ -1,10 +1,12 @@
-"""The cooperative's 69 kV system: twelve breakered stations on the Texas coastal bend (two 138/69 kV bulk stations fed
-by the generation and transmission cooperative, ten switching or distribution stations), sixteen lines, the load taps
-along them (the distribution substations, their members and how each is backed up), every structure and span with its
-coordinates, insulators and the distance to the Gulf shore, the line-out source impedances behind each line terminal
-(Inland's ground source changed when its 150 MVA autotransformer replaced the 75 MVA unit on 14 March 2024), the solar
-farm tapped on Shell Ridge-Ponder Creek and its grounded-wye step-up, and the relay at each terminal."""
+"""The cooperative's 69 kV system (architecture 7, Level 5): twelve breakered stations on the Texas coastal bend (two
+138/69 kV bulk stations fed by the generation and transmission cooperative, ten switching or distribution stations),
+sixteen lines including a 14.5 km double-circuit steel-pole corridor shared by Lines 10 and 11 out of Inland (mutual
+zero-sequence impedance Z0m), the load taps along them, every structure and span with its coordinates, insulators,
+corridor surface (for non-soluble dust exposure) and distance to the Gulf shore, the line-out source impedances behind
+each terminal, and two independent power producer lateral taps (Coyote Draw Solar on Line 9 and Brushy Creek BESS on
+Line 8), both with grounded-wye YNd1 step-up transformers."""
 import cmath
+import datetime as _dt
 import math
 
 import numpy as np
@@ -59,8 +61,14 @@ LINES = [
 ]
 LINE_NAMES = {lid: '%s-%s' % (ST[a]['name'], ST[b]['name']) for lid, a, b, *_ in LINES}
 
+# Double-circuit corridor shared by L10 (INL-MSQ) and L11 (INL-GRG) leaving Inland bulk substation to junction J
+DC_LINES = ('L10', 'L11')
+DC_JUNCTION = (22.5, 42.5)        # 13.21 km straight from INL -> 14.5 km corridor length
+DC_KM = 14.5
+DC_Z0M = complex(0.1180, 0.7150)  # mutual zero-sequence impedance (ohm/km) on double-circuit steel poles
+
 # line-out source impedances behind each terminal (ohm, |Z| and angle), from the protection studies' network model
-# (z1 mag, z1 ang, z0 mag, z0 ang); Inland's ground source before and after 14 March 2024
+# (z1 mag, z1 ang, z0 mag, z0 ang); Inland's ground bus source before and after 14 March 2024
 SOURCES = {
     ('L01', 'BAY'): (2.6, 84.0, 1.9, 81.0), ('L01', 'PAL'): (7.8, 81.5, 13.4, 77.0),
     ('L02', 'PAL'): (7.1, 81.0, 12.1, 76.5), ('L02', 'SHR'): (10.6, 80.0, 21.8, 75.5),
@@ -71,36 +79,60 @@ SOURCES = {
     ('L07', 'TUL'): (6.9, 81.0, 11.2, 77.0), ('L07', 'CAN'): (9.4, 80.5, 17.8, 76.0),
     ('L08', 'CAN'): (8.7, 80.5, 15.9, 76.0), ('L08', 'PND'): (14.8, 79.0, 31.6, 74.0),
     ('L09', 'SHR'): (10.1, 80.0, 20.4, 75.5), ('L09', 'PND'): (14.2, 79.0, 29.8, 74.0),
-    ('L10', 'INL'): (3.1, 84.5, None, 80.5), ('L10', 'MSQ'): (8.2, 81.0, 14.6, 76.5),
-    ('L11', 'INL'): (3.2, 84.5, None, 80.5), ('L11', 'GRG'): (11.8, 79.5, 26.2, 75.0),
+    ('L10', 'INL'): (3.1, 84.5, None, 80.5), ('L10', 'MSQ'): (8.2, 81.0, 7.8, 77.0),
+    ('L11', 'INL'): (3.2, 84.5, None, 80.5), ('L11', 'GRG'): (11.8, 79.5, 13.5, 76.0),
     ('L12', 'CAN'): (9.0, 80.5, 16.8, 76.0), ('L12', 'MSQ'): (8.6, 81.0, 15.2, 76.5),
     ('L13', 'GRG'): (12.4, 79.5, 27.5, 75.0), ('L13', 'LOK'): (9.6, 80.0, 18.2, 75.5),
     ('L14', 'LOK'): (9.2, 80.5, 17.4, 76.0), ('L14', 'CAN'): (9.8, 80.0, 18.9, 75.5),
     ('L15', 'MSQ'): (8.8, 81.0, 15.8, 76.5), ('L15', 'LOK'): (9.4, 80.5, 17.9, 76.0),
     ('L16', 'PAL'): (6.8, 81.0, 11.0, 77.0), ('L16', 'TUL'): (7.2, 81.0, 11.9, 77.0),
 }
-INL_Z0 = {'old': 9.8, 'new': 3.6}            # Inland's ground source, 75 MVA (to 14 Mar 2024) and 150 MVA units
+INL_Z0 = {'old': 9.8, 'new': 3.6}            # Inland's ground bus source, 75 MVA (to 14 Mar 2024) and 150 MVA units
 
 # lines rebuilt with their structures renumbered: date, and former number less new number
-import datetime as _dt
 REBUILT = {'L13': (_dt.date(2023, 4, 18), 9), 'L08': (_dt.date(2023, 9, 26), -6)}
 
 # stretches of line carrying the cooperative's 12.47 kV distribution circuits built under the 69 kV on the same poles
-# (structure no. from, to)
-UNDERBUILT = {'L01': (20, 35), 'L02': (28, 40), 'L06': (41, 76), 'L10': (30, 44), 'L12': (38, 50), 'L14': (58, 72),
-              'L15': (45, 55), 'L16': (1, 999)}
+# Includes TWO active underbuild clearance spans (L06 57-58, L15 48-49) AND TWO active grow-ins on underbuilt spans
+# (L14 62-63, L12 44-45), so an underbuild filter fails completely.
+UNDERBUILT = {
+    'L01': (20, 35), 'L02': (28, 40), 'L06': (40, 76), 'L10': (22, 42),
+    'L12': (36, 54), 'L14': (56, 74), 'L15': (40, 62), 'L16': (1, 999),
+}
 
-# the solar farm: tap on L09 at km TAP_KM from Shell Ridge, a 1.6 km tap line to the farm's 69/34.5 kV step-up
+# Two independent power producer lateral taps on the two Ponder Creek lines (PND is electromechanical):
+#   L09: Coyote Draw Solar LLC, 60 MW AC, tapped 23.4 km from Shell Ridge, energized 2023-02-20
+#   L08: Brushy Creek BESS LLC, 45 MW AC, tapped 13.8 km from Caney Bend, energized 2023-05-15
+IPP_TAPS = {
+    'L09': dict(key='ipp', name=C.IPP, short=C.IPP_SHORT, tap_km=23.4, tap_len=1.6, conductor='477 ACSR Hawk',
+                mva=66.0, z_pct=9.2, xr=28.0, winding='YNd1', ngr_ohm=10.0, inv_i_pu=1.1,
+                energized=C.SOLAR_ENERGIZED, kind='solar'),
+    'L08': dict(key='ipp2', name=C.IPP2, short=C.IPP2_SHORT, tap_km=13.8, tap_len=1.4, conductor='477 ACSR Hawk',
+                mva=50.0, z_pct=8.8, xr=26.0, winding='YNd1', ngr_ohm=6.0, inv_i_pu=1.1,
+                energized=C.BESS_ENERGIZED, kind='bess'),
+}
+# backward-compat aliases for Coyote Draw Solar
 TAP_LINE = 'L09'
-TAP_KM = 23.4
-TAP_LEN = 1.6
-GSU = dict(mva=66.0, z_pct=9.2, xr=28.0, winding='YNd1', ngr_ohm=10.0)   # grounded-wye on the 69 kV side through a
-                                                                         # 10 ohm neutral reactor: a zero-sequence source
-INV_I_PU = 1.1                                              # the inverters' fault current, per unit of rated
+TAP_KM = IPP_TAPS['L09']['tap_km']
+TAP_LEN = IPP_TAPS['L09']['tap_len']
+GSU = IPP_TAPS['L09']
+INV_I_PU = 1.1
 
 # the Gulf shoreline (a polyline, km) and the bay's open water (a circle)
 SHORE = [(52.0, 0.0), (75.0, 22.0), (92.0, 45.0), (104.0, 70.0)]
 BAY_CENTRE, BAY_R = (66.0, 36.5), 4.2
+
+# Corridor surface / dust exposure class along each Gulf line (used for realistic NSDD clay/caliche dust physics)
+# Assigned by km ranges along each Gulf line so adjacent structures share continuous terrain corridors.
+SURFACE_BANDS = {
+    'L01': [(0.0, 4.2, 'caliche / cropland'), (4.2, 11.2, 'pasture'), (11.2, 17.5, 'caliche / cropland'), (17.5, 99.0, 'pasture')],
+    'L02': [(0.0, 3.6, 'pasture'), (3.6, 7.2, 'coastal marsh'), (7.2, 10.8, 'pasture'), (10.8, 14.4, 'caliche / cropland'),
+            (14.4, 18.0, 'coastal marsh'), (18.0, 21.6, 'pasture'), (21.6, 99.0, 'caliche / cropland')],
+    'L03': [(0.0, 3.6, 'pasture'), (3.6, 7.2, 'caliche / cropland'), (7.2, 10.8, 'pasture'), (10.8, 18.0, 'caliche / cropland'),
+            (18.0, 21.6, 'pasture'), (21.6, 99.0, 'coastal marsh')],
+    'L04': [(0.0, 3.6, 'pasture'), (3.6, 99.0, 'coastal marsh')],
+}
+DUST_MULT = {'coastal marsh': 0.22, 'pasture': 1.00, 'caliche / cropland': 3.40}
 
 # load taps: name, line, km from terminal A, members (2026), feeders, backup ('auto' alternate source with automatic
 # throw-over, 'manual' alternate closed by the control room, 'none' radial), the alternate line, a motor-operated
@@ -121,10 +153,10 @@ TAPS = [
     ('Ponder Lake', 'L08', 19.8, 2230, 3, 'none', None, False),
     ('Oyster Ridge', 'L09', 8.7, 3370, 3, 'auto', 'L03', True),
     ('Coyote Draw', 'L09', 27.9, 1180, 2, 'none', None, False),
-    ('Mesquite North', 'L10', 7.6, 4410, 4, 'manual', 'L15', True),
-    ('Inland Crossroads', 'L10', 16.9, 3060, 3, 'none', None, True),
-    ('Granger Ranch', 'L11', 12.3, 2580, 3, 'none', None, False),
-    ('Bluestem', 'L11', 21.8, 1890, 2, 'manual', 'L13', False),
+    ('Mesquite North', 'L10', 9.2, 4410, 4, 'manual', 'L15', True),
+    ('Inland Crossroads', 'L10', 21.4, 3060, 3, 'none', None, True),
+    ('Granger Ranch', 'L11', 11.6, 2580, 3, 'none', None, False),
+    ('Bluestem', 'L11', 23.2, 1890, 2, 'manual', 'L13', False),
     ('Caney West', 'L12', 9.1, 3320, 3, 'auto', 'L14', True),
     ('Sandhill', 'L12', 18.4, 2470, 3, 'none', None, False),
     ('Granger Wells', 'L13', 11.6, 1720, 2, 'none', None, False),
@@ -152,31 +184,109 @@ def _zpol(mag, ang):
     return cmath.rect(mag, math.radians(ang))
 
 
-def source(line, end, when=None):
-    """the line-out source behind a terminal on a date: (Z1, Z0) complex ohms"""
+def inl_bus_z0(when=None):
+    m0 = INL_Z0['old'] if (when is not None and when < C.INLAND_NEW_AUTO) else INL_Z0['new']
+    return _zpol(m0, 80.5)
+
+
+def source(line, end, when=None, net=None):
+    """the line-out source behind a terminal on a date: (Z1, Z0) complex ohms.
+    For the Inland terminal of double-circuit Lines 10 and 11, returns the exact single-line-out Thevenin
+    equivalent Z0 = Z0_INL_bus || (Z0_parallel_line + Z0_far_end) when net is supplied (or raw bus Z0 otherwise)."""
     m1, a1, m0, a0 = SOURCES[(line, end)]
     if m0 is None:   # Inland
-        m0 = INL_Z0['old'] if (when is not None and when < C.INLAND_NEW_AUTO) else INL_Z0['new']
+        z0_bus = inl_bus_z0(when)
+        if net is not None and line in DC_LINES:
+            other = 'L11' if line == 'L10' else 'L10'
+            far = net['lines'][other]['b']
+            _, z0_far = source(other, far, when)
+            z0_par = net['lines'][other]['z0'] * net['lines'][other]['length'] + z0_far
+            z0 = 1.0 / (1.0 / z0_bus + 1.0 / z0_par)
+            return _zpol(m1, a1), z0
+        return _zpol(m1, a1), z0_bus
     return _zpol(m1, a1), _zpol(m0, a0)
 
 
-def gsu_z(seq=0):
-    """the solar farm step-up's impedance seen from 69 kV (ohm); the zero sequence adds three times the neutral reactor"""
-    zb = 69.0 ** 2 / GSU['mva']
-    z = cmath.rect(GSU['z_pct'] / 100.0 * zb, math.atan(GSU['xr']))
-    return z + (3j * GSU['ngr_ohm'] if seq == 0 else 0)
+def gsu_z(seq=0, line='L09'):
+    """an IPP step-up's impedance seen from 69 kV (ohm); zero sequence adds three times the neutral reactor"""
+    info = IPP_TAPS[line]
+    zb = 69.0 ** 2 / info['mva']
+    z = cmath.rect(info['z_pct'] / 100.0 * zb, math.atan(info['xr']))
+    return z + (3j * info['ngr_ohm'] if seq == 0 else 0)
+
+
+def _surface_at(lid, km, x, y):
+    if lid in SURFACE_BANDS:
+        for k0, k1, surf in SURFACE_BANDS[lid]:
+            if k0 <= km < k1:
+                return surf
+    sd = _shore_dist(x, y)
+    if sd < 2.0:
+        return 'coastal marsh'
+    return 'caliche / cropland' if x < 45.0 else 'pasture'
 
 
 def build(rng=None):
     rng = rng or np.random.default_rng(C.SEED)
-    net = dict(stations=ST, lines={}, taps=[], structures=[], spans={})
+    net = dict(stations=ST, lines={}, taps=[], structures=[], spans={},
+               dc=dict(lines=DC_LINES, km=DC_KM, z0m=DC_Z0M, junction=DC_JUNCTION),
+               ipp_taps=IPP_TAPS)
+
+    # First generate the shared 14.5 km double-circuit corridor spans out of INL so L10 and L11 share exact structures
+    dc_spans = rng.uniform(0.165, 0.230, int(DC_KM / 0.195 * 1.4))
+    dc_cum = np.concatenate([[0.0], np.cumsum(dc_spans)])
+    dc_cum = dc_cum[dc_cum < DC_KM - 0.10]
+    dc_cum = np.append(dc_cum, DC_KM)
+    x0_inl, y0_inl = ST['INL']['xy']
+    xj, yj = DC_JUNCTION
+    dc_straight = math.hypot(xj - x0_inl, yj - y0_inl)
+    dc_nx, dc_ny = -(yj - y0_inl) / dc_straight, (xj - x0_inl) / dc_straight
+    dc_xy = []
+    for km in dc_cum:
+        f = km / DC_KM
+        bow = 0.7 * math.sin(math.pi * f)
+        x = x0_inl + (xj - x0_inl) * f + dc_nx * bow + float(rng.normal(0, 0.015))
+        y = y0_inl + (yj - y0_inl) * f + dc_ny * bow + float(rng.normal(0, 0.015))
+        dc_xy.append((round(float(km), 3), x, y))
+
     for lid, a, b, cond, rf, year, ins, kink in LINES:
         xa, ya = ST[a]['xy']
         xb, yb = ST[b]['xy']
+        cd = CONDUCTORS[cond]
+        if lid in DC_LINES:
+            tail_straight = math.hypot(xb - xj, yb - yj)
+            tail_len = round(tail_straight * 1.08 + float(rng.normal(0, 0.12)), 2)
+            length = round(DC_KM + tail_len, 2)
+            tspans = rng.uniform(0.155, 0.240, int(tail_len / 0.198 * 1.4))
+            tcum = np.cumsum(tspans)
+            tcum = tcum[tcum < tail_len - 0.10]
+            tcum = np.append(tcum, tail_len)
+            tnx, tny = -(yb - yj) / tail_straight, (xb - xj) / tail_straight
+            line = dict(id=lid, a=a, b=b, name=LINE_NAMES[lid], conductor=cond, length=length, year=year,
+                        z1=cd['z1'], z0=cd['z0'], structures=[], dc_km=DC_KM, dc_structures=len(dc_xy))
+            for i, (km, x, y) in enumerate(dc_xy):
+                sd = _shore_dist(x, y)
+                st = dict(line=lid, no=i + 1, km=km, x=x, y=y, shore_km=sd, bay_km=_bay_dist(x, y),
+                          insulator=ins, ins_year=year, kind='double-circuit steel pole',
+                          surface=_surface_at(lid, km, x, y), dc_shared=True)
+                line['structures'].append(st)
+            base_n = len(dc_xy)
+            for j, tkm in enumerate(tcum):
+                f = tkm / tail_len
+                bow = kink * 0.6 * math.sin(math.pi * f)
+                x = xj + (xb - xj) * f + tnx * bow + float(rng.normal(0, 0.02))
+                y = yj + (yb - yj) * f + tny * bow + float(rng.normal(0, 0.02))
+                km = round(float(DC_KM + tkm), 3)
+                sd = _shore_dist(x, y)
+                st = dict(line=lid, no=base_n + j + 1, km=km, x=x, y=y, shore_km=sd, bay_km=_bay_dist(x, y),
+                          insulator=ins, ins_year=year, kind='wood H-frame',
+                          surface=_surface_at(lid, km, x, y), dc_shared=False)
+                line['structures'].append(st)
+            net['lines'][lid] = line
+            continue
+
         straight = math.hypot(xb - xa, yb - ya)
         length = round(straight * rf + rng.normal(0, 0.15), 2)
-        cd = CONDUCTORS[cond]
-        # structures: spans of 150 to 245 m, the line bowing sideways by `kink` km at its middle
         n_target = length / 0.198
         spans = rng.uniform(0.150, 0.245, int(n_target * 1.4))
         cum = np.concatenate([[0.0], np.cumsum(spans)])
@@ -184,7 +294,7 @@ def build(rng=None):
         cum = np.append(cum, length)
         nx, ny = -(yb - ya) / straight, (xb - xa) / straight
         line = dict(id=lid, a=a, b=b, name=LINE_NAMES[lid], conductor=cond, length=length, year=year,
-                    z1=cd['z1'], z0=cd['z0'], structures=[])
+                    z1=cd['z1'], z0=cd['z0'], structures=[], dc_km=0.0, dc_structures=0)
         for i, km in enumerate(cum):
             f = km / length
             bow = kink * math.sin(math.pi * f)
@@ -192,13 +302,15 @@ def build(rng=None):
             y = ya + (yb - ya) * f + ny * bow + rng.normal(0, 0.02)
             sd = _shore_dist(x, y)
             st = dict(line=lid, no=i + 1, km=round(float(km), 3), x=x, y=y, shore_km=sd, bay_km=_bay_dist(x, y),
-                      insulator=ins, ins_year=year, kind=('steel pole' if lid in ('L06', 'L16') else
-                                                           'wood H-frame' if cond != '336.4 ACSR Linnet' else
-                                                           'wood single pole'))
+                      insulator=ins, ins_year=year,
+                      kind=('steel pole' if lid in ('L06', 'L16') else
+                            'wood H-frame' if cond != '336.4 ACSR Linnet' else 'wood single pole'),
+                      surface=_surface_at(lid, float(km), x, y), dc_shared=False)
             line['structures'].append(st)
         net['lines'][lid] = line
+
     # polymer upgrades (insulators replaced after older flashover programmes): parts of L04 and L05, all of L16
-    for lid, k0, k1, yr in (('L04', 6.0, 11.9, 2015), ('L05', 0.0, 6.5, 2015), ('L01', 17.5, 21.6, 2019)):
+    for lid, k0, k1, yr in (('L04', 6.0, 16.0, 2015), ('L05', 0.0, 6.5, 2015), ('L01', 17.5, 26.0, 2019)):
         for st in net['lines'][lid]['structures']:
             if k0 <= st['km'] <= k1:
                 st['insulator'], st['ins_year'] = 'polymer', yr
