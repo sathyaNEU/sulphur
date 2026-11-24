@@ -134,7 +134,7 @@
   "note": "version 30 of platform task 955a716f-052f-42cd-bd6f-3fb23ac0fb7a; determinism and solution passed, stumped failed; runs/review_2026-11-22.md"
  },
  "prompt_rewritten": false,
- "resume": "RETURNED 2026-11-22 on difficulty (runs/review_2026-11-22.md, with its 2026-11-23 correction: each response lost two steps and the errors cancelled on Meta iOS and Google Android). 2026-11-23: the author re-ran the platform pair on the pack as submitted (target.zip, prompt.txt and submission.md unchanged on main since b2e885b) to read the platform's task checker feedback again beside the review; on its paste, /triage-runs task1 saves the pair and the feedback under runs/, and the call is taken with the author. Architecture 8 (the same world re-dialed, S1 to S3 and the golden's estimators kept, the asks trimmed to shadow the call) is on branch task1-arch8-redesign (worktree .claude/worktrees/task1-arch8), never merged to main without the author's word",
+ "resume": "RETURNED 2026-11-22 on difficulty (runs/review_2026-11-22.md, with its 2026-11-23 correction: each response lost two steps and the errors cancelled on Meta iOS and Google Android). 2026-11-23: the author re-ran the platform pair on the pack as submitted (target.zip, prompt.txt and submission.md unchanged on main since b2e885b) to read the platform's task checker feedback again beside the review; on its paste, /triage-runs task1 saves the pair and the feedback under runs/, and the call is taken with the author. Architecture 8 (the same world re-dialed, S1 to S3 and the golden's estimators kept, the asks trimmed to shadow the call) is on branch task1-arch8-redesign (worktree .claude/worktrees/task1-arch8), never merged to main without the author's word; 2026-11-23 later: architecture 8 PAUSED mid stage 3 on its branch for the author's account change, its full state, rulings, disclosures and pending steps in redesign_branch here and in the branch's own task1/pipeline.json resume",
  "redraws": [
   {
    "date": "2026-11-16",
@@ -165,7 +165,44 @@
   "branch": "task1-arch8-redesign",
   "worktree": ".claude/worktrees/task1-arch8",
   "why": "the author's instruction of 2026-11-23: keep the redesign ready on a separate branch for another review while main stays on the submitted architecture 7",
-  "state": "architecture 8's core at CORE PASS level 5 on the branch (golden hold, hold, scale, hold, scale, hold, hold; S1 lost flips five bands; both recorded routes lose two steps); the note, the card, the prompt and the build still to come there",
-  "from": "a05dbd6 (main), branch head 3e23461"
+  "state": "PAUSED mid stage 3 on 2026-11-23 (the author's account change): the design is final at 839a30c (CORE PASS level 5, precut PASS 118 checks, 0 FAIL, 3 WARN); the stage 3 build was in flight on top of it and was told to commit, push and set the branch's task1/pipeline.json to PAUSED with its exact resume step. Read that resume first, then this block's pending list",
+  "from": "a05dbd6 (main); design head 839a30c; the build's PAUSED commit sits on top (git log origin/task1-arch8-redesign)",
+  "restore_worktree": "if .claude/worktrees/task1-arch8 is missing (it is gitignored and local): git fetch origin && git worktree add .claude/worktrees/task1-arch8 task1-arch8-redesign; work only there; never merge main into the branch (task1/ conflicts, main holds the submitted architecture 7); merge the branch to main only on the author's word, taking the branch's side for task1/",
+  "design": [
+   "Call (839a30c): scale Snapchat iOS 1.457 (1.254 to 1.542) and Pinterest iOS 1.440 (1.241 to 1.577); hold Meta iOS 1.034 (0.949 to 1.169), TikTok iOS 1.079 (0.943 to 1.168), Google iOS 1.075 (0.977 to 1.156), Google Android 1.070 (0.967 to 1.123), AppLovin Android 1.050 (0.960 to 1.124); it holds on all 2,923 crossed ways and the 190 pack crossings",
+   "Components, one per stump: S1 AppLovin Android monthly-plan payments per 100 installs 42.3 (41.7 to 42.9); S2 Meta iOS's 33.0 (29.3 to 38.6); S3 the installs the 2027 plan buys 232,900 (220,400 to 237,900); the plan's 12-month net revenue EUR 1,283,000 (1,207,000 to 1,333,000)",
+   "Other payments per 100: TikTok iOS 41.0 (37.6 to 45.0), Snapchat iOS 47.5 (42.2 to 51.8), Google iOS 60.5 (57.7 to 67.7), Pinterest iOS 53.4 (46.4 to 61.1), Google Android 71.3 (70.4 to 72.2). The build re-measures every figure on the cut pack; the core is the source, never these lines",
+   "Each stump's worth over the family's spread: S1 opens AppLovin Android at 4.8 times, S2 Meta iOS at 4.1, S3 Google iOS at 3.6; each component falls with its own stump alone; S1 lost alone flips five bands",
+   "World dials moved in the redesign: CHURN -1.20 and CHURN_SILENT -4.00 (engaged subscribers cancel about 23 per cent a month, a silent store subscription ends only on a failed renewal, about 1.8 per cent); AppLovin Android phi 1.30; TikTok iOS phi 1.80; DORMANT0 without its source term; the delivery share 0.80; budget norms Meta iOS 1833, TikTok iOS 1464, Snapchat iOS 1067, Google iOS 2001, Pinterest iOS 1380, Google Android 4833, AppLovin Android 2900",
+   "prompt.txt on the branch is the 785-character draft (voice-check PASS); the author rewrites it for voice, then voice-check.py --rewrite and leak.py run on the rewrite"
+  ],
+  "prices": [
+   "Base / band by band / by figure / both, on corelib's four rubric models (on architecture 7 these models said 21 to 47 and the platform gave 64: a model, not a promise)",
+   "generous (Response 1 by mechanism) 35.5 / 40.7 / 38.9 / 44.0; hedge (Response 2 as recorded, and with markets pooled) 15.7 / 26.0 / 35.5 / 45.8",
+   "S1 lost 29.0 / 34.1 / 38.9 / 44.0; S2 lost 35.6 / 48.4 / 45.5 / 58.4 (with the pack's conventions 42.2 / 55.1 / 48.8 / 61.7); S3 lost 22.3 / 27.5 / 45.5 / 50.7; reflex 15.6 / 25.9 / 28.9 / 39.2",
+   "app-seen continuation 29.0 / 41.8 / 45.5 / 58.4 (a wrong call now); calibrated and keep-3 29.0 / 39.2 / 42.2 / 52.5; named value 35.5 / 43.3 / 42.2 / 49.9; rigorous 28.9 / 36.6 / 35.5 / 43.3; whole-record true-up 35.5 / 43.3 / 38.9 / 46.6"
+  ],
+  "rulings": [
+   "The payments ask stays; the whole-record true-up of the payments is a priced rival",
+   "SF32: the pooled-markets fit of the second step is refused by each market's own ratios (no threshold), with the live and dark split and the Wald distance as support, and stays a wrong call (the rung generous:pooled-markets)",
+   "Every graded figure's band holds the crossed family, or each crossing that leaves it is ruled out by a shipped-file figure (the two-grains rule rules out nine)",
+   "The truth anchor (core.anchor) covers every graded figure, payments per 100 included; no tolerance is edited to pass it",
+   "R5 is scoped to the five networks; organic iOS is reported (0.941) and not graded",
+   "AppLovin's payment counting: 365.25 or 366 days land inside; leaving out the first charge or the web checkout's charges, or counting an annual charge as one or twelve payments, are ruled out by the prompt's sentence and policy 2.3 and 2.5, quoted verbatim in SF6",
+   "The app-seen continuation (S1's default) was made a wrong call by the churn gap; Response 2's 'store' cells read as the storefront (the market)",
+   "C1 (S1 made, one other rung lost: 55 to 80 base) and C2 (S1 lost with a second loss that cancels) are disclosures, not targets; no fourth design round"
+  ],
+  "disclosures": [
+   "A run that makes S1 and takes a lower rung elsewhere scores 55 to 80 base (fit on spend 75.4; full delivery rescaled 80.1 with the golden call; pooled markets 62.1; Android analogue and one ratio 55.5); no run on record made S1",
+   "Response 1's route (generous) cancels S1's and S2's errors on Snapchat iOS, Google iOS and Pinterest iOS (35.5 base), and its fixed-spend carry makes S3, so against it only S1 and S2 are lost; S3 is lost by the full-delivery reading (Response 2)",
+   "Thin spots the build's gate (k) watches: Meta iOS's truth anchor has 0.001 of room; Meta iOS's pack-bounded range tops at 1.188 against 1.20; the reflex route's AppLovin Android 0.863 rests on phi 1.30; the app-seen cuts sit about 0.04 under 0.90; Google iOS's ratio moved by a fifth crosses (1.209)"
+  ],
+  "pending": [
+   "1. Stage 3 build (Opus, high) in the worktree: re-run python3 task1/generator/core.py and precut.py task1 first; follow the branch's pipeline.json resume and the note's Build brief items (a) to (k); results.spec_of mirrors core.build_spec (crossed family); crossed_family on the fork path (about 19 minutes serially); AppLovin's counting conventions re-banded on the cut; checks.py SF6 and SF40 extended (crossed family, two grains, 365.25 and 366 days, first charge out, web out), core.anchor, the three pins (continuation_pin, pooled_pins, pooled_sessions_pin), R5 per the core; gate (k) before effort.py (re-measure PACK_SHIFTS, pack_table and the anchor; stop and send to the architect if Meta iOS's range reaches 1.20, a crossing moves a call, a one-lost route passes 45 base, the Meta anchor breaks or a core assertion fails); effort.json written new and effort.py exit 0; the golden ZIP exactly the workbook (bands on its first sheet) and the csv; submission.md from writeup.py with no stump block and no reflex count as a graded figure; figures_check.py, verify.py, make.py in full (two byte-identical builds, both zips), audit_containers.py, gates.py task1; commit BUILD (task1) on the branch and push. Never widen a band, edit a tolerance, move a dial or file a method to pass a gate: core repairs go to the stump-architect (on Opus by the author's ruling while Fable 5.2 is unavailable)",
+   "2. Stage 4 from the main thread: the leak reader (general-purpose, Sonnet, medium) and the determinism-judge (determinism mode) spawned together in the background on the branch's cut; every finding fixed in the generator in one pass; re-judged once only if a fix moved a graded figure, the prompt or the pack",
+   "3. Stage 5: every gate re-run on the final cut, both zips from the final rebuild, audit_containers.py last, commit READY (task1): scale Snapchat iOS and Pinterest iOS, hold the other five, with target.zip, the golden ZIP and golden/ force-added, on the branch, pushed",
+   "4. Hand the author the prompt draft for the voice rewrite, the pack, the golden ZIP and the answer blocks with the disclosures above; ask whether to merge the branch to main",
+   "5. Architecture 7 on main: the author's re-run of the submitted pack; on its paste, /triage-runs task1 on main, compared with runs/review_2026-11-22.md"
+  ]
  }
 }
