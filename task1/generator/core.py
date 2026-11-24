@@ -46,9 +46,14 @@ DORMANT0 = dict(a=-4.00, e=0.45, u=0.60)                       # the chance of n
 #                                                                the same whatever ad found the person: where the ad found
 #                                                                them shows only month by month, once they are paying
 DORMANT = dict(a=-2.10, e=0.45, u=0.60, f=1.00)                # the monthly chance of never opening again, later
-CHURN = dict(a=-2.00, e=0.45, u=0.60)                          # the monthly chance of cancelling while still opening
-CHURN_SILENT = dict(a=-3.45, e=-0.10)                          # and once the app is no longer opened: a store
-#                                                                subscription nobody looks at is rarely cancelled
+CHURN = dict(a=-1.20, e=0.45, u=0.60)                          # the monthly chance of cancelling while still opening:
+#                                                                a subscriber who opens the app decides each month whether
+#                                                                it is still worth paying for, so cancels as interest goes
+CHURN_SILENT = dict(a=-4.00, e=-0.10)                          # and once the app is no longer opened: a store
+#                                                                subscription nobody looks at is not decided on, and ends
+#                                                                only when a renewal cannot be charged (a card the store
+#                                                                cannot renew and its retries do not recover), about one
+#                                                                in fifty a month
 CHURN_SILENT_WEB = dict(a=-0.90, e=-0.10)                      # the web checkout emails a receipt for every charge
 # an ad network finds its buyers with the signal it gets back from the people it reached. A person who declines the
 # tracking prompt sends none, so a network's installs that declined are the ones it bought blind: the same first two
@@ -67,14 +72,14 @@ KAPPA, LAMBDA, SIG_M, RHO_M, DBAR = 0.55, 1.00, 0.26, 0.25, 0.80
 # spend over the norm; the team's budget moves (first week, weeks, factor)
 SCALE = 2.0
 CH = {
-    "Meta iOS":         dict(ios=1, complete=0, mu=0.05,  nu=0.10, phi=-5.00, n=330, b0=2250, el=0.78, xs=0.35, plan=1.10, stretch=1.30),
-    "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.80,  n=300, b0=1694, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
-    "Snapchat iOS":     dict(ios=1, complete=0, mu=-0.15, nu=0.08, phi=0.80,  n=250, b0=1268, el=0.76, xs=0.35, plan=1.30, stretch=1.15),
-    "Google iOS":       dict(ios=1, complete=0, mu=0.10,  nu=0.10, phi=-1.20, n=260, b0=2436, el=0.70, xs=0.30, plan=1.25, stretch=1.35),
-    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.70,  n=200, b0=1617, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
+    "Meta iOS":         dict(ios=1, complete=0, mu=0.05,  nu=0.10, phi=-5.00, n=330, b0=1833, el=0.78, xs=0.35, plan=1.10, stretch=1.30),
+    "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.80,  n=300, b0=1464, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
+    "Snapchat iOS":     dict(ios=1, complete=0, mu=-0.15, nu=0.08, phi=0.80,  n=250, b0=1067, el=0.76, xs=0.35, plan=1.30, stretch=1.15),
+    "Google iOS":       dict(ios=1, complete=0, mu=0.10,  nu=0.10, phi=-1.20, n=260, b0=2001, el=0.70, xs=0.30, plan=1.25, stretch=1.35),
+    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.70,  n=200, b0=1380, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
     "Apple Search Ads": dict(ios=1, complete=1, mu=0.60,  nu=0.15, phi=-0.80, n=140, b0=1390, el=0.62, xs=0.30, plan=1.40, stretch=1.00),
-    "Google Android":   dict(ios=0, complete=1, mu=0.00,  nu=0.10, phi=0.55,  n=420, b0=5538, el=0.66, xs=0.30, plan=0.60, stretch=1.25),
-    "AppLovin Android": dict(ios=0, complete=1, mu=-0.55, nu=0.05, phi=1.10,  n=500, b0=3328, el=0.82, xs=0.30, plan=0.72, stretch=1.45),
+    "Google Android":   dict(ios=0, complete=1, mu=0.00,  nu=0.10, phi=0.55,  n=420, b0=4833, el=0.66, xs=0.30, plan=0.60, stretch=1.25),
+    "AppLovin Android": dict(ios=0, complete=1, mu=-0.55, nu=0.05, phi=1.30,  n=500, b0=2900, el=0.82, xs=0.30, plan=0.72, stretch=1.45),
 }
 ORGANIC = {"organic iOS": dict(ios=1, mu=0.25, nu=0.12, phi=1.00, n=380),
            "organic Android": dict(ios=0, mu=0.10, nu=0.12, phi=-0.80, n=700)}
@@ -149,6 +154,9 @@ def week_month(w):
 
 WMONTH = np.array([week_month(w) for w in range(WEEKS)])
 PLAN_MONTH = np.array([int(month_of_day(791 + 7 * t + 3)) for t in range(52)])     # 4 January 2027 is day 791
+# a week's month by its Monday, the build's sixth file convention (analysis.MON), for the record's weeks and the plan's
+MON_MONTHS = (np.array([int(month_of_day(7 * w)) for w in range(WEEKS)]),
+              np.array([int(month_of_day(791 + 7 * t)) for t in range(52)]))
 
 
 def plan_spend(c):
@@ -1523,6 +1531,8 @@ def route(O, s1="golden", s2="golden", s3="golden", **kw):
     key = (id(O), s1, s2, s3, tuple(sorted(kw.items())))
     if key in _CACHE:
         return _CACHE[key]
+    if kw.get("month") == "mon" and not np.array_equal(WMONTH, MON_MONTHS[0]):
+        return _on_mondays(O, s1, s2, s3, kw)
     v = values(O, s1, **kw)
     vm = values(O, s1, unit="months", **kw)
     pay = values(O, s1, which="payers", **kw)
@@ -1647,6 +1657,54 @@ ORGANIC_SHARED = ("gpo", "po", "go")
 NO_LIGHTER_CELL = ("tier8", "sess8", "sess4", "tp4")
 S1_KEYS = {"split", "trim", "form", "cadence", "cshare", "bins", "pt", "refunds", "clock"}
 S3_KEYS = {"months", "weeks_i", "weeks_v", "quality", "qpool", "dbar_weeks", "dbar_from", "s3", "month", "carry"}
+
+
+def _on_mondays(O, s1, s2, s3, kw):
+    """a route with each week given the month of its Monday: the record's month pattern and the plan's months read
+    that way, the plan's weekly spend the media plan's own whatever month a week is given"""
+    g = globals()
+    keep = g["WMONTH"], g["PLAN_MONTH"], g["plan_spend"]
+    plans = {c: keep[2](c) for c in ORDER}
+    g["WMONTH"], g["PLAN_MONTH"], g["plan_spend"] = MON_MONTHS[0], MON_MONTHS[1], (lambda c: plans[c])
+    try:
+        return route(O, s1, s2, s3, **kw)
+    finally:
+        g["WMONTH"], g["PLAN_MONTH"], g["plan_spend"] = keep
+
+
+# the conventions only the cut pack's files carry (the build's PACK_VARIANTS, the note's SF27 to SF31): the week's
+# month taken from its Monday is worked on the arrays here and crossed with every way of the family (PACK_WAYS); the
+# other five need the files' own fields (each charge's time of day, the refunds, the export's install time), so each
+# is carried by the move it made on every graded figure on the last cut pack (6739aed's, read with analysis.route
+# against that pack's golden), put on the edges of the ranges (PACK_SHIFTS): a bound on what the build's crossings
+# with them add, never a range the blocks state
+PACK_WAYS = [("a week's month taken from its Monday", dict(month="mon"))]
+PACK_SHIFTS = {
+    "the stores and the records compared by calendar month": {
+        "return TikTok iOS": 0.0001, "payments per 100 TikTok iOS": 0.0002, "return Snapchat iOS": 0.0001,
+        "payments per 100 Snapchat iOS": 0.0002, "payments per 100 Google iOS": 0.0001, "return Pinterest iOS": 0.0001,
+        "payments per 100 Pinterest iOS": 0.0001, "return Google Android": 0.0001,
+        "payments per 100 Google Android": 0.0001, "return AppLovin Android": 0.0001,
+        "payments per 100 AppLovin Android": 0.0002, "revenue the plan's installs bring": 0.0001},
+    "the App Store's report days taken as UTC days": {
+        "return TikTok iOS": 0.0001, "payments per 100 TikTok iOS": 0.0002, "return Snapchat iOS": 0.0001,
+        "payments per 100 Snapchat iOS": 0.0002, "payments per 100 Google iOS": 0.0001, "return Pinterest iOS": 0.0001,
+        "payments per 100 Pinterest iOS": 0.0001},
+    "the stores' refunds netted on the day of the refund": {},
+    "the stores' refunds netted from their renewals": {
+        "return Meta iOS": 0.0154, "payments per 100 Meta iOS": 0.0257, "return TikTok iOS": 0.0047,
+        "payments per 100 TikTok iOS": 0.0067, "return Snapchat iOS": 0.0043, "payments per 100 Snapchat iOS": 0.0062,
+        "return Google iOS": 0.0060, "payments per 100 Google iOS": 0.0088, "return Pinterest iOS": 0.0064,
+        "payments per 100 Pinterest iOS": 0.0103, "return Google Android": 0.0035,
+        "payments per 100 Google Android": 0.0050, "return AppLovin Android": 0.0047,
+        "payments per 100 AppLovin Android": 0.0061, "revenue the plan's installs bring": 0.0063},
+    "the install week and the 365 days counted from the attribution export's install time": {},
+}
+
+
+def pack_ways():
+    """[(name, conventions)]: the week's month from its Monday alone and every crossing of the family that holds it"""
+    return [(nm, kw) for nm, kw in crossed_ways(VARIANTS + PACK_WAYS) if kw.get("month") == "mon"] + list(PACK_WAYS)
 
 
 def step_of(kw):
@@ -2035,6 +2093,18 @@ def band_of(fid, g, fam, beside=()):
     return [int(round(a)), int(round(b))] if nd <= 0 else [round(a, nd), round(b, nd)]
 
 
+def pack_band(fid, g, fam, beside=()):
+    """a figure's range with the cut pack's conventions in: band_of over the family and the Monday months' crossings,
+    each edge moved out by the largest move any of the other five conventions made on the figure on the last cut"""
+    lo, hi = band_of(fid, g, fam, beside)
+    sh = [d.get(stated_id(fid), 0.0) for d in PACK_SHIFTS.values()]
+    lo, hi = lo * (1.0 + min(0.0, min(sh))), hi * (1.0 + max(0.0, max(sh)))
+    nd = unit(fid)
+    f = 10.0 ** nd
+    a, b = math.floor(lo * f + 1e-9) / f, math.ceil(hi * f - 1e-9) / f
+    return [int(round(a)), int(round(b))] if nd <= 0 else [round(a, nd), round(b, nd)]
+
+
 # the routes the platform's runs took on architecture 7 (runs/rerun1.md, runs/rerun2.md), each built on the arrays as
 # a strong run would. Response 1 (generous) took the billing records as they stand, valued the declined installs by
 # its mixture (a payers' gap per source fitted on the unattributed accounts' week by sessions cohorts, rounded to a
@@ -2068,11 +2138,18 @@ RUNS = {
     "generous:pooled-markets": dict(s1="raw", markets="pooled", **R1_CARRY),
     "hedge": dict(s1="raw", carry="plain", dbar_set=1.0),
     "hedge:full-delivery-rescaled": dict(s1="raw", dbar_set=1.0),
+    # Response 2's deconvolution "over weekly x store x conversion-value cells", read with the store as the platform
+    # (the three markets summed) rather than the storefront
+    "hedge:pooled-markets": dict(s1="raw", carry="plain", dbar_set=1.0, markets="pooled"),
     # the third step's older shortcut, a rung below the full-delivery reading: installs fitted on the billed spend
     "hedge:fit-on-spend": dict(s1="raw", s3="spend"),
     # calibrated: the silent subscriptions' continuation read on the web checkout's subscribers, whose every charge
     # the backend holds, carried to the store subscriptions
     "calibrated": dict(webq=True),
+    # the same carry with the continuation the app sees: the excess placed on the subscriptions last seen set to renew
+    # at the stores' trial-end share, and each carried at one less the cancellations per monthly charge on file of the
+    # subscribers still opening it, the first step's default (a subscription nobody opens lapses as one still opened)
+    "calibrated:app-seen": dict(s1="awake"),
     # cutoff: a subscription still set to renew counted as paying for a set number of months after its last open,
     # and each network's installs valued at its named installs' value (the subset whose channel is known)
     "cutoff": dict(s1="keep:3", s2="consenters"),
@@ -2101,9 +2178,9 @@ RUNGS.update({
     "S3: Response 1's carry": dict(R1_CARRY)})
 # the first step's own rungs, the second and third steps the golden's: each continuation and each scaling a run could
 # put on the subscriptions nobody opens. The continuation the app saw (the cancellations per charge on file of the
-# subscribers still opening it, 0.912 and 0.875 against the 0.971 fitted to the stores' excess) places the excess on
-# the right subscriptions at the stores' trial-end share and files the golden's call on this draw: a report, beside
-# the run routes, of where the first step's continuation is decisive for its own figures and not for the call
+# subscribers still opening it, against the continuation fitted to the stores' excess) places the excess on the right
+# subscriptions at the stores' trial-end share and carries it at the engaged subscribers' lapse; it is a run route
+# (calibrated:app-seen) and files a wrong call
 S1_RUNGS = {
     "S1: the records as they stand": dict(s1="raw"),
     "S1: trued up to the stores by period": dict(s1="prop_month"),
@@ -2160,6 +2237,33 @@ def rung_table(spec):
     for nm, fv in R.get("own", {}).items():
         call = L._calls(spec, {m: fv["return " + m] for m in sorted(spec["members"])})
         print("  %-68s %s  %s" % (nm, fmt(own[nm]), "files the golden's call" if call == gcall else "call wrong"))
+
+
+def pack_table(spec):
+    """every lattice route and run route priced on the stated ranges and on the ranges with the cut pack's conventions
+    in, and the call on every crossing of the week's month from its Monday"""
+    import copy
+    R, P = spec["rungs"], spec["pack"]
+    sp = copy.deepcopy(spec)
+    for f in sp["figures"]:
+        f["band"] = list(P["bands"][stated_id(f["id"])])
+    named = {"lost " + k: fv for k, fv in R["lattice"].items()}
+    named.update({"run " + k: fv for k, fv in R["runs"].items()})
+    a, b = price_routes(spec, named), price_routes(sp, named)
+    fmt = lambda r: " / ".join("%.1f" % x for x in r)
+    gcall = tuple(band(spec["members"][c]["golden"]) for c in MEMBERS)
+    print("the cut pack's conventions in (the week's month from its Monday crossed with the family, %d ways; the "
+          "other five by their moves on the last cut): the call %s on every one" % (
+              P["ways"], "holds" if all(cl == gcall for cl in P["calls"]) else "MOVES"))
+    print("  their reach: " + "; ".join("%s %.3f to %.3f" % (c, lo, hi) for c, (lo, hi) in P["reach"].items()))
+    wid = [(fid, spec_band, P["bands"][fid]) for fid, spec_band in
+           ((stated_id(f["id"]), f["band"]) for f in spec["figures"] if not f["id"].startswith("on its line"))
+           if list(spec_band) != list(P["bands"][fid])]
+    print("  ranges they widen: " + ("; ".join("%s %s to %s (stated %s to %s)" % (fid, x[0], x[1], s_[0], s_[1])
+                                               for fid, s_, x in wid) or "none"))
+    print("every route on the stated ranges, then with the pack's conventions in (base / band by band / by figure / both):")
+    for nm in named:
+        print("  %-40s %-28s %s" % (nm, fmt(a[nm]), fmt(b[nm])))
 
 
 # each stump pushed past its fitted value to the far end a run might set: every subscription last seen set to renew
@@ -2222,11 +2326,12 @@ def _crossed_one(kw):
     return figure_values(route(_XW["O"] if al is None else _XW[al], **kw))
 
 
-def crossed_family(W, O):
-    """the graded figures of every way of the crossed family, in the order crossed_ways gives, worked across the
-    machine's cores (forked, so every worker holds the same record and the figures do not depend on the cores)"""
+def crossed_family(W, O, ways=None):
+    """the graded figures of every way of the crossed family (or of the ways given), in the order crossed_ways gives,
+    worked across the machine's cores (forked, so every worker holds the same record and the figures do not depend
+    on the cores)"""
     import multiprocessing as mp
-    ways = [kw for _nm, kw in crossed_ways()]
+    ways = [kw for _nm, kw in (ways if ways is not None else crossed_ways())]
     _XW.clear()
     _XW.update(W=W, O=O)
     try:
@@ -2240,6 +2345,8 @@ def build_spec(W=None, verbose=False):
     W = W or simulate()
     O = Obs(W)
     xf = crossed_family(W, O)                                      # before the record's caches fill, so forks are light
+    pw = pack_ways()
+    pf = crossed_family(W, O, pw)                                  # the week's month from its Monday, crossed
     T = truth_at_plan()
     g = route(O)
     aligned = {}
@@ -2268,7 +2375,9 @@ def build_spec(W=None, verbose=False):
     rungs = dict(made={k: figure_values(route(O, **kw)) for k, kw in RUNGS.items()},
                  lost={k: figure_values(route(O, s1="raw", **kw)) for k, kw in RUNGS.items()},
                  s1_alone=figure_values(route(O, s1="raw")),
-                 own={k: figure_values(route(O, **kw)) for k, kw in S1_RUNGS.items()})
+                 own={k: figure_values(route(O, **kw)) for k, kw in S1_RUNGS.items()},
+                 lattice={k: figure_values(r) for k, r in lat_res.items()},
+                 runs={k: figure_values(r) for k, r in runs.items()})
     anc = anchor(W, O, g, T)
     members = {}
     for c in MEMBERS:
@@ -2288,6 +2397,14 @@ def build_spec(W=None, verbose=False):
     xb = [nm.split("; ")[0] in bes for nm, _k in crossed_ways()]
     rng = lambda fid: band_of(fid, gf[fid], [x[fid] for x in ff[:nbat]] + [x[fid] for x, b in zip(xf, xb) if not b],
                               [x[fid] for x in ff[nbat:]] + [x[fid] for x, b in zip(xf, xb) if b])
+    # the same ranges with the cut pack's conventions in: the Monday months crossed with the family, the other five
+    # carried by their moves on the last cut (a check on what the build's crossings add, not a stated range)
+    pb = [nm.split("; ")[0] in bes for nm, _k in pw]
+    prng = lambda fid: pack_band(fid, gf[fid],
+                                 [x[fid] for x in ff[:nbat]] + [x[fid] for x, b in zip(xf, xb) if not b]
+                                 + [x[fid] for x, b in zip(pf, pb) if not b],
+                                 [x[fid] for x in ff[nbat:]] + [x[fid] for x, b in zip(xf, xb) if b]
+                                 + [x[fid] for x, b in zip(pf, pb) if b])
     figures = []
     for c in MEMBERS:
         figures.append(dict(id="return " + c, block="ask", weight=1.0, member=c, band=rng("return " + c)))
@@ -2309,7 +2426,11 @@ def build_spec(W=None, verbose=False):
     spec = dict(call="lines", members=members, stumps=stumps, lattice=lattice, run_routes=run_routes,
                 referee=dict(slice=ref["slice"], covers_target=False, truth=ref["truth"], golden=ref["golden"],
                              rivals=ref["rivals"]),
-                falsification=fal, figures=as_stated(figures), rungs=rungs, anchor=anc)
+                falsification=fal, figures=as_stated(figures), rungs=rungs, anchor=anc,
+                pack=dict(bands={fid: prng(fid) for fid in gf}, ways=len(pw),
+                          calls=[tuple(band(x["return " + c]) for c in MEMBERS) for x in pf],
+                          reach={c: (min(x["return " + c] for x in pf), max(x["return " + c] for x in pf))
+                                 for c in MEMBERS}))
     if verbose:
         return spec, dict(O=O, W=W, T=T, g=g, fam=fam, xf=xf, lat=lat_res, direct=direct, rigorous=rigorous, ref=ref,
                           runs=runs, over=over, v=v, pay=pay)
@@ -2521,6 +2642,7 @@ if __name__ == "__main__":
     import corelib
     spec = build_spec()
     rung_table(spec)
+    pack_table(spec)
     print("every graded figure against the world's own (golden, world, gap, tolerance):")
     for fid, a in spec["anchor"].items():
         print("  %-36s %12.3f %12.3f %+.3f %.3f %s" % (fid, a["golden"], a["world"], a["gap"], a["tolerance"],
