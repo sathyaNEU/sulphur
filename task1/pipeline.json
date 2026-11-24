@@ -1,11 +1,11 @@
 {
   "task": "task1",
-  "status": "BUILD",
+  "status": "READY",
   "domain": "product-analytics",
   "subdomain": "retention-cohort-lifetime-value-modeling",
   "objective": "forecasting",
-  "stage": 3,
-  "stage_name": "build",
+  "stage": 5,
+  "stage_name": "ready",
   "updated": "2026-11-24",
   "doctrine": "throughout",
   "architecture": 8,
@@ -14,25 +14,30 @@
   "call": "scale Snapchat iOS and Pinterest iOS, hold Meta iOS, TikTok iOS, Google iOS, Google Android and AppLovin Android for 2027 (return per euro at the plan's weekly spend against the lines 0.90 and 1.20, generator/core.py after the fourth pass: Snapchat iOS 1.457, Pinterest iOS 1.440, TikTok iOS 1.079, Google iOS 1.075, Google Android 1.070, AppLovin Android 1.050, Meta iOS 1.034)",
   "stump": "three decisive steps on three axes, each necessary alone and none sufficient (corelib level 5). S1 (the stores' excess over the billing records belongs to the subscriptions nobody opens, carried at a continuation of their own fitted to that excess) opens AppLovin Android and alone moves five bands; S2 (an iOS network steers its blind buys by the first-48-hour value its postbacks return, so each network's declined installs are worth a fraction of its named ones fitted from the pool across 156 market-weeks, not the labelled channels' gap) opens Meta iOS; S3 (the plan's weekly figures are billed spend, so what they buy is read at the budget that bills them, at the record's share) opens Google iOS. The reflex route (both runs' recorded choices on all three) files Meta iOS 1.882 and Google iOS 1.401 scale and AppLovin Android 0.863 cut and earns 15.6 on corelib's rubric. S1's continuation is decisive for the call since the fourth pass: carried at the continuation the app saw it files TikTok iOS 0.854 and AppLovin Android 0.860 cut (29.0 with S2 and S3 made)",
   "chain": "R1 the monthly-plan payments per 100 installs the Android channels' installs of the year to 2 November 2025 made in their first twelve months; R2 the same for each iOS network over every install it bought; R3 the installs the whole 2027 plan's billed spend buys; R4 the twelve-month net revenue those installs bring; R5 each channel's 2027 return per euro at the plan's weekly spend; R6 each channel's band",
-  "components": "one per decisive step, each falling with its own step alone: AppLovin Android's monthly-plan payments per 100 installs of the year to 2 November 2025 (42.3, range 41.7 to 42.9, with S1), Meta iOS's (33.0, range 29.3 to 38.6, with S2), the installs the 2027 plan buys (232,900, range 220,400 to 237,900, with S3)",
+  "components": "one per decisive step, each falling with its own step alone: AppLovin Android's monthly-plan payments per 100 installs of the year to 2 November 2025 (42.3, range 41.3 to 43.2, with S1), Meta iOS's (33.0, range 29.3 to 39.7, with S2), the installs the 2027 plan buys (232,900, range 220,400 to 238,400, with S3)",
   "precut": {
     "exit": 0,
-    "date": "2026-11-23",
-    "checks": "precut.py task1 after the fourth pass (CHURN -1.20 against CHURN_SILENT -4.00, AppLovin Android's phi 1.30, seven budget norms re-placed, the continuation the app saw a run route, the cut pack's conventions priced in core): 118 checks, 0 FAIL, 3 WARN (R1 upstream of four of the other five, answered in the Carry-forward line; the nearest chains task4 and task24, answered in the Template check; effort.json not written yet, owed at stage 3); generator/core.py CORE PASS level 5"
+    "date": "2026-11-24",
+    "checks": "precut.py task1 on the final cut (target.zip f4049ea8cb8e1f093e06abd50e203724): 118 checks, 0 FAIL, 2 WARN (R1 upstream of four of the other five, answered in the Carry-forward line; the nearest chains task24 and task4, answered in the Template check); effort.py task1 --check-note passes on the cut pack (quick 9.0, careful 22.2, thorough 100.0, the note's pair estimate the measured one); generator/core.py CORE PASS level 5"
   },
-  "leak": "owed on the architecture 8 cut; architecture 7's record under architecture_7",
+  "leak": {
+    "leak_py": "REVIEW on the final cut, no LEAK (gates.py): the growth policy's nine stump-paragraph nouns and the prompt's forward-window sentence (sweep 4) and the media plan's 2027 dates (sweep 9), each ruled in the note's Leak rulings",
+    "reader": "third read, 2026-11-24 (Sonnet, medium, fresh copies of the prompt and the pack only): no sentence says how any part is done, nothing ranks, helps or answers, question 6 finds no one thing; nothing to fix"
+  },
   "duplicate_check": "guard.py check task1 on 2026-11-23 after the second pass (card v8 refreshed and registered): WARN only (template.chain_near and overuse.weight against task24 and task4, overuse.forum, repeat.deliverables csv+xlsx against task8 and task26, skeleton.house_lesson record_algorithm_inversion on task22 v2 and task16 v4), each answered in the note's Draw; repeat.question_form no longer fires (task3 retired)",
-  "judge": "owed on the architecture 8 cut; architecture 7's record under architecture_7",
+  "judge": {
+    "verdict": "DETERMINISTIC",
+    "report": "determinism_check_report_pass3.md",
+    "mode": "determinism",
+    "date": "2026-11-24",
+    "disposition": "pass 3 (Opus 5.5 at high) on target.zip f4049ea8cb8e1f093e06abd50e203724: every critical component, return and band reproduced from the shipped files; 23 alternatives run in code, six move the call and each is refuted by a figure from the files. FIX_NOW in the answer blocks only, taken in the generator in one pass: step 3 states the refunded purchases come out of the stores' first charges as out of the records; the spend fit and the year carried over are named by the bands they move (Google Android 0.872, cut; Pinterest iOS 1.163, hold, and Google Android 0.831, cut); the proportional split of the accounts with no channel is stated with its refutation (Meta iOS 52.3 per 100 and 1.397, a scale; F 19.24 and 27.52 on 5 and 127 against 2.29; results.split_block, checks SF24, fork row SF24); step 6 defines both misses and step 7 the quarters; the paragraph's opener made true for the rescaled full-delivery reading. Not re-judged: no graded figure, the prompt or the pack moved"
+  },
   "paper_pair": 25.6,
   "effort": {
-    "quick": 0.0,
-    "careful": 15.6,
+    "quick": 9.0,
+    "careful": 22.2,
     "thorough": 100.0,
-    "measured": "owed on the new cut: effort.py task1 --check-note (no effort.json on file; the build writes it from this core). corelib at design after the fourth pass: one stump lost S1 29.0, S2 35.6 (42.2 with the cut pack's conventions in, pack_table), S3 22.3; fixed alone 15.7/15.7/35.5; reflex 15.6; rigorous 28.9; run routes generous 35.5, calibrated 29.0, calibrated:app-seen 29.0, hedge 15.7, hedge:pooled-markets 15.7, cutoff 15.7",
-    "factorial": "corelib level 5 after the fourth pass: S1 opens AppLovin Android, S2 Meta iOS, S3 Google iOS; each necessary alone, none sufficient; 5 distinct wrong calls across the lattice, 3 among the single drops; S1 necessary in its identification and in its continuation (the continuation the app saw files hold, cut, scale, hold, scale, hold, cut, 29.0 with S2 and S3 made, and is refused besides by the stores' renewal excess, continuation_pin 0.427 and 0.326)",
-    "rubric": "corelib on the crossed bands, base / band by band / by figure / both, stated ranges then the cut pack's (pack_table): S1 lost 29.0/34.1/38.9/44.0 (same); S2 lost 35.6/48.4/45.5/58.4 (42.2/55.1/48.8/61.7: Google iOS's line in on the near-miss stretch once its payments range reaches 68.3); S3 lost 22.3/27.5/45.5/50.7 (same); S1+S2 lost 35.5/40.7/38.9/44.0; S1+S3 15.7/26.0/35.5/45.8; S2+S3 15.7/20.8/22.3/27.4 (15.7/20.8/25.6/30.7); reflex 15.6/25.9/28.9/39.2; rigorous 28.9/36.6/35.5/43.3; whole-record true-up 35.5/43.3/38.9/46.6; generous 35.5/40.7/38.9/44.0; calibrated 29.0/39.2/42.2/52.5; calibrated:app-seen 29.0/41.8/45.5/58.4; hedge and hedge:pooled-markets 15.7/26.0/35.5/45.8; cutoff 15.7/23.4/19.0/26.7; named-value 35.5/43.3/42.2/49.9 (42.2/49.9/45.5/53.2); fit-on-spend 29.0/34.1/35.6/40.7; full-delivery-rescaled 22.3/24.9/22.3/24.9; S1-made rungs (disclosures): mixture 35.6/48.4/45.5/58.4, unrounded and pooled curve 42.2/55.1, named value and consenters 35.6/45.9/38.9/49.2, ASA ratio 35.6/48.4/42.2/55.1, Android analogue 55.5/68.3/62.1/74.9, one ratio 55.5/68.3/58.8/71.6, pooled markets 62.1/77.6/65.4/80.9, full delivery plain 22.3/27.5/45.5/50.7, full delivery rescaled 80.1/80.1/83.4/83.4, fit on spend 75.4/90.8/78.7/94.1, Response 1's carry 100; S1's own rungs with S2 and S3 made, each a wrong call: records 29.0, true-up by period 28.9, whole record 35.5, keep three months 29.0, web continuation 29.0, the continuation the app saw 29.0/41.8/45.5/58.4",
-    "largest_hint": "the budget sentence takes the reflex route from 15.6 to 35.5 and rescues R3 (1 of 6); the stores' sentence to 15.7 (R1), the consent sentence to 15.7 (none whole)",
-    "forcing": "2,923 ways (32 variants, 17 beside, 2,874 crossings) and the 190 crossings with the cut pack's Monday month file one set of bands, nearest Meta iOS 1.158 (0.042 under 1.20), TikTok iOS 1.157 and 0.955; each fitted input moved by its spread holds (thinnest TikTok iOS and Google iOS 1.147 at their ratios two standard errors high); disclosed, a ratio a fifth either way moves Google iOS (1.209) and leaves TikTok iOS at 1.198; the golden files the call on five other draws re-run on the fourth pass's dials (nearest Google iOS 0.960 at seed 74126); shortcuts on both sides of both lines"
+    "measured": "effort.py task1 --check-note on the cut pack: the note agrees, pair estimate 22.2"
   },
   "runs": {
     "run1": null,
@@ -89,7 +94,7 @@
     "note": "version 30 of platform task 955a716f-052f-42cd-bd6f-3fb23ac0fb7a; determinism and solution passed, stumped failed; runs/review_2026-11-22.md"
   },
   "prompt_rewritten": false,
-  "resume": "stage 3 built on 839a30c's frozen core, held for the architect's ruling on 15 checks.py failures before stage 4. Gate (k) re-read on the measured ranges per the ruling: the layered family (each file convention that moves a figure on this cut: calendar months, UTC days, refunds netted from the renewals, the export's install clock (3.1e-05) and the Monday month, layered on every way of the family that does not set it, alone and all together; refunds netted on the refund's day move 0.0 and are left out) adds 29,804 ways to the crossed family's 5,407: 35,211 ways, no call moves; Meta iOS's return range 0.949 to 1.186 (0.014 under 1.20); every anchor inside (Meta iOS's return -0.087 against 0.088); corelib level 5, one stump lost S1 29.0, S2 42.2, S3 22.3 on base (S2 lost 61.7 and S3 lost 50.7 on the both model). Over 50 on base and needing a ruling: the markets-summed S2 shortcut 62.1 and the full-delivery-rescaled S3 shortcut 80.1, each with the other two steps made (disclosed in the note). figures.json records pack_shifts, pack_widened (against the crossed ranges) and layered (each widened edge with its way). The full make is byte-identical with both zips; effort.py 22.2 careful with --check-note passing; figures_check, verify (53/53), audit_containers and gates.py task1 pass. checks.py, 15 failures, none loosened (the classifier refused a loosening): proxies whose corrected rule passes (the billing cadence's mean gap 30.4156, every charge on the rule; R6's absolute third at S3 fixed alone 35.5, corelib's gain-over-reflex row PASS; R3 S2 lost misstates 4 returns against 5 and the reflex route lands Google iOS's payments, the cut equal to core in both); design properties for a ruling (range widths R2 31.5, R5 24.4 and R4 10.6 per cent against 17 and 8; the S2 referee 2.8 times against 3; Meta iOS's records lack -0.4 per cent so S1's factor misses one channel; the fit on billed spend files one band wrong against 3; SF6's annual-as-one Pinterest iOS 60.0 inside its range; the SF32 spend-export split 0.976 against 2 per cent; SF34's power form F 1.5 against 1.45; the two shortcuts above). Next: the architect rules each, then stage 4: leak reader and determinism judge.",
+  "resume": "READY on branch task1-arch8-redesign. Next, the author's: rewrite prompt.txt in their own voice, then run voice-check.py --rewrite and leak.py through gates.py task1; upload the prompt with target.zip and paste the answer blocks; decide whether the branch merges to main (task1/ taken from the branch). When both platform responses are back: /triage-runs task1",
   "redraws": [
     {
       "date": "2026-11-16",
@@ -139,7 +144,18 @@
       "state": "golden Meta iOS 1.034, TikTok iOS 1.079, Snapchat iOS 1.457, Google iOS 1.075, Pinterest iOS 1.440, Google Android 1.070, AppLovin Android 1.050 (hold, hold, scale, hold, scale, hold, hold); CORE PASS level 5; S1 lost 29.0, S2 lost 35.6 (42.2 with the pack's conventions), S3 lost 22.3; the continuation the app saw hold, cut, scale, hold, scale, hold, cut at 29.0"
     }
   ],
-  "final_cut": "owed on the architecture 8 cut; architecture 7's record under architecture_7",
+  "final_cut": {
+    "date": "2026-11-24",
+    "target_zip": "f4049ea8cb8e1f093e06abd50e203724",
+    "golden_zip": "d3b10074d1bf323cde8c5134e451affc",
+    "submission_md": "5214da52d14c02032bac7174b2bb1083",
+    "prompt_txt": "6ff254e53804b9204fd1f29a67dd920f",
+    "gates": "gates.py task1: 9 gates, 0 FAIL, 3 WARN (precut, leak REVIEW, heart)",
+    "checks": "361 of 361",
+    "verify": "53 of 53",
+    "figures_check": "381 figures, none absent",
+    "containers": "audit_containers.py 0 FAIL on the final zips"
+  },
   "source": "the author's brief of 2026-11-21 (phase 2: bring task1 to the guidelines of 11/20 and off the 45 closed strategies; settle the design on paper, then apply it once)",
   "branch": "task1-arch8-redesign (worktree .claude/worktrees/task1-arch8): the author's instruction of 2026-11-23 keeps architecture 8 ready on its own branch for another review while main stays on the submitted architecture 7, whose pair the author re-ran on the platform the same day; merged to main only on the author's word",
   "asks": "two multi-faceted asks: for every channel its 2027 return per euro at the plan's weekly spend with its monthly-plan payments per 100 installs (one answer line each, seven lines); for the whole plan its installs and their twelve-month net revenue (one line); 19 graded figures on 8 answer lines and 3 component lines",

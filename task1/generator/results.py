@@ -367,6 +367,74 @@ def market_week_miss(O, v):
     return {k: round(100 * float(np.abs(p - act).sum() / act.sum()), 1) for k, p in ways.items()}
 
 
+FPOINT_SPLIT = {(5, 127): 2.29}                                    # the five per cent point of F on 5 and 127
+
+
+def _split_price(orig):
+    """core.ios_price with one more way of pricing an iOS network's unnamed installs, the proportional split: each
+    market-week's accounts with no channel shared across the sources in proportion to their unnamed installs at each
+    first-48-hour value, so every source's unnamed installs of a value in a market-week are worth the same"""
+    def price(O_, v, c, how="golden", cells="fine", minn=20, tilt="cell", rcells="tier2", **fit):
+        if how != "split":
+            return orig(O_, v, c, how, cells, minn, tilt, rcells, **fit)
+        T = C.s2_cells(O_, v, cells, minn, tilt)
+        S = C.s2_strata(O_, v, cells, minn, tilt)
+        ci = C.ORDER.index(c)
+        vc, n = T["vc"][ci], T["n"][ci]
+        x = np.maximum(S["nc"][ci], 0)
+        pm = np.where(S["pn"] > 0, S["pv"] / np.maximum(S["pn"], 1), 0.0)
+        ncs = x.sum((0, 1))
+        vn = np.where(ncs > 0, (x * pm).sum((0, 1)) / np.maximum(ncs, 1e-9), vc)
+        tot = n + ncs
+        return T["key32"], np.where(tot > 0, (n * vc + ncs * vn) / np.maximum(tot, 1e-9), vc), tot
+    return price
+
+
+def split_block(O, v):
+    """the accounts with no channel split across the sources in proportion to their unnamed installs (the reading the
+    determinism judge ran on 2026-11-24), market-week by market-week and over the 52 weeks at once (core's flat): each
+    adds up to what those accounts paid by construction, so the adding-up cannot refuse it; what refuses it is the
+    sources not being alike at the same first-48-hour value: across the 156 market-weeks, what the accounts with no
+    channel paid on a free value per first-48-hour cell, and again with the five networks' unnamed installs added as
+    five more terms, weighted by one over the accounts (as the golden's fit) and unweighted"""
+    orig = C.ios_price
+    C.ios_price = _split_price(orig)
+    try:
+        routes = {"split": A.route(O, s2="split")}
+    finally:
+        C.ios_price = orig
+    routes["flat"] = A.route(O, s2="flat")
+    out = {}
+    for k, r in routes.items():
+        fv = C.figure_values(r)
+        out[k] = dict(pay100_meta=round(float(fv["payments per 100 Meta iOS"]), 1),
+                      return_plan={c: round(float(r[c]["roas"]), 3) for c in MEM},
+                      bands={c: C.band(r[c]["roas"]) for c in MEM})
+    S = C.s2_strata(O, v)
+    pn, pv = S["pn"], S["pv"]
+    y = pv.sum(2).reshape(-1)
+    X0 = pn.reshape(-1, pn.shape[2])
+    X0 = X0[:, X0.sum(0) > 0]
+    N = np.stack([np.maximum(S["nc"][i], 0).sum(2).reshape(-1) for i in S["hidden"]], 1)
+    stat = {}
+    for wk, w in (("weighted", 1.0 / np.maximum(pn.sum(2).reshape(-1), 1)), ("unweighted", np.ones(len(y)))):
+        sw = np.sqrt(w)
+        fits = []
+        for X in (X0, np.hstack([X0, N])):
+            Xw = X * sw[:, None]
+            b, *_ = np.linalg.lstsq(Xw, y * sw, rcond=None)
+            e = y * sw - Xw @ b
+            fits.append((float(e @ e), int(np.linalg.matrix_rank(Xw))))
+        (r0, p0), (r1, p1) = fits
+        d1, d2 = p1 - p0, len(y) - p1
+        stat[wk] = (((r0 - r1) / d1) / (r1 / d2), d1, d2)
+    d = (stat["weighted"][1], stat["weighted"][2])
+    assert d == (stat["unweighted"][1], stat["unweighted"][2]) and d in FPOINT_SPLIT, d
+    out["test"] = dict(rows=len(y), cells=int(X0.shape[1]), terms=len(S["hidden"]), df=list(d), point=FPOINT_SPLIT[d],
+                       weighted=round(stat["weighted"][0], 2), unweighted=round(stat["unweighted"][0], 2))
+    return out
+
+
 def web_one_factor(O, c="AppLovin Android"):
     """the web checkout's check under one ratio per store over the whole record"""
     ci = C.ORDER.index(c)
@@ -844,6 +912,7 @@ def figures(X):
     vm = C.values(O, unit="months")
     fig["ratios"] = ratio_block(O, v, vm)
     fig["ratios"]["market_week_miss_pct"] = market_week_miss(O, v)
+    fig["ratios"]["split"] = split_block(O, v)
     fig["pooled"] = pooled_block(O, v, g)
     live = live_of(O)
     fig["pooled"]["live_from_spend"] = bool(all(np.array_equal(live[c], C.CH[c]["live"][:, :C.MATURE]) for c in C.GATED))

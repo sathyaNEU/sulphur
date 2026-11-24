@@ -4254,6 +4254,62 @@
    "fitted": 6.4,
    "one_ratio": 8.4,
    "markets_pooled": 7.5
+  },
+  "split": {
+   "split": {
+    "pay100_meta": 52.3,
+    "return_plan": {
+     "Meta iOS": 1.397,
+     "TikTok iOS": 1.177,
+     "Snapchat iOS": 1.538,
+     "Google iOS": 1.046,
+     "Pinterest iOS": 1.542,
+     "Google Android": 1.071,
+     "AppLovin Android": 1.05
+    },
+    "bands": {
+     "Meta iOS": "scale",
+     "TikTok iOS": "hold",
+     "Snapchat iOS": "scale",
+     "Google iOS": "hold",
+     "Pinterest iOS": "scale",
+     "Google Android": "hold",
+     "AppLovin Android": "hold"
+    }
+   },
+   "flat": {
+    "pay100_meta": 55.2,
+    "return_plan": {
+     "Meta iOS": 1.45,
+     "TikTok iOS": 1.178,
+     "Snapchat iOS": 1.535,
+     "Google iOS": 1.036,
+     "Pinterest iOS": 1.54,
+     "Google Android": 1.07,
+     "AppLovin Android": 1.05
+    },
+    "bands": {
+     "Meta iOS": "scale",
+     "TikTok iOS": "hold",
+     "Snapchat iOS": "scale",
+     "Google iOS": "hold",
+     "Pinterest iOS": "scale",
+     "Google Android": "hold",
+     "AppLovin Android": "hold"
+    }
+   },
+   "test": {
+    "rows": 156,
+    "cells": 24,
+    "terms": 5,
+    "df": [
+     5,
+     127
+    ],
+    "point": 2.29,
+    "weighted": 19.24,
+    "unweighted": 27.52
+   }
   }
  },
  "pooled": {

@@ -38,6 +38,13 @@ def _moved(f, key):
     return ["%s %s (%.3f)" % (c, r[c]["band"], r[c]["return_plan"]) for c in deliver.order(f) if r[c]["band"] != f["bands"][c]]
 
 
+def _shift(f, x):
+    """the channels a simpler way files in another band, each with its return and the band it lands in"""
+    lo, hi = f["policy"]["lines"]
+    band = lambda r: "scale" if r >= hi else ("hold" if r >= lo else "cut")   # noqa: E731
+    return _list("%s at %.3f (%s)" % (c, x["return_plan"][c], band(x["return_plan"][c])) for c in x["wrong"])
+
+
 def _two(t):
     return "%.2f and %.2f against %.2f" % (t["stat"], t["stat_one_variance"], t["point"])
 
@@ -127,7 +134,8 @@ def write(path, f):
         "Set `%s` and `%s` against the billing events by store and by period of %s days counted from 4 November 2024 "
         "(the App Store's charges on its report's Pacific days): Google Play reports %s renewals against %s in the records "
         "and the App Store %s against %s, so %s and %s renewals were never taken in, with %s and %s first monthly charges "
-        "and %s and %s annual first charges." % (
+        "and %s and %s annual first charges, the refunded purchases taken out of the stores' first charges as they were "
+        "out of the records, each on the day it was charged (the stores' reports count them as charges)." % (
             F["google"], F["apple"], cad, _n(gp["store_renewals"]), _n(gp["recorded_renewals"]),
             _n(ap["store_renewals"]), _n(ap["recorded_renewals"]), _n(gp["renewal_excess"]), _n(ap["renewal_excess"]),
             _n(gp["first_excess"]), _n(ap["first_excess"]), _n(gp["annual_excess"]), _n(ap["annual_excess"])),
@@ -192,9 +200,11 @@ def write(path, f):
         "A week takes the month of its Thursday, as the plan's blocks do, and its value per install prices its installs "
         "by first-48-hour value at what that value was worth over the %d weeks with twelve months on file (for an iOS "
         "network, what its named and unnamed installs of that value came to together under step 5). Fitted on "
-        "billed spend instead, the fit passes a hold-out of every fourth week (it misses the held-out installs by %.1f "
-        "per cent, the budget alone by %.1f), but over the %d weeks of the %d moves the team logged, each move left out "
-        "of the fit in turn, it misses the installs by %.1f per cent and the fit on the budget by %.1f; on Google iOS the "
+        "billed spend instead, the fit passes a hold-out of every fourth week (it misses the held-out weeks' installs by "
+        "%.1f per cent on average, week by week and channel by channel, the budget alone by %.1f), but over the %d weeks "
+        "of the %d moves the team logged, each move left out of the fit in turn, it misses the installs by %.1f per cent "
+        "(the moved weeks' absolute misses summed over the installs counted in them) and the fit on the budget by %.1f; "
+        "on Google iOS the "
         "installs of the raised weeks over those of the lowered weeks were %.3f, the budget fit gives %.3f and the spend "
         "fit %.3f. Every plan channel's value per install falls with the budget (slopes %.2f to %.2f, each at least %.1f "
         "of its spreads below nought)." % (
@@ -203,7 +213,8 @@ def write(path, f):
             fm["value_slope_range"][0], fm["value_slope_range"][1], fm["value_slope_spreads"]),
         "The growth sheet of `%s` gives each channel's weekly spend in euros \"as the platforms bill it\", and over the %d weeks "
         "the platforms billed %.1f to %.1f per cent of a channel's budgets (a whole budget in %d to %d weeks of %d, the "
-        "best quarter %.1f to %.1f per cent). So each plan week was carried at the budget that bills it, the plan's spend "
+        "best of the eight 13-week quarters counted from 4 November 2024 %.1f to %.1f per cent). So each plan week was "
+        "carried at the budget that bills it, the plan's spend "
         "over the channel's billed share of the %d weeks. Installs come from the installs equation's budget slope and "
         "month pattern, scaled so that those two terms alone, over the %d weeks, add up to the installs counted; value "
         "per install comes from the value equation's budget slope and month pattern, scaled so that over the %d complete "
@@ -260,8 +271,10 @@ def write(path, f):
               un["return_span"][A][1], _n(min(un["installs"])), _n(max(un["installs"])), ky["held_pct"][0],
               ky["held_pct"][1], ky["refused_short_pct"][0], ky["refused_short_pct"][1], nb["channel"], nb["distance"]),
           "",
-          "Each simpler way of taking a step is refuted by a figure from the files, and each files a wrong band with the "
-          "other two steps as estimated. The stores' excess: the records as they stand (AppLovin Android %.3f); each "
+          "Each simpler way of taking a step is refuted by a figure from the files, and each but one files a wrong band "
+          "with the other two steps as estimated (the plan's spend read as a budget billed in full and scaled to the "
+          "installs on record files the same seven bands, every return lower, and the plan's installs at %s). The stores' "
+          "excess: the records as they stand (AppLovin Android %.3f); each "
           "recorded charge raised by its store's charges over the recorded ones period by period (%.3f) or over the "
           "whole record (%.3f), which puts EUR %.2f and %.2f on the web checkout's subscribers against the %.2f they were "
           "charged; the candidates carried at the web checkout's continuation (%.3f; AppLovin Android %.3f) or at one "
@@ -273,7 +286,14 @@ def write(path, f):
           "every source (%.3f): the accounts with no channel come to %.3f, %.3f and %.3f times what they paid on the "
           "first three, the five networks' fitted ratios stand %.1f from Apple Search Ads' ratio and %.1f from the "
           "Android ratios against a five per cent point of %.2f, and one ratio misses the market-weeks' revenue by %.1f "
-          "per cent against %.1f. Sources sharing one ratio are refused by the fit's own test wherever it refuses them "
+          "per cent against %.1f. Shared across the sources in proportion to their unnamed installs, the accounts with no "
+          "channel of each market-week and first-48-hour value (every source's unnamed installs of that value worth the "
+          "same) put Meta iOS at %.1f payments per 100 installs and a return of %.3f, a %s (%.1f and %.3f shared over the "
+          "%d weeks at once); a split adds up to what those accounts paid by construction, and the sources are not "
+          "alike: across the %d market-weeks, what the accounts with no channel paid, set on a free value for each of "
+          "the %d first-48-hour cells, takes the five networks' unnamed installs as five more terms at F %.2f and %.2f "
+          "(weighted by one over the accounts and unweighted) on %d and %d degrees of freedom against a five per cent "
+          "point of %.2f. Sources sharing one ratio are refused by the fit's own test wherever it refuses them "
           "(the five networks %s; Meta with TikTok %s) and kept where it cannot (Snapchat with Pinterest %s, TikTok with "
           "Snapchat %s, TikTok with Pinterest %s, the three together %s). The ratios "
           "fitted on the %d weeks with the three markets summed file TikTok iOS in scale (%.3f, its ratio %.3f) and "
@@ -282,12 +302,13 @@ def write(path, f):
           "accounts with no channel come to %.3f of what they paid in the %d market-weeks TikTok iOS spent in and %.3f in "
           "the %d it did not (Google iOS %.3f and %.3f), where the 156-row ratios give %.3f to %.3f for every network's "
           "weeks; the summed-markets ratios stand %.1f from the 156-row fit's on %d degrees of freedom against %.2f. The "
-          "response: fitted on billed spend (Google iOS %.3f) it fails on the moved weeks as step 6 shows, and the year "
-          "to 2 November 2025's return carried over (%.3f) holds the weekly spend at that year's; a straight line or an "
+          "response: fitted on billed spend it puts %s and fails on the moved weeks as step 6 shows, and the year to 2 "
+          "November 2025's return carried over, which puts %s, holds the weekly spend at that year's; a straight line or an "
           "exponential in the budget is refused when the fitted form's term is added channel by channel (F %.1f and "
           "%.1f against %.2f, where the budget added to the fitted form gives %.1f). The plan's spend read as a budget "
           "billed in full, in the fit's own prediction (Google iOS %.3f) or scaled to the installs on record (AppLovin "
           "Android %.3f), is refused by the plan's own header and by the record's billed shares (step 7)." % (
+              _n(sc["full_delivery_rescaled"]["plan"]["installs"]),
               sc["as_recorded"]["return_plan"][A], sc["by_period"]["return_plan"][A], sc["one_factor"]["return_plan"][A],
               w["true_up"], w["true_up_one_factor"], w["charged"], gr["web"]["rate"], sc["web_rate"]["return_plan"][A],
               gr["seen"]["rate"], ar["seen"]["rate"], sc["seen_rate"]["return_plan"]["TikTok iOS"],
@@ -298,6 +319,11 @@ def write(path, f):
               sc["android"]["return_plan"][M], sc["one_ratio"]["return_plan"][M], Q["adding_up"]["borrowed_shift"],
               Q["adding_up"]["named"], Q["adding_up"]["search_ads"], Q["lent"]["search_ads"]["stat"],
               Q["lent"]["android"]["stat"], Q["lent"]["search_ads"]["point"], mw["one_ratio"], mw["fitted"],
+              Q["split"]["split"]["pay100_meta"], Q["split"]["split"]["return_plan"][M], Q["split"]["split"]["bands"][M],
+              Q["split"]["flat"]["pay100_meta"], Q["split"]["flat"]["return_plan"][M], s["mature_weeks"],
+              Q["split"]["test"]["rows"], Q["split"]["test"]["cells"], Q["split"]["test"]["weighted"],
+              Q["split"]["test"]["unweighted"], Q["split"]["test"]["df"][0], Q["split"]["test"]["df"][1],
+              Q["split"]["test"]["point"],
               _two(T["the five networks"]), _two(T["Meta and TikTok"]), _two(T["Snapchat and Pinterest"]),
               _two(T["TikTok and Snapchat"]), _two(T["TikTok and Pinterest"]), _two(T["TikTok, Snapchat and Pinterest"]),
               s["mature_weeks"], P["return_plan"]["TikTok iOS"], tk["pooled"], P["return_plan"][GI], gk["pooled"],
@@ -305,7 +331,7 @@ def write(path, f):
               gk["pooled"], sp["TikTok iOS"]["pooled"][0], sp["TikTok iOS"]["live"], sp["TikTok iOS"]["pooled"][1],
               sp["TikTok iOS"]["dark"], sp[GI]["pooled"][0], sp[GI]["pooled"][1], P["golden_split_pack_range"][0],
               P["golden_split_pack_range"][1], P["wald"], P["wald_df"], P["wald_point"],
-              sc["on_spend"]["return_plan"][GI], sc["last_year"]["return_plan"][GI], fm["line"], fm["exponential"],
+              _shift(f, sc["on_spend"]), _shift(f, sc["last_year"]), fm["line"], fm["exponential"],
               fm["point"], fm["power"], sc["full_delivery"]["return_plan"][GI], sc["full_delivery_rescaled"]["return_plan"][A]),
           "",
           "The three steps are independent. With the stores' excess alone taken the simpler way the bands are the same but "
