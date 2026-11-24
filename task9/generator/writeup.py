@@ -187,8 +187,9 @@ def write(path, fig):
       "anti-phase with the trailing labelled row waves in warehouse_labelled_rows_weekly.csv. Inverting lambda_f and "
       "row2_f by matching log net bootstrap variance across the 16 dates yields lambda_f from %.3f to %.3f and cuts "
       "mean log-RMSE from %.4f (uniform lambda = 1) and %.4f (lag-0 1/n_t) down to %.4f (%.1fx better than uniform). "
-      "Alternative smooth recency kernels fitted to the same 16 pairs keep training data in remediation (power-law "
-      "%.2f, linear ramp %.2f) while exponential achieves the lowest log-RMSE. Evaluating the exact weighted-window "
+      "Alternative smooth recency kernels fitted to the same 16 pairs keep training data in remediation (shifted "
+      "power-law (1 + age/g)^(-2) %.2f, linear ramp %.2f) while exponential achieves the lowest log-RMSE. Evaluating "
+      "the exact weighted-window "
       "turnover variance row2_f * sum_u (p_{t1, u} - p_{t0, u})^2 / n_u across the four 2027 snapshot spans in "
       "labelled_row_plan_2027.xlsx yields %.2f points (band %s, remediation plan)." % (
           pr["raw bootstrap face value"], pr["net bootstrap face value (over)"], pr["uniform window turnover"],
@@ -242,8 +243,10 @@ def write(path, fig):
       "square). Comparing each source's annual points against section 4's 5.5 and 8.0 thresholds places label revisions "
       "in escalation (%.2f), feature releases (%.2f), optimisation noise (%.2f) and training data (%.2f) on remediation "
       "plans, and retunes on monitor (%.2f). For sections 5 and 6 context, the workbook also reports model-side shares, "
-      "merchants' own share of all movement (%.1f per cent), and Schedule C tier-change rates (%.1f per cent as "
-      "scheduled versus %.1f per cent with designated sources removed, against the 12 per cent cap)." % (
+      "merchants' own share of all movement (%.1f per cent), and Schedule C tier-change rates scaled from 2026 "
+      "empirical rates by each family's root-variance ratio (%.1f per cent as scheduled versus %.1f per cent with "
+      "designated sources removed, against the 12 per cent cap; a direct Gaussian projection on the 21 September 2026 "
+      "panel reaches the same cap conclusion)." % (
           fig["tot_q1"], fig["tot_q2"], fig["tot_q3"], fig["tot_q4"], fig["tot_yr"],
           P["label revisions"], P["feature releases"], P["optimisation noise"], P["training data"], P["retunes"],
           fig["own_share"], fig["fr_sched"], fig["fr_removed"]))
