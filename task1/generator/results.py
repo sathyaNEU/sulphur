@@ -294,6 +294,8 @@ def delivery_block(O):
     return dict(channels={c: dict(share=round(x["share"], 3), whole=x["whole"], best_quarter=round(x["best_quarter"], 3),
                                   adds_up_pct=round(100 * x["adds_up"], 1)) for c, x in d.items()},
                 share=[round(min(x["share"] for x in d.values()), 3), round(max(x["share"] for x in d.values()), 3)],
+                share_pct=[round(100 * min(x["share"] for x in d.values()), 1),
+                           round(100 * max(x["share"] for x in d.values()), 1)],
                 whole=[min(x["whole"] for x in d.values()), max(x["whole"] for x in d.values())],
                 best_quarter=[round(min(x["best_quarter"] for x in d.values()), 3),
                               round(max(x["best_quarter"] for x in d.values()), 3)],

@@ -211,7 +211,7 @@ def write(path, f):
         "spend buys %s installs, which bring EUR %s. Read as a budget billed in full, the same spend buys %s installs and "
         "Google iOS returns %.3f, a scale; that reading has the installs equation, run over the record's own budgets at "
         "a share of one, add up to %.1f to %.1f per cent of the installs counted." % (
-            F["plan"], s["weeks"], 100 * dl["share"][0], 100 * dl["share"][1], dl["whole"][0], dl["whole"][1], s["weeks"],
+            F["plan"], s["weeks"], dl["share_pct"][0], dl["share_pct"][1], dl["whole"][0], dl["whole"][1], s["weeks"],
             dl["best_quarter_pct"][0], dl["best_quarter_pct"][1], s["weeks"], s["weeks"], s["mature_weeks"],
             _n(f["plan_spend"]), _n(f["plan_installs"]), _n(f["plan_revenue"]), _n(R["S3"]["plan"]["installs"]),
             R["S3"][GI]["return_plan"], dl["adds_up_pct"][0], dl["adds_up_pct"][1]),

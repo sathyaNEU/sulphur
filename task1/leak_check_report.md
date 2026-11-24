@@ -1,13 +1,14 @@
 # leak check, task1
 
-**Verdict: REVIEW.** 14 files read, 148 golden figures and 2 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 14 files read, 53 golden figures and 2 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: android, google, budget, applovin, stores, network, fitted, tiktok, snapchat, charges, accounts, charge, checkout, declined, pinterest, continuation, reports, missed, record, source, export, second, excess, auction, component
+Stump terms swept: android, google, budget, install, applovin, stores, network, tiktok, continuation, snapchat, pinterest, record, billed, charges, delivery, channels, fitted, declined, beside, carried, reports, accounts, charge, checkout, inside
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `growth_policy_paid_channels_v3_2026-09.pdf`: 8 of 25 stump-paragraph terms appear (google, budget, stores, charges, charge, checkout); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `growth_policy_paid_channels_v3_2026-09.pdf`: 9 of 25 stump-paragraph terms appear (google, budget, install, stores, record, charges); read whether the document names the move
+- **REVIEW** `prompt`: prompt sentence carries two or more stump terms: "Our records run to 8 November 2026 and none of the installs that spend buys will be twelve months old before 2028, so each channel's return has to be an estimate."
 
 ## 9 dates after the setting (REVIEW 1)
 - **REVIEW** `media_plan_2027.xlsx`: 156 ISO dates after 2026-11-09, e.g. 2027-01-04, 2027-01-11, 2027-01-18, 2027-01-25, 2027-02-01

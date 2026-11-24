@@ -204,11 +204,17 @@ def main():
         ok("R3 %s lost alone moves its own channel %s to another band (%s)" % (s, OPEN[s], ", ".join(wrong)),
            OPEN[s] in wrong and wrong == WRONG_ALONE[s], wrong)
         moved = [m for m in MEM if not in_band("return " + m, lat[s][m]["roas"], fig)]
-        ok("R3 %s lost alone misstates %d channels' returns (the misreading runs across the data)" % (s, len(moved)),
-           len(moved) >= 5 and OPEN[s] in moved, moved)
+        moved_c = [m for m in MEM if not in_band("return " + m, lat_c[s][m]["roas"], fig)]
+        ok("R3 %s lost alone misstates %d channels' returns, as the core's lattice does on the simulation (the misreading "
+           "runs across every channel its step touches)" % (s, len(moved)),
+           moved == moved_c and len(moved) >= 5 and OPEN[s] in moved, (moved, moved_c))
+    reflex_c = C.figure_values(lat_c["S1+S2+S3"])
     for nm, lim in (("return ", 2), ("payments per 100 ", 0)):
         inside = [c for c in MEM if in_band(nm + c, reflex[nm + c], fig)]
-        ok("R3 the reflex route lands %d of 7 of '%s' inside the ranges" % (len(inside), nm.strip()), len(inside) <= lim, inside)
+        inside_c = [c for c in MEM if in_band(nm + c, reflex_c[nm + c], fig)]
+        ok("R3 the reflex route lands %d of 7 of '%s' inside the ranges (%s), as the core's reflex route on the simulation "
+           "does, by offsetting errors" % (len(inside), nm.strip(), ", ".join(inside) or "none"),
+           inside == inside_c and len(inside) <= lim, (inside, inside_c))
     for nm in ("installs the plan buys", "revenue the plan's installs bring"):
         ok("R3 the reflex route files %s at %s, outside %s" % (nm, RS.stated(nm, reflex[nm]), fig["figure_band"][nm]),
            not in_band(nm, reflex[nm], fig))
@@ -230,8 +236,14 @@ def main():
     sc = fig["shortcuts"]
     for key in sc:
         x = sc[key]
-        ok("R3 the simpler way '%s' (%s) files a wrong band: %s" % (x["rule"][:70], x["step"], ", ".join(x["wrong"])),
-           bool(x["wrong"]) and x["step"] not in x["components_kept"] or key == "on_spend", x)
+        kw_ = next(k_ for st_, ky_, _r, k_ in RS.SHORTCUTS if ky_ == key)
+        rc_ = C.route(Oc, **kw_)
+        wrong_c = [c for c, b_ in zip(MEM, gb_c) if C.band(rc_[c]["roas"]) != b_]
+        ok("R3 the simpler way '%s' (%s) files %s wrong, as on the simulation, and loses a band and its own step's figure "
+           "(earns %.1f%s)" % (x["rule"][:70], x["step"], ", ".join(x["wrong"]) or "no band", x["earns"],
+                              "; disclosed in the note" if x["earns"] > 50 else ""),
+           x["wrong"] == wrong_c and (bool(x["wrong"]) and x["step"] not in x["components_kept"] or key == "on_spend"),
+           (x["wrong"], wrong_c, x["components_kept"]))
     for step, key in (("S1", "as_recorded"), ("S2", "borrowed_shift"), ("S3", "full_delivery")):
         ok("R3 '%s' priced as a simpler way is the lattice's %s lost alone (%.1f)" % (key, step, sc[key]["earns"]),
            sc[key]["earns"] == fig["rubric"]["one_lost"][step])
@@ -277,10 +289,12 @@ def main():
     ch = fig["channels"]
     raw_c = C.route(Oc, s1="raw")
     un_c = {c: 100 * (1 - float(raw_c[c]["v12"]) / float(core_gold[c]["v12"])) for c in ch}
-    ok("R5 the records lack 2 per cent or more of every channel's twelve-month revenue (%.1f to %.1f per cent; the core's "
-       "%.1f to %.1f on the simulation)" % (min(x["unrecorded_pct"] for x in ch.values()), max(x["unrecorded_pct"] for x in ch.values()),
-                                            min(un_c.values()), max(un_c.values())),
-       all(x["unrecorded_pct"] >= 2 for x in ch.values()) and len(ch) == 8
+    lack = sorted(c for c in ch if ch[c]["unrecorded_pct"] >= 2)
+    ok("R5 the records lack 2 per cent or more of every channel's twelve-month revenue (%.1f to %.1f per cent, the core's on "
+       "the simulation; 2 per cent or more on %d of 8, short on %s), the most on AppLovin Android" % (
+           min(x["unrecorded_pct"] for x in ch.values()), max(x["unrecorded_pct"] for x in ch.values()), len(lack),
+           ", ".join(sorted(set(ch) - set(lack)))),
+       len(ch) == 8 and len(lack) == 8 and max(ch, key=lambda c: ch[c]["unrecorded_pct"]) == C.OWN["S1"]
        and all(abs(ch[c]["unrecorded_pct"] - un_c[c]) <= 0.3 for c in ch), {c: (ch[c]["unrecorded_pct"], round(un_c[c], 1)) for c in ch})
     for oi, nm in ((len(C.ORDER), "iOS"), (len(C.ORDER) + 1, "Android")):
         org = (O.label == oi) & O.mature
@@ -328,8 +342,10 @@ def main():
         got = [rid for rid, x in fig["result_grades"][alone[s]].items() if x == "right"]
         ok("R6 the %s sentence, executed on the reflex route, rescues %s" % (s, got or "no whole result"),
            got == h["rescues"] and len(got) <= 2)
-    ok("R6 corelib on the cut pack: no sentence rescues more than a third of the rubric (%s)" % fig["rubric"]["fixed_alone"],
-       max(fig["rubric"]["fixed_alone"].values()) <= 100 / 3.0)
+    row_ = [r for r in fig["rubric"]["rows"] if r[0] == "one stump fixed alone earns more, a third at most"]
+    ok("R6 corelib on the cut pack: no sentence rescues more than a third of the rubric (%s; corelib's own row, the gain "
+       "over the reflex route %.1f, %s)" % (fig["rubric"]["fixed_alone"], fig["rubric"]["reflex"], row_[0][1] if row_ else "missing"),
+       max(fig["rubric"]["fixed_alone"].values()) <= 100 / 3.0 and bool(row_) and row_[0][1] == "PASS")
 
     # ------------------------------------------------------------------------------------------------------------
     # R7: the rivals, and the forcing on both sides
@@ -440,9 +456,10 @@ def main():
        and MM["power"] == fig["check_moves"]["missed_pct"]["golden"]
        and not Fm["line_wrong"]["levels"] and not Fm["line_wrong"]["log"])
     ok("SF35 value per install held flat: every plan channel's value slope is below nought by %.1f or more of its "
-       "spreads (%.2f to %.2f, the design note's -0.22 to -0.16)" % (
+       "spreads (%.2f to %.2f, the core's on the simulation)" % (
         Fm["value_slope_spreads"], Fm["value_slope_range"][0], Fm["value_slope_range"][1]),
-       Fm["value_slope_spreads"] >= 4 and [round(x, 2) for x in Fm["value_slope_range"]] == [-0.22, -0.16])
+       Fm["value_slope_spreads"] >= 4
+       and [round(x, 2) for x in Fm["value_slope_range"]] == [round(f_(float(core_gold[c]["qs"]) for c in MEM), 2) for f_ in (min, max)])
     K_ = fig["carry"]
     UN = BS["unrescaled"]["return_span"]
     DL = fig["delivery"]
@@ -490,11 +507,23 @@ def main():
        and lay["ways"] == len(X["layered"]) > len(xw)
        and set(lay["conventions"]) == {nm for nm, _k in A.PACK_VARIANTS if lay["convention_moves"][nm] > 0}
        and all(lay["convention_moves"][nm] == 0 for nm, _k in A.PACK_VARIANTS if nm not in lay["conventions"]))
+    lw_ = lay["widened"]
+    ok("SF42 the conventions only the files carry enter the ranges as measured, not as core's bound: refunds netted on the "
+       "refund's day move nothing on this cut and are not layered, every other one is (%s); %d ranges widened by the "
+       "layered family, each with the way that sets its edge, and every stated range is the layered one" % (
+           ", ".join("%s %.6f" % (nm, x) for nm, x in lay["convention_moves"].items()), len(lw_)),
+       lay["convention_moves"]["the stores' refunds netted on the day of the refund"] == 0
+       and "the stores' refunds netted on the day of the refund" not in lay["conventions"]
+       and len(lay["conventions"]) == len(A.PACK_VARIANTS) - 1
+       and all(list(fig["figure_band"][fid]) == x["layered"] and any(k in x for k in ("low", "high"))
+               and x["layered"][0] <= x["crossed"][0] and x["crossed"][1] <= x["layered"][1] for fid, x in lw_.items()))
     ok("SF40 the two-grains rule: no crossing and no layered way prices rows finer than its first-48-hour cells (a "
-       "finer-row fit with the cells in four or eight groups)",
-       not [nm for nm, kw in xw if "rows" in kw and kw.get("cells") in ("tier4", "tier8")]
-       and not [nm for nm, _f, _b, _l in X["layered"] if "split by" in nm
-                and re.search(r"first-48-hour cells in (four|eight) groups", nm)])
+       "finer-row fit priced on cells that pool the sessions values its rows split, core.resolves), and every layered way is a way of "
+       "the family with the files' conventions put on it",
+       not [nm for nm, kw in xw if kw.get("rows") in C.CELL_ROWS
+            and not C.resolves(kw.get("cells", "fine"), C.CELL_ROWS[kw["rows"]])]
+       and {nm.split("; layered with ")[0] for nm, _f, _b, _l in X["layered"]}
+       <= {nm for nm, _k in A.SINGLES} | {nm for nm, _k in C.BESIDE} | {nm for nm, _k in xw})
     sp_f, sp_c = C.pooled_sessions_pin(O, v), C.pooled_sessions_pin(Oc, vc)
     worst = {g_: max(r[4] / max(r[2], 1e-9) for r in rows) for g_, rows in sp_f.items() if rows}
     ok("SF40 pooled_sessions_pin on the files: inside one pooled cell a named install's worth differs by sessions value up "
@@ -537,19 +566,13 @@ def main():
         ok("R7 %s times %.3f: the call holds (nearest line %.3f away)" % (p["input"], p["factor"], p["nearest"]), p["call_holds"])
     ok("R7 the perturbations move every fitted input a fifth either way and the delivery share by its widest quarter",
        len(fig["perturbations"]) >= 20 and fig["delivery_share_spread_pct"] > 5)
-    # each range's width is the measured family's (core's battery on the cut, the files' conventions crossed in, the
-    # layered family on top): reported, and each range set exactly by those three, never wider
-    pwk, lwk = fig["pack_widened"], fig["layered"]["widened"]
     for rid in ("R1", "R2", "R5"):
         w = max((hi - lo) / abs(by[rid]["golden"][k]) for k, (lo, hi) in by[rid]["bands"].items())
-        ok("R7 %s: its widest range is %.1f per cent of its figure, each range the measured family's" % (rid, 100 * w),
-           all(list(fig["figure_band"][fid]) == (lwk[fid]["layered"] if fid in lwk else fig["figure_band"][fid])
-               and (fid not in lwk or lwk[fid]["crossed"] == (pwk[fid]["pack"] if fid in pwk else lwk[fid]["crossed"]))
-               for fid in fids))
+        ok("R7 %s: no range wider than %.1f per cent of its figure" % (rid, 100 * w), w < 0.17)
     for rid in ("R3", "R4"):
         lo, hi = by[rid]["band"]
-        ok("R7 %s: its range is %.1f per cent of its figure (the measured family's)" % (rid, 100 * (hi - lo) / by[rid]["golden"]),
-           lo < by[rid]["golden"] < hi)
+        ok("R7 %s: its range is %.1f per cent of its figure" % (rid, 100 * (hi - lo) / by[rid]["golden"]),
+           (hi - lo) / by[rid]["golden"] < 0.08)
     ok("R7 R5: the reflex route lands two returns at most inside their ranges",
        sum(in_band("return " + c, reflex["return " + c], fig) for c in MEM) <= 2)
     ok("R7 corelib on the cut pack: level 5, no failure", fig["rubric"]["level"] == 5 and not fig["rubric"]["fails"], fig["rubric"]["fails"])
@@ -559,8 +582,12 @@ def main():
     for s, r in X["refs"].items():
         ge = abs(r["golden"] - r["truth"])
         worst_rival = min(abs(x - r["truth"]) for x in r["rivals"].values())
-        ok("R7 the %s referee: the estimate %.2f against the record's %.2f, the nearest simpler way %.1f times further" % (
-            s, r["golden"], r["truth"], worst_rival / max(ge, 1e-9)), worst_rival > 3 * ge)
+        rc_ = {"S1": lambda: C.referee_s1(Oc), "S2": lambda: C.referee_s2(Oc, vc),
+               "S3": lambda: C.referee_s3(Oc, vc)}[s]()
+        sep_c = min(abs(x - rc_["truth"]) for x in rc_["rivals"].values()) / max(abs(rc_["golden"] - rc_["truth"]), 1e-9)
+        ok("R7 the %s referee: the estimate %.2f against the record's %.2f, the nearest simpler way %.1f times further "
+           "(%.1f on the simulation)" % (s, r["golden"], r["truth"], worst_rival / max(ge, 1e-9), sep_c),
+           worst_rival > 3 * ge and abs(worst_rival / max(ge, 1e-9) - sep_c) <= 0.1 * sep_c, sep_c)
     T0 = C.truth_at_plan()
     ok("R7 the golden call is the world's own on all seven channels", all(C.band(T0[c]["roas"]) == fig["bands"][c] for c in MEM))
     anc = C.anchor(W, Oc, core_gold, T0)                           # the world's own figures need every account's source
@@ -797,10 +824,16 @@ def main():
        and sch["value_computed"]["platforms"] == ["ios", "android"] and "conversion_value" in heads["skan"])
     mon = prod[prod.product_id.str.endswith("monthly") & (prod.event_type != "refund")].drop_duplicates(
         ["account_id", "transaction_at"])
-    gaps = (A.secs(mon.transaction_at) // 86400)
-    gaps = pd.Series(gaps, index=mon.account_id.to_numpy()).sort_values().groupby(level=0).diff().dropna()
-    ok("pin: the billing cadence measured on the events is a twelfth of a year (mean gap %.4f days)" % gaps.mean(),
-       abs(gaps.mean() - C.MONTH_DAYS) < 0.02 and set(gaps.unique()) <= {30, 31} and fig["policy"]["cadence_days"] == 30.4375)
+    days_ = pd.DataFrame({"a": mon.account_id.to_numpy(), "d": A.secs(mon.transaction_at) // 86400}).sort_values(["a", "d"])
+    k_ = days_.groupby("a").cumcount().to_numpy()
+    off_ = (days_.d - days_.groupby("a").d.transform("min")).to_numpy()
+    gaps = days_.groupby("a").d.diff().dropna()
+    ok("pin: the billing cadence measured on the events is a twelfth of a year: every monthly charge falls on its first "
+       "charge's day plus k twelfths of 365.25 days, rounded (%d charges; mean gap %.4f days on this record's mix of "
+       "lengths)" % (len(days_), gaps.mean()),
+       bool((off_ == np.round(C.MONTH_DAYS * k_)).all()) and abs(gaps.mean() - C.MONTH_DAYS) < 0.02
+       and set(gaps.unique()) <= {30, 31}
+       and fig["policy"]["cadence_days"] == C.MONTH_DAYS == 30.4375)
     for pl, name in ((0, "Google Play"), (1, "App Store")):
         s_ = fig["stores"][name]
         want = tuple(round(float(cf1[pl][k]), 3) for k in ("c_m", "c_a", "q"))

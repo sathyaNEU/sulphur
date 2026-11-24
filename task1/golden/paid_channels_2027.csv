@@ -1,9 +1,9 @@
 row,channel,band,return_per_eur_plan_spend,monthly_plan_payments_per_100_installs_2024-11-04_to_2025-11-02,installs_2027,net_revenue_12m_eur
-channel,Pinterest iOS,scale,1.388,68.9,,
-channel,Snapchat iOS,scale,1.363,61.1,,
-channel,Google iOS,hold,1.106,83.1,,
-channel,Meta iOS,hold,1.080,48.2,,
-channel,TikTok iOS,hold,1.036,49.6,,
-channel,Google Android,hold,1.033,86.2,,
-channel,AppLovin Android,hold,0.992,50.4,,
-plan,all seven growth channels,,,,233300,1514000
+channel,Snapchat iOS,scale,1.457,47.5,,
+channel,Pinterest iOS,scale,1.440,53.4,,
+channel,TikTok iOS,hold,1.079,41.0,,
+channel,Google iOS,hold,1.075,60.5,,
+channel,Google Android,hold,1.070,71.3,,
+channel,AppLovin Android,hold,1.050,42.3,,
+channel,Meta iOS,hold,1.034,33.0,,
+plan,all seven growth channels,,,,232900,1283000
