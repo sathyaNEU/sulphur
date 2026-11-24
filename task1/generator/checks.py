@@ -391,7 +391,8 @@ def main():
     ok("R7 the files' conventions and their crossings widen %d of core's ranges (reported, figure by figure, with the "
        "way: %s)" % (len(pw), "; ".join("%s %s to %s against %s to %s" % (k, x["pack"][0], x["pack"][1], x["core"][0],
                                                                           x["core"][1]) for k, x in sorted(pw.items())[:6])),
-       all(x["pack"][0] <= x["core"][0] and x["core"][1] <= x["pack"][1] for x in pw.values()))
+       all(x["pack"][0] <= x["core"][0] and x["core"][1] <= x["pack"][1] for x in pw.values())
+       and all(pw[k]["pack"] == fig["layered"]["widened"][k]["crossed"] for k in pw if k in fig["layered"]["widened"]))
     ok("R7 Meta iOS's return range stays under the scale line (%s to %s, against 1.20)" % tuple(fig["figure_band"]["return Meta iOS"]),
        fig["figure_band"]["return Meta iOS"][1] < C.LINES[1])
     near = min(abs(r[c]["roas"] - l) for _n, r in sg + [("golden", g)] for c in MEM for l in C.LINES)

@@ -708,11 +708,11 @@ def figures(X):
                           for (n, _r), x in zip(sg[ncore:], sf[ncore:])}
     fig["pack_widened"] = {}
     for fid in fids:
-        if band[fid] != core_band[fid]:
+        if crossed_band[fid] != core_band[fid]:
             ways = [(n, x[fid]) for (n, _r), x in zip(sg[ncore:], sf[ncore:])] + [(n, fv[fid]) for n, fv, _b, cc in xr
                                                                               if not cc]
             lo = min(ways, key=lambda t: t[1]); hi = max(ways, key=lambda t: t[1])
-            fig["pack_widened"][fid] = dict(core=core_band[fid], pack=band[fid],
+            fig["pack_widened"][fid] = dict(core=core_band[fid], pack=crossed_band[fid],
                                             low=[lo[0], stated(fid, lo[1])], high=[hi[0], stated(fid, hi[1])])
     # the layered family (each file convention that moves a figure put on top of every way that does not set it,
     # then all of them together): what it adds to the crossed ranges, and the way that sets each widened edge

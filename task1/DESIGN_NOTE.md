@@ -110,6 +110,8 @@ From `python3 task1/generator/core.py` after the fourth pass (SEED 71126 for the
 | generous | wrong | 0.6662 | 0.8151 | 1.075 | 1.463 | 1.161 | 1.285 | 0.7407 |
 | hedge | wrong | 0.8631 | 1.055 | 1.25 | 1.319 | 1.597 | 1.311 | 0.9215 |
 
+The figure table below is `generator/core.py`'s at the draw, on core's stated ranges; the ranges the blocks state are the cut's, measured over the family, its crossings and the layered family (SF42: AppLovin Android's payments 41.3 to 43.2, Meta iOS's 29.3 to 39.7, the plan's installs 220,400 to 238,400, Meta iOS's return 0.949 to 1.186).
+
 | Figure | Block | Golden | Band | S1 lost | S2 lost | S3 lost | Reflex route |
 |---|---|---|---|---|---|---|---|
 | return Meta iOS | asks | 1.034 | 0.949 to 1.169 | - | flips | flips | lost |

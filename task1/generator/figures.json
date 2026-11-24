@@ -166,24 +166,6 @@
   }
  },
  "pack_widened": {
-  "return Meta iOS": {
-   "core": [
-    0.949,
-    1.169
-   ],
-   "pack": [
-    0.949,
-    1.186
-   ],
-   "low": [
-    "the installs equation's own prediction, not rescaled, at the last 52 weeks' share of the budgets spent; the App Store's report days taken as UTC days; the ratios fitted unweighted",
-    0.972
-   ],
-   "high": [
-    "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, weighted by one over the accounts; the stores' refunds netted from their renewals; spend instrumented by the budget",
-    1.121
-   ]
-  },
   "return TikTok iOS": {
    "core": [
     0.943,
@@ -191,7 +173,7 @@
    ],
    "pack": [
     0.943,
-    1.179
+    1.169
    ],
    "low": [
     "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, unweighted; the install week and the 365 days counted from the attribution export's install time; delivery share from the last 52 weeks",
@@ -209,7 +191,7 @@
    ],
    "pack": [
     1.254,
-    1.56
+    1.548
    ],
    "low": [
     "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, unweighted; the install week and the 365 days counted from the attribution export's install time; delivery share from the mature weeks",
@@ -227,7 +209,7 @@
    ],
    "pack": [
     0.977,
-    1.169
+    1.165
    ],
    "low": [
     "the installs equation's own prediction, not rescaled, at the mature weeks' share of the budgets spent; the stores' refunds netted on the day of the refund; the networks' ratios drawn toward their pooled ratio by the fit's own spread",
@@ -238,158 +220,14 @@
     1.154
    ]
   },
-  "return Pinterest iOS": {
-   "core": [
-    1.241,
-    1.577
-   ],
-   "pack": [
-    1.235,
-    1.587
-   ],
-   "low": [
-    "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, unweighted; the stores' refunds netted on the day of the refund; the budget alone, the delivery left out",
-    1.318
-   ],
-   "high": [
-    "the stores' refunds netted from their renewals; every postback dated back four days; installs response on the last 78 weeks",
-    1.489
-   ]
-  },
-  "return Google Android": {
-   "core": [
-    0.967,
-    1.123
-   ],
-   "pack": [
-    0.948,
-    1.128
-   ],
-   "low": [
-    "the installs equation's own prediction, not rescaled, at the mature weeks' share of the budgets spent; a week's month taken from its Monday",
-    1.003
-   ],
-   "high": [
-    "the installs equation's own prediction, not rescaled, at the last 52 weeks' weekly shares, each put through the delivery term and averaged; the stores' refunds netted from their renewals; every postback dated back three days",
-    1.101
-   ]
-  },
-  "return AppLovin Android": {
-   "core": [
-    0.96,
-    1.124
-   ],
-   "pack": [
-    0.96,
-    1.128
-   ],
-   "low": [
-    "the installs equation's own prediction, not rescaled, at the mature weeks' share of the budgets spent; a week's month taken from its Monday",
-    0.987
-   ],
-   "high": [
-    "the installs equation's own prediction, not rescaled, at the last 52 weeks' weekly shares, each put through the delivery term and averaged; the stores' refunds netted from their renewals; cells of fifty or more",
-    1.1
-   ]
-  },
-  "payments per 100 Meta iOS": {
-   "core": [
-    29.3,
-    38.6
-   ],
-   "pack": [
-    29.3,
-    39.7
-   ],
-   "low": [
-    "one fit across both stores; the ratios fitted by fortnight; a week's month taken from its Monday",
-    31.0
-   ],
-   "high": [
-    "the ratios fitted on each market-week's accounts split by first-48-hour sessions value, weighted by the revenue the fit expects; the stores' refunds netted from their renewals",
-    36.2
-   ]
-  },
-  "payments per 100 TikTok iOS": {
-   "core": [
-    37.6,
-    45.0
-   ],
-   "pack": [
-    37.6,
-    45.2
-   ],
-   "low": [
-    "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, unweighted; one fit across both stores; a week's month taken from its Monday",
-    38.1
-   ],
-   "high": [
-    "TikTok iOS and Snapchat iOS sharing one ratio; the stores' refunds netted from their renewals",
-    43.7
-   ]
-  },
-  "payments per 100 Snapchat iOS": {
-   "core": [
-    42.2,
-    51.8
-   ],
-   "pack": [
-    42.2,
-    52.1
-   ],
-   "low": [
-    "one fit across both stores; TikTok iOS, Snapchat iOS and Pinterest iOS sharing one ratio; a week's month taken from its Monday",
-    44.7
-   ],
-   "high": [
-    "the ratios fitted on each market-week's accounts split by first-48-hour sessions value, weighted by one over the accounts; the stores' refunds netted from their renewals",
-    50.3
-   ]
-  },
-  "payments per 100 Google iOS": {
-   "core": [
-    57.7,
-    67.7
-   ],
-   "pack": [
-    57.7,
-    68.6
-   ],
-   "low": [
-    "one fit across both stores; the networks' ratios drawn toward their pooled ratio by the fit's own spread; a week's month taken from its Monday",
-    59.3
-   ],
-   "high": [
-    "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, unweighted; the stores' refunds netted from their renewals",
-    65.1
-   ]
-  },
-  "payments per 100 Pinterest iOS": {
-   "core": [
-    46.4,
-    61.1
-   ],
-   "pack": [
-    46.4,
-    61.5
-   ],
-   "low": [
-    "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, weighted by one over the accounts; one share charged for every trial-end candidate; a week's month taken from its Monday",
-    48.2
-   ],
-   "high": [
-    "Snapchat iOS and Pinterest iOS sharing one ratio; the stores' refunds netted from their renewals",
-    56.6
-   ]
-  },
   "payments per 100 Google Android": {
    "core": [
     70.4,
     72.2
    ],
    "pack": [
-    70.1,
-    72.6
+    70.4,
+    72.5
    ],
    "low": [
     "two-rate continuation; the stores' refunds netted from their renewals",
@@ -406,8 +244,8 @@
     42.9
    ],
    "pack": [
-    41.3,
-    43.2
+    41.5,
+    43.0
    ],
    "low": [
     "two-rate continuation; the stores' refunds netted from their renewals",
@@ -418,32 +256,14 @@
     42.7
    ]
   },
-  "installs the plan buys": {
-   "core": [
-    220400,
-    237900
-   ],
-   "pack": [
-    220400,
-    238400
-   ],
-   "low": [
-    "the installs equation's own prediction, not rescaled, at the mature weeks' share of the budgets spent; the install week and the 365 days counted from the attribution export's install time; every postback dated back three days",
-    227200
-   ],
-   "high": [
-    "delivery share from the mature weeks; a week's month taken from its Monday",
-    235100
-   ]
-  },
   "revenue the plan's installs bring": {
    "core": [
     1207000,
     1333000
    ],
    "pack": [
-    1206000,
-    1342000
+    1207000,
+    1337000
    ],
    "low": [
     "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, unweighted; the install week and the 365 days counted from the attribution export's install time; delivery share from the last 52 weeks",
