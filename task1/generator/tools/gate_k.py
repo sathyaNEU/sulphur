@@ -1,5 +1,9 @@
 """gate (k): the five pack conventions re-measured on the new cut put in place of core's PACK_SHIFTS (in this
 process only, core.py untouched), pack_table re-run, and the truth anchor"""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import os as _os
 _GEN = _os.path.normpath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
 _TGT = _os.path.normpath(_os.path.join(_GEN, "..", "target"))

@@ -9,6 +9,10 @@ budget with the platform's delivery beside it and carried to the plan. The conti
 scalar minimiser where the golden finishes a grid search, a day's half is rounded up where the golden rounds to
 even, the App Store's days come from the tz database, and the least squares are solved by their normal equations.
 Every graded figure is then held against figures.json, the golden CSV and the golden workbook."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import glob
 import json
 import math

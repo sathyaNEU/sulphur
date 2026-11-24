@@ -6,6 +6,10 @@ The bar block (labels R1 to R7), every row of the design note's fork table (SF1 
 against the simulation it was written from, mess neutrality, the forcing on both sides, the realism sweep, the input
 gates, the goldens, the answer blocks and the prompt. It rebuilds the pack once into a scratch folder (the
 byte-identical check, and the account order the array comparison needs)."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import csv
 import hashlib
 import itertools

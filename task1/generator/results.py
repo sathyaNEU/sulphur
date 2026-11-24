@@ -1,6 +1,10 @@
 """Every owed figure, computed on the shipped files: figures.json (what the answer blocks and the goldens state)
 and effort.json (each result's golden, band and the three passes, the stump factorial, the run routes, the forcing
 on both sides), with the core's rubric table re-priced on the cut pack by corelib on the ranges the blocks state."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import datetime as dt
 import math
 import os

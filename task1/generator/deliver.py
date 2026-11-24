@@ -1,5 +1,9 @@
 """The two golden files: the workbook the head of financial planning opens (the bands on its first sheet, the
 working behind it) and the channel and plan figures as a CSV. Every number comes from figures.json."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import csv
 import os
 

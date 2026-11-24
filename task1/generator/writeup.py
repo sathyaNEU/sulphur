@@ -1,6 +1,10 @@
 """submission.md: the tags and the four answer blocks, every figure from figures.json. The answer to the form's stump
 question (How is each model stumped?) is written from the platform's two responses once both are saved for this cut;
 architecture 7's pair answered for a world this cut does not ship, so no stump block is written until then."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import deliver
 import docs
 import pack

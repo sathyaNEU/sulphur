@@ -4,6 +4,10 @@ files carry: the App Store's report is on Pacific days, so the App Store account
 before they are set against it, and the conventions the files leave to the analyst (the period the stores and the
 records are compared on, where a refunded purchase is netted, the clock an install runs from, the month a week
 belongs to) are properties of a view of the observations, each run as a variant."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import datetime as dt
 import os
 import sys
