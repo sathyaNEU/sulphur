@@ -1,4 +1,4 @@
-"""task1 architecture 7: an independent recomputation of the golden from the shipped files.
+"""task1 architecture 8: an independent recomputation of the golden from the shipped files.
 
     python3 task1/generator/verify.py
 
@@ -9,6 +9,10 @@ budget with the platform's delivery beside it and carried to the plan. The conti
 scalar minimiser where the golden finishes a grid search, a day's half is rounded up where the golden rounds to
 even, the App Store's days come from the tz database, and the least squares are solved by their normal equations.
 Every graded figure is then held against figures.json, the golden CSV and the golden workbook."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import glob
 import json
 import math
@@ -134,6 +138,8 @@ def main():
        and all((stretch[c] > plan[c]).all() for c in MEMBERS) and [r[0] for r in stre[4:56]] == [r[0] for r in grow[4:56]])
     ok("plan: each channel's stretch is one multiple of its plan in every week",
        all(np.ptp(stretch[c] / plan[c]) < 1e-9 for c in MEMBERS))
+    ok("plan: the growth sheet's figures are the weekly spend as the platforms will bill it",
+       "as the platforms bill it" in str(grow[0][0]) or any("as the platforms" in str(x) for r in grow[:3] for x in r if x))
     bud = list(load_workbook(one("paid_budgets_weekly_*.xlsx"), read_only=True, data_only=True)["Weekly budgets"]
                .iter_rows(values_only=True))
     CHANNELS = [x for x in bud[2][1:] if x and x != "Total"]
@@ -195,6 +201,8 @@ def main():
 
     km = kept[kept.monthly]
     n_m = np.bincount(km.i, minlength=n)
+    in_m = km.d.to_numpy() < day[km.i.to_numpy()] + 365
+    pay12 = np.bincount(km.i.to_numpy()[in_m], minlength=n).astype(float)   # the monthly plan's payments on file
     first_m = km[km.event_type == "first_charge"]
     first_day = np.full(n, -1, np.int64); first_day[first_m.i] = first_m.d
     first_tod = tod.copy()
@@ -316,16 +324,22 @@ def main():
         fits[name] = dict(q=q, share_m=share_m, share_a=share_a, r_i=r_i, tm_i=tm_i, ta_i=ta_i, rel_m=rel_m, rel_a=rel_a)
 
     # each account's 12-month net revenue with the charges the records never took in
-    v = rec12.copy()
+    # and each account's payments on the monthly plan in its first 12 months, the same charges counted one by one
+    v, pm = rec12.copy(), pay12.copy()
     end365 = day + 365
     for name, f in fits.items():
         q, r_i, tm_i, ta_i = f["q"], f["r_i"], f["tm_i"], f["ta_i"]
         for j in range(1, 26):
             d = last_m[r_i] + up(PERIOD * j)
-            v[r_i] += q ** j * net_m[r_i] * ((d < end365[r_i]) & (d <= END_DAY))
+            hit = q ** j * ((d < end365[r_i]) & (d <= END_DAY))
+            v[r_i] += hit * net_m[r_i]
+            pm[r_i] += hit
             d = day[tm_i] + 7 + up(PERIOD * j)
-            v[tm_i] += f["share_m"] * f["rel_m"] * q ** j * net_m[tm_i] * ((d < end365[tm_i]) & (d <= END_DAY))
+            hit = f["share_m"] * f["rel_m"] * q ** j * ((d < end365[tm_i]) & (d <= END_DAY))
+            v[tm_i] += hit * net_m[tm_i]
+            pm[tm_i] += hit
         v[tm_i] += f["share_m"] * f["rel_m"] * net_m[tm_i]
+        pm[tm_i] += f["share_m"] * f["rel_m"]
         v[ta_i] += f["share_a"] * f["rel_a"] * net_a[ta_i]
 
     # ------------------------------------------------------------------------------------------------------------
@@ -367,24 +381,14 @@ def main():
     installs = {c: (posted[c].sum((1, 2)) if c in NETWORKS else np.bincount(week[label == c], minlength=WEEKS).astype(float))
                 for c in CHANNELS}
 
-    # each source's named installs by first-48-hour value, and what they went on to pay
+    # each source's named installs by first-48-hour value, and what they went on to pay (or the payments they made)
     SOURCES = NETWORKS + ["organic iOS"]
-    refset = full & ios & allowed & np.isin(label, SOURCES)
-    ref_n = np.bincount(cv[refset], minlength=32)
-    ref_v = np.where(ref_n >= 20, np.bincount(cv[refset], weights=v[refset], minlength=32) / np.maximum(ref_n, 1), v[refset].mean())
-    named_n, named_v = {}, {}
-    for s in SOURCES:
-        lab = full & ios & allowed & (label == s)
-        cnt = np.bincount(cv[lab], minlength=32).astype(float)
-        tot = np.bincount(cv[lab], weights=v[lab], minlength=32)
-        level = tot.sum() / (cnt * ref_v).sum()
-        named_n[s], named_v[s] = cnt, np.where(cnt >= 20, tot / np.maximum(cnt, 1), ref_v * level)
     pool = full & ios & unnamed
+    hidden, rest = {}, None
     shape = (3, FULL, 32)
-    pool_n, pool_v = np.zeros(shape), np.zeros(shape)
+    pool_n = np.zeros(shape)
     np.add.at(pool_n, (market[pool], week[pool], cv[pool]), 1)
-    np.add.at(pool_v, (market[pool], week[pool], cv[pool]), v[pool])
-    hidden, rest = {}, pool_n.copy()
+    rest = pool_n.copy()
     for c in NETWORKS:
         x = posted[c][:FULL].transpose(1, 0, 2).copy()                 # market, week, first-48-hour value
         lab = full & (label == c)
@@ -392,30 +396,53 @@ def main():
         hidden[c] = x
         rest -= x
     hidden["organic iOS"] = rest
-    y = pool_v.sum(2).reshape(-1)
     npool = pool_n.sum(2).reshape(-1)
-    X = np.stack([(hidden[s] * named_v[s][None, None, :]).sum(2).reshape(-1) for s in SOURCES], axis=1)
+
+    def second_step(val):
+        refset = full & ios & allowed & np.isin(label, SOURCES)
+        ref_n = np.bincount(cv[refset], minlength=32)
+        ref_v = np.where(ref_n >= 20, np.bincount(cv[refset], weights=val[refset], minlength=32) / np.maximum(ref_n, 1),
+                         val[refset].mean())
+        named_n, named_v = {}, {}
+        for s_ in SOURCES:
+            lab = full & ios & allowed & (label == s_)
+            cnt = np.bincount(cv[lab], minlength=32).astype(float)
+            tot = np.bincount(cv[lab], weights=val[lab], minlength=32)
+            level = tot.sum() / (cnt * ref_v).sum()
+            named_n[s_], named_v[s_] = cnt, np.where(cnt >= 20, tot / np.maximum(cnt, 1), ref_v * level)
+        pool_v = np.zeros(shape)
+        np.add.at(pool_v, (market[pool], week[pool], cv[pool]), val[pool])
+        y = pool_v.sum(2).reshape(-1)
+        X = np.stack([(hidden[s_] * named_v[s_][None, None, :]).sum(2).reshape(-1) for s_ in SOURCES], axis=1)
+        ratio = dict(zip(SOURCES, wls(X, y, 1.0 / np.maximum(npool, 1.0))))
+        paid = {}
+        for c in CHANNELS:
+            if c in NETWORKS:
+                extra = np.maximum(hidden[c].sum((0, 1)), 0)
+                tot = named_n[c] + extra
+                price = np.where(tot > 0, (named_n[c] * named_v[c] + extra * named_v[c] * ratio[c]) / np.maximum(tot, 1e-9),
+                                 named_v[c])
+                paid[c] = dict(v=float((tot * price).sum() / tot.sum()), price=price)
+            else:
+                lab = full & (label == c)
+                cnt = np.bincount(cv[lab], minlength=32)
+                price = np.where(cnt >= 20, np.bincount(cv[lab], weights=val[lab], minlength=32) / np.maximum(cnt, 1),
+                                 val[lab].mean())
+                paid[c] = dict(v=float(val[lab].mean()), price=price)
+        return ratio, paid, pool_v, named_n
+    ratio, paid, pool_v, named_n = second_step(v)
     ok("unnamed installs: %d accounts with no channel over the 52 weeks paid EUR %d; %d the five networks', %d organic; %d "
        "market-weeks" % (pool.sum(), round(pool_v.sum()), round(sum(hidden[c].sum() for c in NETWORKS)), round(rest.sum()),
                          (npool > 0).sum()),
        (int(pool.sum()), int(round(sum(hidden[c].sum() for c in NETWORKS))), int(round(rest.sum())), int((npool > 0).sum())) ==
        (fig["ratios"]["pool"]["accounts"], fig["ratios"]["pool"]["network_installs"], fig["ratios"]["pool"]["organic_installs"],
         fig["ratios"]["pool"]["market_weeks"]) and abs(pool_v.sum() / fig["ratios"]["pool"]["paid"] - 1) < 0.002)
-    ratio = dict(zip(SOURCES, wls(X, y, 1.0 / np.maximum(npool, 1.0))))
-    ok("unnamed installs: the fitted ratios are " + ", ".join("%s %.3f" % (s.split()[0], ratio[s]) for s in SOURCES),
-       all(abs(ratio[s] - fig["ratios"]["sources"][s]["ratio"]) <= 0.003 for s in SOURCES))
-    paid = {}
-    for c in CHANNELS:
-        if c in NETWORKS:
-            extra = np.maximum(hidden[c].sum((0, 1)), 0)
-            tot = named_n[c] + extra
-            price = np.where(tot > 0, (named_n[c] * named_v[c] + extra * named_v[c] * ratio[c]) / np.maximum(tot, 1e-9), named_v[c])
-            paid[c] = dict(v=float((tot * price).sum() / tot.sum()), price=price)
-        else:
-            lab = full & (label == c)
-            cnt = np.bincount(cv[lab], minlength=32)
-            price = np.where(cnt >= 20, np.bincount(cv[lab], weights=v[lab], minlength=32) / np.maximum(cnt, 1), v[lab].mean())
-            paid[c] = dict(v=float(v[lab].mean()), price=price)
+    ok("unnamed installs: the fitted ratios are " + ", ".join("%s %.3f" % (s_.split()[0], ratio[s_]) for s_ in SOURCES),
+       all(abs(ratio[s_] - fig["ratios"]["sources"][s_]["ratio"]) <= 0.003 for s_ in SOURCES))
+    ratio_p, paid_p, _pv, _nn = second_step(pm)
+    ok("unnamed installs, on the payments: the ratios fitted on the monthly payments are " + ", ".join(
+        "%s %.3f" % (s_.split()[0], ratio_p[s_]) for s_ in SOURCES),
+       all(abs(ratio_p[s_] - fig["ratios"]["sources"][s_]["ratio_payments"]) <= 0.003 for s_ in SOURCES))
     named_share = [100 * named_n[c].sum() / installs[c][:FULL].sum() for c in NETWORKS]
     ok("unnamed installs: the export names %.1f to %.1f per cent of an iOS network's installs" % (min(named_share), max(named_share)),
        round(min(named_share), 1) == min(fig["channels"][c]["named_pct"] for c in NETWORKS)
@@ -461,7 +488,7 @@ def main():
     ga = fig["channels"]["Google Android"]
     ok("response: Google Android's installs rise %.3f per cent for one per cent of budget, %.3f when fitted on spend" % (
         fi["Google Android"]["s"], fi_s["Google Android"]["s"]),
-       round(fi["Google Android"]["s"], 3) == ga["budget_elasticity"] and round(fi_s["Google Android"]["s"], 3) == ga["spend_elasticity"])
+       round(fi["Google Android"]["s"], 3) == ga["budget_elasticity"] and round(fi_s["Google Android"]["s"], 3) == ga["spend_fit_elasticity"])
 
     out = {}
     for c in MEMBERS:
@@ -472,74 +499,85 @@ def main():
         scale_i = installs[c].sum() / np.exp(fi[c]["a"] + si * xh + mi[wmonth - 1]).sum()
         shape_v = np.exp(sv * xh[:FULL] + mv[wmonth[:FULL] - 1])
         scale_v = paid[c]["v"] / ((shape_v * installs[c][:FULL]).sum() / installs[c][:FULL].sum())
-        r = {}
-        for tag, weekly in (("plan", plan[c]), ("stretch", stretch[c])):
-            xp = np.log(weekly / share) - lbm
-            n_t = scale_i * np.exp(fi[c]["a"] + si * xp + mi[pmonth - 1])
-            v_t = scale_v * np.exp(sv * xp + mv[pmonth - 1])
-            r[tag] = dict(ret=(n_t * v_t).sum() / weekly.sum(), installs=n_t.mean(), value=(n_t * v_t).sum() / n_t.sum())
-        out[c] = {"return ": r["plan"]["ret"], "stretch return ": r["stretch"]["ret"], "installs a week ": r["plan"]["installs"],
-                  "value at plan ": r["plan"]["value"], "next euro ": r["plan"]["ret"] * (si + sv),
-                  "stretch next euro ": r["stretch"]["ret"] * (si + sv), "paid per install ": paid[c]["v"]}
+        xp = np.log(plan[c] / share) - lbm
+        n_t = scale_i * np.exp(fi[c]["a"] + si * xp + mi[pmonth - 1])
+        v_t = scale_v * np.exp(sv * xp + mv[pmonth - 1])
+        out[c] = {"return ": (n_t * v_t).sum() / plan[c].sum(), "payments per 100 ": 100.0 * paid_p[c]["v"],
+                  "installs": n_t.sum(), "revenue": (n_t * v_t).sum()}
+    whole = {"installs the plan buys": sum(out[c]["installs"] for c in MEMBERS),
+             "revenue the plan's installs bring": sum(out[c]["revenue"] for c in MEMBERS)}
 
     # ------------------------------------------------------------------------------------------------------------
     # every graded figure against the blocks' figure and range
     # ------------------------------------------------------------------------------------------------------------
     worst = (0.0, "")
+    ND = {"return ": 3, "payments per 100 ": 1, "installs the plan buys": -2, "revenue the plan's installs bring": -3}
+
+    def held(fid, nd, x):
+        lo, hi = fig["figure_band"][fid]
+        mine_ = round(x, nd) if nd > 0 else int(round(x, nd))
+        return lo <= mine_ <= hi, mine_, abs(x / fig["figure"][fid] - 1)
     for c in MEMBERS:
         misses = []
-        for fam, x in out[c].items():
-            fid = fam + c
-            lo, hi = fig["figure_band"][fid]
-            nd = 0 if fam == "installs a week " else (2 if fam in ("value at plan ", "paid per install ") else 3)
-            mine_ = int(round(x)) if nd == 0 else round(x, nd)
-            rel = abs(x / fig["figure"][fid] - 1)
-            worst = max(worst, (rel, fid))
-            if not (lo <= mine_ <= hi) or rel > 0.003:
-                misses.append((fid, mine_, fig["figure"][fid], [lo, hi]))
-        ok("%s: the seven figures recomputed here sit in their ranges and within 0.3 per cent of the stated ones (return %.3f, "
-           "%s)" % (c, out[c]["return "], band_name(out[c]["return "], HOLD, SCALE)),
+        for fam in ("return ", "payments per 100 "):
+            good, mine_, rel = held(fam + c, ND[fam], out[c][fam])
+            worst = max(worst, (rel, fam + c))
+            if not good or rel > 0.003:
+                misses.append((fam + c, mine_, fig["figure"][fam + c], fig["figure_band"][fam + c]))
+        ok("%s: return %.3f (%s) and %.1f payments on the monthly plan per 100 installs, recomputed here, in their ranges and "
+           "within 0.3 per cent of the stated ones" % (c, out[c]["return "], band_name(out[c]["return "], HOLD, SCALE),
+                                                      out[c]["payments per 100 "]),
            not misses and band_name(out[c]["return "], HOLD, SCALE) == fig["bands"][c], misses)
+    for fid, x in whole.items():
+        good, mine_, rel = held(fid, ND[fid], x)
+        worst = max(worst, (rel, fid))
+        ok("the plan: %s %.0f recomputed here, %s stated, in its range %s" % (fid, x, fig["figure"][fid], fig["figure_band"][fid]),
+           good and rel <= 0.003)
     ok("the largest distance between a figure recomputed here and the stated one is %.2f per cent (%s)" % (100 * worst[0], worst[1]),
        worst[0] < 0.003)
     call = {b: [c for c in MEMBERS if band_name(out[c]["return "], HOLD, SCALE) == b] for b in ("scale", "hold", "cut")}
-    ok("the call: scale %s; hold %s; cut %s" % tuple(", ".join(call[b]) for b in ("scale", "hold", "cut")),
+    ok("the call: scale %s; hold %s; cut %s" % tuple(", ".join(call[b]) or "none" for b in ("scale", "hold", "cut")),
        all(sorted(call[b]) == sorted(fig["by_band"][b]) for b in call))
     comp = fig["components"]
-    ok("the three steps' own figures: EUR %.2f, EUR %.2f and %d installs a week" % (
-        out["AppLovin Android"]["paid per install "], out["Meta iOS"]["paid per install "], round(out["Google Android"]["installs a week "])),
-       abs(out["AppLovin Android"]["paid per install "] - comp["S1"]["value"]) <= 0.02
-       and abs(out["Meta iOS"]["paid per install "] - comp["S2"]["value"]) <= 0.03
-       and abs(out["Google Android"]["installs a week "] - comp["S3"]["value"]) <= 2)
-    rec_al = rec12[full & (label == "AppLovin Android")].mean()
-    ok("AppLovin Android's installs of the year paid EUR %.2f each in the records as they stand" % rec_al,
-       round(rec_al, 2) == fig["channels"]["AppLovin Android"]["recorded_per_install"])
-
+    ok("the three steps' own figures: %.1f and %.1f payments per 100 installs and %.0f installs" % (
+        out["AppLovin Android"]["payments per 100 "], out["Meta iOS"]["payments per 100 "], whole["installs the plan buys"]),
+       abs(out["AppLovin Android"]["payments per 100 "] - comp["S1"]["value"]) <= 0.15
+       and abs(out["Meta iOS"]["payments per 100 "] - comp["S2"]["value"]) <= 0.15
+       and abs(whole["installs the plan buys"] - comp["S3"]["value"]) <= 0.003 * comp["S3"]["value"])
+    rec_ap = 100 * pay12[full & (label == "AppLovin Android")].mean()
+    ok("AppLovin Android's installs of the year made %.1f payments on the monthly plan per 100 installs in the records as "
+       "they stand" % rec_ap, round(rec_ap, 1) == fig["channels"]["AppLovin Android"]["recorded_pay100"])
     # ------------------------------------------------------------------------------------------------------------
     # the golden files
     # ------------------------------------------------------------------------------------------------------------
-    gcsv = pd.read_csv(os.path.join(G, "paid_channels_2027.csv"))
-    ok("golden CSV: seven channels, a band and seven figures each, the three steps' figures among them",
-       list(gcsv.columns[:2]) == ["channel", "band"] and gcsv.shape == (7, 9) and set(gcsv.channel) == set(MEMBERS))
-    cols = dict(zip(["return ", "stretch return ", "installs a week ", "value at plan ", "next euro ", "stretch next euro ",
-                     "paid per install "], gcsv.columns[2:]))
-    off = [(c, fam) for c in MEMBERS for fam, col in cols.items()
-           if float(gcsv.set_index("channel").loc[c, col]) != fig["figure"][fam + c]]
-    ok("golden CSV: every figure is the blocks' figure, every band the call's",
-       not off and all(gcsv.set_index("channel").band[c] == fig["bands"][c] for c in MEMBERS), off)
-    near = max(abs(float(gcsv.set_index("channel").loc[c, col]) / out[c][fam] - 1) for c in MEMBERS for fam, col in cols.items())
-    ok("golden CSV: every figure within 0.3 per cent of the one recomputed here (largest %.2f)" % (100 * near), near < 0.003)
+    gcsv = pd.read_csv(os.path.join(G, "paid_channels_2027.csv"), dtype=str, keep_default_na=False)
+    chrows = gcsv[gcsv.row == "channel"].set_index("channel")
+    planrow = gcsv[gcsv.row == "plan"]
+    ok("golden CSV: seven channel rows (band, return, payments per 100 installs) and one plan row (installs, revenue)",
+       gcsv.shape == (8, 7) and set(chrows.index) == set(MEMBERS) and len(planrow) == 1)
+    rc, pc = gcsv.columns[3], gcsv.columns[4]
+    off = [c for c in MEMBERS if float(chrows.loc[c, rc]) != fig["figure"]["return " + c]
+           or float(chrows.loc[c, pc]) != fig["figure"]["payments per 100 " + c] or chrows.loc[c, "band"] != fig["bands"][c]]
+    off += [k for k, col in (("installs the plan buys", gcsv.columns[5]), ("revenue the plan's installs bring", gcsv.columns[6]))
+            if int(planrow[col].iloc[0]) != fig["figure"][k]]
+    ok("golden CSV: every figure is the blocks' figure, every band the call's", not off, off)
+    near = max([abs(float(chrows.loc[c, rc]) / out[c]["return "] - 1) for c in MEMBERS]
+               + [abs(float(chrows.loc[c, pc]) / out[c]["payments per 100 "] - 1) for c in MEMBERS])
+    ok("golden CSV: every channel figure within 0.3 per cent of the one recomputed here (largest %.2f)" % (100 * near),
+       near < 0.003)
     gwb = load_workbook(os.path.join(G, "paid_channels_2027.xlsx"), data_only=True)
     first = gwb.worksheets[0]
     head = str(first["A1"].value)
     ok("golden workbook: the first sheet opens on the call", all(c in head for c in call["scale"] + call["hold"] + call["cut"])
-       and head.index("scale") < head.index("hold") < head.index("cut"))
-    rows = {first.cell(row=r, column=1).value: [first.cell(row=r, column=k).value for k in range(2, 10)]
+       and head.index("scale") < head.index("hold"))
+    rows = {first.cell(row=r, column=1).value: [first.cell(row=r, column=k).value for k in range(2, 5)]
             for r in range(1, first.max_row + 1) if first.cell(row=r, column=1).value in MEMBERS}
-    ok("golden workbook: the first sheet's rows are the CSV's rows",
-       len(rows) == 7 and all(rows[c][0].lower() == fig["bands"][c]
-                              and [float(x) for x in rows[c][1:]] == [float(gcsv.set_index("channel").loc[c, col]) for col in cols.values()]
-                              for c in MEMBERS))
+    labels = {first.cell(row=r, column=1).value: first.cell(row=r, column=2).value for r in range(1, first.max_row + 1)}
+    ok("golden workbook: the first sheet's rows are the CSV's rows, and it carries the plan's installs and revenue",
+       len(rows) == 7 and all(rows[c][0].lower() == fig["bands"][c] and float(rows[c][1]) == float(chrows.loc[c, rc])
+                              and float(rows[c][2]) == float(chrows.loc[c, pc]) for c in MEMBERS)
+       and labels.get("Installs the plan's spend buys") == fig["plan_installs"]
+       and labels.get("Their 12-month net revenue (EUR)") == fig["plan_revenue"])
     print("\n%d passed, %d failed" % (N["pass"], N["fail"]))
     return 1 if N["fail"] else 0
 

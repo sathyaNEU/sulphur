@@ -1,8 +1,9 @@
-channel,band,return_plan_spend,return_stretch_spend,installs_per_week_plan_spend,net_revenue_12m_per_install_plan_spend_eur,return_next_euro_plan_spend,return_next_euro_stretch_spend,net_revenue_12m_per_install_installs_2024-11-04_to_2025-11-02_eur
-Pinterest iOS,scale,1.578,1.175,325,10.20,0.746,0.556,9.37
-Google iOS,scale,1.450,1.250,624,9.36,0.730,0.629,9.47
-Meta iOS,hold,1.050,0.928,789,5.64,0.556,0.492,5.78
-Google Android,hold,1.039,0.941,611,9.33,0.576,0.522,8.60
-AppLovin Android,hold,0.969,0.846,932,4.94,0.616,0.538,4.87
-Snapchat iOS,cut,0.621,0.583,643,5.93,0.342,0.321,6.10
-TikTok iOS,cut,0.549,0.519,750,4.79,0.327,0.309,4.98
+row,channel,band,return_per_eur_plan_spend,monthly_plan_payments_per_100_installs_2024-11-04_to_2025-11-02,installs_2027,net_revenue_12m_eur
+channel,Snapchat iOS,scale,1.457,47.5,,
+channel,Pinterest iOS,scale,1.440,53.4,,
+channel,TikTok iOS,hold,1.079,41.0,,
+channel,Google iOS,hold,1.075,60.5,,
+channel,Google Android,hold,1.070,71.3,,
+channel,AppLovin Android,hold,1.050,42.3,,
+channel,Meta iOS,hold,1.034,33.0,,
+plan,all seven growth channels,,,,232900,1283000

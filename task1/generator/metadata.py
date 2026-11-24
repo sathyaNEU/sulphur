@@ -1,5 +1,9 @@
 """metadata.json, outside target/: each shipped file's source, date and licence, the files the analysis does not use,
 the decision and the deliverables. It names no method and no graded figure."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import json
 
 import docs

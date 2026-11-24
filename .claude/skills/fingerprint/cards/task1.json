@@ -1,8 +1,8 @@
 {
   "task": "task1",
   "project": "sulfur",
-  "architecture": "v7",
-  "drawn": "2026-11-21",
+  "architecture": "v8",
+  "drawn": "2026-11-23",
   "slot_note": "",
   "domain": "product-analytics",
   "client_domain": "product-analytics",
@@ -12,7 +12,7 @@
   "shape": "07",
   "decision_type": "go_hold_or_stop",
   "answer_unit": "set_of_items",
-  "answer": "Scale Google iOS and Pinterest iOS, hold Meta iOS, Google Android and AppLovin Android and cut TikTok iOS and Snapchat iOS for 2027 (return per euro at the plan's weekly spend, generator/figures.json: Pinterest iOS 1.578, Google iOS 1.450; Meta iOS 1.050, Google Android 1.039, AppLovin Android 0.969; Snapchat iOS 0.621, TikTok iOS 0.549); three decisive steps on three axes, three open channels each opened by its own step, each step with a figure of its own (AppLovin Android EUR 4.87 and Meta iOS EUR 5.78 of 12-month net revenue per install, Google Android 611 installs a week at the plan's spend), seven distinct wrong calls across the lattice",
+  "answer": "Scale Snapchat iOS and Pinterest iOS, hold Meta iOS, TikTok iOS, Google iOS, Google Android and AppLovin Android for 2027 (return per euro at the plan's weekly spend, generator/core.py: Pinterest iOS 1.388, Snapchat iOS 1.363; Google iOS 1.106, Meta iOS 1.080, TikTok iOS 1.036, Google Android 1.033, AppLovin Android 0.992); three decisive steps on three axes, each with a figure of its own (AppLovin Android 50.4 and Meta iOS 48.2 monthly-plan payments per 100 installs, 233,300 installs the plan buys), the first step alone moving five of the seven bands",
   "answer_source": "task1/generator/figures.json, written by the generator from the cut pack; task1/submission.md",
   "gap": [
     "time",
@@ -34,7 +34,7 @@
   "validated_decoy": false,
   "context_artifact": "operations_log",
   "stump_class": "analytical",
-  "analyst_test": "A careful but hurried analyst trues the app's billing records up to the stores' reports month by month, prices every install postback of an iOS network at the value its installs that allowed tracking showed at the same first two days (or at the ratio the one fully named iOS channel shows), and fits installs and value per install on each week's spend; that route cuts AppLovin Android (0.71) and Google Android (0.78) and scales Meta iOS (1.84) against the golden's three holds, and files 45 of the 49 graded figures outside their stated ranges.",
+  "analyst_test": "A careful but hurried analyst takes the billing records as they stand, prices each network's unnamed installs with the payer and revenue gap read off the labelled channels and carries the plan at full delivery; that route files scale for Meta iOS (1.740) and Google iOS (1.270) and cut for TikTok iOS (0.799) and AppLovin Android (0.766), four of the seven bands wrong, and lands the other three only because its errors offset (no answer line whole).",
   "domain_test": "Each result is an acquisition-economics and lifetime-value quantity of a subscription app (what an install went on to pay in twelve months where the app's records stop at the last open, what a network's installs are worth where the attribution export names no channel, what a weekly budget buys in an auction, the return per euro at a plan's spend and what the next euro returns); swap the nouns for another field's and the store reports, the tracking prompt, the install postbacks, the campaign flights and the ad auction stop making sense.",
   "layer2_family": "estimation_fit",
   "layer2_pattern": "own:store-charges-recorded-only-at-the-next-open-each-networks-unnamed-installs-priced-from-the-unattributed-accounts-across-market-flights-and-a-weeks-spend-set-by-its-auction",
@@ -82,9 +82,9 @@
   ],
   "opening_move": "question-first",
   "question_form": "which",
-  "driver": "Each unit's band rests on what one more period of its planned outlay returns over a year, a quantity no record holds: the detailed record takes in a payment only when the payer is next seen and the payers no longer seen go on at a rate of their own, which only the complete summary's excess over the detailed record shows period by period; the units no record ties to a source sit in one pool whose outcome is known only as a whole, each source's worth a different fraction of its named units, so one fraction per source is fitted together from how the pool's outcome moves as each source's known count in it moves across places and periods; and the outlay itself is what a supplier delivered of a set amount given that period's market, so the response is read on the amount set and checked on the periods it was moved.",
-  "driver_concrete": "Zancada's growth policy places a paid channel in scale, hold or cut on its 12-month net revenue per euro at the 2027 plan's weekly spend (1.20 and 0.90 the lines). A store charge reaches the billing records only at the subscriber's next open, a store subscription nobody opens is rarely cancelled (0.97 a month, against 0.88 on the web checkout, whose every charge is on file), and the records miss a tenth to 36 per cent of a channel's twelve-month revenue, most on AppLovin Android. On iOS the export names a network's install only where the user allowed tracking (about 27 per cent); the rest, bought without the signal, are worth 0.44 (Meta) to 0.90 (Google) of the named ones at the same first two days and sit among the accounts with no channel with the organic ones, each network's share of them moving with its campaign flights by market. And installs rise about one for one with a week's spend in the record while a budget buys them at an elasticity of 0.68 to 0.80, because the platform spends more of a budget in the weeks its auction is cheap.",
-  "stump": "The careful but hurried route (records trued up to the stores' totals month by month, every postback at the named installs' value by first-48-hour value, the response fitted on spend) cuts AppLovin Android (0.71) and Google Android (0.78) and scales Meta iOS (1.84) against the golden's three holds; each step dropped alone flips its own channel (AppLovin Android 0.74, Meta iOS 1.73, Google Android 0.85), no step fixed alone reaches the call, and the stronger shortcuts (the unseen subscriptions carried at the cancellations the app saw or at the web checkout's continuation; the unnamed installs at the one fully named channel's ratio, at an Android look-alike's or at one ratio for every source) each flip the same channel by another figure.",
+  "driver": "Each unit's band rests on what a year of its planned outlay returns, a quantity no record holds: the detailed record takes in a payment only when the payer is next seen and the payers no longer seen go on at a rate of their own, which only the complete summary's excess over the detailed record shows period by period; the units no record ties to a source sit in one pool whose outcome is known only as a whole, and because each source steers what it takes in blind by an early signal it still receives, the gap the labelled sources show is wrong on every other, so one fraction per source is fitted together from how the pool's outcome moves as each source's known count in it moves; and the planned outlay is what a supplier will bill of a set amount, so what it buys is read on the amount set, with the share delivered beside it.",
+  "driver_concrete": "Zancada's growth policy places a paid channel in scale, hold or cut on its 12-month net revenue per euro at the 2027 plan's weekly spend (1.20 and 0.90 the lines). A store charge reaches the billing records only at the subscriber's next open and a store subscription nobody opens is rarely cancelled (0.97 a month, against 0.71 on the web checkout, which emails a receipt for every charge), so the records miss 2 per cent of Meta iOS's twelve-month revenue, 36 per cent of AppLovin Android's and 39 per cent of TikTok iOS's. On iOS the export names a network's install only where the user allowed tracking (27 per cent); the rest sit among the accounts with no channel, worth 0.45 (Meta) to 0.72 (Google) of the named ones, and because a network still gets each install's first-48-hour value in its postback and steers its blind buys by it, the payer and revenue gap the labelled channels show is wrong on every network. And the plan's weekly figures are billed spend, what the platform delivered of a budget (83 to 87 per cent over the 104 weeks), so the plan's spend needs its budget.",
+  "stump": "Both responses on record took the billing records as they stand (S1), which cuts TikTok iOS, Google Android and AppLovin Android and holds Snapchat iOS and Pinterest iOS against the golden's bands; Response 1 also priced each network's unnamed installs with the payer and revenue gap borrowed from the labelled channels (S2), which scales Meta iOS (1.47) because an iOS network steers what it buys blind by the first-48-hour value its postbacks return; Response 2 priced the plan at full delivery (S3), which puts the plan's installs 15.5 per cent high and alone scales Meta iOS, Google iOS and Google Android. Each step dropped alone flips its own channel, none fixed alone reaches the call, and a run careful on S2 and S3 still files five bands wrong.",
   "answer_shape": "forecast-bands-drivers",
   "weight": "hard-to-measure",
   "chain_signature": [
@@ -93,16 +93,15 @@
     "causal-reasoning",
     "forecasting",
     "forecasting",
-    "modeling",
     "synthesis"
   ],
-  "results": "R1 what an install bought on each Android channel in the year to 2 November 2025 paid in its first twelve months, net; R2 the same for each iOS network, over every install it bought; R3 the installs a week the plan's spend buys on each channel; R4 the 12-month net revenue per install of those installs; R5 each channel's 2027 return per euro at the plan's weekly spend and at its stretch spend; R6 what one more euro returns on top of the plan's weekly spend and on top of its stretch spend; R7 each channel's band",
-  "one_fact_test": "the most useful sentence on the cut pack's rubric (a week's spend is what the platform chose to deliver of the week's budget in that week's auction, so what a budget buys shows in the weeks the team moved it) leaves the estimator, the level set to the history and the budget that delivers the plan's spend to build; alone on the reflex route it adds 16.1 rubric points (10.9 to 27.0, each answer line one criterion) and rescues R3 (1 of 7); the consent sentence (each network's installs that declined the tracking prompt are worth a different fraction of its named ones, and they sit among the accounts with no channel) adds as many (to 27.0) and rescues no result whole; the stores' sentence adds 10.4 (to 21.3) and rescues R1",
+  "results": "R1 the monthly-plan payments per 100 installs that each Android channel's installs of the year to 2 November 2025 made in their first twelve months; R2 the same for each iOS network, over every install it bought; R3 the installs the whole 2027 plan's billed spend buys; R4 the twelve-month net revenue those installs bring; R5 each channel's 2027 return per euro at the plan's weekly spend; R6 each channel's band",
+  "one_fact_test": "the most useful sentence (the plan's billed spend needs the budget that bills it, at the record's delivery share) takes the reflex route from 9 to 22 on corelib's rubric and rescues R3 alone (1 of 6); the stores' sentence takes it to 16 and rescues R1 alone; the consent sentence to 16 and rescues no result whole",
   "strategy_label": "UNTESTED",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark115": "mark115 forecast a deal mechanic's second response where its new level crosses a rival's, measured on the stores that moved; here no response at a rival's level decides anything: each channel's 12-month return is estimated from three records with their own blind spots (store charges the app sees only at the subscriber's next open, iOS installs the attribution export names only with tracking consent, a weekly spend the auction sets), each opening a different channel and each ruled on by a slice the plan's channels do not reach",
-    "task1": "v6 priced the installs with no channel by one ratio that makes the unattributed accounts add up and graded an unrecorded share and two totals; v7 moves the decisive rung: every network's unnamed installs are worth their own fraction of its named ones (0.44 to 0.90), fitted together across market-weeks from the campaign flights, v6's single ratio and the one fully named channel's ratio are priced shortcuts that scale Meta iOS, the unseen store subscriptions go on at a rate neither the app's own cancellations nor the web checkout's show, and each step owns a figure the prompt asks for"
+    "task1": "v7 was returned with one step lost on the runs' evidence and four bands forced wide; v8 keeps v7's three estimators and redials the world: an iOS network steers its blind buys by the first-48-hour value its postbacks return, so the gap borrowed from the labelled channels is wrong on every network; every member sits 0.09 to 0.19 from its nearest line and moves across it with one step lost, the first step alone moving five of the seven bands; the stretch, marginal and per-channel installs asks are cut, and the first step owns its own checkable figure (monthly-plan payments per 100 installs)"
   },
   "lineage": [
     {
@@ -351,6 +350,11 @@
       ],
       "gate_g": "forecasting",
       "decision_type": "go_hold_or_stop"
+    },
+    {
+      "architecture": "v7",
+      "fate": "returned 2026-11-22 at review (reward 64, Stumped failed): one decisive step on the runs' own evidence; both responses counted the iOS installs from the postbacks, valued the unnamed installs source by source and fitted the install response on the budget, so S2 and S3 read as made and S1 (the stores' charges the records never took in) alone as lost; four bands forced by wide margins, S1 buried in revenue per install, the stretch and marginal asks mechanical. Re-read on 2026-11-23: each response lost two steps (Response 1 S1 with S2's borrowed shift, Response 2 S1 with S3's full delivery) and the errors cancelled on Meta iOS and Google Android. Redrawn in the same world as v8 at the author's ruling.",
+      "driver": "Each unit's band rests on what one more period of its planned outlay returns over a year, a quantity no record holds: the detailed record takes in a payment only when the payer is next seen and the payers no longer seen go on at a rate of their own, which only the complete summary's excess over the detailed record shows period by period; the units no record ties to a source sit in one pool whose outcome is known only as a whole, each source's worth a different fraction of its named units, so one fraction per source is fitted together from how the pool's outcome moves as each source's known count in it moves across places and periods; and the outlay itself is what a supplier delivered of a set amount given that period's market, so the response is read on the amount set and checked on the periods it was moved."
     }
   ],
   "lineage_shells": [
@@ -374,13 +378,18 @@
       "question form": "which",
       "second-sentence opener": "i'd",
       "deliverable set": "pptx+xlsx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "none",
+      "deliverable set": "csv+xlsx"
     }
   ],
   "architecture_spent": null,
-  "notes": "architecture 7, redrawn on 2026-11-21 under the client's phase 2 bar, before any upload (the READY cut of 2026-11-16, 2af8cff, never went to the platform, so its prompt's shell is not carried as a lineage shell). What moved from v6: the second step is redrawn (each iOS network's installs that declined tracking are worth a network-specific fraction of its named ones, fitted as one ratio per source across market-weeks; v6's single ratio is now a priced shortcut, and so are the one fully named channel's ratio and an Android look-alike's); the world gives every paid channel campaign flights by market; the first step's world separates the three continuations (a store subscription nobody opens, the web checkout's, a subscriber still opening) and its figure is asked for in the decision's words (what an install went on to pay); each step owns one critical component (AppLovin Android's and Meta iOS's 12-month net revenue per install, Google Android's installs a week at the plan's spend). New vocabulary keys, none on file being honest: the lesson unlabelled_pool_apportioned_by_varying_mix and the move source_rates_fitted_to_pool_totals. stump_strategy decomposition_attribution: the largest step apportions the unattributed accounts' revenue among the sources that bought them. Axes redrawn at this registration, the window having moved past the card's first filing: the weight is hard-to-measure (the twelve-month return of a euro no record holds; v6 said measurement, which task8 now holds), the answer shape forecast-bands-drivers (each channel's forecast return at the plan's and the stretch spend with the installs and the value per install that drive it, the band being the recommendation on top; v6 said flagged-set, which describes a designation with a false-alarm rate this answer never had), the prompt shape 07 (a grid of channels by figures), the forum executive_team (the heads of growth and of financial planning approve the plan) and the forcing event purchase_order_or_contract (the 2027 insertion orders signed in December).",
+  "notes": "architecture 8, redrawn on 2026-11-23 in the same world after v7's return (reward 64, 2026-11-22), at the author's ruling: the value side unfrozen, the golden's three estimators and conventions kept. What moved: the iOS networks steer what they buy blind by the first-48-hour value (STEER), Meta iOS and Google iOS subscribers rarely go silent, the web checkout loses silent subscribers faster, every member 0.09 to 0.19 from its nearest line (TikTok iOS, Snapchat iOS and Pinterest iOS re-placed at a second pass so the six finer-row fits of the second step file the golden's call), the plan's Meta iOS and AppLovin Android spends re-drawn so the plan buys 4 per cent fewer installs than the record's mature year, the asks cut to each channel's return and monthly payments per 100 installs and the plan's installs and revenue; the withheld postback values (S4 of the first arch 8 screen) dropped. architecture 7, redrawn on 2026-11-21 under the client's phase 2 bar, before any upload (the READY cut of 2026-11-16, 2af8cff, never went to the platform, so its prompt's shell is not carried as a lineage shell). What moved from v6: the second step is redrawn (each iOS network's installs that declined tracking are worth a network-specific fraction of its named ones, fitted as one ratio per source across market-weeks; v6's single ratio is now a priced shortcut, and so are the one fully named channel's ratio and an Android look-alike's); the world gives every paid channel campaign flights by market; the first step's world separates the three continuations (a store subscription nobody opens, the web checkout's, a subscriber still opening) and its figure is asked for in the decision's words (what an install went on to pay); each step owns one critical component (AppLovin Android's and Meta iOS's 12-month net revenue per install, Google Android's installs a week at the plan's spend). New vocabulary keys, none on file being honest: the lesson unlabelled_pool_apportioned_by_varying_mix and the move source_rates_fitted_to_pool_totals. stump_strategy decomposition_attribution: the largest step apportions the unattributed accounts' revenue among the sources that bought them. Axes redrawn at this registration, the window having moved past the card's first filing: the weight is hard-to-measure (the twelve-month return of a euro no record holds; v6 said measurement, which task8 now holds), the answer shape forecast-bands-drivers (each channel's forecast return at the plan's and the stretch spend with the installs and the value per install that drive it, the band being the recommendation on top; v6 said flagged-set, which describes a designation with a false-alarm rate this answer never had), the prompt shape 07 (a grid of channels by figures), the forum executive_team (the heads of growth and of financial planning approve the plan) and the forcing event purchase_order_or_contract (the 2027 insertion orders signed in December).",
   "shell": {
     "question form": "which",
-    "second-sentence opener": "none",
+    "second-sentence opener": "our",
     "deliverable set": "csv+xlsx"
   },
   "skeleton": {
@@ -398,7 +407,8 @@
       "platform_delivers_more_of_a_budget_when_the_auction_is_cheap",
       "team_budget_moves_identify_what_a_budget_buys",
       "store_charges_recorded_only_at_the_next_app_open",
-      "store_subscription_nobody_opens_is_rarely_cancelled"
+      "store_subscription_nobody_opens_is_rarely_cancelled",
+      "ios_network_steers_blind_buys_by_postback_value"
     ],
     "detection": [
       "control_total_gap",
@@ -421,5 +431,5 @@
       "unused_distractor"
     ]
   },
-  "registered": "2026-11-21T17:09:02Z"
+  "registered": "2026-11-24T00:16:05Z"
 }

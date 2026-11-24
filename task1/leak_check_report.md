@@ -1,13 +1,14 @@
 # leak check, task1
 
-**Verdict: REVIEW.** 14 files read, 148 golden figures and 2 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 14 files read, 53 golden figures and 2 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: android, google, budget, applovin, stores, network, fitted, tiktok, snapchat, charges, accounts, charge, checkout, declined, pinterest, continuation, reports, missed, record, source, export, second, excess, auction, component
+Stump terms swept: android, google, budget, install, applovin, stores, network, tiktok, continuation, snapchat, pinterest, record, billed, charges, delivery, channels, fitted, declined, beside, carried, reports, accounts, charge, checkout, inside
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `growth_policy_paid_channels_v3_2026-09.pdf`: 8 of 25 stump-paragraph terms appear (google, budget, stores, charges, charge, checkout); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `growth_policy_paid_channels_v3_2026-09.pdf`: 9 of 25 stump-paragraph terms appear (google, budget, install, stores, record, charges); read whether the document names the move
+- **REVIEW** `prompt`: prompt sentence carries two or more stump terms: "Our records run to 8 November 2026 and none of the installs that spend buys will be twelve months old before 2028, so each channel's return has to be an estimate."
 
 ## 9 dates after the setting (REVIEW 1)
 - **REVIEW** `media_plan_2027.xlsx`: 156 ISO dates after 2026-11-09, e.g. 2027-01-04, 2027-01-11, 2027-01-18, 2027-01-25, 2027-02-01
@@ -154,3 +155,52 @@ None as a ranking of return. Closest: none of the files computes return or ROAS.
 `media_plan_2027.xlsx`: 156 ISO dates after 2026-11-09: harmless. The file is the 2027 media plan, drafted 30 October 2026, and the prompt itself asks about the 2027 plan, so the weeks starting 2027-01-04 to 2027-12-27 (52 weeks x 3 sheets = 156) are the plan's own calendar and reveal no result or method.
 
 After the second read the final cut (pack digest 4811ca4627b3e1d3) changed seven cells of the change log's Reason column and nothing else in the pack: five reasons that stood twice in the same words, and two rows the re-deal moved with them, now carry another of the same writer's reasons, so that no reason for a budget move is written twice in the same words. One new wording entered the pack with them, the closer "Invoice settled" on the row that ends a hold over a disputed agency invoice, and no third read was run; the mechanical sweeps above are of the final cut. The rulings on both reads are in the design note's `## Leak rulings`.
+
+Third read, 2026-11-24, of architecture 8's cut (target.zip md5 f4049ea8cb8e1f093e06abd50e203724; one isolated reader on Sonnet at medium, shown only fresh copies of the prompt and the pack; it reads for leaks and does not solve). Its answers, as returned:
+
+1. Method, step, comparison, adjustment, grouping, population or window
+Several filed sentences fix populations, windows and conventions. None names a method or estimator.
+- growth_policy_paid_channels_v3_2026-09.pdf s2.2: "An install is the first install of a new consumer account. A second device, a reinstall, a staff account and a test account are not installs. Each install is bought by at most one channel, the one whose ad drove it, whether or not the attribution partner can name it; an install no ad drove is organic." This fixes the population. It also says the attribution partner may not name every ad-driven install.
+- PDF s2.1: "For a plan year the period is the plan's 52 weeks and the spend is the plan's weekly spend on the channel, as the platform bills it."
+- PDF s2.3: "...every charge the App Store, Google Play or the web checkout made on its account in the 365 days from the install, each at the time of the transaction, less the net revenue of any of those charges refunded."
+- PDF s2.4: VAT of "Spain 21 per cent, Italy 22 per cent, Portugal 23 per cent, by the storefront". Store commission of "15 per cent of the price net of VAT". Web processor fee of "3 per cent of the price net of VAT".
+- PDF s2.6: "A channel's marginal return at a stated spend is the 12-month net revenue that one more euro of spend returns at that spend, every week of the period raised in the same proportion."
+- PDF s3.1: bands are scale at 1.20 or more, hold at 0.90 to under 1.20, cut under 0.90.
+- PDF s4.1: "each return is an estimate, and it is given as a committed figure."
+- prompt.txt: "how many payments on the monthly plan the installs it bought in the year to 2 November 2025 made in their first 12 months, per 100 installs". This fixes that population and window. "at the weekly spend the plan gives it" fixes the spend.
+- PDF s1.2 excludes the brand sheet (Apple Search Ads) from placement.
+- paid_budgets_weekly_2024-2026.xlsx 'Changes' sheet is a log of budget changes with reasons. It states no method.
+
+2. A file that already ranks or scores the candidates
+None. Nothing ships a per-channel return or a band. creative_tests_2025-2026.csv has per-arm network-reported installs only, not a ranking on the return question. The media plan has spend only.
+
+3. A file that exists only to help the analyst
+None as such. The nearest is skadnetwork_conversion_values.json, a conversion-value schema ("sessions_bucket", "trial_started", "purchased"). It documents the conversion_value fields in accounts and the SKAN postbacks, so it is a field dictionary. The PDF policy is a definitions document, but the question needs it.
+
+4. A figure or name that reads as the answer
+None. The nearest items are context:
+- PDF s3.1 band thresholds (1.20 and 0.90). They are the task's bands, not results.
+- media_plan_2027.xlsx "Total 2027" rows: 1135390 on Growth channels and 1497772.5 on Stretch case. They are plan spend, not results.
+- The Stretch case sheet is a spend schedule only.
+
+5. A filed sentence that fixes how a graded figure is computed or over which population
+- PDF s2.3: "...the net revenue of every charge the App Store, Google Play or the web checkout made on its account in the 365 days from the install, each at the time of the transaction, less the net revenue of any of those charges refunded." Read literally, each install's revenue is the net of every charge in its first 365 days, including the trial-end first charge, renewals and web charges, minus refunded charges. Charges are taken at their transaction time.
+- PDF s2.4 plus s2.5: net revenue per charge is price, less VAT by storefront, less 15% (store) or 3% (web) of the net-of-VAT price. Prices are EUR 9.99 a month and EUR 59.99 a year.
+- PDF s2.1: return is the 12-month net revenue of the installs the plan year's spend buys, per euro of that spend. It is evaluated at the plan's weekly spend over 52 weeks.
+- PDF s2.2: each install is credited to the one channel whose ad drove it, even where the attribution partner cannot name it. Read literally, installs with no media_source in the attribution file can still belong to a paid channel. Organic installs are those no ad drove.
+- PDF s2.6: marginal return is the response to scaling every week's spend by the same proportion.
+- prompt.txt: payments per 100 installs counts monthly-plan payments in each install's first 12 months, for installs in the year to 2 November 2025. It is not revenue, so it is a count of charges.
+
+6. One thing that would make most of the ask routine
+I found no single file, sentence or planted pattern that settles most of it. The nearest candidate is PDF s2.2, the sentence "whether or not the attribution partner can name it". It tells the analyst that installs the attribution partner leaves unnamed still belong to paid channels. It settles the credit population only. It does not give any channel's return, its response to spend, its 2027 estimate, the plan totals or the bands. The marginal return, the response curve and the extrapolation to a 2027 year not yet twelve months old are all left to the analyst.
+By part of the ask:
+- Band per channel: analysis, applying PDF s3.1 to estimated returns. The band cuts are a stated rule, but the figure being banded is an estimate.
+- Committed 2027 return per channel, in euros of 12-month net revenue per euro of spend at the plan's weekly spend: analysis. The inputs are the attribution, accounts and billing joins. The 2027 return is a forward estimate under a spend response, since the installs are not yet twelve months old. The definition (PDF s2.1 to s2.4) is a stated convention that has to be followed correctly, but it does not produce the figure.
+- Monthly-plan payments per 100 installs in the first 12 months, for installs in the year to 2 November 2025: partly "reading a definition correctly" (which installs count, and which payments on which plan). The filed population and window mean it is mostly counting, though assigning unnamed ad-driven installs to channels (PDF s2.2) and net-of-refund handling take real work.
+- Plan-level installs bought by 2027 spend: analysis, a forward estimate of installs from spend.
+- Plan-level 12-month net revenue of those installs: analysis, a forward estimate that chains installs and revenue per install.
+Nothing here turns on catching a planted item as such. The sandbox, staff and test accounts and the reinstalls are named in the policy.
+
+REVIEW item: `media_plan_2027.xlsx` dates after 2026-11-09: harmless. The file is the 2027 plan, so its 52 weekly rows (2027-01-04 onward, repeated on the three sheets) are the forward spend the prompt asks about.
+
+Main thread, 2026-11-24: nothing to fix. Every quoted sentence is a definition of population, window or convention that executes to the golden's own (the policy's 2.1 to 2.5, the prompt's monthly plan and its year to 2 November 2025); no file ranks, helps or answers; question 6 finds no one thing. The two stump-vocabulary lines are ruled in the design note's `## Leak rulings`.

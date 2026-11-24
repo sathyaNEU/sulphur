@@ -6,6 +6,10 @@ channel buys market by market: a campaign runs in one market (ES, IT or PT), liv
 and an install's market is its storefront. The mess laid on top (re-sent rows, reinstalls, staff and test accounts,
 sandbox charges, refunded purchases, webhook retries, Apple's Pacific days, a few euros billed after a pause) never
 touches an array the core reads."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import csv
 import datetime as dt
 import os

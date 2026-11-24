@@ -1,6 +1,10 @@
 """Zancada's own documents: the growth policy for paid channels (exported from a word processor through the house
 writer), the growth team's weekly budget workbook with its change log, the 2027 media plan workbook and the app's
 conversion-value schema."""
+import os  # noqa: E402
+# numpy runs on Apple's Accelerate here, whose threads do not survive a fork: one thread, set before numpy loads
+for _v in ("VECLIB_MAXIMUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
 import datetime as dt
 import json
 import os
