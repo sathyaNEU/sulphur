@@ -1,12 +1,12 @@
 {
  "task": "task9",
- "status": "READY",
+ "status": "RUNS",
  "domain": "general-statistics-data-science",
  "subdomain": "interpretability",
  "objective": "root-cause",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-23",
+ "stage": 6,
+ "stage_name": "runs",
+ "updated": "2026-11-24",
  "doctrine": "throughout",
  "seed": 9605,
  "call": "for 2027 escalate label revisions (9.82 points between consecutive quarter-end snapshots), put feature releases (7.06), optimisation noise (6.86) and training data (6.83) on remediation plans, and keep retunes on monitor (4.29), against the stability standard's lines of 5.5 and 8.0 points; combined model-side movement 16.07 points for 2027 (Q1 16.89, Q2 17.07, Q3 15.52, Q4 14.69); 34.8 per cent of 2027's 52 assessment-year weekly retrains expected to actually run on pinned feature views",
@@ -67,11 +67,19 @@
  "runs": {
   "architecture": 6,
   "pair": 1,
-  "files": [],
+  "files": [
+   "runs/run1.md",
+   "runs/run2.md"
+  ],
   "run1": null,
   "run2": null,
   "average": null,
   "rubric": null,
+  "recorded": "2026-11-24",
+  "first_wrong_step": {
+   "run1": "method_shortcut (S1 linear warm-start carry 12.119; S3 orthogonal feature releases 4.563)",
+   "run2": "method_shortcut (S1 linear warm-start carry 12.117; S2 single-refit mean(C/N_eff) 5.950; S3 orthogonal releases 1.960; S4 calendar planned pins 83.379%)"
+  },
   "history": [
    {
     "architecture": 5,
@@ -192,7 +200,33 @@
    "repair": "redesign (Level-5 architecture 6 upgrade)"
   }
  ],
- "resume": "upload prompt.txt, target.zip, golden.zip, and the four answer blocks from submission.md to the platform for architecture 6 pair 1; once both runs and the generated rubric return, run /triage-runs to map losses, draft How is each model stumped?, and route to SUBMIT",
+ "holistic": [
+  {
+   "date": "2026-11-24",
+   "mode": "holistic",
+   "report": "task9/runs/holistic_check_v4.md",
+   "verdict": "passed",
+   "score": 4,
+   "rubric": {
+    "run1": 0.58,
+    "run2": 0.32,
+    "mean": 0.45,
+    "stumped": "passed"
+   },
+   "correctness": "passed",
+   "determinism": "pinned",
+   "depth_level": 4,
+   "depth_flag": "none",
+   "loss_concentration": 0.381,
+   "must_fix": [],
+   "md5": {
+    "prompt.txt": "76464a490e249acffd63489d393e5906",
+    "target.zip": "3d1a3459a01af1bb411d56cba5631852",
+    "submission.md": "db113a52098906ae4d1f2eaea085354e"
+   }
+  }
+ ],
+ "resume": "stage 6: in-house Holistic Audit v4 passed on architecture 6 pair 1 (score 4, depth level 4, Run 1 0.58, Run 2 0.32, mean 0.45, loss_concentration 0.381 spread, must_fix none); run /triage-runs for run-triage and How is each model stumped?, confirm prompt_rewritten status, and proceed to submit",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -359,6 +393,10 @@
   {
    "date": "2026-11-23",
    "event": "architecture 5 pair 3 scored 0.60 / 0.60 (mean 0.60, fail; depth 4 concentrated on warm-start noise decay); upgraded to Level-5 architecture 6 (seed 9605) keeping S1 warm-start decay, replacing solved uniform overlap with S2 exponential recency decay inverted from 16 seasonal 2026 bootstrap pairs/family, and adding S3 within-group merchant-level release covariance across 141 same-group 2026 shadow pairs carried to 2027 multi-phase sprints; closed both Holistic Audit v3 determinism notes without leaking (Standard 2.2 52 assessment-year Mondays and strictly linear 29-55w cold-era curves); READY: precut 120/120 (0 FAIL), effort 26.7 (single stump lost 40), corelib CORE PASS level 5 zero waivers (44/44/49, reflex 20, run routes 14), checks 78/78, verify 25/25, figures 179/179, containers 0 FAIL/0 WARN, leak-reader CLEAN (4 minor realism tells fixed in pack.py), determinism-judge DETERMINISTIC APPROVE (38 forks run, fix none)"
+  },
+  {
+   "date": "2026-11-24",
+   "event": "RUNS: architecture 6 pair 1 saved verbatim as runs/run1.md and runs/run2.md; in-house Holistic Audit v4 (determinism-judge holistic mode) passed, score 4: correctness passed, determinism pinned (both shared run shortcuts forced by 2026 panel and release-shadow records), rubric Run 1 0.58 / Run 2 0.32 / mean 0.45 (stumped passed), depth level 4 (DEEP, depth_flag none, loss_concentration 0.381 spread), must_fix none"
   }
  ],
  "final_cut": {
