@@ -1,12 +1,12 @@
 {
  "task": "task16",
- "status": "READY",
+ "status": "RUNS",
  "domain": "general-statistics-data-science",
  "subdomain": "data-integration-record-linkage-entity-resolution",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-13",
+ "stage": 6,
+ "stage_name": "runs",
+ "updated": "2026-11-24",
  "doctrine": "throughout",
  "call": "run Rule B (exact first name, last name, birth date, sex and street address) at the 5 April 2027 conversion: 35,566 links, about 3 false merges once its 5 blood mismatches are explained (3 on records holding two patients), 0.17 per 2,000 against HIM-14's one; Rule A 1.85 (59.5 chance merges the national rates and the blood bank do not see), Rule C 1.63 (41 twins, 16 documented), Rule D 4.86",
  "chain": "R1 the converted index (212,402 distinct patients, 69,318 in both); R2 rule A's false merges (59.5); R3 rule C's twins (41); R4 rule D's false merges (104); R5 Calder Bay records holding two or more patients (556); R8 rule B's false merges once its blood mismatches are explained (3); R6 the rule (B); R7 patients left under more than one record after Rule B (44,567); R9 Rule B's links touching a record that holds two patients (124) and those records (119)",
@@ -41,16 +41,20 @@
   "largest_hint": "the chance-agreement sentence rescues R2 (one of nine; each stump's sentence rescues one)"
  },
  "runs": {
+  "files": [
+   "runs/run1.md",
+   "runs/run2.md"
+  ],
   "run1": null,
   "run2": null,
   "average": null,
   "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "",
-   "run2": ""
+   "run1": "method_shortcut (S2 Rule A delivery-log-only 3 false merges; S4 EM linkage skipped)",
+   "run2": "method_shortcut (S2 Rule A delivery-log-only 3 false merges; S3 23 overlays only; S4 EM linkage skipped)"
   },
   "triage": "",
-  "recorded": "",
+  "recorded": "2026-11-24",
   "history": [
    {
     "architecture": 1,
@@ -139,7 +143,33 @@
    "route": "architecture 4 in the same world at the reviewer's request: the confirming files' direct counts land wrong on three members (A, B, C), each opened by its own stump; level 5 under stumping Part 3.4"
   }
  ],
- "resume": "stage 6: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py; keep the note asked for as a PDF), uploads it and target.zip, and pastes both runs and the rubric for /triage-runs",
+ "holistic": [
+  {
+   "date": "2026-11-24",
+   "mode": "holistic",
+   "report": "task16/runs/holistic_check_v4.md",
+   "verdict": "passed",
+   "score": 4,
+   "rubric": {
+    "run1": 0.39,
+    "run2": 0.31,
+    "mean": 0.35,
+    "stumped": "passed"
+   },
+   "correctness": "passed",
+   "determinism": "pinned",
+   "depth_level": 4,
+   "depth_flag": "none",
+   "loss_concentration": 0.508,
+   "must_fix": [],
+   "md5": {
+    "prompt.txt": "a37c5f56e0ec9ebadfc5b1d799f6c07c",
+    "target.zip": "23ce6a22bfbd88e73ae42866aebed2a1",
+    "submission.md": "8a17d92ed5755852538aa5f599cec0e1"
+   }
+  }
+ ],
+ "resume": "stage 6: in-house Holistic Audit v4 passed (score 4, depth level 4, Run 1 0.39, Run 2 0.31, mean 0.35, loss_concentration 0.508, must_fix none); run /triage-runs for run-triage and How is each model stumped? or proceed to submit",
  "approved": null,
  "submitted": null,
  "portal": {
