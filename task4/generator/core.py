@@ -301,7 +301,7 @@ def records(world, seed=SEED + 1):
 
 # ------------------------------------------------------------------------------------------------- the estimators
 GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
-              count_months="all", harmonics=2, hinge=0.0, share_fit="panel", level="fit", age_fit="wls", age_drop=0,
+              count_months="all", harmonics=2, hinge=0.0, share_fit="between", level="fit", age_fit="wls", age_drop=0,
               alive="lots", clock="deliveries",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)   # the forcing battery's multipliers on the fitted inputs
 # the hurried choice at each stump, and the same stump pushed past its fitted value to the far end a run might set
@@ -377,29 +377,34 @@ def fit_cellar(rec, o):
 
 
 def fit_store(R, o):
-    """the cold store's stock beer by beer: each beer's Monday stock on its deliveries that week (a cover in weeks
-    of deliveries, one for each container type) and on its racking run (the share of a run a beer holds beyond its
-    cover, one for every beer). Nothing files the share and no type's own record can show it, because a type's runs
-    never changed in the record; the beers' different runs do. Returns the share and each type's cover"""
-    first = 0 if o["share_fit"] == "all" else 52
+    """the cold store's stock beer by beer. A beer's Monday stock saws between its cover and its cover and a run, and
+    a heavy week of deliveries is itself what draws it down, so the week-to-week movement inside a beer says nothing
+    of its cover; the beers' means do. The golden fits each beer's mean Monday stock (the last 104 Mondays) on its
+    mean weekly deliveries (a cover in weeks of deliveries) and on its racking run (the share of a run a beer holds
+    beyond its cover), across every beer of every container type. Nothing files the share and no type's own record
+    can show it, because a type's runs never changed in the record; the beers' different runs do. The battery fits
+    the same on every Monday of the record, on the beer-weeks themselves with one cover, and on the beer-weeks with
+    a cover for each container type. Returns the share and each type's cover"""
+    kind = o["share_fit"]
+    first = 0 if kind == "between_all" else 52
+    by_type = kind == "panel"
     rows = []
     for k, p in enumerate(POOLS):
         rec = R["pool"][p]
         for code, sh, run in rec["beers26"]:
             st, fl = rec["store_beer"][code][first:], rec["flow_beer"][code][first:]
-            if o["share_fit"] == "between":                       # each beer's mean stock on its mean deliveries
+            if kind.startswith("between"):                        # each beer's mean stock on its mean deliveries
                 st, fl = np.array([st.mean()]), np.array([fl.mean()])
             for a, b in zip(st, fl):
                 x = np.zeros(len(POOLS) + 1)
-                x[0 if o["share_fit"] in ("one_cover", "between") else k] = b
+                x[k if by_type else 0] = b
                 x[-1] = run
                 rows.append((x, a))
     X, y = np.array([r[0] for r in rows]), np.array([r[1] for r in rows])
     use = [j for j in range(X.shape[1]) if np.abs(X[:, j]).sum() > 0]
     beta = np.zeros(X.shape[1])
     beta[use] = np.linalg.lstsq(X[:, use], y, rcond=None)[0]
-    one = o["share_fit"] in ("one_cover", "between")
-    return dict(theta=float(beta[-1]), cov={p: float(beta[0 if one else k]) for k, p in enumerate(POOLS)})
+    return dict(theta=float(beta[-1]), cov={p: float(beta[k if by_type else 0]) for k, p in enumerate(POOLS)})
 
 
 def fit_age(rec, o):
@@ -549,9 +554,9 @@ FAMILY = [
     ("the bend in the weather response a degree higher", {"hinge": 1.0}),
     ("one seasonal harmonic in the deliveries fit", {"harmonics": 1}),
     ("three seasonal harmonics in the deliveries fit", {"harmonics": 3}),
-    ("the store's stock fitted with one cover for every container type", {"share_fit": "one_cover"}),
-    ("the store's stock fitted between beers, on each beer's mean stock and mean deliveries", {"share_fit": "between"}),
-    ("the store's stock fitted on every Monday of the record, not the last 104", {"share_fit": "all"}),
+    ("the store's stock fitted between beers on every Monday of the record, not the last 104", {"share_fit": "between_all"}),
+    ("the store's stock fitted on the beer-weeks themselves, one cover", {"share_fit": "one_cover"}),
+    ("the store's stock fitted on the beer-weeks with a cover for each container type", {"share_fit": "panel"}),
     ("deliveries at the count over its last two weeks, not the fit's value for its week", {"level": 2}),
     ("deliveries at the count as its own week's", {"level": 1}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
