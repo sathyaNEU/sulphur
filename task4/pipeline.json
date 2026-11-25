@@ -1,46 +1,46 @@
 {
  "task": "task4",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "supply-chain-logistics",
  "subdomain": "regression-classification-model-diagnostics",
  "client_domain": "general-statistics-data-science",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-17",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-25",
  "doctrine": "throughout",
  "architecture": 14,
- "loops": 0,
- "call": "buy 30 litre kegs and firkins, hire 50 and 20 litre kegs for the season, nothing for kilderkins (largest weekly shortfall in the 2027 summer season, planning case, generator/figures.json on the cut pack: 50 litre 1,879, 30 litre 3,294, 20 litre 633, firkins 1,617, kilderkins -429; lines nil and the maker's minimum order run 3,500, 1,500, 1,200, 1,200, 600)",
- "chain": "R1 each pool's stock account at the four counts and its deliveries; R2 the rise in the trade's stock from the count to the worst week; R3 the containers the trade lost in the year to 30 November 2026; R4 the store's full stock under the 2027 brew plan; R5 each pool's largest weekly shortfall in the planning case; R6 the same in the hot case; R7 the cover per pool",
- "stump": "the reflex route (the trade's stock moved in step with deliveries, the store's weeks of cover carried from 2026, the tagged pool's loss carried to every pool) files 7,067, 3,714, -383, -847, -877: a purchase of 50 and 30 litre kegs, nothing for 20 litre kegs, firkins and kilderkins; S1 lost alone files 5,764 fifty-litre (a purchase), S2 lost alone -658 twenty-litre (nothing), S3 lost alone 867 firkins (a seasonal hire)",
+ "loops": 1,
+ "call": "(from generator/core.py at the draw; the cut pack's figures replace them) buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (largest weekly shortfall in the 2027 summer season, planning case: 50 litre 4,417, 30 litre 1,907, 20 litre 657, firkins 1,684, kilderkins -457; lines nil and the maker's minimum order run 3,500, 1,500, 1,200, 1,200, 600)",
+ "chain": "R1 each pool's account at the count of 30 November 2026 (register and count by purchase lot) and its deliveries; R2 the rise in the trade's stock from the count to its summer peak, from full-only cellar counts rebuilt on each line's delivery cycle; R3 the containers the trade loses in a year, from the share of each purchase lot found on site against its age; R4 the store at its fullest under the 2027 brew plan; R5 each pool's largest weekly shortfall in the planning case; R6 the same in the hot case; R7 the cover per pool",
+ "stump": "the reflex route (the reps' counts fitted as they stand, the store's weeks of cover carried from 2026, the counted fleet carried forward with no loss) files -471, -222, -839, 102, -767: nothing for the three keg pools and a hire of firkins; S1 lost alone files 2,675 fifty-litre and 1,182 thirty-litre (a hire each), S2 lost alone -510 twenty-litre (nothing), S3 lost alone 768 firkins (a hire); each stump pushed past its fit files a wrong cover too, and the four run routes (hedge, generous, calibrated, cut-off) each file a wrong call",
  "precut": {
   "exit": 0,
-  "date": "2026-11-17",
-  "checks": "precut.py task4: 113 checks, 0 FAIL, 3 WARN (nearest chains task14 and task24 answered in the Template check; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5 (seeds 1 to 12: eleven pass); core.py --forcing exit 0; prompt gate PASS"
+  "date": "2026-11-25",
+  "checks": "precut.py task4: 117 checks, 0 FAIL, 4 WARN (nearest chains task8, task19 and task22 answered in the Template check; checks.py and effort.json owed at stage 3; the build's wider battery owed at stage 3); generator/core.py CORE PASS level 5 with every row PASS on a card re-registered today (seeds 1 to 16: fifteen pass, seed 5 fails the world's own consistency check); core.py --forcing exit 0; prompt gate PASS"
  },
  "leak": {
-  "leak_py": "REVIEW on the final cut, six lines, each answered in the note's Leak rulings (the standard's and the hire terms' own vocabulary, the 2027 dates of the brew plan, the weather normals and the supply schedules, one metadata line); no LEAK",
-  "reader": "one read (Sonnet, medium) at stage 4: its findings fixed in the generator in the same pass as the judge's first; the later repairs changed data columns and the answer blocks only, no document and no sentence of the prompt, so the reader was not re-run and leak.py was re-run on the final cut"
+  "leak_py": "owed on the new cut (stage 3)",
+  "reader": "owed at stage 4: the pack and the prompt change"
  },
  "duplicate_check": {
-  "heart": "guard.py heart task4 on the final cut: WARN only (template.chain_near task24 v2, overuse.weight task16 v4, repeat.gate_g task1 v6), each answered in the note's Template check; surface PASS",
-  "nearest": "guard.py check task4 on 2026-11-17: WARN only (template.chain_near task24, overuse.weight task16, repeat.gate_g task1, skeleton.lesson_closed_near and lesson_once on fixed_nuisance_component, NOTE driver.near against this slot's architecture 13), each answered in the note's Template check and Frontier check; skeleton severity none"
+  "heart": "owed on the new cut",
+  "nearest": "guard.py check task4 on 2026-11-25: WARN only (template.chain_near task8, overuse.weight task8, repeat.gate_g task1, repeat.deliverables task9, NOTE driver.near 0.18 against this slot's architecture 13), each answered in the note's Template check; skeleton.py check PASS, severity none; registered 2026-11-25"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "pass 1 NOT_DETERMINISTIC (the wash log's washed count rebuilt the return flows, and several rules were left to guess): repaired in the generator and the pack, the core re-proved at level 5 on the cut; pass 2 on the repaired cut DETERMINISTIC with SOLUTION_WRONG, FIX_NOW on the answer blocks only, its nine findings taken in one generator pass with the pack, the prompt, every stated figure and every band unchanged, so no third pass is owed",
-  "report": "determinism_check_report.md (pass 2 in full, then the fixes taken): the five covers held on about 90 rebuilds, the ten ask figures and three components rebuilt to the unit; fixed: the rejected route's rule for the tagged kegs stated (-383 and 9,956 rebuild), the hot case's temperature, the estate's season and the not-traced rule stated, the tagged response given both ways, the fitted split refused on 52 and 156 Mondays in either form by one rule (checks.py SF42) with the 156 Monday mean split in the battery, the week-beginning fit's window and five R squared stated, the first count's clear account grounded in a figure (SF43), the tags' filling months stated (SF44)"
+  "verdict": "",
+  "disposition": "owed at stage 4 on the new cut (determinism mode: the Holistic Audit v4, Step 0, Part A and Part B)",
+  "report": ""
  },
- "paper_pair": 26.7,
+ "paper_pair": 9.0,
  "effort": {
-  "quick": 9.0,
-  "careful": 26.7,
-  "thorough": 100,
-  "factorial": "corelib level 5 on the cut pack: S1 what a cellar holds by line (opens the 50 litre kegs), S2 the store under the 2027 brew plan (opens the 20 litre kegs), S3 the loss where nothing is tagged (opens the firkins); each necessary alone, none sufficient alone on the reflex route; 7 distinct wrong sets of covers on the lattice",
-  "rubric": "figure by figure (corelib on the cut pack): one stump lost S1 32.9, S2 22.3, S3 38.2; one fixed alone 15.7, 15.7, 21.0; the reflex route 14.3; the rigorous standard route 9.0",
-  "largest_hint": "a cellar holds a number of containers for each line whatever it sells, plus cover for its delivery interval: rescues 1 of 7",
-  "forcing": "835 variants (each of 41 conventions alone and every two together) on the golden's covers, 13 refused readings on the same covers; each fitted input moved 20 per cent (deliveries 5) and all four by two measured spreads: same covers"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "factorial": "corelib level 5 at the draw: S1 a cellar count is of full containers, the holding rebuilt from the line's delivery cycle (opens the 50 litre kegs), S2 the store under the 2027 brew plan (opens the 20 litre kegs), S3 the loss from the lots' age structure on site (opens the firkins); each necessary alone, none sufficient alone on the reflex route, each two-sided; 4 distinct wrong sets of covers on the lattice",
+  "rubric": "corelib at the draw: one stump lost S1 33, S2 22, S3 22; one fixed alone 16, 16, 16; the reflex route 9; the rigorous standard route 9; run routes hedge 9, generous 9, calibrated 33, cut-off 33",
+  "largest_hint": "a rep's cellar count is of the full containers of a line on its order day, and the empties wait there for the dray: rescues 1 of 7",
+  "forcing": "twenty variants on the golden's covers at the draw; each fitted input moved 20 per cent (deliveries 5) and all four by two measured spreads: same covers"
  },
  "returned": [
   {
@@ -101,15 +101,23 @@
    "portal": "holistic audit (second): holdings not forced; the author asked for a new, out-of-the-box world with a large relational pack and five or six independent judgments",
    "moves": "architecture 13 drawn: Wrenfold Brewery's 2027 keg order",
    "commit": ""
+  },
+  {
+   "date": "2026-11-25",
+   "source": "review",
+   "repair": "design",
+   "portal": "the author pasted the platform's review sheet of 8 November 2026 for the slot (architecture 5, reward 68.5, Stumped failed, one decisive step; runs/arch5/review_2026-11-08.md) and asked for the task to meet the latest rules, to pass the Holistic Audit v4 and to carry three or more decisive steps, without following the sheet's own suggestions (tried as architectures 6 to 9, each landed by both runs)",
+   "moves": "architecture 14's first cut (READY 2026-11-17, never uploaded; in git at 458d644) read against the guidelines of 11/20, the closed page of 2026-11-21 and the rules that followed: its S1 sat next to the margin card and was scored by the tag census, its S3 closed by subtraction, its components were not asked for, ten asks were numbered and no run route was priced; the free gates failed on the golden workbook's container and two fingerprint bans. The core redrawn as loop 1 in the same world and proved in generator/core.py: the reps' counts are of full containers (S1 rebuilds each line's holding from its delivery cycle), one count of every site by purchase lot against a register never reconciled (S3 estimates the loss from the lots' age structure), the store under the 2027 plan kept (S2); no tags, no earlier counts; the prompt asks for each decisive step's own quantity; the card re-registered (weight measurement, answer shape reconciled table); the first cut's zips, goldens, answer blocks and reports removed from the tree",
+   "commit": ""
   }
  ],
- "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload, then /triage-runs task4 once both runs are graded",
+ "resume": "/build task4 from 3: execute the note's Build brief (the first cut's generator modules world.py, pack.py, analysis.py, results.py, docs.py, deliver.py, writeup.py, verify.py, metadata.py, build.py and make.py are the starting point and are stale against the new core; checks.py, effort.json, figures.json, target.zip, golden.zip, golden/, submission.md, metadata.json and the two reports of the first cut are in git at 458d644), re-prove the core on the cut pack, then stage 4 (leak reader and the determinism judge in determinism mode), READY",
  "approved": "",
  "delivered": "",
  "portal": {
-  "status": "READY",
-  "date": "2026-11-17",
-  "note": "architecture 14 redrawn and rebuilt; the author rewrites the prompt for voice, uploads it with target.zip, pastes the four blocks and uploads golden.zip (the workbook and the deck)"
+  "status": "DESIGN",
+  "date": "2026-11-25",
+  "note": "architecture 14 loop 1 drawn; nothing to upload until the build reaches READY"
  },
  "portal_id": "",
  "portal_status": "",
@@ -198,6 +206,10 @@
   {
    "date": "2026-11-17",
    "event": "architecture 13 (the 2027 keg order by size, READY at 0e8e5ec, never uploaded) set aside before any platform round: asks on bases every route reaches, decisive steps that netted two records, three sizes whose corrections offset; DRAWN architecture 14 in the same world (five container pools against the fleet standard's two lines; core proved at level 5)"
+  },
+  {
+   "date": "2026-11-25",
+   "event": "the author re-pasted the review of 8 November 2026 (architecture 5) and asked for the latest rules, the Holistic Audit v4 and three or more decisive steps; architecture 14's first cut failed three free gates and today's core rules; redrawn as loop 1 in the same world (full-only cellar counts, one count by purchase lot, no tags), CORE PASS level 5 with every row PASS, card re-registered, precut 117 checks 0 FAIL; status DESIGN, the build owed from stage 3"
   }
  ],
  "runs": {
@@ -278,7 +290,7 @@
    }
   ]
  },
- "gates": "gates.py task4 --full on the final cut, 2026-11-17: 11 gates, 0 FAIL, 3 WARN (precut nearest chains task14 and task24, leak REVIEW, heart three WARNs, each answered in the note); checks.py 151 of 151, verify.py 23 of 23, two builds byte-identical (target c2dd65b140fc0d05, golden f80c6812cc20b788), audit_containers.py 0 FAIL",
+ "gates": "owed on the new cut; on the first cut gates.py of 2026-11-25 gave 3 FAIL (the golden workbook's style table at leak and containers, heart BLOCK on weight and artifact) and precut WARNs on the Decisive steps, Run routes and Validation handles lines, all answered by this redraw",
  "zip_sha256_16": "",
  "golden_zip_sha256_16": "",
  "migrated_from": {
@@ -290,15 +302,13 @@
  },
  "prompt_rewritten": false,
  "draw": {
-  "answer_shape": "forecast-band-drivers",
-  "weight": "hard-to-measure",
+  "answer_shape": "reconciled-table",
+  "weight": "measurement",
   "depth_level": 5,
   "world": "Wrenfold Brewery Ltd (invented), West Yorkshire: five returnable container fleets read against the fleet standard's lines for the 2027 summer season"
  },
  "final_cut": {
-  "date": "2026-11-17",
-  "target_digest": "c2dd65b140fc0d05",
-  "target_zip_md5": "c5e45a78ecb27bfa3e9e46074d8fdcaa",
-  "golden_zip_md5": "b531f221c4b057d14b01e42f775eeb24"
+  "date": "",
+  "note": "the first cut of 2026-11-17 (target digest c2dd65b140fc0d05) is superseded and out of the tree"
  }
 }

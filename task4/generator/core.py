@@ -1,26 +1,31 @@
 #!/usr/bin/env python3
-"""task4 architecture 14, the core: Wrenfold Brewery's five container pools (50, 30 and 20 litre kegs, firkins and
-kilderkins) against the fleet standard's lines for the 2027 summer season (no shortfall in any week of it: hold; a shortfall under the maker's minimum run: hire for the season; the minimum run or more: buy).
+"""task4 architecture 14, loop 1, the core: Wrenfold Brewery's five container pools (50, 30 and 20 litre kegs,
+firkins and kilderkins) against the fleet standard's lines for the 2027 summer season (no shortfall in any week of
+it: hold; a shortfall under the maker's minimum run: hire for the season; the minimum run or more: buy).
 
 A weekly miniature of the world the generator simulates day by day: the trade's cellars line by line, the containers
-the trade loses, the store's racking runs, the four 30 November stocktakes and a register that never loses a
-container. No record holds what the trade has in its cellars in a summer week, how many containers are still alive,
-or what the store will hold under next year's range. The miniature writes the records the pack will hold (weekly
-deliveries, the stocktakes, the register, the reps' cellar counts, the store's stock by week, the tags of the one
-tracked pool, the 2027 plan), and every estimator below reads those records only. It proves, before any pack exists,
-that
+the trade loses, the store's racking runs, one count of every site on 30 November 2026 and a register that never
+loses a container. No record holds what the trade has in its cellars in a summer week, how many containers are
+still alive, or what the store will hold under next year's range. The miniature writes the records the pack will
+hold (weekly deliveries, the count by purchase lot, the register by purchase lot, the reps' cellar counts of full
+containers with the day of each line's last delivery, the store's stock by week, the 2027 plan), and every
+estimator below reads those records only. It proves, before any pack exists, that
 
-  S1  a cellar holds containers by the line and its delivery interval, so the trade's stock does not move in step
-      with its sales,
+  S1  a rep's cellar count sees the full containers of a line on its order day and never the empties waiting for
+      the dray, so what a line holds has to be rebuilt from its own delivery cycle before the trade's stock can be
+      carried to a summer week,
   S2  the store holds each beer a racking run at a time, so its stock follows the runs and the range on sale,
-  S3  the containers the trade loses where nothing is tracked have to come from the stock account, not from the
-      tracked pool,
+  S3  the register never loses a container, so the containers the trade loses have to be estimated from how the
+      share of each purchase lot still seen on site falls with the lot's age,
 
-each move one pool's call when made the hurried way, none reaches the call when fixed alone, and a run that loses any
-one of them is priced under the bar on the rubric. Nothing here reads a prompt or solves a task.
+each move one pool's call when made the hurried way, none reaches the call when fixed alone, each files a wrong call
+when pushed past its fitted value, the four routes the runs take (generous, calibrated, hedge, cut-off) each file a
+wrong call, and a run that loses any one of them is priced under the bar on the rubric. Nothing here reads a prompt
+or solves a task.
 
     python3 task4/generator/core.py            the core table and CORE PASS level N
     python3 task4/generator/core.py --detail   every figure on every route
+    python3 task4/generator/core.py --forcing  each fitted input moved by its spread
 """
 import datetime as dt
 import math
@@ -33,8 +38,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 import corelib  # noqa: E402
 
 SEED = int(os.environ.get("CORE_SEED", 72417))
-D0 = dt.date(2023, 12, 4)            # week 0 starts here; the reconciliation stocktake is the Thursday before
-WH = 156                             # history weeks; the stocktakes sit at week boundaries 0, 52, 104 and 156
+D0 = dt.date(2023, 12, 4)            # week 0 starts here; the dockets open that Monday
+WH = 156                             # history weeks; the count of every site closes week 155 (30 November 2026)
 WF = 43                              # 2027 weeks carried: to the week starting 20 September 2027
 SEASON = range(WH + 22, WH + WF)     # the summer the order is sized for: weeks starting 3 May to 20 September 2027
 ESTATE_WEEK = WH + 19                # Maplestead's pubs are listed from 12 April 2027, a third a week
@@ -43,33 +48,34 @@ FLOAT = 2.0 / 7.0                    # the standard's float: two days of deliver
 HOT_RANK = -2                        # the upper end of the 80 per cent range: the second highest of the ten summers
 POOLS = ("K50", "K30", "K20", "FIR", "KIL")
 NAMES = {"K50": "50 litre keg", "K30": "30 litre keg", "K20": "20 litre keg", "FIR": "firkin", "KIL": "kilderkin"}
+LOT_YEARS = tuple(range(2011, 2024))  # the purchase lots older than the docket record, one a year
 
 # per pool: weekly sales at the seasonal mean, the season's amplitude (casks sell best in the cold months), the
 # response to a warm day, growth a year, lines, containers a line holds whatever it sells (a) and per container sold
 # a week and week of interval and cover (b), the share of emptied containers the trade loses, the weeks of sales in
 # depots, transit, wash and repair (c2), the store's cover in weeks, the beers with their share of the pool and their
-# racking run before and under the summer 2027 plan, beers added to the summer range, the estate's lines and their weekly
-# sales, the world's shortfall the fleet is placed at, lots bought since the reconciliation (week, containers), the
-# maker's minimum run, counts the reps made, and whether the pool carries tags
+# racking run before and under the summer 2027 plan, beers added to the summer range, the estate's lines and their
+# weekly sales, the world's shortfall the fleet is placed at, lots bought inside the docket record (week,
+# containers), the maker's minimum run and the cellar counts the reps made
 W = {
     "K50": dict(S0=4300, amp=0.20, k=0.045, g=0.000, L=2700, a=2.2, b=0.50, loss=0.0100, c2=0.55, cover=0.35,
                 beers=[("PIL", 0.62, 400, 2400), ("GLD", 0.38, 300, 1400)], new27=[],
-                estate=(300, 0.60), place=2000, lots=[(15, 1800), (70, 1200)], moq=3500, counts=1000, tagged=False),
-    "K30": dict(S0=2400, amp=0.05, k=0.012, g=0.005, L=2600, a=2.1, b=0.50, loss=0.0085, c2=0.55, cover=0.35,
+                estate=(600, 0.90), place=4300, lots=[(15, 1800), (70, 1200)], moq=3500, counts=1800),
+    "K30": dict(S0=2400, amp=0.10, k=0.012, g=0.005, L=2600, a=2.1, b=0.50, loss=0.0085, c2=0.55, cover=0.35,
                 beers=[("PAL", 0.35, 250, 800), ("IPA", 0.25, 165, 550), ("HER", 0.22, 165, 500),
                        ("BLK", 0.18, 125, 400)], new27=[],
-                estate=(450, 0.78), place=3300, lots=[(15, 900), (70, 600)], moq=1500, counts=1000, tagged=False),
-    "K20": dict(S0=640, amp=0.14, k=0.024, g=0.030, L=1800, a=2.0, b=0.50, loss=0.0030, c2=0.60, cover=0.35,
+                estate=(450, 1.30), place=2000, lots=[(15, 900), (70, 600)], moq=1500, counts=1800),
+    "K20": dict(S0=640, amp=0.14, k=0.024, g=0.030, L=1800, a=2.0, b=0.50, loss=0.0060, c2=0.60, cover=0.35,
                 beers=[("F%02d" % i, 1.0 / 8, 120, 200) for i in range(1, 9)],
                 new27=[("F%02d" % i, 200) for i in range(9, 19)],
-                estate=(150, 0.20), place=650, lots=[(15, 650), (70, 650)], moq=1200, counts=700, tagged=True),
+                estate=(150, 0.20), place=650, lots=[(15, 650), (70, 650)], moq=1200, counts=900),
     "FIR": dict(S0=1500, amp=-0.15, k=0.0, g=-0.020, L=1700, a=3.0, b=0.50, loss=0.0150, c2=0.60, cover=0.35,
                 beers=[("BIT", 0.60, 300, 700), ("MLD", 0.20, 150, 270), ("SEA", 0.20, 240, 600)],
                 new27=[("SUM", 300), ("HAR", 300)],
-                estate=(160, 0.60), place=1600, lots=[(40, 800)], moq=1200, counts=650, tagged=False),
+                estate=(160, 0.60), place=1600, lots=[(40, 800)], moq=1200, counts=900),
     "KIL": dict(S0=250, amp=-0.15, k=0.0, g=-0.030, L=170, a=3.0, b=0.50, loss=0.0200, c2=0.60, cover=0.35,
                 beers=[("BIK", 1.0, 80, 360)], new27=[],
-                estate=(0, 0.0), place=-450, lots=[], moq=600, counts=160, tagged=False),
+                estate=(0, 0.0), place=-450, lots=[], moq=600, counts=250),
 }
 SCRAP = 0.0009                        # share of returning containers condemned at the wash
 NEW_SHARE = 0.03                      # a beer added to the 2027 range takes this share of its pool
@@ -137,7 +143,7 @@ def simulate(seed=SEED):
     anom = np.zeros(WH)
     for i in range(1, WH):
         anom[i] = 0.5 * anom[i - 1] + rng.normal(0, 2.2)
-    record = np.zeros((10, WF))                                  # the ten summers on record, 2016 to 2025
+    record = np.zeros((10, WF))                                  # the ten summers on record
     for y in range(10):
         e = rng.normal(0, 2.54)
         for j in range(WF):
@@ -182,20 +188,60 @@ def simulate(seed=SEED):
         drain = float(lost.sum() + scrap.sum() + drain27[pk])
         alive0 = round((need27[pk] - w["place"] + drain - bought.sum()) / 10.0) * 10.0
         alive = np.zeros(WH + WF + 1)
-        register = np.zeros(WH + WF + 1)
-        alive[0] = register[0] = alive0
+        alive[0] = alive0
         allost = np.concatenate([lost, lost27])
         allscrap = np.concatenate([scrap, scrap27])
         for i in range(WH + WF):
             alive[i + 1] = alive[i] - allost[i] - allscrap[i] + bought[i]
-            register[i + 1] = register[i] - allscrap[i] + bought[i]
         onsite = alive[1:WH + 1] - cellar                         # at each history week's close
         idle = onsite - store - other - FLOAT * S
         idle27 = alive[WH + 1:] - need27
-        q.update(S=S, cellar=cellar, store=store, other=other, lost=lost, scrap=scrap, alive=alive, register=register,
+        q.update(S=S, cellar=cellar, store=store, other=other, lost=lost, scrap=scrap, alive=alive,
                  onsite=onsite, idle=idle, idle27=idle27, fut=fut, peak=WH + pk, need27=need27, alive0=alive0)
+        q.update(lots_of(p, q, rng))
         out["pool"][p] = q
     return out
+
+
+def lots_of(p, q, rng):
+    """the fleet by purchase lot at the count: a lot a year from 2011 to 2023 and the lots bought inside the docket
+    record. Every lot loses the same share of what is alive each year (a lost container is any container), the
+    register keeps every container bought that was not condemned at the wash, and the count finds on site a random
+    share of what is alive."""
+    w = W[p]
+    frac = q["lost"] / q["alive"][:WH]
+    keep = np.ones(WH + 1)                                       # survival from the start of week i to the count
+    for i in range(WH - 1, -1, -1):
+        keep[i] = keep[i + 1] * (1.0 - frac[i] - q["scrap"][i] / q["alive"][i])
+    fleet = float(q["alive"][WH - 52:WH + 1].mean())
+    rl = float(q["lost"][WH - 52:].sum()) / fleet                 # the share of the fleet the trade loses in a year
+    rs = float(q["scrap"][WH - 52:].sum()) / fleet                # the share condemned at the wash and struck off
+    rho_y = {y: rl * math.exp(rng.normal(0, 0.05)) for y in LOT_YEARS}
+    size = rng.uniform(0.6, 1.4, len(LOT_YEARS)) * np.linspace(1.25, 0.85, len(LOT_YEARS))
+    surv0 = []
+    for y in LOT_YEARS:                                          # from a mid-year purchase to the start of week 0
+        s = (1.0 - rho_y[y] - rs) ** 0.42
+        for z in range(y + 1, 2024):
+            s *= 1.0 - rho_y[z] - rs
+        surv0.append(s)
+    surv0 = np.array(surv0)
+    bought0 = size * q["alive0"] / float((size * surv0).sum())   # each old lot as bought
+    alive_old = bought0 * surv0 * keep[0]
+    age = [(dt.date(2026, 11, 30) - dt.date(y, 7, 1)).days / 365.25 for y in LOT_YEARS]
+    reg = [b * (1.0 - rs) ** a for b, a in zip(bought0, age)]
+    alive = list(alive_old)
+    for wk, n in w["lots"]:
+        a = (WH - wk) / 52.18
+        age.append(a)
+        reg.append(n * (1.0 - rs) ** a)
+        alive.append(n * keep[wk])
+    alive = np.array(alive)
+    alive *= q["alive"][WH] / alive.sum()                        # the lots add to the fleet alive at the count
+    alive_i = np.floor(alive).astype(int)
+    onsite_n = int(round(q["alive"][WH] - q["cellar"][WH - 1]))
+    ons = rng.multivariate_hypergeometric(alive_i, min(onsite_n, int(alive_i.sum())))
+    return dict(lot_age=np.array(age), lot_reg=np.rint(np.array(reg)), lot_alive=alive, lot_ons=ons.astype(float),
+                rho=rl)
 
 
 def truth_at(p, world, anom27=None):
@@ -209,37 +255,59 @@ def truth_at(p, world, anom27=None):
 
 # ------------------------------------------------------------------------------------------------- the records
 def records(world, seed=SEED + 1):
-    """what the pack will hold, per pool: weekly deliveries, the four stocktakes, the register, the store's weekly
-    stock, the reps' cellar counts, each line's rate and interval, the tracked pool's weekly census, the plan"""
+    """what the pack will hold, per pool: weekly deliveries, the count of 30 November 2026 by purchase lot, the
+    register by purchase lot, the store's weekly stock, the reps' cellar counts (the full containers of a line on
+    the day of the call, with the days since the line's last delivery and its weekly sales, both built from the
+    dockets), each line's rate and interval, the plan"""
     rng = np.random.default_rng(seed)
     R = {"anom": world["anom"].copy(), "record": world["record"], "pool": {}}
     for p in POOLS:
         w, q = W[p], world["pool"][p]
-        takes = {}
-        for b in (0, 52, 104, 156):
-            j = max(b - 1, 0)
-            takes[b] = dict(onsite=float(q["alive"][b] - q["cellar"][j]), register=float(q["register"][b]),
-                            other=float(q["other"][j]), flow=float(q["S"][j]))
+        take = dict(onsite=float(q["lot_ons"].sum()), register=float(q["lot_reg"].sum()),
+                    other=float(q["other"][WH - 1]), flow=float(q["S"][WH - 1]),
+                    condemned=float(q["scrap"][WH - 52:].sum()))  # struck off the register in the year to the count
         n = w["counts"]
         idx = rng.integers(0, w["L"], n)
         wk = rng.integers(60, WH, n)
         rate = q["r"][idx] * q["S"][wk] / w["S0"]
-        held = np.rint(w["a"] + w["b"] * rate * (q["iv"][idx] + 1.0) + rng.normal(0, 0.7, n))
-        R["pool"][p] = dict(takes=takes, flow=q["S"].copy(), store=q["store"].copy(),
-                            count_rate=rate, count_iv=q["iv"][idx], count_held=held, count_week=wk,
+        iv = q["iv"][idx]
+        held = np.maximum(np.rint(w["a"] + w["b"] * rate * (iv + 1.0) + rng.normal(0, 0.45, n)), 1.0)
+        # a rep calls on the account's order day: four to six days after the dray on a weekly round (three in a
+        # week with a bank holiday), two or three days after it on a twice-weekly one
+        days = np.where(iv == 1.0, rng.choice([3, 4, 5, 6], n, p=[0.15, 0.27, 0.33, 0.25]),
+                        rng.choice([2, 3], n, p=[0.40, 0.60])).astype(float)
+        # a line draws steadily, so the containers emptied since the dray called are its sales over those days,
+        # caught at a random point of the container on dispense
+        sold = np.minimum(np.floor(rate * days / 7.0 * np.exp(rng.normal(0, 0.08, n)) + rng.random(n)), held - 1.0)
+        full = held - sold                                       # the count: full containers and the one on dispense
+        R["pool"][p] = dict(take=take, flow=q["S"].copy(), store=q["store"].copy(),
+                            count_rate=rate * np.exp(rng.normal(0, 0.10, n)),      # four weeks of the line's dockets
+                            count_rate13=rate * np.exp(rng.normal(0, 0.06, n)),    # thirteen weeks of them
+                            count_iv=iv, count_full=full, count_days=days, count_week=wk,
                             line_rate=q["r"], line_iv=q["iv"], estate=w["estate"], beers26=beers_at(p, 0),
-                            census=q["cellar"].copy() if w["tagged"] else None,
-                            tag_loss=float(q["lost"][104:156].sum()) if w["tagged"] else None,
-                            tag_trips=float(q["S"][104:156].sum()) if w["tagged"] else None)
+                            lot_age=q["lot_age"].copy(), lot_reg=q["lot_reg"].copy(), lot_ons=q["lot_ons"].copy())
     return R
 
 
 # ------------------------------------------------------------------------------------------------- the estimators
-GOLDEN = dict(swing="lines", store="runs", loss="account", loss_years=1, trade_change=True, fit="ols",
-              count_months="all", harmonics=2, hinge=0.0, cover="mean", other="mean", level=4, census=False,
+GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate",
+              count_months="all", harmonics=2, hinge=0.0, cover="mean", level=1, age_fit="wls", age_drop=0,
+              alive="lots", clock="deliveries",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)   # the forcing battery's multipliers on the fitted inputs
-HURRIED = {"S1": {"swing": "prop"}, "S2": {"store": "cover"}, "S3": {"loss": "tag"}}
-RIGOROUS = {"swing": "tracked", "store": "regress", "loss": "tag"}
+# the hurried choice at each stump, and the same stump pushed past its fitted value to the far end a run might set
+HURRIED = {"S1": {"recon": "face"}, "S2": {"store": "cover"}, "S3": {"loss": "none"}}
+OVER = {"S1": {"swing": "prop"}, "S2": {"store": "wholerun"}, "S3": {"loss": "writeoff"}}
+RIGOROUS = {"recon": "face", "store": "regress", "loss": "none"}
+# the routes the runs take, each with every stump it does not touch made the golden's way (the strongest opponent)
+RUN = {
+    "hedge": {"recon": "face", "store": "cover", "loss": "none"},
+    "generous": {"recon": "whole", "store": "wholerun", "loss": "writeoff"},
+    "calibrated": {"recon": "face", "swing": "level"},
+    "cutoff": {"recon": "cut4"},
+    "cutoff:three days": {"recon": "cut3"},
+    "cutoff:summer counts": {"recon": "face", "count_months": "summer"},
+    "cutoff:weekly rounds": {"recon": "face", "fit": "weekly"},
+}
 
 
 def fit_sales(flow, anom, harmonics, hinge=0.0):
@@ -264,28 +332,76 @@ def fit_sales(flow, anom, harmonics, hinge=0.0):
 
 def fit_cellar(rec, o):
     """containers a line holds: a number whatever it sells (a), a number per container it sells a week (b1) and a
-    number per container it sells a week and week between deliveries (b2); or one line per delivery interval"""
-    rate, iv, held, wk = rec["count_rate"], rec["count_iv"], rec["count_held"], rec["count_week"]
+    number per container it sells a week and week between deliveries (b2). The count is of full containers, so what
+    the line holds is the count and the containers it has sold since the dray last called (`days`); or the count as
+    it stands (`face`), with half a delivery or a whole one added (`half`, `whole`), on the calls soonest after a
+    delivery (`cut3`, `cut4`), or with the days since the delivery as a term of the fit (`joint`)"""
+    rate, iv, full, days, wk = rec[o["rate"]], rec["count_iv"], rec["count_full"], rec["count_days"], rec["count_week"]
+    keep = np.ones(len(rate), bool)
     if o["count_months"] == "summer":
-        keep = np.array([4 <= week_date(int(i)).month <= 9 for i in wk])
-        rate, iv, held = rate[keep], iv[keep], held[keep]
+        keep &= np.array([4 <= week_date(int(i)).month <= 9 for i in wk])
+    recon = o["recon"]
+    if recon.startswith("cut"):
+        keep &= days <= np.where(iv == 1.0, float(recon[3:]), 2.0)
+    if o["fit"] == "weekly":
+        keep &= iv == 1.0
+    rate, iv, full, days = rate[keep], iv[keep], full[keep], days[keep]
+    sold = rate * days / 7.0
+    if recon == "joint":
+        a, b1, b2, bd = np.linalg.lstsq(np.column_stack([np.ones(len(rate)), rate, rate * iv, sold]), full,
+                                        rcond=None)[0]
+        return float(a), (lambda x: float(b1 + b2 * x)), float(bd)
+    held = full + {"days": sold, "half": rate * iv / 2.0, "whole": rate * iv}.get(recon, 0.0)
+    if o["fit"] == "weekly":                                      # the weekly rounds only: one slope, carried to all
+        b, a = np.polyfit(rate, held, 1)
+        return float(a), (lambda x: float(b)), None
     if o["fit"] == "ols":
         a, b1, b2 = np.linalg.lstsq(np.column_stack([np.ones(len(rate)), rate, rate * iv]), held, rcond=None)[0]
-        return float(a), (lambda x: float(b1 + b2 * x))
+        return float(a), (lambda x: float(b1 + b2 * x)), None
     slope = {}
     icpt = {}
     for x in sorted(set(iv.tolist())):                           # one line through the counts of each interval
         k = iv == x
         slope[x], icpt[x] = np.polyfit(rate[k], held[k], 1)
-    return float(icpt[1.0]), (lambda x: float(slope[x]))
+    return float(icpt[1.0]), (lambda x: float(slope[x])), None
 
 
-def tracked_response(R):
-    """the tracked pool's own response: the share by which its containers in the trade move when its deliveries
-    move by one per cent, from its weekly census"""
-    t = R["pool"]["K20"]
-    slope, icpt = np.polyfit(t["flow"][52:], t["census"][52:], 1)
-    return float(slope * t["flow"][52:].mean() / t["census"][52:].mean())
+def fit_age(rec, o):
+    """the share of each purchase lot the count found on site against the lot's age: its fall with age is the share
+    of the fleet that leaves each year, and its level at age nought the share of the fleet that is on site. Returns
+    the yearly rate of leaving (continuous) and the share on site"""
+    age, reg, ons = rec["lot_age"], rec["lot_reg"], rec["lot_ons"]
+    k = ons > 0
+    order = np.argsort(age)
+    if o["age_drop"] == "newest":
+        k[order[0]] = False
+    elif o["age_drop"] == "oldest":
+        k[order[-1]] = False
+    x, y, wt = age[k], np.log(ons[k] / reg[k]), ons[k]
+    if o["loss"] == "origin":                                     # every lot's whole absence from site read as loss
+        return float(-(wt * x * y).sum() / (wt * x * x).sum()), 1.0
+    if o["age_fit"] == "ols":
+        wt = np.ones(len(x))
+    if o["age_fit"] == "ends":                                    # the oldest four lots against the newest four
+        idx = np.argsort(x)
+        lo, hi = idx[:4], idx[-4:]
+        lam = (math.log(ons[k][lo].sum() / reg[k][lo].sum()) - math.log(ons[k][hi].sum() / reg[k][hi].sum())) / \
+              (np.average(x[hi], weights=reg[k][hi]) - np.average(x[lo], weights=reg[k][lo]))
+        f = ons[k][lo].sum() / reg[k][lo].sum() * math.exp(lam * np.average(x[lo], weights=reg[k][lo]))
+        return float(lam), float(f)
+    sw = np.sqrt(wt)
+    b, a = np.linalg.lstsq(np.column_stack([x * sw, sw]), y * sw, rcond=None)[0]
+    return float(-b), float(math.exp(a))
+
+
+_CACHE = {}
+
+
+def cached(kind, R, p, o, keys, fn):
+    k = (kind, id(R), p) + tuple(o[x] for x in keys)
+    if k not in _CACHE:
+        _CACHE[k] = fn()
+    return _CACHE[k]
 
 
 def chain(R, p, opt=None, anom27=None):
@@ -293,45 +409,50 @@ def chain(R, p, opt=None, anom27=None):
     o = dict(GOLDEN)
     o.update(opt or {})
     w, rec = W[p], R["pool"][p]
-    T, flow = rec["takes"], rec["flow"]
-    tagged = rec["census"] is not None
-    X = {b: T[b]["register"] - T[b]["onsite"] for b in T}         # outside the gates by the register, lost included
-    a, slope = fit_cellar(rec, o)
+    T, flow = rec["take"], rec["flow"]
+    a, slope, bd = cached("cellar", R, p, o, ("recon", "fit", "rate", "count_months"), lambda: fit_cellar(rec, o))
     lr, li = rec["line_rate"], rec["line_iv"]                     # the trade's containers per container sold a week
     b, m = slope(1.0) / 2.0, 2.0 * sum(slope(x) * float(lr[li == x].sum()) for x in set(li.tolist())) / \
         slope(1.0) / float(lr.sum())
     b *= o["x_b"]
-    predict, shape = fit_sales(flow, R["anom"], o["harmonics"], o["hinge"])
+    predict, shape = cached("sales", R, p, o, ("harmonics", "hinge"),
+                            lambda: fit_sales(flow, R["anom"], o["harmonics"], o["hinge"]))
     if o["level"] == "fit":
-        lev = {bk: predict(max(bk - 1, 0), normal_temp(max(bk - 1, 0)) + R["anom"][max(bk - 1, 0)]) for bk in T}
+        lev = predict(WH - 1, normal_temp(WH - 1) + R["anom"][WH - 1])
     else:
-        lev = {bk: float(flow[max(bk - o["level"], 0):bk].mean()) if bk else float(flow[:o["level"]].mean())
-               for bk in T}
-    # the trade's loss: what the register still holds outside the gates beyond what the trade's cellars took on
-    lo = 156 - 52 * o["loss_years"]
-    gone = X[156] - X[lo] - (b * m * (lev[156] - lev[lo]) if o["trade_change"] else 0.0)
-    lam_acc = gone / float(flow[lo:156].sum())
-    tag = R["pool"]["K20"]
-    lam_tag = tag["tag_loss"] / tag["tag_trips"]
-    if o["loss"] == "none":
-        lam = 0.0
-    elif o["loss"] == "tag" or (tagged and not o.get("account_tagged")):
-        lam = lam_tag
+        lev = float(flow[WH - o["level"]:WH].mean())
+    year = float(flow[WH - 52:WH].sum())
+    # the fleet alive, and the containers the trade loses in a year
+    if o["loss"] == "none":                                       # the register read as the fleet
+        alive, year_loss = T["register"], 0.0
+    elif o["loss"] == "writeoff":                                 # what the register holds beyond the site and the
+        held0 = a * w["L"] + b * m * lev                          # cellars, written off over the three years on record
+        alive, year_loss = T["onsite"] + held0, max(T["register"] - T["onsite"] - held0, 0.0) / 3.0
     else:
-        lam = lam_acc
-    lam *= o["x_lam"]
-    year_loss = lam * float(flow[104:156].sum())
-    alive_out = X[156] - lam * float(flow[:156].sum())           # the trade's containers at the stocktake, alive
-    resp = tracked_response(R) if o["swing"] == "tracked" else 1.0
+        lam_y, share = cached("age", R, p, o, ("loss", "age_fit", "age_drop"), lambda: fit_age(rec, o))
+        alive = float((rec["lot_reg"] * np.exp(-lam_y * rec["lot_age"])).sum()) if o["alive"] == "lots" else \
+            T["onsite"] / share
+        year_loss = alive * (math.exp(lam_y) - 1.0)
+    year_loss *= o["x_lam"]
+    lam = year_loss / year                                        # per container delivered
+    scrap = T["condemned"] / year                                 # condemned at the wash, per container delivered
+    alive_out = alive - T["onsite"]                               # the trade's containers at the count, alive
+    if o["loss"] == "none":                                       # no loss known: the counts as they stand, every line
+        o2 = dict(o, recon="face")
+        af, sf, _ = cached("cellar", R, p, o2, ("recon", "fit", "rate", "count_months"), lambda: fit_cellar(rec, o2))
+        alive_out = af * w["L"] + sum(sf(x) * float(lr[li == x].sum()) for x in set(li.tolist())) * lev / w["S0"]
+    if o["swing"] == "level":                                     # the counts as they stand, scaled to that level
+        scale = alive_out / (a * w["L"] + b * m * lev)
+        a, b = a * scale, b * scale
     # the store: its cover in weeks of deliveries, beside the half run each beer on sale holds on average
-    half26 = sum(run for c, sh, run in rec["beers26"]) / 2.0
+    full26 = float(sum(run for c, sh, run in rec["beers26"]))
+    part = 1.0 if o["store"] == "wholerun" else 0.5               # a whole run for each beer, or half of one
     reg = np.polyfit(flow[52:], rec["store"][52:], 1)
-    cov = (float(rec["store"][52:].mean()) - half26) / float(flow[52:].mean()) if o["cover"] == "mean" else \
-        float(np.median((rec["store"][52:] - half26) / flow[52:]))
+    cov = (float(rec["store"][52:].mean()) - part * full26) / float(flow[52:].mean()) if o["cover"] == "mean" else \
+        float(np.median((rec["store"][52:] - part * full26) / flow[52:]))
     cov *= o["x_cov"]
     ne, re_ = rec["estate"]
-    c2 = float(np.mean([T[bk]["other"] / T[bk]["flow"] for bk in T])) if o["other"] == "mean" else \
-        T[156]["other"] / T[156]["flow"]
+    c2 = T["other"] / (lev if o["level"] == "fit" else float(flow[WH - o["level"]:WH].mean()))
     path, cum = [], 0.0
     for i in range(WH, WH + WF):
         j = i - 52
@@ -341,38 +462,37 @@ def chain(R, p, opt=None, anom27=None):
         es = ne * re_ * live * shape(i, temp)
         est = a * ne * live + b * 2.0 * es
         D = F + es
-        if o["swing"] == "lines" or (tagged and o["swing"] == "tracked"):
-            if tagged and o["census"]:
-                swing = rec["census"][j] - rec["census"][155] + b * m * (F - flow[j]) + est
-            else:
-                swing = b * m * (F - lev[156]) + est
-        elif tagged:                                              # last season's census, moved with the deliveries
-            swing = rec["census"][j] * D / flow[j] - rec["census"][155]
-        else:                                                     # the trade's stock moved with the deliveries
-            swing = alive_out * resp * (D / lev[156] - 1.0)
-        if o["store"] == "runs":
-            store = sum(cov * sh * D + run / 2.0 for c, sh, run in beers_at(p, i))
+        if o["swing"] == "prop":                                  # the trade's stock moved with the deliveries
+            swing = alive_out * (D / lev - 1.0)
+        else:
+            swing = b * m * (F - lev) + est
+        if o["store"] in ("runs", "wholerun"):
+            store = sum(cov * sh * D + part * run for c, sh, run in beers_at(p, i))
         elif o["store"] == "cover":
             store = float(rec["store"][j - 2:j + 3].mean() / flow[j - 2:j + 3].mean()) * D
         else:
             store = float(reg[1] + reg[0] * D)
-        cum += lam * D
-        need = swing + store + c2 * D + FLOAT * D                 # beside the trade's containers at the stocktake
-        path.append(dict(i=i, need=need, short=need - T[156]["onsite"] + cum, swing=swing, store=store))
+        cum += (lam * D if o["clock"] == "deliveries" else year_loss / 52.18) + scrap * D
+        need = swing + store + c2 * D + FLOAT * D                 # beside the trade's containers at the count
+        path.append(dict(i=i, need=need, short=need - T["onsite"] + cum, swing=swing, store=store))
     season = [x for x in path if x["i"] in SEASON]
     pick = max(season, key=lambda x: x["short"])
     return dict(short=pick["short"], week=pick["i"], swing=pick["swing"], store=pick["store"], year_loss=year_loss,
-                lam=lam, lam_acc=lam_acc, a=a, b=b, m=m)
+                rise=max(x["swing"] for x in season), fullest=max(x["store"] for x in season),
+                lam=lam, a=a, b=b, m=m, alive=alive, days_coef=bd)
 
 
 def direct(R, p, anom27=None):
-    """the register as the fleet and its turns: the fleet moved with the busiest week's deliveries over the year's"""
-    rec = R["pool"][p]
-    predict, shape = fit_sales(rec["flow"], R["anom"], 2)
-    ne, re_ = rec["estate"]
-    peak = max(predict(i, normal_temp(i) + (0.0 if anom27 is None else anom27[i - WH])) +
-               ne * re_ * shape(i, normal_temp(i) + (0.0 if anom27 is None else anom27[i - WH])) for i in SEASON)
-    return rec["takes"][156]["register"] * (peak / float(rec["flow"][104:156].mean()) - 1.0)
+    """the register read as the fleet: the requirement built from the records as they stand (the cellar counts
+    carried to every line, the store at its weeks of cover) less every container the register holds"""
+    w, rec = W[p], R["pool"][p]
+    o = dict(GOLDEN, recon="face", store="cover", loss="none")
+    g = chain(R, p, o, anom27)
+    a, slope, _ = fit_cellar(rec, o)
+    lr, li = rec["line_rate"], rec["line_iv"]
+    lev = fit_sales(rec["flow"], R["anom"], 2)[0](WH - 1, normal_temp(WH - 1) + R["anom"][WH - 1])
+    held = a * w["L"] + sum(slope(x) * float(lr[li == x].sum()) for x in set(li.tolist())) * lev / w["S0"]
+    return g["short"] + rec["take"]["onsite"] + held - rec["take"]["register"]
 
 
 def hot(fn):
@@ -382,24 +502,25 @@ def hot(fn):
 
 FAMILY = [
     ("the golden's conventions", {}),
-    ("the loss rate over the last two years", {"loss_years": 2}),
-    ("the loss rate over the three years since the reconciliation", {"loss_years": 3}),
-    ("the trade's own change between the stocktakes left out of the loss", {"trade_change": False}),
     ("the cellar counts fitted one line for each delivery interval", {"fit": "byclass"}),
+    ("a line's weekly sales from thirteen weeks of its dockets, not four", {"rate": "count_rate13"}),
+    ("the summer's cellar counts only", {"count_months": "summer"}),
     ("the bend in the weather response a degree lower", {"hinge": -1.0}),
     ("the bend in the weather response a degree higher", {"hinge": 1.0}),
-    ("the summer's cellar counts only", {"count_months": "summer"}),
     ("one seasonal harmonic in the deliveries fit", {"harmonics": 1}),
     ("three seasonal harmonics in the deliveries fit", {"harmonics": 3}),
     ("the store's cover as the median week's, not the mean's", {"cover": "median"}),
-    ("depots, wash and repair at the last stocktake's weeks of deliveries", {"other": "last"}),
-    ("the three-year loss and the fitted level together", {"loss_years": 3, "level": "fit"}),
-    ("deliveries at each stocktake over eight weeks, not four", {"level": 8}),
-    ("deliveries at each stocktake from the fit", {"level": "fit"}),
-    ("the tracked pool's trade stock from its own census", {"census": True}),
-    ("the tracked pool's loss from the stock account", {"account_tagged": True}),
-    ("the two-year loss and the lines by interval together", {"loss_years": 2, "fit": "byclass"}),
-    ("the summer counts and the eight-week level together", {"count_months": "summer", "level": 8}),
+    ("deliveries at the count over its last two weeks, not its own week's", {"level": 2}),
+    ("deliveries at the count as the fit's value for its week", {"level": "fit"}),
+    ("the lots fitted unweighted", {"age_fit": "ols"}),
+    ("the lots fitted without the newest lot", {"age_drop": "newest"}),
+    ("the lots fitted without the oldest lot", {"age_drop": "oldest"}),
+    ("the oldest four lots against the newest four", {"age_fit": "ends"}),
+    ("the fleet alive as the count over the fitted share on site", {"alive": "share"}),
+    ("the loss carried on the calendar, not on deliveries", {"clock": "calendar"}),
+    ("thirteen weeks of dockets and the lines by interval together", {"rate": "count_rate13", "fit": "byclass"}),
+    ("the summer counts and the two-week level together", {"count_months": "summer", "level": 2}),
+    ("the unweighted lots and the calendar loss together", {"age_fit": "ols", "clock": "calendar"}),
 ]
 
 
@@ -409,8 +530,8 @@ FORCING = [
     ("what a line holds per container sold, 20 per cent up", {"x_b": 1.2}),
     ("the store's cover, 20 per cent down", {"x_cov": 0.8}),
     ("the store's cover, 20 per cent up", {"x_cov": 1.2}),
-    ("the loss per container delivered, 20 per cent down", {"x_lam": 0.8}),
-    ("the loss per container delivered, 20 per cent up", {"x_lam": 1.2}),
+    ("the containers lost in a year, 20 per cent down", {"x_lam": 0.8}),
+    ("the containers lost in a year, 20 per cent up", {"x_lam": 1.2}),
     ("the season's deliveries, 5 per cent down", {"x_del": 0.95}),
     ("the season's deliveries, 5 per cent up", {"x_del": 1.05}),
 ]
@@ -418,18 +539,17 @@ FORCING = [
 
 def spreads(R, p, reps=120, seed=11):
     """each fitted input's own measured spread for one pool, as a share of its value: what a line holds per
-    container sold (the counts resampled), the store's cover (the weeks resampled in blocks of four), the loss per
-    container delivered (its range over one, two and three years of the stock account) and the worst week's
-    deliveries (the fit's residuals resampled)"""
+    container sold (the counts resampled), the store's cover (the weeks resampled in blocks of four), the containers
+    lost in a year (the lots resampled) and the worst week's deliveries (the fit's residuals resampled)"""
     rng = np.random.default_rng(seed)
     rec = R["pool"][p]
     lr, li = rec["line_rate"], rec["line_iv"]
-    n = len(rec["count_held"])
+    n = len(rec["count_full"])
     bm = []
     for _ in range(reps):
         idx = rng.integers(0, n, n)
         r2 = dict(rec)
-        for k in ("count_rate", "count_iv", "count_held", "count_week"):
+        for k in ("count_rate", "count_rate13", "count_iv", "count_full", "count_days", "count_week"):
             r2[k] = rec[k][idx]
         sl = fit_cellar(r2, GOLDEN)[1]
         bm.append(sum(sl(x) * float(lr[li == x].sum()) for x in set(li.tolist())) / float(lr.sum()))
@@ -439,7 +559,17 @@ def spreads(R, p, reps=120, seed=11):
     for _ in range(reps):
         idx = np.concatenate([np.arange(k * 4, k * 4 + 4) for k in rng.integers(0, len(st) // 4, len(st) // 4)])
         cv.append((st[idx].mean() - half) / fl[idx].mean())
-    lams = [chain(R, p, {"loss_years": y, "account_tagged": True})["lam_acc"] for y in (1, 2, 3)]
+    nl = len(rec["lot_age"])
+    lams = []
+    for _ in range(reps):
+        idx = rng.integers(0, nl, nl)
+        r2 = dict(rec)
+        for k in ("lot_age", "lot_reg", "lot_ons"):
+            r2[k] = rec[k][idx]
+        if len(set(r2["lot_age"].tolist())) < 4:
+            continue
+        lam_y = fit_age(r2, GOLDEN)[0]
+        lams.append(math.exp(lam_y) - 1.0)
     g = chain(R, p)
     predict = fit_sales(rec["flow"], R["anom"], 2)[0]
     fit = np.array([predict(i, normal_temp(i) + R["anom"][i]) for i in range(WH)])
@@ -447,7 +577,7 @@ def spreads(R, p, reps=120, seed=11):
     pk = [fit_sales(fit * np.exp(rng.choice(res, len(res))), R["anom"], 2)[0](g["week"], normal_temp(g["week"]))
           for _ in range(reps // 3)]
     return dict(x_b=float(np.std(bm) / np.mean(bm)), x_cov=float(np.std(cv) / abs(np.mean(cv))),
-                x_lam=float((max(lams) - min(lams)) / lams[0]) / 2.0,
+                x_lam=float(np.std(lams) / np.mean(lams)),
                 x_del=float(np.std(pk) / predict(g["week"], normal_temp(g["week"]))))
 
 
@@ -465,6 +595,21 @@ def lattice_opts():
                 o.update(HURRIED[s])
         keys["+".join(s for k, s in enumerate(ids) if mask >> k & 1)] = o
     return keys
+
+
+def days_check(R):
+    """the falsification check: across every pool's cellar counts in one fit, each pool with its own relation to a
+    line's sales and delivery interval, the fall in the full containers counted for each container the line has
+    sold since its last delivery"""
+    X, y = [], []
+    for k, p in enumerate(POOLS):
+        rec = R["pool"][p]
+        rate, iv, full, days = rec["count_rate"], rec["count_iv"], rec["count_full"], rec["count_days"]
+        blk = np.zeros((len(rate), 3 * len(POOLS) + 1))
+        blk[:, 3 * k], blk[:, 3 * k + 1], blk[:, 3 * k + 2], blk[:, -1] = 1.0, rate, rate * iv, rate * days / 7.0
+        X.append(blk)
+        y.append(full)
+    return float(np.linalg.lstsq(np.vstack(X), np.concatenate(y), rcond=None)[0][-1])
 
 
 def main():
@@ -490,6 +635,12 @@ def main():
             print("%-58s %s  %s" % ("all four %s together, two measured spreads each" % side,
                                     "  ".join("%7.0f" % v[p] for p in POOLS), "same call" if same else "CALL MOVES"))
         return 1 if bad else 0
+    slack = {p: (float(world["pool"][p]["idle"].min()), float(world["pool"][p]["idle27"][:ESTATE_WEEK - WH].min()))
+             for p in POOLS}
+    if min(min(v) for v in slack.values()) < 0:
+        print("WORLD FAIL  a pool is short of containers in the record or before the estate arrives: %s" % ", ".join(
+            "%s %.0f and %.0f" % (p, v[0], v[1]) for p, v in slack.items()))
+        return 1
     rec10 = world["record"]
     lat_o = lattice_opts()
     reflex = "+".join(sorted(HURRIED))
@@ -501,54 +652,57 @@ def main():
         if heat:
             return float(sum(hot(lambda y: chain(R, p, opt, rec10[y])[field]) for p in pools))
         return float(sum(chain(R, p, opt)[field] for p in pools))
+    base = ("hedge", "generous", "calibrated", "cutoff")
     members = {}
     for p in POOLS:
         members[p] = dict(lines=[0.0, float(W[p]["moq"])], truth=truth[p], golden=G[p]["short"],
                           family=[chain(R, p, o)["short"] for _, o in FAMILY],
                           routes={"direct": direct(R, p), "rigorous": chain(R, p, RIGOROUS)["short"]})
     lat = {k: {p: chain(R, p, o)["short"] for p in POOLS} for k, o in lat_o.items()}
-    untagged = tuple(p for p in POOLS if not W[p]["tagged"])
-    comps = [("C1", "swing", POOLS), ("C2", "store", POOLS), ("C3", "year_loss", untagged)]
+    comps = [("C1", "rise"), ("C2", "fullest"), ("C3", "year_loss")]
     figures = []
-    for cid, field, pools in comps:
-        figures.append(dict(id=cid, block="component", golden=fig(field, None, pools),
-                            family=[fig(field, o, pools) for _, o in FAMILY],
-                            lattice={k: fig(field, o, pools) for k, o in lat_o.items()},
-                            routes={"rigorous": fig(field, RIGOROUS, pools)}))
+    for cid, field in comps:
+        routes = {"rigorous": fig(field, RIGOROUS)}
+        routes.update({k: fig(field, RUN[k]) for k in base})
+        figures.append(dict(id=cid, block="component", golden=fig(field), family=[fig(field, o) for _, o in FAMILY],
+                            lattice={k: fig(field, o) for k, o in lat_o.items()}, routes=routes))
     for p in POOLS:
-        figures.append(dict(id="A-%s" % p, block="ask", member=p))
+        figures.append(dict(id="A-%s" % p, block="ask", member=p, sentence="ask-%s" % p))
     for p in POOLS:
-        figures.append(dict(id="H-%s" % p, block="ask", golden=fig("short", None, (p,), True),
+        routes = {"rigorous": fig("short", RIGOROUS, (p,), True)}
+        routes.update({k: fig("short", RUN[k], (p,), True) for k in base})
+        figures.append(dict(id="H-%s" % p, block="ask", sentence="ask-%s" % p, golden=fig("short", None, (p,), True),
                             family=[fig("short", o, (p,), True) for _, o in FAMILY],
-                            lattice={k: fig("short", o, (p,), True) for k, o in lat_o.items()},
-                            routes={"rigorous": fig("short", RIGOROUS, (p,), True)}))
-    # the referee: the tracked pool's containers in the trade, 30 November 2025 to its busiest week of summer 2026
-    t = R["pool"]["K20"]
-    pk = 104 + int(np.argmax(t["census"][104:156]))
-    gk = G["K20"]
-    lev25 = float(t["flow"][100:104].mean())
-    referee = dict(slice="the tracked pool's containers in the trade, from the 30 November 2025 stocktake to its "
-                         "busiest week of summer 2026, which its tags count and no 2027 week or other pool shares",
-                   covers_target=False, truth=float(t["census"][pk] - t["census"][103]),
-                   golden=gk["b"] * gk["m"] * (float(t["flow"][pk]) - lev25),
-                   rivals={"the trade's stock moved in step with deliveries":
-                           float(t["census"][103] * (t["flow"][pk] / lev25 - 1.0))})
-    spec = dict(task="task4 architecture 14", call="lines", members=members, lattice=lat, referee=referee,
-                figures=figures, stumps={
-                    "S1": dict(axis="unit", opens="K50",
-                               said_out_loud="A cellar holds a number of containers for each line whatever it sells, "
-                                             "plus cover for its delivery interval, so the trade's stock does not "
-                                             "move in step with its sales.",
-                               steps_left=4, precedents=["N01", "L15", "L40"]),
-                    "S2": dict(axis="when", opens="K20",
+                            lattice={k: fig("short", o, (p,), True) for k, o in lat_o.items()}, routes=routes))
+    run_routes = {k: {p: chain(R, p, o)["short"] for p in POOLS} for k, o in RUN.items()}
+    over = {s: {p: chain(R, p, o)["short"] for p in POOLS} for s, o in OVER.items()}
+    # what forces the call between the ways of reading a cellar count: the counts' own fall with the containers a
+    # line has sold since its last delivery, which no file states and no route but the golden's expects
+    dc = days_check(R)
+    falsification = dict(check="across the cellar counts, with a line's weekly sales and delivery interval held, the "
+                               "full containers counted fall by one for each container the line has sold since its "
+                               "last delivery (the dockets give the day); no file holds a line's empties, the "
+                               "trade's stock or any pool's shortfall",
+                         observes_target=False, truth=dc, golden=-1.0,
+                         rivals={"the count as it stands is what the line holds": 0.0,
+                                 "the count and a whole delivery is what the line holds": 0.0,
+                                 "the count and half a delivery is what the line holds": 0.0})
+    spec = dict(task="task4 architecture 14 loop 1", call="lines", members=members, lattice=lat,
+                falsification=falsification, run_routes=run_routes, figures=figures, stumps={
+                    "S1": dict(axis="what", opens="K50", sides={"over": over["S1"]},
+                               said_out_loud="A rep's cellar count is of the full containers of a line on its order "
+                                             "day, and the empties wait there for the dray, so what the trade holds "
+                                             "is more than the counts show and does not move in step with its sales.",
+                               steps_left=5, precedents=["L56", "L57", "L07"]),
+                    "S2": dict(axis="when", opens="K20", sides={"over": over["S2"]},
                                said_out_loud="The store receives each beer a whole racking run at a time, so its "
                                              "stock follows the runs and the number of beers on sale, and both "
                                              "change in 2027.",
-                               steps_left=3, precedents=["N17", "N02", "L37"]),
-                    "S3": dict(axis="who", opens="FIR",
-                               said_out_loud="The register never loses a container, and the only pool whose losses "
-                                             "are seen is the tracked one, which loses far fewer.",
-                               steps_left=4, precedents=["N08", "N12", "L53"]),
+                               steps_left=4, precedents=["N17", "N02", "L37"]),
+                    "S3": dict(axis="who", opens="FIR", sides={"over": over["S3"]},
+                               said_out_loud="A container lost in the trade is never taken off the register, so the "
+                                             "register is not the fleet and nothing records how many are lost.",
+                               steps_left=4, precedents=["L53", "L43", "N13"]),
                 })
     if detail:
         print("containers short in the pool's worst week of the 2027 season")
@@ -560,9 +714,25 @@ def main():
                 p, truth[p], mm["golden"], min(mm["family"]), max(mm["family"]), lat["S1"][p], lat["S2"][p],
                 lat["S3"][p], lat[reflex][p], mm["routes"]["direct"], mm["routes"]["rigorous"], W[p]["moq"],
                 week_date(G[p]["week"]), week_date(truth_at(p, world)[1]["i"])))
+        print("each stump pushed past its fitted value, and the routes the runs take")
+        for name, mp in [("S1 over: moved with deliveries", over["S1"]), ("S2 over: a whole run a beer", over["S2"]),
+                         ("S3 over: every absence a loss", over["S3"])] + sorted(run_routes.items()):
+            print("  %-34s %s  %s" % (name, " ".join("%7.0f" % mp[p] for p in POOLS),
+                                      [band_of(mp[p], [0.0, float(W[p]["moq"])]) for p in POOLS]))
+        for name, o in (("half a delivery added to every count", {"recon": "half"}),
+                        ("a whole delivery added to every count", {"recon": "whole"})):
+            v = {p: chain(R, p, o) for p in POOLS}
+            print("  %-34s %s  %s  rise %6.0f" % (name[:34], " ".join("%7.0f" % v[p]["short"] for p in POOLS),
+                                                  [band_of(v[p]["short"], [0.0, float(W[p]["moq"])]) for p in POOLS],
+                                                  sum(v[p]["swing"] for p in POOLS)))
         print("variant deviations from the golden")
         for name, o in FAMILY[1:]:
             print("  %-68s" % name[:68], " ".join("%6.0f" % (chain(R, p, o)["short"] - G[p]["short"]) for p in POOLS))
+        print("components: golden, family, lattice")
+        for f in figures[:3]:
+            print("  %s golden %7.0f family %7.0f to %7.0f | S1 %7.0f S2 %7.0f S3 %7.0f reflex %7.0f | %s" % (
+                f["id"], f["golden"], min(f["family"]), max(f["family"]), f["lattice"]["S1"], f["lattice"]["S2"],
+                f["lattice"]["S3"], f["lattice"][reflex], " ".join("%s %.0f" % kv for kv in sorted(f["routes"].items()))))
         print("hot summer: truth, golden")
         for f in figures[-5:]:
             p = f["id"][2:]
@@ -572,15 +742,24 @@ def main():
         print("the world")
         for p in POOLS:
             q = world["pool"][p]
-            print("  %-4s fleet at the reconciliation %6.0f, register now %6.0f, alive now %6.0f, on site %6.0f; "
-                  "idle least in history %6.0f, at the 2026 peak %6.0f, least before the estate %6.0f; a %.2f b %.2f "
-                  "(%.2f, %.2f); loss rate %.4f account, %.4f world; year loss %5.0f (%5.0f)" % (
-                      p, q["alive0"], q["register"][156], q["alive"][156], R["pool"][p]["takes"][156]["onsite"],
-                      q["idle"].min(), q["idle"][104:156].min(), q["idle27"][:ESTATE_WEEK - WH].min(), G[p]["a"],
-                      G[p]["b"], W[p]["a"], W[p]["b"], G[p]["lam_acc"], q["lost"][104:156].sum() / q["S"][104:156].sum(),
-                      G[p]["lam_acc"] * q["S"][104:156].sum(), q["lost"][104:156].sum()))
-        print("  the tracked pool's response %.3f; referee truth %.0f golden %.0f rival %.0f" % (
-            tracked_response(R), referee["truth"], referee["golden"], list(referee["rivals"].values())[0]))
+            rec = R["pool"][p]
+            lam_y, share = fit_age(rec, GOLDEN)
+            af = fit_cellar(rec, dict(GOLDEN, recon="face"))
+            print("  %-4s register %6.0f, alive %6.0f (fitted %6.0f), on site %6.0f, in the trade %6.0f; idle least "
+                  "in history %6.0f, at the 2026 peak %6.0f; a %.2f b %.2f (%.2f, %.2f; as counted a %.2f b %.2f); "
+                  "leaving a year %.3f fitted, %.3f world; on site share %.3f; year loss %5.0f (%5.0f); rise %5.0f "
+                  "store %5.0f" % (
+                      p, rec["take"]["register"], q["alive"][WH], G[p]["alive"], rec["take"]["onsite"],
+                      q["cellar"][WH - 1], q["idle"].min(), q["idle"][104:156].min(), G[p]["a"], G[p]["b"], W[p]["a"],
+                      W[p]["b"], af[0], af[1](1.0) / 2.0, 1.0 - math.exp(-lam_y), q["rho"], share, G[p]["year_loss"],
+                      q["lost"][104:156].sum(), G[p]["swing"], G[p]["store"]))
+        tw = {p: truth_at(p, world)[1] for p in POOLS}
+        print("  the world's own rise in the trade %s, store %s, year loss %s" % (
+            " ".join("%.0f" % (tw[p]["cellar"] - world["pool"][p]["cellar"][WH - 1]) for p in POOLS),
+            " ".join("%.0f" % tw[p]["store"] for p in POOLS),
+            " ".join("%.0f" % world["pool"][p]["lost"][WH - 52:].sum() for p in POOLS)))
+        print("  the falsification check: counted fall per container sold since the delivery %.3f (the golden's "
+              "model -1, every rival's 0)" % dc)
         print()
     return corelib.run(spec)
 
