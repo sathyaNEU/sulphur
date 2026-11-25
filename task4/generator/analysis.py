@@ -69,7 +69,8 @@ SINGLES = [
     ("the year's loss as the yearly share leaving times the fleet alive at the count", {"loss_form": "share"}),
     ("the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens", {"share_fit": "one_cover_open"}),
     ("depots' full stock and the wash queue from their own weekly files, the rest scaled", {"other": "files"}),
-    ("the same with the depots' empties bays held at the count", {"other": "files_held"}),
+    ("the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+     {"other": "files_held"}),
     ("the store at its fullest over the whole plan year, not the season", {"fullest_window": "year"}),
     ("depots, wash and repair read against the fitted level at the count, not its own week's deliveries", {"other": "level"}),
     ("deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal", {"level": "next"}),
@@ -317,8 +318,12 @@ def load(target, mess=None):
     # the trade quality reps' cellar checks: a line checked twice on one call taken once
     ck = pd.read_csv(f("checks"), dtype={"account_no": str, "container": str, "product": str}, keep_default_na=False)
     R.check_rows = len(ck)
+    R.check_doubles_differ = 0
     if mess != "dup_checks":
-        ck = ck.drop_duplicates(["check_ref", "account_no", "line"])
+        dd = ck[ck.duplicated(["check_ref", "account_no", "line"], keep=False)]
+        R.check_doubles_differ = int(sum(1 for _, g in dd.groupby(["check_ref", "account_no", "line"])
+                                         if len(g[["full_in_cellar", "on_dispense"]].drop_duplicates()) > 1))
+        ck = ck.drop_duplicates(["check_ref", "account_no", "line"])            # the first entry kept
     R.check_doubles = R.check_rows - len(ck)
     ck["pool"] = ck["container"].map(to_pool)
     ck["acct"] = ck["account_no"].map(lambda x: cur.get(x, x))
@@ -619,7 +624,7 @@ def fit_store(R, o):
         runs = runs_of(R, p, o["run_stat"])
         for s, run in runs.items():
             st, fl = R.store_beer[p][s][first:], R.flow_beer[p][s][first:]
-            if kind == "one_cover_open":                          # each Monday against the week it opens
+            if kind in ("one_cover_open", "between_open"):        # each Monday against the week it opens
                 st, fl = R.store_beer[p][s][first:-1], R.flow_beer[p][s][first + 1:]
             if kind.startswith("between"):                        # each beer's mean stock on its mean deliveries
                 st, fl = np.array([st.mean()]), np.array([fl.mean()])
@@ -835,6 +840,94 @@ def lattice_opts():
     return keys
 
 
+def own_falls(R, rate=None):
+    """each type's own fall in its checks' full containers per container sold since the dray's last call, the
+    falsification fit run on one type at a time: (coefficient, standard error) by type"""
+    rate_key = rate or GOLDEN["rate"]
+    out = {}
+    for p in POOLS:
+        rec = R.counts[p]
+        rate, iv, full, days = rec[rate_key], rec["count_iv"], rec["count_full"], rec["count_days"]
+        X = np.column_stack([np.ones(len(rate)), rate, rate * iv, rate * days / 7.0])
+        beta = np.linalg.lstsq(X, full, rcond=None)[0]
+        res = full - X @ beta
+        se = math.sqrt(float(res @ res) / (len(full) - X.shape[1]) * float(np.linalg.inv(X.T @ X)[-1, -1]))
+        out[p] = (float(beta[-1]), se)
+    return out
+
+
+def pass3_diagnostics(R, X):
+    """the figures the blocks state for the readings the third judge pass added"""
+    D = {}
+    fall, se, _ = X["days_check"]
+    D["own_falls"] = own_falls(R)
+    D["own_falls_z"] = {p: abs(c - fall) / s for p, (c, s) in D["own_falls"].items()}
+    # the store: each Monday paired with the week that ended the day before (the golden) or the week it opens
+    D["pairing"] = {k: fit_store(R, dict(GOLDEN, share_fit=k)) for k in ("one_cover", "one_cover_open", "between",
+                                                                          "between_open")}
+    lo = {}
+    for k in ("ended", "opens"):
+        vals = []
+        for p in POOLS:
+            for s in runs_of(R, p):
+                st, fl = R.store_beer[p][s][52:], R.flow_beer[p][s][52:]
+                if k == "opens":
+                    st, fl = st[:-1], fl[1:]
+                ok = fl > 0
+                vals.append(float((st[ok] / fl[ok]).min()))
+        lo[k] = (float(min(vals)), float(np.median(vals)))
+    D["pairing_min_cover"] = lo
+    # the depots' empties bays at the count against each depot's count-week deliveries
+    site = {"Leeds": "LDS", "York": "YRK", "Sheffield": "SHF"}
+    cells = []
+    for p in POOLS:
+        for nm, n in R.depot_empty_by.get(p, {}).items():
+            d = R.depot_week[p].get(site.get(nm, nm), 0.0)
+            if d > 0:
+                cells.append((p, nm, float(n), float(d)))
+    e = np.array([c[2] for c in cells])
+    d = np.array([c[3] for c in cells])
+    D["empties"] = dict(cells=cells, ratio_lo=float((e / d).min()), ratio_hi=float((e / d).max()),
+                        corr=float(np.corrcoef(e, d)[0, 1]), n=len(cells),
+                        slope_origin=float((e * d).sum() / (d * d).sum()),
+                        intercept=float(np.polyfit(d, e, 1)[1]))
+    # the depots' full stock and the wash queue on the type's deliveries, from their own weekly files
+    D["files_fit"] = {p: dict(depot=tuple(float(v) for v in np.polyfit(R.flow[p][52:R.WH], R.depot_full[p][53:R.WH + 1], 1)),
+                              wash=tuple(float(v) for v in np.polyfit(R.flow[p][52:R.WH], R.awaiting_close[p][52:R.WH], 1)))
+                      for p in POOLS}
+    # the Maplestead outlets' season: 50 litre kegs' 2026 season against the twelve months to September 2026
+    yr = [i for i in range(R.WH) if dt.date(2025, 10, 1) <= R.week_dates[i] + dt.timedelta(days=3) < dt.date(2026, 10, 1)]
+    s0 = (first_monday_of_may(2026) - R.D0).days // 7
+    sea = list(range(s0, s0 + SEASON_WEEKS))
+    D["season_ratio"] = {p: (float(R.flow[p][sea].mean() / R.flow[p][yr].mean()), float(R.flow[p][sea].max() / R.flow[p][yr].mean()))
+                         for p in POOLS}
+    # the last three summers as recorded against their normals
+    dep = {}
+    for y in (R.asof.year - 2, R.asof.year - 1, R.asof.year):
+        d0 = first_monday_of_may(y)
+        ws = [d0 + dt.timedelta(days=7 * k) for k in range(SEASON_WEEKS)]
+        dep[y] = float(np.mean([R.temp[w] - R.normal[w] for w in ws]))
+    D["summer_departure"] = dep
+    D["summer_departure_mean"] = float(np.mean(list(dep.values())))
+    # the readings added to the battery, each alone
+    alone = {}
+    for name, o in BATTERY:
+        if len(o) == 1 and list(o.items())[0] in (("loss_form", "hazard"), ("loss_form", "share"),
+                                                   ("fullest_window", "year"), ("share_fit", "one_cover_open"),
+                                                   ("other", "files"), ("other", "files_held"), ("level", 1),
+                                                   ("recon", "pooled")):
+            k = "%s=%s" % list(o.items())[0]
+            alone[k] = {}
+            for p in POOLS:
+                c = chain(R, p, o)
+                wk = max(c["path"], key=lambda x: x["store"])
+                alone[k][p] = dict(short=c["short"], year_loss=c["year_loss"], rise=c["rise"], fullest=c["fullest"],
+                                   fullest_date=R.week_dates[wk["i"]].isoformat() if "i" in wk else None)
+    D["alone"] = alone
+    D["check_doubles_differ"] = R.check_doubles_differ
+    return D
+
+
 def days_check(R, rate=None):
     """the falsification check: across every pool's cellar checks in one fit, each pool with its own relation to a
     line's sales and delivery interval, the fall in the full containers counted for each container the line has
@@ -950,6 +1043,7 @@ def run(target):
         X["rate_diag"][rate] = dict(slope={p: fit_cellar(R, p, g)[1](1.0) for p in POOLS},
                                     fall=days_check(R, rate)[:2])
     X["slope_se"] = {p: dict(rebuild=slope_se(R, p, "days"), joint=slope_se(R, p, "joint")) for p in POOLS}
+    X["diag3"] = pass3_diagnostics(R, X)
     X["level_diag"] = {}
     for p in POOLS:
         predict = fit_sales(R, p, 2)[0]

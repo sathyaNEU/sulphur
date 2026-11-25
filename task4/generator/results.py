@@ -183,6 +183,30 @@ def figures(X):
     fig["slope_se"] = {p: {k: round(v, 3) for k, v in X["slope_se"][p].items()} for p in POOLS}
     fig["refused"] = {name: {p: r0(v[p]) for p in POOLS} for name, v in X["refused"].items()}
     fig["refused_cover"] = {name: {p: A.cover_of(v[p], p) for p in POOLS} for name, v in X["refused"].items()}
+    D3 = X["diag3"]
+    al = D3["alone"]
+    fig["pass3"] = {
+        "own_falls": {p: [round(c, 3), round(se, 3)] for p, (c, se) in D3["own_falls"].items()},
+        "own_falls_zmax": round(max(D3["own_falls_z"].values()), 1),
+        "one_fit_fall": round(X["days_check"][0], 3),
+        "pairing": {k: {"share": round(v["theta"], 3), "cover": round(v["cov"]["K50"], 3), "resid_sd": round(v["resid_sd"], 1)}
+                    for k, v in D3["pairing"].items()},
+        "pairing_min_cover": {k: [round(v[0], 3), round(v[1], 3)] for k, v in D3["pairing_min_cover"].items()},
+        "empties": {"ratio_lo": round(D3["empties"]["ratio_lo"], 3), "ratio_hi": round(D3["empties"]["ratio_hi"], 3),
+                    "corr": round(D3["empties"]["corr"], 2), "n": D3["empties"]["n"],
+                    "intercept": round(D3["empties"]["intercept"], 1), "slope": round(D3["empties"]["slope_origin"], 3)},
+        "files_fit": {p: {"depot": round(v["depot"][0], 3), "wash": round(v["wash"][0], 3)} for p, v in D3["files_fit"].items()},
+        "season_ratio": {p: [round(v[0], 2), round(v[1], 2)] for p, v in D3["season_ratio"].items()},
+        "summer_departure": {str(y): round(v, 2) for y, v in D3["summer_departure"].items()},
+        "summer_departure_mean": round(D3["summer_departure_mean"], 2),
+        "check_doubles_differ": D3["check_doubles_differ"],
+        "alone": {k: {p: {"plan": r0(x["short"]), "year_loss": r0(x["year_loss"]), "rise": r0(x["rise"]),
+                          "fullest": r0(x["fullest"]), "fullest_date": x["fullest_date"]} for p, x in v.items()}
+                  for k, v in al.items()},
+    }
+    for k, v in fig["pass3"]["alone"].items():
+        for q in ("year_loss", "rise", "fullest"):
+            v["total_" + q] = sum(v[p][q] for p in POOLS)
     fig["rate_diag"] = {k: {"slope": {p: round(v["slope"][p], 2) for p in POOLS}, "fall": round(-v["fall"][0], 3)}
                         for k, v in X["rate_diag"].items()}
     fig["level_diag"] = {p: {k: round(v, 3) if k in ("scatter", "count_week") else r0(v) for k, v in d.items()}
@@ -207,6 +231,7 @@ def figures(X):
     dc, se, nn = X["days_check"]
     fig["falsification"] = dict(fall=round(-dc, 2), coef=round(dc, 2), se=round(se, 2), checks=nn)
     fig["variants"] = n
+    fig["variants_other"] = n - 1
     fig["battery"] = len(A.BATTERY)
     bat = {p: [x["short"] for x in X["bat"][p]] for p in POOLS}
     hbat = {p: X["hot_bat"][p] for p in POOLS}

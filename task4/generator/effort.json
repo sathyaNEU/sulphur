@@ -97,8 +97,8 @@
     "L07"
    ],
    "band": [
-    8157,
-    8926
+    7834,
+    9121
    ]
   },
   {
@@ -120,8 +120,8 @@
     "N13"
    ],
    "band": [
-    5008,
-    5121
+    4442,
+    5234
    ]
   },
   {
@@ -143,8 +143,8 @@
     "L37"
    ],
    "band": [
-    10077,
-    11124
+    9989,
+    11562
    ]
   },
   {
@@ -195,24 +195,24 @@
    ],
    "bands": {
     "K50": [
-     4049,
-     4998
+     3836,
+     5108
     ],
     "K30": [
-     2255,
-     2647
+     2082,
+     2800
     ],
     "K20": [
-     374,
-     871
+     405,
+     1034
     ],
     "FIR": [
-     1600,
-     2014
+     1524,
+     2003
     ],
     "KIL": [
-     -481,
-     -426
+     -506,
+     -407
     ]
    },
    "partly_share": 0.5
@@ -265,24 +265,24 @@
    ],
    "bands": {
     "K50": [
-     7952,
-     9826
+     7628,
+     9958
     ],
     "K30": [
-     2712,
-     3139
+     2520,
+     3289
     ],
     "K20": [
-     665,
-     1257
+     756,
+     1380
     ],
     "FIR": [
-     1610,
-     2012
+     1534,
+     1998
     ],
     "KIL": [
-     -481,
-     -426
+     -506,
+     -407
     ]
    },
    "partly_share": 0.5
@@ -656,6 +656,86 @@
     ]
    },
    {
+    "name": "deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
     "name": "depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
     "answer": [
      "50 litre kegs: purchase",
@@ -747,16 +827,6 @@
    },
    {
     "name": "the loss carried on the calendar, not on deliveries",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
-    "name": "the dray's last call as the line's own last docket, not the account's",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -886,6 +956,86 @@
     ]
    },
    {
+    "name": "the cellar checks fitted one line for each delivery interval; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the cellar checks fitted one line for each delivery interval; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the cellar checks fitted one line for each delivery interval; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the cellar checks fitted one line for each delivery interval; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the cellar checks fitted one line for each delivery interval; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the cellar checks fitted one line for each delivery interval; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the cellar checks fitted one line for each delivery interval; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the cellar checks fitted one line for each delivery interval; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
     "name": "the cellar checks fitted one line for each delivery interval; depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
     "answer": [
      "50 litre kegs: purchase",
@@ -977,16 +1127,6 @@
    },
    {
     "name": "the cellar checks fitted one line for each delivery interval; the loss carried on the calendar, not on deliveries",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
-    "name": "the cellar checks fitted one line for each delivery interval; the dray's last call as the line's own last docket, not the account's",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -1106,6 +1246,86 @@
     ]
    },
    {
+    "name": "the summer's cellar checks only; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the summer's cellar checks only; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the summer's cellar checks only; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the summer's cellar checks only; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the summer's cellar checks only; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the summer's cellar checks only; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the summer's cellar checks only; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the summer's cellar checks only; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
     "name": "the summer's cellar checks only; depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
     "answer": [
      "50 litre kegs: purchase",
@@ -1206,16 +1426,6 @@
     ]
    },
    {
-    "name": "the summer's cellar checks only; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the summer's cellar checks only; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -1297,6 +1507,86 @@
    },
    {
     "name": "the bend in the weather response a degree lower; deliveries at the count over its last two weeks",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree lower; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree lower; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree lower; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree lower; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree lower; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree lower; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree lower; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree lower; the store at its fullest over the whole plan year, not the season",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -1406,16 +1696,6 @@
     ]
    },
    {
-    "name": "the bend in the weather response a degree lower; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the bend in the weather response a degree lower; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -1497,6 +1777,86 @@
    },
    {
     "name": "the bend in the weather response a degree higher; deliveries at the count over its last two weeks",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree higher; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree higher; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree higher; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree higher; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree higher; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree higher; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree higher; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the bend in the weather response a degree higher; the store at its fullest over the whole plan year, not the season",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -1606,16 +1966,6 @@
     ]
    },
    {
-    "name": "the bend in the weather response a degree higher; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the bend in the weather response a degree higher; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -1677,6 +2027,86 @@
    },
    {
     "name": "one seasonal harmonic where the F test does not ask for two; deliveries at the count over its last two weeks",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "one seasonal harmonic where the F test does not ask for two; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "one seasonal harmonic where the F test does not ask for two; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "one seasonal harmonic where the F test does not ask for two; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "one seasonal harmonic where the F test does not ask for two; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "one seasonal harmonic where the F test does not ask for two; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "one seasonal harmonic where the F test does not ask for two; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "one seasonal harmonic where the F test does not ask for two; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "one seasonal harmonic where the F test does not ask for two; the store at its fullest over the whole plan year, not the season",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -1786,16 +2216,6 @@
     ]
    },
    {
-    "name": "one seasonal harmonic where the F test does not ask for two; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "one seasonal harmonic where the F test does not ask for two; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -1857,6 +2277,86 @@
    },
    {
     "name": "three seasonal harmonics in the deliveries fit; deliveries at the count over its last two weeks",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "three seasonal harmonics in the deliveries fit; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "three seasonal harmonics in the deliveries fit; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "three seasonal harmonics in the deliveries fit; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "three seasonal harmonics in the deliveries fit; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "three seasonal harmonics in the deliveries fit; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "three seasonal harmonics in the deliveries fit; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "three seasonal harmonics in the deliveries fit; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "three seasonal harmonics in the deliveries fit; the store at its fullest over the whole plan year, not the season",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -1966,16 +2466,6 @@
     ]
    },
    {
-    "name": "three seasonal harmonics in the deliveries fit; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "three seasonal harmonics in the deliveries fit; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -2007,6 +2497,76 @@
    },
    {
     "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; deliveries at the count over its last two weeks",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; the store at its fullest over the whole plan year, not the season",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -2116,16 +2676,6 @@
     ]
    },
    {
-    "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the store's stock fitted between beers on every Monday of the record, not the last 104; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -2157,6 +2707,76 @@
    },
    {
     "name": "the store's stock fitted on the beer-weeks themselves, one cover; deliveries at the count over its last two weeks",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks themselves, one cover; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks themselves, one cover; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks themselves, one cover; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks themselves, one cover; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks themselves, one cover; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks themselves, one cover; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks themselves, one cover; the store at its fullest over the whole plan year, not the season",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -2266,16 +2886,6 @@
     ]
    },
    {
-    "name": "the store's stock fitted on the beer-weeks themselves, one cover; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the store's stock fitted on the beer-weeks themselves, one cover; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -2307,6 +2917,76 @@
    },
    {
     "name": "the store's stock fitted on the beer-weeks with a cover for each container type; deliveries at the count over its last two weeks",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks with a cover for each container type; deliveries at the count as its own week's dockets",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks with a cover for each container type; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks with a cover for each container type; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks with a cover for each container type; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks with a cover for each container type; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks with a cover for each container type; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks with a cover for each container type; the store at its fullest over the whole plan year, not the season",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -2416,16 +3096,6 @@
     ]
    },
    {
-    "name": "the store's stock fitted on the beer-weeks with a cover for each container type; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the store's stock fitted on the beer-weeks with a cover for each container type; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -2447,6 +3117,76 @@
    },
    {
     "name": "the store's stock fitted on the beer-weeks with a cover for each container type; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count over its last two weeks; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count over its last two weeks; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count over its last two weeks; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count over its last two weeks; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count over its last two weeks; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count over its last two weeks; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count over its last two weeks; the store at its fullest over the whole plan year, not the season",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -2546,16 +3286,6 @@
     ]
    },
    {
-    "name": "deliveries at the count over its last two weeks; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "deliveries at the count over its last two weeks; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -2577,6 +3307,1276 @@
    },
    {
     "name": "deliveries at the count over its last two weeks; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the fall per container sold as the checks' one fit gives it, not one for one",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the lots fitted unweighted",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the lots fitted by a binomial model with a log link on the counts found out of registered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the oldest four lots against the newest four",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the lots fitted without the newest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the lots fitted without the oldest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the lots bought inside the docket record left out",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the fleet alive as the count over the fitted share on site",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; the loss carried on the calendar, not on deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; a lot's age from the middle of the year on its stamp",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; a lot's age from the middle of the year each container was delivered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "deliveries at the count as its own week's dockets; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the year's loss as the fitted rate times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the year's loss as the yearly share leaving times the fleet alive at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the lots fitted unweighted",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the lots fitted by a binomial model with a log link on the counts found out of registered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the oldest four lots against the newest four",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the lots fitted without the newest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the lots fitted without the oldest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the lots bought inside the docket record left out",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the fleet alive as the count over the fitted share on site",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; the loss carried on the calendar, not on deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; a lot's age from the middle of the year on its stamp",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; a lot's age from the middle of the year each container was delivered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the fall per container sold as the checks' one fit gives it, not one for one; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the lots fitted unweighted",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the lots fitted by a binomial model with a log link on the counts found out of registered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the oldest four lots against the newest four",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the lots fitted without the newest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the lots fitted without the oldest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the lots bought inside the docket record left out",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the fleet alive as the count over the fitted share on site",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; the loss carried on the calendar, not on deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; a lot's age from the middle of the year on its stamp",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; a lot's age from the middle of the year each container was delivered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the fitted rate times the fleet alive at the count; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the lots fitted unweighted",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the lots fitted by a binomial model with a log link on the counts found out of registered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the oldest four lots against the newest four",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the lots fitted without the newest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the lots fitted without the oldest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the lots bought inside the docket record left out",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the fleet alive as the count over the fitted share on site",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; the loss carried on the calendar, not on deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; a lot's age from the middle of the year on its stamp",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; a lot's age from the middle of the year each container was delivered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the year's loss as the yearly share leaving times the fleet alive at the count; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; depots' full stock and the wash queue from their own weekly files, the rest scaled",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the lots fitted unweighted",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the lots fitted by a binomial model with a log link on the counts found out of registered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the oldest four lots against the newest four",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the lots fitted without the newest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the lots fitted without the oldest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the lots bought inside the docket record left out",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the fleet alive as the count over the fitted share on site",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the loss carried on the calendar, not on deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; a lot's age from the middle of the year on its stamp",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; a lot's age from the middle of the year each container was delivered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the lots fitted unweighted",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the lots fitted by a binomial model with a log link on the counts found out of registered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the oldest four lots against the newest four",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the lots fitted without the newest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the lots fitted without the oldest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the lots bought inside the docket record left out",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the fleet alive as the count over the fitted share on site",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; the loss carried on the calendar, not on deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; a lot's age from the middle of the year on its stamp",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; a lot's age from the middle of the year each container was delivered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "depots' full stock and the wash queue from their own weekly files, the rest scaled; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the store at its fullest over the whole plan year, not the season",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the lots fitted unweighted",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the lots fitted by a binomial model with a log link on the counts found out of registered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the oldest four lots against the newest four",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the lots fitted without the newest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the lots fitted without the oldest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the lots bought inside the docket record left out",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the fleet alive as the count over the fitted share on site",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; the loss carried on the calendar, not on deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; a lot's age from the middle of the year on its stamp",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; a lot's age from the middle of the year each container was delivered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count; a beer's racking run as the mean of its rackings",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; depots, wash and repair read against the fitted level at the count, not its own week's deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; the lots fitted unweighted",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; the lots fitted by a binomial model with a log link on the counts found out of registered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; the oldest four lots against the newest four",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; the lots fitted without the newest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; the lots fitted without the oldest lot",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; the lots bought inside the docket record left out",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; the fleet alive as the count over the fitted share on site",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; the loss carried on the calendar, not on deliveries",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; a lot's age from the middle of the year on its stamp",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; a lot's age from the middle of the year each container was delivered",
+    "answer": [
+     "50 litre kegs: purchase",
+     "30 litre kegs: purchase",
+     "20 litre kegs: seasonal hire",
+     "firkins: purchase",
+     "kilderkins: no cover"
+    ]
+   },
+   {
+    "name": "the store at its fullest over the whole plan year, not the season; a beer's racking run as the mean of its rackings",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -2667,16 +4667,6 @@
    },
    {
     "name": "depots, wash and repair read against the fitted level at the count, not its own week's deliveries; the loss carried on the calendar, not on deliveries",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
-    "name": "depots, wash and repair read against the fitted level at the count, not its own week's deliveries; the dray's last call as the line's own last docket, not the account's",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -2796,16 +4786,6 @@
     ]
    },
    {
-    "name": "deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -2877,16 +4857,6 @@
    },
    {
     "name": "the lots fitted unweighted; the loss carried on the calendar, not on deliveries",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
-    "name": "the lots fitted unweighted; the dray's last call as the line's own last docket, not the account's",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -2976,16 +4946,6 @@
     ]
    },
    {
-    "name": "the lots fitted by a binomial model with a log link on the counts found out of registered; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the lots fitted by a binomial model with a log link on the counts found out of registered; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -3066,16 +5026,6 @@
     ]
    },
    {
-    "name": "the oldest four lots against the newest four; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the oldest four lots against the newest four; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -3117,16 +5067,6 @@
    },
    {
     "name": "the lots fitted without the newest lot; the loss carried on the calendar, not on deliveries",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
-    "name": "the lots fitted without the newest lot; the dray's last call as the line's own last docket, not the account's",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",
@@ -3186,16 +5126,6 @@
     ]
    },
    {
-    "name": "the lots fitted without the oldest lot; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the lots fitted without the oldest lot; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -3246,16 +5176,6 @@
     ]
    },
    {
-    "name": "the lots bought inside the docket record left out; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the lots bought inside the docket record left out; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -3296,16 +5216,6 @@
     ]
    },
    {
-    "name": "the fleet alive as the count over the fitted share on site; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the fleet alive as the count over the fitted share on site; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -3336,16 +5246,6 @@
     ]
    },
    {
-    "name": "the loss carried on the calendar, not on deliveries; the dray's last call as the line's own last docket, not the account's",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
     "name": "the loss carried on the calendar, not on deliveries; a lot's age from the middle of the year on its stamp",
     "answer": [
      "50 litre kegs: purchase",
@@ -3367,36 +5267,6 @@
    },
    {
     "name": "the loss carried on the calendar, not on deliveries; a beer's racking run as the mean of its rackings",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
-    "name": "the dray's last call as the line's own last docket, not the account's; a lot's age from the middle of the year on its stamp",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
-    "name": "the dray's last call as the line's own last docket, not the account's; a lot's age from the middle of the year each container was delivered",
-    "answer": [
-     "50 litre kegs: purchase",
-     "30 litre kegs: purchase",
-     "20 litre kegs: seasonal hire",
-     "firkins: purchase",
-     "kilderkins: no cover"
-    ]
-   },
-   {
-    "name": "the dray's last call as the line's own last docket, not the account's; a beer's racking run as the mean of its rackings",
     "answer": [
      "50 litre kegs: purchase",
      "30 litre kegs: purchase",

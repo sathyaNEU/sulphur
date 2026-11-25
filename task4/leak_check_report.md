@@ -1,10 +1,10 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 23 files read, 72 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 23 files read, 71 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: register, deliveries, delivery, missed, cellar, purchase, dockets, record, fitted, empties, reflex, together, carried, dropped, checks, carries, racking, measured, tagged, generator, monday, estimated, schedule, weather, result
+Stump terms swept: register, deliveries, delivery, cellar, missed, purchase, dockets, record, fitted, empties, reflex, together, checks, carried, dropped, carries, racking, measured, firkins, tagged, generator, monday, estimated, schedule, weather
 
 ## 4 design-note vocabulary (REVIEW 2)
 - **REVIEW** `FS-04_returnable_container_fleet_issue3.pdf`: 8 of 25 stump-paragraph terms appear (deliveries, delivery, purchase, record, empties, together); read whether the document names the move

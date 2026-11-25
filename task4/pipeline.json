@@ -1,12 +1,12 @@
 {
  "task": "task4",
- "status": "BUILD",
+ "status": "READY",
  "domain": "supply-chain-logistics",
  "subdomain": "regression-classification-model-diagnostics",
  "client_domain": "general-statistics-data-science",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "build",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-25",
  "doctrine": "throughout",
  "architecture": 14,
@@ -20,17 +20,38 @@
   "checks": "precut.py task4 on the cut pack: 117 checks, 0 FAIL, 1 WARN (nearest chains, answered in the Template check); core.py and results.py CORE PASS level 5"
  },
  "leak": {
-  "leak_py": "REVIEW on the cut pack (FS-04 and the hire terms' vocabulary, plan dates after the setting), each ruled in the note's ## Leak rulings; no LEAK",
-  "reader": "owed at stage 4"
+  "leak_py": "REVIEW on the final cut (FS-04 and the hire terms' vocabulary, plan dates after the setting), each ruled in the note's ## Leak rulings; no LEAK",
+  "reader": "read on the 9de59b9 cut: no leak; its flag on FS-04's definitional clauses ruled in the note; no document or prompt changed since"
  },
  "duplicate_check": {
   "heart": "WARN on the cut pack (template.chain_near and overuse.weight against task8, repeat.gate_g against task1), each answered in the note's Template check; surface PASS",
   "nearest": "guard.py check task4 on 2026-11-25: WARN only (template.chain_near task8, overuse.weight task8, repeat.gate_g task1, repeat.deliverables task9, NOTE driver.near 0.18 against this slot's architecture 13), each answered in the note's Template check; skeleton.py check PASS, severity none; registered 2026-11-25"
  },
  "judge": {
-  "verdict": "pass 2 (2026-11-25): DETERMINISTIC (pass 1: NOT_DETERMINISTIC on the store's run share, repaired)",
-  "disposition": "FIX_NOW on the blocks, done: the shortfall built as a change from the count and the level design refused with its figures (A), survival exponential with the straight line refused by the lots' deviance (B), the accrual, depots and Maplestead rules written in Step 8 (C), the rejected firkin figure as about nil (D), the every-Monday share's window named (E); the architect widened the 30 litre, firkin and 50 litre margins in the core and set the depots against the count week's own deliveries",
-  "report": "determinism_check_report_pass2.md"
+  "verdict": "pass 3 (2026-11-25): DETERMINISTIC (pass 1: NOT_DETERMINISTIC on the store's run share, repaired; pass 2: DETERMINISTIC, FIX_NOW done)",
+  "passes": [
+   {
+    "pass": 1,
+    "verdict": "NOT_DETERMINISTIC",
+    "disposition": "SEND_BACK on the store's run share; repaired (the share measured between beers on the Monday position by product, block edits a to g)",
+    "report": "determinism_check_report.md"
+   },
+   {
+    "pass": 2,
+    "verdict": "DETERMINISTIC",
+    "disposition": "FIX_NOW on the blocks, done (A to E), the architect's wider margins in the core",
+    "report": "determinism_check_report_pass2.md"
+   },
+   {
+    "pass": 3,
+    "verdict": "DETERMINISTIC",
+    "disposition": "FIX_NOW on the blocks only, done: its six readings in the battery by the architect's ruling (the fall as the one fit gives it, the loss as rate or yearly share times the fleet alive, the store with each Monday against the week it opens, the count week's own level, the depots and wash from their own files with the empties bays scaled or held, the fullest over the plan year), each type's own fall and the line's own last docket refused with figures, the wording edits in the blocks",
+    "report": "determinism_check_report_pass3.md"
+   }
+  ],
+  "fourth_pass": "not owed: no graded figure, pack file or prompt word moved (target.zip md5 0440ca1dac58ae15927361a52098864d, prompt.txt 1fa45a2f98db0eb39ba3de57d665e867, every golden figure as at pass 3)",
+  "holistic_determinism": "holistic.py task4 --check --mode determinism: CHECK PASS",
+  "report": "determinism_check_report_pass3.md"
  },
  "paper_pair": 26.7,
  "effort": {
@@ -38,9 +59,9 @@
   "careful": 26.7,
   "thorough": 100.0,
   "factorial": "cut pack, corelib level 5: S1 a cellar check is of full containers, the holding rebuilt from the dray's last call at the account (opens the 50 litre kegs), S2 the store under the 2027 brew plan (opens the 20 litre kegs), S3 the loss from the lots' age structure on site (opens the firkins); each necessary alone, none sufficient alone on the reflex route, each two-sided; 7 distinct wrong sets of covers on the lattice",
-  "rubric": "corelib on the cut pack: one stump lost S1 33, S2 22, S3 22; one fixed alone 16 each; the reflex route 9; the rigorous standard route 9; run routes hedge 9, generous 9, calibrated 33, cut-off 33",
+  "rubric": "corelib on the final cut (475-variant battery): one stump lost S1 44, S2 22, S3 22 (S1 keeps the kilderkins' and firkins' rows, the checks barely moving those pools; accepted by the architect at 50 or under); one fixed alone 16 each; the reflex route 9; the rigorous standard route 9; run routes hedge 9, generous 9, calibrated 44, cut-off 44",
   "largest_hint": "a rep's cellar count is of the full containers of a line on its order day, and the empties wait there for the dray: rescues 1 of 7",
-  "forcing": "cut pack: the battery's 201 rebuilds and the refused readings on the golden's covers; each fitted input moved 20 per cent (deliveries 5) and all four by two measured spreads: same covers"
+  "forcing": "final cut: the battery's 474 rebuilds (each convention alone and every two together) file the golden's covers; nearest by pool 4,048 (548 from 3,500), 2,202 (702 from 1,500), 929 (271 from 1,200), 1,604 (404 from 1,200), -424 (424 from nil); S1, S2 and S3 worth 3.8, 4.8 and 4.0 times the family's spread"
  },
  "returned": [
   {
@@ -85,13 +106,13 @@
    "source": "platform runs (the author's paste)",
    "repair": "design",
    "portal": "architecture 11: the run landed the call and three of the four judgments (congestion on a logged density, the acquired brand at its own mix, the 53-week re-key), losing only the growth-conditioned overstatement and the agency hours",
-   "moves": "re-rooted in a new world as architecture 12: Hav\u00f8rn Regional's 2027 rotable spares, each line diagnosed; every priced judgment a relation between records at different grains that a correct reading of each file does not reveal"
+   "moves": "re-rooted in a new world as architecture 12: Havørn Regional's 2027 rotable spares, each line diagnosed; every priced judgment a relation between records at different grains that a correct reading of each file does not reveal"
   },
   {
    "date": "2026-11-12",
    "source": "holistic audit",
    "repair": "determinism",
-   "portal": "holdings not forced: the in-house lines rode a Bod\u00f8 shop turnaround calibrated near saturation with no 2027 roster shipped (the audit's replay 12 to 17 days in the summer against the golden's 29; the starter-generator 6, 9 or 13 spares by reading); the VHF transceiver's 25 removals rested on an unfiled four-year window and an unfiled reading of repeat removals traced to one aircraft; fix: ship the 2027 roster and absence plan, file the capacity basis, the rate window and the repeat-removal treatment, re-derive the holdings and the saving",
+   "portal": "holdings not forced: the in-house lines rode a Bodø shop turnaround calibrated near saturation with no 2027 roster shipped (the audit's replay 12 to 17 days in the summer against the golden's 29; the starter-generator 6, 9 or 13 spares by reading); the VHF transceiver's 25 removals rested on an unfiled four-year window and an unfiled reading of repeat removals traced to one aircraft; fix: ship the 2027 roster and absence plan, file the capacity basis, the rate window and the repeat-removal treatment, re-derive the holdings and the saving",
    "runs": "runs/arch12/runs.md (both platform runs pasted, scores not supplied): both found the landings driver and the watch list's aircraft-driven removals; pools 90 and 71 against the golden's 78"
   },
   {
@@ -111,13 +132,13 @@
    "commit": ""
   }
  ],
- "resume": "third judge pass on the new cut (target.zip md5 0440ca1dac58ae15927361a52098864d), then READY",
+ "resume": "the author rewrites the prompt in their own voice, voice-check.py --rewrite and leak.py, upload, then /triage-runs task4",
  "approved": "",
  "delivered": "",
  "portal": {
-  "status": "DESIGN",
+  "status": "READY",
   "date": "2026-11-25",
-  "note": "architecture 14 loop 1 drawn; nothing to upload until the build reaches READY"
+  "note": "ready to upload: the author rewrites the prompt, re-gates it, uploads it with target.zip"
  },
  "portal_id": "",
  "portal_status": "",
@@ -149,7 +170,7 @@
   },
   {
    "date": "2026-11-10",
-   "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittyl\u00e4 depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
+   "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittylä depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
   },
   {
    "date": "2026-11-10",
@@ -165,7 +186,7 @@
   },
   {
    "date": "2026-11-11",
-   "event": "architecture 10 landed by both platform runs (runs/arch10/, REDESIGN); the world and its scaffold left; architecture 11 drawn: Saarnela fulfilment centre's 2027 peak plan (Telkk\u00e4 Logistics Oy, Kotikaari Oy and its acquired brand Huippu Sport), card registered, skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added"
+   "event": "architecture 10 landed by both platform runs (runs/arch10/, REDESIGN); the world and its scaffold left; architecture 11 drawn: Saarnela fulfilment centre's 2027 peak plan (Telkkä Logistics Oy, Kotikaari Oy and its acquired brand Huippu Sport), card registered, skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added"
   },
   {
    "date": "2026-11-11",
@@ -173,11 +194,11 @@
   },
   {
    "date": "2026-11-11",
-   "event": "architecture 11 landed on the platform (runs/arch11/run1.md, REDESIGN); architecture 12 drawn in a new world (Norway, Hav\u00f8rn Regional AS, 30 twin turboprops, the Bod\u00f8 component shop, the Helgeland routes from April 2027): which rotables will be short of spares in 2027 and which over-stocked, card registered with skeleton keys exposure_basis_decoupled, staggered_conversion_at_renewal and rate_on_driver_exposure added"
+   "event": "architecture 11 landed on the platform (runs/arch11/run1.md, REDESIGN); architecture 12 drawn in a new world (Norway, Havørn Regional AS, 30 twin turboprops, the Bodø component shop, the Helgeland routes from April 2027): which rotables will be short of spares in 2027 and which over-stocked, card registered with skeleton keys exposure_basis_decoupled, staggered_conversion_at_renewal and rate_on_driver_exposure added"
   },
   {
    "date": "2026-11-12",
-   "event": "architecture 12 built (seed 41239, the Bod\u00f8 shop at 52 per cent other work with staggered summer holidays, the avionics pools sized on 2026's flying): checks 66 of 66, verify 9 of 9, effort quick 20.8 / careful 40.6 / thorough 100 with every careful loss cited, 7 golden-family members and 8 perturbations holding the 15-line call; stage 4 next"
+   "event": "architecture 12 built (seed 41239, the Bodø shop at 52 per cent other work with staggered summer holidays, the avionics pools sized on 2026's flying): checks 66 of 66, verify 9 of 9, effort quick 20.8 / careful 40.6 / thorough 100 with every careful loss cited, 7 golden-family members and 8 perturbations holding the 15-line call; stage 4 next"
   },
   {
    "date": "2026-11-12",
@@ -199,7 +220,7 @@
    "architecture": 12,
    "status": "READY",
    "call": "buy 12 rotable spares on 6 lines (starter-generators 3, brake assemblies 2, bleed air shutoff valves 2, nose wheel steering actuators 2, main batteries 2, cabin pressure controllers 1) and cut 18 on 9; withdraw 8 of the 23 watch-list serials; the whole list saves about 34 removals",
-   "chain": "R2 the starter-generator, brake and bleed valve 2027 removals on landings; R3 the watch-list serials worth withdrawing; R3b the removals withdrawing the whole list saves; R4 the propeller control's 2027 removals and spares through SB 61-0042's conversion; R5 every part number's 2027 removals; R6 the in-house lines' spares through the Bod\u00f8 shop's 2027 queue; R7 the 80 per cent ranges; R8 the spares each line needs; R9 the lines to buy and to cut with how many",
+   "chain": "R2 the starter-generator, brake and bleed valve 2027 removals on landings; R3 the watch-list serials worth withdrawing; R3b the removals withdrawing the whole list saves; R4 the propeller control's 2027 removals and spares through SB 61-0042's conversion; R5 every part number's 2027 removals; R6 the in-house lines' spares through the Bodø shop's 2027 queue; R7 the 80 per cent ranges; R8 the spares each line needs; R9 the lines to buy and to cut with how many",
    "zip_sha256_16": "684dc3d10c44f52e",
    "fate": "spent 2026-11-12 on the author's word after the second holistic audit (holdings not forced)"
   },
@@ -234,6 +255,10 @@
   {
    "date": "2026-11-25",
    "event": "judge pass 2 DETERMINISTIC with FIX_NOW; blocks A to E written, the core's wider margins rebuilt; gates.py --full 0 FAIL; third judge pass owed"
+  },
+  {
+   "date": "2026-11-25",
+   "event": "judge pass 3 FIX_NOW done: its readings in the battery by the architect's ruling (475 variants, every cover held), the block wording; gates.py --full 0 FAIL, holistic determinism CHECK PASS, audit_containers exit 0; READY"
   }
  ],
  "runs": {
@@ -314,9 +339,9 @@
    }
   ]
  },
- "gates": "gates.py task4 --full on the new cut (target.zip md5 0440ca1dac58ae15927361a52098864d), 2026-11-25: 0 FAIL, 3 WARN (precut nearest chains, leak REVIEW ruled, heart answered); checks, verify 44 of 44, two byte-identical builds; core.py and results.py CORE PASS level 5; audit_containers exit 0",
- "zip_sha256_16": "",
- "golden_zip_sha256_16": "",
+ "gates": "gates.py task4 --full on the final cut (target.zip md5 0440ca1dac58ae15927361a52098864d), 2026-11-25: 12 gates, 0 FAIL, 3 WARN (precut nearest chains, leak REVIEW ruled, heart answered); checks 132 of 132, verify 44 of 44, two byte-identical builds; results.py CORE PASS level 5; holistic.py determinism CHECK PASS; audit_containers exit 0",
+ "zip_sha256_16": "a88e29ecf6a85055",
+ "golden_zip_sha256_16": "bbaa117c81d98800",
  "migrated_from": {
   "project": "Mark",
   "task": "task250",
@@ -333,6 +358,8 @@
  },
  "final_cut": {
   "date": "2026-11-25",
-  "note": "cut pack on the architect's second rulings (target digest 60760947b5f46954); zips built, force-added at READY"
- }
+  "note": "final cut after judge pass 3 (target digest f3204f033bd335ba, golden digest 3665438cae904d7a); target.zip and golden.zip from the final rebuild, force-added at READY"
+ },
+ "zip_md5": "0440ca1dac58ae15927361a52098864d",
+ "golden_zip_md5": "0def0e5c6cef1c637136388e08ce8f22"
 }

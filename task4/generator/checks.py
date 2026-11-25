@@ -206,8 +206,8 @@ def main(target):
     ok("SF13 the count covers every site, full and empty", set(R.count_sites) == {"Brighouse", "Leeds", "York", "Sheffield"})
     ok("SF14 the fitted value the golden; two weeks in the battery, same call", A.GOLDEN["level"] == "fit" and sc({"level": 2}))
     ld = fig["level_diag"]
-    ok("SF14 the count's own week refused: its week sits off the fit by about a week's scatter, same covers",
-       abs(ld["K50"]["count_week"]) > 0.5 * ld["K50"]["scatter"] and sc({"level": 1}), ld["K50"])
+    ok("SF14 the count week's own dockets in the battery, same call", ("level", 1) in
+       [list(o.items())[0] for o in single.values() if len(o) == 1] and sc({"level": 1}), ld["K50"])
     ok("SF14 four and eight weeks refused, the covers they file", same(X["level4"]) and
        same(X["refused"]["deliveries at the count as the mean of its last eight weeks"]), fig["level4"])
     ok("SF15 the form has two count boxes and the counts fall with the sales since the dray",
@@ -219,11 +219,16 @@ def main(target):
        rd["count_rate_share"]["slope"]["K20"] < rd["count_rate13"]["slope"]["K20"] < rd["count_rate"]["slope"]["K20"] and
        rd["count_rate_share"]["fall"] >= rd["count_rate"]["fall"] and sc({"rate": "count_rate13"}) and sc({"rate": "count_rate"}),
        {k: (v["slope"]["K20"], v["fall"]) for k, v in rd.items()})
-    ok("SF17 the line's own last docket, same call", sc({"last": "line"}))
+    ok("SF17 the line's own last docket refused by FS-04 5.1 (every empty of every type at the dray's next delivery "
+       "to the account), same covers", sc({"last": "line"}) and "takes every Wrenfold empty on the premises, of every type"
+       in std and {"last": "line"} in [o for _, o in A.REFUSED])
     ok("SF18 by interval and the summer's checks, same call", sc({"fit": "byclass"}) and sc({"count_months": "summer"}))
-    ok("SF19 the fall left free refused: its slope's standard error over twice the rebuild's, same covers",
-       same({p: X["joint"][p]["short"] for p in POOLS}) and
-       all(fig["slope_se"][p]["joint"] > 2.0 * fig["slope_se"][p]["rebuild"] for p in POOLS), fig["slope_se"])
+    p3 = fig["pass3"]
+    ok("SF19 the fall as the checks' one fit gives it in the battery, same call", {"recon": "pooled"} in single.values()
+       and sc({"recon": "pooled"}), p3["alone"]["recon=pooled"])
+    ok("SF19 a fall for each type on its own refused: none more than two standard errors from the one fit's, same covers",
+       same({p: X["joint"][p]["short"] for p in POOLS}) and p3["own_falls_zmax"] < 2.0 and
+       {"recon": "joint"} in [o for _, o in A.REFUSED], p3["own_falls"])
     ok("SF20 an allowance in place of the rebuild puts C1 outside its band",
        all(not inband(fig["allowances"][k]["C1"], fig["trade_rise_band"]) for k in ("half", "whole")),
        {k: fig["allowances"][k]["C1"] for k in ("half", "whole")})
@@ -280,6 +285,46 @@ def main(target):
     ok("SF33 the re-sent docket lines are under half a per cent", R.resent_rows < 0.005 * R.docket_rows,
        "%d of %d" % (R.resent_rows, R.docket_rows))
     ok("SF34 every two conventions together, same call", fig["battery_calls_all_golden"])
+    # the readings the third judge pass added, each closed same call and in band
+    ok("SF37 the year's loss as survivors a year before less at the count (golden); the rate and the yearly share "
+       "times the fleet alive in the battery, same call, inside the C3 band",
+       A.GOLDEN["loss_form"] == "survivors" and sc({"loss_form": "hazard"}) and sc({"loss_form": "share"}) and
+       all(inband(p3["alone"][k]["total_year_loss"], fig["year_loss_band"]) for k in ("loss_form=hazard", "loss_form=share")),
+       {k: p3["alone"][k]["total_year_loss"] for k in ("loss_form=hazard", "loss_form=share")})
+    ok("SF38 each Monday against the week that ended the day before (golden); the week it opens in the battery, same "
+       "call; the golden pairing keeps every beer above the fitted cover's floor and the smaller spread",
+       sc({"share_fit": "one_cover_open"}) and p3["pairing_min_cover"]["ended"][0] > p3["pairing_min_cover"]["opens"][0]
+       and p3["pairing"]["one_cover"]["resid_sd"] < p3["pairing"]["one_cover_open"]["resid_sd"],
+       {"min": p3["pairing_min_cover"], "sd": {k: v["resid_sd"] for k, v in p3["pairing"].items()}})
+    ok("SF39 the store at its fullest in the season (golden); over the whole plan year in the battery, same call, "
+       "inside the C2 band", A.GOLDEN["fullest_window"] == "season" and sc({"fullest_window": "year"}) and
+       inband(p3["alone"]["fullest_window=year"]["total_fullest"], fig["store_2027_band"]),
+       p3["alone"]["fullest_window=year"]["total_fullest"])
+    ok("SF40 the depots' empties bays scaled with deliveries (golden; they move with each depot's count-week "
+       "deliveries); held at the count in the battery, same call", sc({"other": "files_held"}) and
+       p3["empties"]["corr"] > 0.9, p3["empties"])
+    ok("SF41 the depots' full stock and the wash queue from their own weekly files in the battery, same call",
+       sc({"other": "files"}), p3["files_fit"])
+    ok("R7 the two readings refused on the third pass file the same covers",
+       all(same(X["refused"][nm]) for nm in ("the fall per container sold left free for each container type on its own",
+                                             "the dray's last call as the line's own last docket, not the account's")))
+    rc = fig["route_components"]
+    gc = {"C1": fig["trade_rise"], "C2": fig["store_2027"], "C3": fig["year_loss"]}
+    cb = {"C1": fig["trade_rise_band"], "C2": fig["store_2027_band"], "C3": fig["year_loss_band"]}
+    moved = [(r, c, v) for r, d in rc.items() for c, v in d.items() if abs(v - gc[c]) > 2]
+    over = {"C1": sum(X["over"][p]["S1"]["rise"] for p in POOLS), "C2": sum(X["over"][p]["S2"]["fullest"] for p in POOLS),
+            "C3": sum(X["over"][p]["S3"]["year_loss"] for p in POOLS)}
+    ok("R7 no route's component inside its band: every lattice, run and over route value that moves sits outside",
+       all(not inband(v, cb[c]) for r, c, v in moved) and all(not inband(v, cb[c]) for c, v in over.items()),
+       {"moved": len(moved), "over": {c: round(v) for c, v in over.items()}})
+    tb = fig["trade_rise_band_by_pool"]["K20"]
+    g20 = fig["trade_rise_by_pool"]["K20"]
+    lo20 = g20 - 1.5 * (g20 - tb[0])
+    k20 = {"S1": X["lat"]["K20"]["S1"]["rise"], "calibrated": X["runs"]["K20"]["calibrated"]["rise"],
+           "cutoff": X["runs"]["K20"]["cutoff"]["rise"]}
+    ok("R7 the 20 litre row lost on its trade rise by the S1, calibrated and cut-off routes (below the band stretched "
+       "half again about the golden)", all(v < lo20 for v in k20.values()),
+       {k: round(v) for k, v in k20.items()} | {"floor": round(lo20)})
     # ------------------------------------------------------------------------------------------- the realism sweep
     refs = sorted(set(int(r.split(",")[0].split("-")[1]) for r in open(os.path.join(target, F["checks"])).readlines()[1:]))
     ok("realism: the check references are not one arithmetic step", len(set(np.diff(refs[:200]))) > 1 or len(refs) < 3)

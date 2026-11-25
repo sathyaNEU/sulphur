@@ -191,7 +191,7 @@
    }
   }
  },
- "battery": 288,
+ "battery": 475,
  "battery_calls_all_golden": true,
  "battery_outside_band": {
   "FIR": 0,
@@ -202,46 +202,46 @@
  },
  "battery_range": {
   "FIR": [
-   1670,
-   1945
+   1604,
+   1923
   ],
   "K20": [
-   457,
-   788
+   510,
+   929
   ],
   "K30": [
-   2321,
-   2581
+   2202,
+   2680
   ],
   "K50": [
-   4207,
-   4839
+   4048,
+   4895
   ],
   "KIL": [
-   -472,
-   -436
+   -489,
+   -424
   ]
  },
  "battery_range_hot": {
   "FIR": [
-   1678,
-   1944
+   1612,
+   1920
   ],
   "K20": [
-   764,
-   1158
+   861,
+   1276
   ],
   "K30": [
-   2783,
-   3067
+   2649,
+   3161
   ],
   "K50": [
-   8265,
-   9513
+   8017,
+   9570
   ],
   "KIL": [
-   -472,
-   -435
+   -489,
+   -424
   ]
  },
  "beer_cover": {
@@ -655,24 +655,24 @@
  },
  "hot_band": {
   "FIR": [
-   1610,
-   2012
+   1534,
+   1998
   ],
   "K20": [
-   665,
-   1257
+   756,
+   1380
   ],
   "K30": [
-   2712,
-   3139
+   2520,
+   3289
   ],
   "K50": [
-   7952,
-   9826
+   7628,
+   9958
   ],
   "KIL": [
-   -481,
-   -426
+   -506,
+   -407
   ]
  },
  "hot_year": {
@@ -1284,40 +1284,479 @@
  },
  "nearest_by_pool": {
   "FIR": {
-   "distance": 470,
-   "figure": 1670,
+   "distance": 404,
+   "figure": 1604,
    "line": 1200,
-   "variant": "the store's stock fitted on the beer-weeks with a cover for each container type; deliveries at the count over its last two weeks"
+   "variant": "the store's stock fitted on the beer-weeks with a cover for each container type; the year's loss as the yearly share leaving times the fleet alive at the count"
   },
   "K20": {
-   "distance": 412,
-   "figure": 788,
+   "distance": 271,
+   "figure": 929,
    "line": 1200,
-   "variant": "the bend in the weather response a degree higher; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal"
+   "variant": "deliveries at the count as its own week's dockets; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens"
   },
   "K30": {
-   "distance": 821,
-   "figure": 2321,
+   "distance": 702,
+   "figure": 2202,
    "line": 1500,
-   "variant": "depots, wash and repair read against the fitted level at the count, not its own week's deliveries; the loss carried on the calendar, not on deliveries"
+   "variant": "the fall per container sold as the checks' one fit gives it, not one for one; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count"
   },
   "K50": {
-   "distance": 707,
-   "figure": 4207,
+   "distance": 548,
+   "figure": 4048,
    "line": 3500,
-   "variant": "the store's stock fitted on the beer-weeks with a cover for each container type; depots, wash and repair read against the fitted level at the count, not its own week's deliveries"
+   "variant": "the fall per container sold as the checks' one fit gives it, not one for one; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count"
   },
   "KIL": {
-   "distance": 436,
-   "figure": -436,
+   "distance": 424,
+   "figure": -424,
    "line": 0,
-   "variant": "the loss carried on the calendar, not on deliveries; the dray's last call as the line's own last docket, not the account's"
+   "variant": "the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens; the depots' full stock and the wash queue from their own weekly files, their empties bays held at the count"
   }
  },
  "nearest_variant": {
-  "distance": 412,
+  "distance": 271,
   "pool": "K20",
-  "variant": "the bend in the weather response a degree higher; deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal"
+  "variant": "deliveries at the count as its own week's dockets; the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens"
+ },
+ "pass3": {
+  "alone": {
+   "fullest_window=year": {
+    "FIR": {
+     "fullest": 1645,
+     "fullest_date": "2027-10-25",
+     "plan": 1828,
+     "rise": 598,
+     "year_loss": 1055
+    },
+    "K20": {
+     "fullest": 2196,
+     "fullest_date": "2027-07-19",
+     "plan": 761,
+     "rise": 784,
+     "year_loss": 220
+    },
+    "K30": {
+     "fullest": 2366,
+     "fullest_date": "2027-07-19",
+     "plan": 2519,
+     "rise": 2141,
+     "year_loss": 1095
+    },
+    "K50": {
+     "fullest": 4502,
+     "fullest_date": "2027-07-19",
+     "plan": 4653,
+     "rise": 5087,
+     "year_loss": 2477
+    },
+    "KIL": {
+     "fullest": 266,
+     "fullest_date": "2027-12-27",
+     "plan": -442,
+     "rise": -27,
+     "year_loss": 237
+    },
+    "total_fullest": 10975,
+    "total_rise": 8583,
+    "total_year_loss": 5084
+   },
+   "level=1": {
+    "FIR": {
+     "fullest": 1608,
+     "fullest_date": "2027-05-03",
+     "plan": 1801,
+     "rise": 572,
+     "year_loss": 1055
+    },
+    "K20": {
+     "fullest": 2196,
+     "fullest_date": "2027-07-19",
+     "plan": 802,
+     "rise": 825,
+     "year_loss": 220
+    },
+    "K30": {
+     "fullest": 2366,
+     "fullest_date": "2027-07-19",
+     "plan": 2629,
+     "rise": 2251,
+     "year_loss": 1095
+    },
+    "K50": {
+     "fullest": 4502,
+     "fullest_date": "2027-07-19",
+     "plan": 4807,
+     "rise": 5240,
+     "year_loss": 2477
+    },
+    "KIL": {
+     "fullest": 257,
+     "fullest_date": "2027-05-03",
+     "plan": -436,
+     "rise": -21,
+     "year_loss": 237
+    },
+    "total_fullest": 10929,
+    "total_rise": 8867,
+    "total_year_loss": 5084
+   },
+   "loss_form=hazard": {
+    "FIR": {
+     "fullest": 1608,
+     "fullest_date": "2027-05-03",
+     "plan": 1775,
+     "rise": 598,
+     "year_loss": 993
+    },
+    "K20": {
+     "fullest": 2196,
+     "fullest_date": "2027-07-19",
+     "plan": 759,
+     "rise": 784,
+     "year_loss": 217
+    },
+    "K30": {
+     "fullest": 2366,
+     "fullest_date": "2027-07-19",
+     "plan": 2487,
+     "rise": 2141,
+     "year_loss": 1053
+    },
+    "K50": {
+     "fullest": 4502,
+     "fullest_date": "2027-07-19",
+     "plan": 4563,
+     "rise": 5087,
+     "year_loss": 2346
+    },
+    "KIL": {
+     "fullest": 257,
+     "fullest_date": "2027-05-03",
+     "plan": -453,
+     "rise": -27,
+     "year_loss": 223
+    },
+    "total_fullest": 10929,
+    "total_rise": 8583,
+    "total_year_loss": 4832
+   },
+   "loss_form=share": {
+    "FIR": {
+     "fullest": 1608,
+     "fullest_date": "2027-05-03",
+     "plan": 1726,
+     "rise": 598,
+     "year_loss": 935
+    },
+    "K20": {
+     "fullest": 2196,
+     "fullest_date": "2027-07-19",
+     "plan": 757,
+     "rise": 784,
+     "year_loss": 214
+    },
+    "K30": {
+     "fullest": 2366,
+     "fullest_date": "2027-07-19",
+     "plan": 2457,
+     "rise": 2141,
+     "year_loss": 1012
+    },
+    "K50": {
+     "fullest": 4502,
+     "fullest_date": "2027-07-19",
+     "plan": 4481,
+     "rise": 5087,
+     "year_loss": 2224
+    },
+    "KIL": {
+     "fullest": 257,
+     "fullest_date": "2027-05-03",
+     "plan": -464,
+     "rise": -27,
+     "year_loss": 209
+    },
+    "total_fullest": 10929,
+    "total_rise": 8583,
+    "total_year_loss": 4594
+   },
+   "other=files": {
+    "FIR": {
+     "fullest": 1608,
+     "fullest_date": "2027-05-03",
+     "plan": 1826,
+     "rise": 598,
+     "year_loss": 1055
+    },
+    "K20": {
+     "fullest": 2196,
+     "fullest_date": "2027-07-19",
+     "plan": 751,
+     "rise": 784,
+     "year_loss": 220
+    },
+    "K30": {
+     "fullest": 2366,
+     "fullest_date": "2027-07-19",
+     "plan": 2420,
+     "rise": 2141,
+     "year_loss": 1095
+    },
+    "K50": {
+     "fullest": 4502,
+     "fullest_date": "2027-07-19",
+     "plan": 4626,
+     "rise": 5087,
+     "year_loss": 2477
+    },
+    "KIL": {
+     "fullest": 257,
+     "fullest_date": "2027-05-03",
+     "plan": -438,
+     "rise": -27,
+     "year_loss": 237
+    },
+    "total_fullest": 10929,
+    "total_rise": 8583,
+    "total_year_loss": 5084
+   },
+   "other=files_held": {
+    "FIR": {
+     "fullest": 1608,
+     "fullest_date": "2027-05-03",
+     "plan": 1835,
+     "rise": 598,
+     "year_loss": 1055
+    },
+    "K20": {
+     "fullest": 2196,
+     "fullest_date": "2027-07-19",
+     "plan": 703,
+     "rise": 784,
+     "year_loss": 220
+    },
+    "K30": {
+     "fullest": 2366,
+     "fullest_date": "2027-07-19",
+     "plan": 2300,
+     "rise": 2141,
+     "year_loss": 1095
+    },
+    "K50": {
+     "fullest": 4502,
+     "fullest_date": "2027-07-19",
+     "plan": 4324,
+     "rise": 5087,
+     "year_loss": 2477
+    },
+    "KIL": {
+     "fullest": 257,
+     "fullest_date": "2027-05-03",
+     "plan": -436,
+     "rise": -27,
+     "year_loss": 237
+    },
+    "total_fullest": 10929,
+    "total_rise": 8583,
+    "total_year_loss": 5084
+   },
+   "recon=pooled": {
+    "FIR": {
+     "fullest": 1608,
+     "fullest_date": "2027-05-03",
+     "plan": 1831,
+     "rise": 601,
+     "year_loss": 1055
+    },
+    "K20": {
+     "fullest": 2196,
+     "fullest_date": "2027-07-19",
+     "plan": 724,
+     "rise": 748,
+     "year_loss": 220
+    },
+    "K30": {
+     "fullest": 2366,
+     "fullest_date": "2027-07-19",
+     "plan": 2421,
+     "rise": 2042,
+     "year_loss": 1095
+    },
+    "K50": {
+     "fullest": 4502,
+     "fullest_date": "2027-07-19",
+     "plan": 4378,
+     "rise": 4808,
+     "year_loss": 2477
+    },
+    "KIL": {
+     "fullest": 257,
+     "fullest_date": "2027-05-03",
+     "plan": -440,
+     "rise": -25,
+     "year_loss": 237
+    },
+    "total_fullest": 10929,
+    "total_rise": 8174,
+    "total_year_loss": 5084
+   },
+   "share_fit=one_cover_open": {
+    "FIR": {
+     "fullest": 1676,
+     "fullest_date": "2027-05-03",
+     "plan": 1896,
+     "rise": 598,
+     "year_loss": 1055
+    },
+    "K20": {
+     "fullest": 2323,
+     "fullest_date": "2027-07-19",
+     "plan": 888,
+     "rise": 784,
+     "year_loss": 220
+    },
+    "K30": {
+     "fullest": 2416,
+     "fullest_date": "2027-07-19",
+     "plan": 2569,
+     "rise": 2141,
+     "year_loss": 1095
+    },
+    "K50": {
+     "fullest": 4572,
+     "fullest_date": "2027-07-19",
+     "plan": 4724,
+     "rise": 5087,
+     "year_loss": 2477
+    },
+    "KIL": {
+     "fullest": 269,
+     "fullest_date": "2027-05-03",
+     "plan": -430,
+     "rise": -27,
+     "year_loss": 237
+    },
+    "total_fullest": 11256,
+    "total_rise": 8583,
+    "total_year_loss": 5084
+   }
+  },
+  "check_doubles_differ": 10,
+  "empties": {
+   "corr": 0.99,
+   "intercept": 3.6,
+   "n": 15,
+   "ratio_hi": 0.164,
+   "ratio_lo": 0.098,
+   "slope": 0.112
+  },
+  "files_fit": {
+   "FIR": {
+    "depot": 0.286,
+    "wash": 0.13
+   },
+   "K20": {
+    "depot": 0.275,
+    "wash": 0.133
+   },
+   "K30": {
+    "depot": 0.246,
+    "wash": 0.121
+   },
+   "K50": {
+    "depot": 0.243,
+    "wash": 0.118
+   },
+   "KIL": {
+    "depot": 0.265,
+    "wash": 0.139
+   }
+  },
+  "one_fit_fall": -0.879,
+  "own_falls": {
+   "FIR": [
+    -0.593,
+    0.232
+   ],
+   "K20": [
+    -0.755,
+    0.409
+   ],
+   "K30": [
+    -1.1,
+    0.119
+   ],
+   "K50": [
+    -0.807,
+    0.073
+   ],
+   "KIL": [
+    -1.309,
+    0.29
+   ]
+  },
+  "own_falls_zmax": 1.9,
+  "pairing": {
+   "between": {
+    "cover": 0.347,
+    "resid_sd": 7.7,
+    "share": 0.508
+   },
+   "between_open": {
+    "cover": 0.347,
+    "resid_sd": 7.9,
+    "share": 0.508
+   },
+   "one_cover": {
+    "cover": 0.348,
+    "resid_sd": 56.1,
+    "share": 0.506
+   },
+   "one_cover_open": {
+    "cover": 0.337,
+    "resid_sd": 69.4,
+    "share": 0.546
+   }
+  },
+  "pairing_min_cover": {
+   "ended": [
+    0.35,
+    0.354
+   ],
+   "opens": [
+    0.27,
+    0.314
+   ]
+  },
+  "season_ratio": {
+   "FIR": [
+    0.91,
+    1.03
+   ],
+   "K20": [
+    1.26,
+    1.67
+   ],
+   "K30": [
+    1.13,
+    1.31
+   ],
+   "K50": [
+    1.27,
+    1.83
+   ],
+   "KIL": [
+    0.9,
+    0.99
+   ]
+  },
+  "summer_departure": {
+   "2024": -2.04,
+   "2025": -0.74,
+   "2026": 0.49
+  },
+  "summer_departure_mean": -0.77
  },
  "path": {
   "FIR": [
@@ -4032,24 +4471,24 @@
  },
  "plan_band": {
   "FIR": [
-   1600,
-   2014
+   1524,
+   2003
   ],
   "K20": [
-   374,
-   871
+   405,
+   1034
   ],
   "K30": [
-   2255,
-   2647
+   2082,
+   2800
   ],
   "K50": [
-   4049,
-   4998
+   3836,
+   5108
   ],
   "KIL": [
-   -481,
-   -426
+   -506,
+   -407
   ]
  },
  "plan_week": {
@@ -4285,13 +4724,6 @@
    "K50": 4742,
    "KIL": -441
   },
-  "deliveries at the count as its own week's": {
-   "FIR": 1801,
-   "K20": 802,
-   "K30": 2629,
-   "K50": 4807,
-   "KIL": -436
-  },
   "deliveries at the count as the mean of its last eight weeks": {
    "FIR": 1874,
    "K20": 697,
@@ -4327,6 +4759,13 @@
    "K50": 5047,
    "KIL": -386
   },
+  "the dray's last call as the line's own last docket, not the account's": {
+   "FIR": 1921,
+   "K20": 650,
+   "K30": 2455,
+   "K50": 4561,
+   "KIL": -440
+  },
   "the estate's scheduled volume level through the 2027 season": {
    "FIR": 1838,
    "K20": 708,
@@ -4334,7 +4773,7 @@
    "K50": 3874,
    "KIL": -442
   },
-  "the fall per container sold left free in the fit of the checks": {
+  "the fall per container sold left free for each container type on its own": {
    "FIR": 1839,
    "K20": 686,
    "K30": 2600,
@@ -4358,13 +4797,6 @@
    "KIL": "nothing"
   },
   "a line's weekly sales from thirteen weeks of its own dockets": {
-   "FIR": "buy",
-   "K20": "hire",
-   "K30": "buy",
-   "K50": "buy",
-   "KIL": "nothing"
-  },
-  "deliveries at the count as its own week's": {
    "FIR": "buy",
    "K20": "hire",
    "K30": "buy",
@@ -4406,6 +4838,13 @@
    "K50": "buy",
    "KIL": "nothing"
   },
+  "the dray's last call as the line's own last docket, not the account's": {
+   "FIR": "buy",
+   "K20": "hire",
+   "K30": "buy",
+   "K50": "buy",
+   "KIL": "nothing"
+  },
   "the estate's scheduled volume level through the 2027 season": {
    "FIR": "buy",
    "K20": "hire",
@@ -4413,7 +4852,7 @@
    "K50": "buy",
    "KIL": "nothing"
   },
-  "the fall per container sold left free in the fit of the checks": {
+  "the fall per container sold left free for each container type on its own": {
    "FIR": "buy",
    "K20": "hire",
    "K30": "buy",
@@ -4434,7 +4873,7 @@
    "R2": "missed",
    "R3": "right",
    "R4": "right",
-   "R5": "missed",
+   "R5": "partly",
    "R6": "missed",
    "R7": "partly"
   },
@@ -5263,7 +5702,7 @@
   },
   "level": 5,
   "one_lost": {
-   "S1": 32.9,
+   "S1": 43.5,
    "S2": 22.3,
    "S3": 22.3
   },
@@ -5306,7 +5745,7 @@
   "2027-05-03",
   "2027-09-20"
  ],
- "singles": 24,
+ "singles": 31,
  "slope_se": {
   "FIR": {
    "joint": 0.165,
@@ -5399,29 +5838,29 @@
  },
  "store_2027": 10929,
  "store_2027_band": [
-  10077,
-  11124
+  9989,
+  11562
  ],
  "store_2027_band_by_pool": {
   "FIR": [
-   1449,
-   1645
+   1425,
+   1770
   ],
   "K20": [
-   1951,
-   2247
+   1920,
+   2405
   ],
   "K30": [
-   2267,
-   2390
+   2255,
+   2453
   ],
   "K50": [
-   4172,
-   4584
+   4155,
+   4671
   ],
   "KIL": [
-   225,
-   265
+   220,
+   289
   ]
  },
  "store_2027_by_pool": {
@@ -5557,29 +5996,29 @@
  },
  "trade_rise": 8583,
  "trade_rise_band": [
-  8157,
-  8926
+  7834,
+  9121
  ],
  "trade_rise_band_by_pool": {
   "FIR": [
-   508,
-   733
+   529,
+   629
   ],
   "K20": [
-   627,
-   845
+   713,
+   851
   ],
   "K30": [
-   2035,
-   2227
+   1975,
+   2317
   ],
   "K50": [
-   4827,
-   5295
+   4585,
+   5411
   ],
   "KIL": [
-   -36,
-   -20
+   -37,
+   -14
   ]
  },
  "trade_rise_by_pool": {
@@ -5636,49 +6075,50 @@
  ],
  "variant_range": {
   "FIR": [
-   1670,
-   1945
+   1604,
+   1923
   ],
   "K20": [
-   457,
-   788
+   510,
+   929
   ],
   "K30": [
-   2321,
-   2581
+   2202,
+   2680
   ],
   "K50": [
-   4207,
-   4839
+   4048,
+   4895
   ],
   "KIL": [
-   -472,
-   -436
+   -489,
+   -424
   ]
  },
  "variant_range_hot": {
   "FIR": [
-   1678,
-   1944
+   1612,
+   1920
   ],
   "K20": [
-   764,
-   1158
+   861,
+   1276
   ],
   "K30": [
-   2783,
-   3067
+   2649,
+   3161
   ],
   "K50": [
-   8265,
-   9513
+   8017,
+   9570
   ],
   "KIL": [
-   -472,
-   -435
+   -489,
+   -424
   ]
  },
- "variants": 288,
+ "variants": 475,
+ "variants_other": 474,
  "world": {
   "FIR": {
    "alive": 9015,
@@ -5746,29 +6186,29 @@
  },
  "year_loss": 5084,
  "year_loss_band": [
-  5008,
-  5121
+  4442,
+  5234
  ],
  "year_loss_band_by_pool": {
   "FIR": [
-   1032,
-   1069
+   895,
+   1096
   ],
   "K20": [
    179,
    239
   ],
   "K30": [
-   1040,
-   1125
+   961,
+   1141
   ],
   "K50": [
-   2468,
-   2506
+   2154,
+   2569
   ],
   "KIL": [
-   227,
-   240
+   197,
+   246
   ]
  },
  "year_loss_by_pool": {
