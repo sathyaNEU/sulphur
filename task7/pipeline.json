@@ -1,11 +1,11 @@
 {
   "task": "task7",
-  "status": "DESIGN",
+  "status": "BUILD",
   "domain": "energy-systems-utilities",
   "subdomain": "tariff-demand-response-evaluation",
   "objective": "experiment-causal",
-  "stage": 2,
-  "stage_name": "design",
+  "stage": 3,
+  "stage_name": "build",
   "updated": "2026-11-25",
   "doctrine": "throughout",
   "architecture": 13,
@@ -20,14 +20,11 @@
   },
   "platform_task": "2d026b3c-65e4-403c-9a40-4bccaac5c1f0 (Energy Systems & Utilities, Experiment & Causal Analysis; the task type match must keep passing)",
   "precut": {
-    "exit": 1,
+    "exit": 0,
     "date": "2026-11-25",
-    "checks": "118 checks, 115 PASS, 2 WARN, 1 FAIL",
-    "fail": "effort measured on the cut pack: effort.py reads architecture 12's stale generator/effort.json (the launching thread said to leave the old generator files in place, and removing the file was refused by the session's permission system); every design row passes",
-    "without_stale_effort_json": "0 FAIL: the same row reads WARN (effort.json not written yet) on a scratch copy of the note, prompt, pipeline.json, core.py and checks.py without that file",
-    "warn": "R1 upstream of R4 to R7 (each needs R2 and R3 as well); nearest chains by shape and weight"
+    "checks": "118 checks, 0 FAIL, 2 WARN (R1 upstream of R4 to R7; nearest chains by shape and weight)"
   },
-  "resume": "/build task7 from 3: the build rewrites architecture 12's generator files around generator/core.py (effort.json and checks.py are stale and are rewritten from the new generator, which clears the one precut FAIL); the Build brief is in DESIGN_NOTE.md, the frozen core in generator/core.py; the author rewrites prompt.txt for voice before upload",
+  "resume": "/build task7 from 4: the leak reader and the determinism judge (determinism mode) on the cut pack; then READY",
   "approved": null,
   "delivered": null,
   "portal": null,
@@ -35,13 +32,27 @@
   "prompt_rewritten": false,
   "core": {
     "date": "2026-11-25",
-    "result": "CORE PASS level 5 (30 rows PASS, 0 WARN, 0 FAIL): three open members opened by three stumps (rep_w by S1, fix_t by S2, recon_in by S3); one stump lost earns 40, 28 and 34; the reflex route 9; the generous run route 21"
+    "result": "CORE PASS level 5 (30 rows PASS, 0 WARN, 0 FAIL) after the architect's resume on the step-window fork: three open members opened by three stumps (rep_w by S1, fix_t by S2, recon_in by S3); 78 variants, one funded set; one stump lost earns 40, 34 and 40; the reflex route 9; the generous run route 27; golden figures unchanged"
   },
   "duplicate_check": {
     "heart": "WARN only on 2026-11-25 after registration (overuse.forcing_event, repeat.gate_g against task9, house lessons unlabelled_pool_apportioned_by_varying_mix and latent_structure_estimation on two live builds each, house shell set_over_threshold on five live builds); 0 BLOCK",
     "skeleton": "severity none against every card, lineage entry and client task"
   },
   "open_members": "Kettle Ridge VHF repeater (S1), Larkin find-and-fix round (S2), reconnection round within 14 km (S3); forced: Halverson carrier fill-in, Medora Flats find-and-fix round, outlying reconnection round",
+  "drawn": {
+    "date": "2026-11-25",
+    "core": "CORE PASS level 5",
+    "precut": "1 FAIL (architecture 12's stale effort.json), 2 WARN; every design row passes",
+    "guard": "check WARN, heart WARN, 0 BLOCK after the fast-forward to origin/main ea1af52"
+  },
+  "architect_resumes": [
+    {
+      "date": "2026-11-25",
+      "finding": "the build's cut pack reproduced the core, and the step window (SF12) moved eight graded figures outside their 15-variant bands without moving the call",
+      "ruling": "the window is not filed; core.py now owns the SCADA minute noise (`minute_noise`) and the commands' slot order (`slot`) on a stream that leaves `step` unchanged, and its battery takes all 63 other windows of 3 to 10 minutes before and after (78 variants); the bands are core.py's new figure table; the build writes the SCADA minutes and the encoder log's order from core's arrays so the cut pack's battery is core's; finer reach bands are accepted on the within-8-km footing as SF15's extension",
+      "moved": "bands only (C1 0.777 to 0.905, C2 0.302 to 0.372, C3 0.628 to 0.733, recon_in 1,252 to 1,552, plan 2,045 to 2,285 kW and USD 37.4 to 41.8 a kW); no golden figure, line or call"
+    }
+  ],
   "history": {
     "architecture_1": {
       "domain": "nonprofit-grant-making",
@@ -436,10 +447,14 @@
       "fate": "spent 2026-11-13 at the platform's holistic audit of READY b75d025 (never uploaded): transport unpinned, the golden's degree bases held only by the generator, the run did every priced stump by reflex; retired the same day"
     }
   },
-  "drawn": {
+  "build": {
     "date": "2026-11-25",
-    "core": "CORE PASS level 5",
-    "precut": "1 FAIL (architecture 12's stale effort.json), 2 WARN; every design row passes",
-    "guard": "check WARN, heart WARN, 0 BLOCK after the fast-forward to origin/main ea1af52"
+    "gates": "gates.py task7 --full: 12 gates, 0 FAIL, 3 WARN (precut WARN rows, leak REVIEW lines, heart house-habit WARNs)",
+    "checks": "checks.py 102 assertions PASS (the pack against core, the bar block R1 to R7, SF1 to SF20, the pinning list, forcing, face-value records, input gates, realism sweep)",
+    "verify": "verify.py 37 checks PASS on its own parse of every shipped format",
+    "rebuild": "two builds byte-identical",
+    "pack": "21 files (CSV, XLSX, DOCX, PDF, PNG); 1,255,800 SCADA rows; target.zip 14 MB",
+    "pack_against_core": "flag, groups, install years and reach bands identical switch by switch; steps on all 64 windows within 0.08 kW of core's step_win; golden members within 0.02 per cent; the 78-rebuild bands equal the architect's frozen bands",
+    "effort": "quick 9.0, careful but hurried 17.8, thorough 100; one stump lost keeps 22 each; level 5 from the factorial"
   }
 }

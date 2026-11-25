@@ -29,6 +29,7 @@ SEED = 713
 N_EVENTS = 60
 RB = (8.0, 14.0, 20.0)            # reach bands, km to the nearest on-air transmitter of the switch's own system
 W_CP = 1.15                       # the weather index of the four 2026 coincident-peak afternoons (filed with the invoices)
+WINDOWS = (3, 4, 5, 6, 7, 8, 9, 10)  # minutes either side of a command a step can be read over (commands are 10 apart)
 OUT_KM = 14.0                     # the reconnection proposals split the flagged premises at 14 km from their transmitter
 OLD_YEAR = 2015                   # switches installed to 2015 are on the cooperative's VHF system, later ones on the carrier's
 NEW_VHF = np.array([-31.0, 12.0])  # the proposed Ridge VHF repeater
@@ -107,18 +108,52 @@ def build(seed=SEED, n_events=N_EVENTS, noise=0.004):
     load = r.uniform(1500, 3500, n_feed)
     # the record: one step in each feeder's SCADA load at each group's shed command (five minutes before against
     # five minutes after), one group every ten minutes from 16:00 in a random order
-    obs_e, obs_g, obs_f, step = [], [], [], []
+    obs_e, obs_g, obs_f, step, sig = [], [], [], [], []
     for e in range(n_events):
         recv = r.random(n_s) < qf(reach[e])
         dl = kap * w[e] * recv * hw * (~disc)
         for gi in np.flatnonzero(disp[e]):
             m = grp == gi
-            st = np.bincount(sf[m], dl[m], n_feed) + r.normal(0, noise * load)
+            s0 = np.bincount(sf[m], dl[m], n_feed)
+            st = s0 + r.normal(0, noise * load)
             obs_e += [e] * n_feed
             obs_g += [gi] * n_feed
             obs_f += list(range(n_feed))
             step += list(st)
-    obs_e, obs_g, obs_f, step = map(np.array, (obs_e, obs_g, obs_f, step))
+            sig += list(s0)
+    obs_e, obs_g, obs_f, step, sig = map(np.array, (obs_e, obs_g, obs_f, step, sig))
+    # The SCADA minutes behind the steps. On an event day the groups shed are paged ten minutes apart from 16:00 in a
+    # random order (slot k at minute 10 k). Each feeder's load carries white minute noise of sd noise * load / sqrt(0.4),
+    # so a five-minute mean after a command less the five-minute mean before it has sd noise * load: the step above.
+    # The minutes are drawn on their own stream and conditioned on that five-minute difference, so `step` is unchanged
+    # and any other window (a minutes before, b minutes after, each 3 to 10) re-draws part of the noise.
+    r2 = np.random.default_rng(seed + 7)
+    slot = np.zeros(len(obs_e), int)
+    minute_noise = {}
+    step_win = {(a_, b_): np.zeros(len(obs_e)) for a_ in WINDOWS for b_ in WINDOWS}   # (minutes before, minutes after)
+    s_min = noise * load / np.sqrt(0.4)
+    pos = 0
+    for e in range(n_events):
+        gl = np.flatnonzero(disp[e])
+        order = r2.permutation(len(gl))                 # order[j] is the slot of the j-th dispatched group (ascending)
+        z = r2.normal(0, 1, (n_feed, 10 * len(gl) + 10)) * s_min[:, None]      # minutes -10 .. 10 n - 1 from 16:00
+        for j in range(len(gl)):
+            t = 10 + 10 * order[j]                      # column of the command's transmit minute
+            idx = slice(pos + j * n_feed, pos + (j + 1) * n_feed)
+            eps = step[idx] - sig[idx]
+            d = z[:, t:t + 5].mean(1) - z[:, t - 5:t].mean(1)
+            z[:, t:t + 5] += ((eps - d) / 2)[:, None]
+            z[:, t - 5:t] -= ((eps - d) / 2)[:, None]
+            slot[idx] = order[j]
+        for j in range(len(gl)):
+            t = 10 + 10 * order[j]
+            idx = slice(pos + j * n_feed, pos + (j + 1) * n_feed)
+            for a_ in WINDOWS:
+                for b_ in WINDOWS:
+                    step_win[(a_, b_)][idx] = sig[idx] + z[:, t:t + b_].mean(1) - z[:, t - a_:t].mean(1)
+        minute_noise[e] = z
+        pos += len(gl) * n_feed
+    assert np.allclose(step_win[(5, 5)], step)
     d_new_v = np.minimum(dv.min(1), np.sqrt((x - NEW_VHF[0]) ** 2 + (y - NEW_VHF[1]) ** 2))
     d_new_c = np.minimum(dc.min(1), np.sqrt((x - NEW_CAR[0]) ** 2 + (y - NEW_CAR[1]) ** 2))
     # the study homes: unit-level interval meters, Town, 1 to 6 km from a transmitter, 2019-20 switches, no unit replaced
@@ -133,7 +168,8 @@ def build(seed=SEED, n_events=N_EVENTS, noise=0.004):
     batch_age = np.array([age[grp == gi].mean() for gi in range(16)])
     return dict(batch_age=batch_age, dist=dist, n_feed=n_feed, n_s=n_s, sf=sf, x=x, y=y, yr=yr, vhf=vhf, age=age, n_events=n_events, reach=reach,
                 now=now, static_any=static_any, dv=dv, dc=dc, von=von, con=con, hw=hw, repl=repl, disc=disc, flag=flag, kap=kap,
-                w=w, grp=grp, disp=disp, load=load, obs=(obs_e, obs_g, obs_f), step=step, qf=qf, hf=hf, d_new_v=d_new_v, d_new_c=d_new_c,
+                w=w, grp=grp, disp=disp, load=load, obs=(obs_e, obs_g, obs_f), step=step, slot=slot, minute_noise=minute_noise,
+                step_win=step_win, qf=qf, hf=hf, d_new_v=d_new_v, d_new_c=d_new_c,
                 study=(s_resp, s_tr), vt=vt, ct=ct)
 
 
@@ -274,11 +310,15 @@ def lines(wd):
 
 
 STUMPS = ("S1", "S2", "S3")
+_TENSORS = {}
 
 
 def model(wd, rb=RB, reach=None, wls=True, district=True, batch="free", keep=None, cut=0.25, cfix=None):
     """One fitted delivery model: (q by reach band, th per switch, c, the working level from the study homes)."""
-    n = tensor(wd, wd["reach"] if reach is None else reach, rb)
+    key = ("own" if reach is None else "other", tuple(rb), id(wd["wx"]))
+    if key not in _TENSORS:
+        _TENSORS[key] = tensor(wd, wd["reach"] if reach is None else reach, rb)
+    n = _TENSORS[key]
     q, a, h, c = fit(wd, n, wls=wls, district=district, batch=batch, keep=keep, cfix=cfix)
     th = a[wd["dist"][wd["sf"]]] * h[wd["grp"]]
     return dict(q=q, th=th, c=c, k=study(wd, cut)["working"], rb=rb, a=a, h=h)
@@ -378,6 +418,10 @@ def main():
         pass
     m_sh2 = dict(m_sh, th=m_sh["th"] * (W_CP - 0.1) / W_CP)
     fam["cooling index measured from 0.1"] = all_figures(wd, m_sh2, ln)
+    # the step read over another window: m minutes after the command less m minutes before, for every clean length
+    for (a_, b_), st_ in wd["step_win"].items():
+        if (a_, b_) != (5, 5):
+            fam["step window %d minutes before, %d after" % (a_, b_)] = all_figures(wd, model(dict(wd, step=st_)), ln)
     names = list(fam)
 
     # ---- the lattice: every subset of the three judgments read at face value ----
@@ -498,7 +542,11 @@ def main():
         print("over %s: " % s_ + ", ".join("%s %.4g" % (k, over[s_][k]) for k in MEMBERS))
     print("variants:")
     for v in names:
-        print("  %-46s " % v + ", ".join("%s %.4g" % (k, fam[v][k]) for k in gold))
+        if not v.startswith("step window") or v.split()[2] == v.split()[5]:
+            print("  %-46s " % v + ", ".join("%s %.4g" % (k, fam[v][k]) for k in gold))
+    wv = [v for v in names if v.startswith("step window")]
+    print("  all %d step windows (3 to 10 minutes each side), lowest to highest: " % len(wv) + ", ".join(
+        "%s %.4g to %.4g" % (k, min(fam[v][k] for v in wv), max(fam[v][k] for v in wv)) for k in gold))
     print("falsification: " + ", ".join("%s %.3f" % kv for kv in fals.items()))
     print()
     return corelib.run(spec)

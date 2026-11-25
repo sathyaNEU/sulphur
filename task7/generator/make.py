@@ -25,6 +25,7 @@ import writeup as WU  # noqa: E402
 TASK = os.path.dirname(HERE)
 TARGET = os.path.join(TASK, "target")
 GOLDEN = os.path.join(TASK, "golden")
+WINDOWS = True            # the step-window rebuilds in the battery
 
 
 def digest(folder):
@@ -37,17 +38,14 @@ def digest(folder):
 
 def main(once):
     BD.build(TARGET)
-    fig, E = EP.run_all(TARGET)
-    fig["org"] = deliver.ORG
-    WU.texts(fig)
-    json.dump(fig, open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True, default=float)
+    F, E, wd, ex, A = EP.run_all(TARGET, windows=WINDOWS)
+    WU.texts(F)
+    json.dump(F, open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True, default=float)
     json.dump(E, open(os.path.join(HERE, "effort.json"), "w"), indent=1, default=float)
     if os.path.isdir(GOLDEN):
         shutil.rmtree(GOLDEN)
-    scratch = tempfile.mkdtemp()
-    deliver.build(GOLDEN, fig, scratch)
-    postprocess.own_mtimes(GOLDEN, {})
-    WU.write(os.path.join(TASK, "submission.md"), fig, fig["bands"])
+    deliver.build(GOLDEN, F)
+    WU.write(os.path.join(TASK, "submission.md"), F)
     metadata.write(os.path.join(TASK, "metadata.json"))
     first = digest(TARGET)
     print("target", first, "golden", digest(GOLDEN))

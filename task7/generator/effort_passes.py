@@ -1,256 +1,278 @@
-"""Every owed figure from the cut pack's read-back, the golden family that sets each band, the named shortcuts, the
-three passes and the stump factorial, written as figures.json and effort.json."""
-import csv
-import os
-
+"""Every owed figure, from the cut pack: the golden and its bands (core.py's battery, the step windows and the forcing
+perturbations run on the read-back arrays), the three passes of the effort test (the quick pass, the careful but
+hurried pass that is the reflex route, the golden), the hints, the factorial and the forcing block. Writes the
+figures.json and effort.json the gates read."""
 import numpy as np
 
-import analysis as A
-import params as P
-import verify as V
+import analysis as AN
+import core as C
+import read as R
 
-GOLD = dict(A.GOLD)
-BASE = dict(cop=None, whkw=None, quad=True, win=2, ctrl="class", tctl="class", lamstat="median", lossfit="origin", lossv=True, comp=None,
-            lam=1.0, lossk=1.0, room=0.0)
-# the judgments a careful run gets wrong in a hurry: the call turns on these
-STUMPS = {
-    2: ("J2", "each untested feeder's response built from its own makeup, not the trial feeders' average", ["N25", "L15"]),
-    3: ("J3", "the response carried through the year hour by hour, thermostatic load giving its energy back", ["N12", "L15"]),
-    5: ("J5", "the change in line losses from current squared, not the annual report's 6.1 percent added in proportion", ["N21", "L22"]),
-}
-# the judgments the files spell out, so a careful run makes them unprompted
-FILED = {
-    1: ("J1", "the trial read on the volts its regulators actually took off (VO-1 3.1: feeder-head voltage is the pilot regulator's output)", []),
-    4: ("J4", "the volts each feeder can give hour by hour from its far-end meters (VO-1 2.3 and 3.1)", []),
-}
-REFLEXES = [
-    ("the customer-meter sums cleaned (re-sent rows, estimated intervals, the far-end meters' lowest reading)", []),
-    ("daily energy regressed on the trial with weather and day-type terms against comparable untested feeders", []),
-    ("energy at the substation, the 115 V floor and the 4.8 V cap, valued at USD 48 and 9.4 (filed in VO-1)", []),
-]
-RIVALS = {
-    "a resistive home at 2.5 times a heat pump home's heating draw": dict(cop=2.5),
-    "a resistive home at 3.2 times a heat pump home's heating draw": dict(cop=3.2),
-    "the trial's weather terms without squares": dict(quad=False),
-    "the trial's control every untested feeder, not the same class": dict(tctl="all"),
-    "the trial's scale the mean of the trial feeders' ratios, not the median": dict(lamstat="mean"),
-    "the loss fit with a no-load term": dict(lossfit="intercept"),
-}
-PERTURB = [("the trial-calibrated response 4.6 percent higher (twice its sampling error)", dict(lam=1.046)),
-           ("the trial-calibrated response 4.6 percent lower (twice its sampling error)", dict(lam=0.954)),
-           ("the loss coefficient 20 percent higher", dict(lossk=1.2)), ("the loss coefficient 20 percent lower", dict(lossk=0.8)),
-           ("the far-end readings 0.2 V higher", dict(room=0.2)), ("the far-end readings 0.2 V lower", dict(room=-0.2))]
+WINDOWS = (3, 4, 5, 6, 7, 8, 9, 10)       # minutes either side of a command a step can be read over (core.WINDOWS)
+NAMES = {"rep_w": "Kettle Ridge VHF repeater", "rep_n": "Halverson carrier fill-in site",
+         "fix_t": "Larkin find-and-fix round", "fix_w": "Medora Flats find-and-fix round",
+         "recon_in": "Reconnection round within 14 km", "recon_out": "Outlying reconnection round"}
+ORDER = ["rep_w", "rep_n", "fix_t", "fix_w", "recon_in", "recon_out"]
+KEYS = ORDER + ["c1_fringe_loss", "c2_failed_old", "c3_unwired", "lost_reach", "lost_hw", "lost_unwired", "delivered",
+                "plan_kw", "plan_cost_per_kw"]
 
 
-def J(*off):
-    return {j: (j not in off) for j in GOLD}
+def battery(target, wd, ex, A, windows=True):
+    """The golden family: core's fifteen rebuilds and the 63 other step windows (a minutes before, b after, 3 to 10
+    each), every one on the cut pack: 78 rebuilds, as core.py's battery."""
+    fam = dict(A["fam"])
+    if windows:
+        for a_ in WINDOWS:
+            for b_ in WINDOWS:
+                if (a_, b_) == (5, 5):
+                    continue
+                w2 = R.steps_for_window(wd, ex, a_, b_)
+                fam["step window %d minutes before, %d after" % (a_, b_)] = C.all_figures(w2, C.model(w2), A["ln"])
+    return fam
 
 
-REFLEX_ROUTE = tuple(STUMPS)          # every stump hurried, every filed judgment and reflex right
+def rnd(x, nd=0):
+    return float(round(float(x), nd)) if nd else int(round(float(x)))
 
 
-def run(R, Jset, **kw):
-    A.OPT.update(BASE)
-    A.OPT.update(kw)
-    A.reset()
-    parts = [A.parts2(R, f, Jset) for f in range(P.NF)]
-    out = {"save": np.array([p["total"] for p in parts]), "cust": np.array([p["cust"] for p in parts]),
-           "loss": np.array([p["loss_rise"] for p in parts])}
-    out["vc"] = out["save"] * P.PRICE * P.ANNUITY / np.array(R.cost)
-    out["set"] = tuple(int(f) for f in np.where(out["vc"] >= 1)[0])
-    out["trial"] = {f: A.trial_effect(R, f, Jset[1]) for f in R.trial}
-    out["room"] = np.array([A.headroom(R, f, Jset[4]).mean() for f in range(P.NF)])
-    # each feeder's yearly response: its customer saving as a share of its energy, per unit of its average reduction
-    out["cvrf"] = out["cust"] / (energy_mwh(R) * out["room"] / P.VNOM)
-    return out
+def run_all(target, windows=True):
+    wd, ex = R.read(target)
+    A = AN.run(wd)
+    ln, cnt, gold = A["ln"], A["cnt"], A["gold"]
+    fam = battery(target, wd, ex, A, windows)
+    names = list(fam)
+    bands = {}
+    for k in KEYS:
+        bands[k] = AN.band(float(gold[k]), [float(fam[v][k]) for v in names])
+    go = AN.funded(gold, ln)
+    for v in names:
+        assert AN.funded(fam[v], ln) == go, "a rebuild in the battery files another set: %s" % v
+    pert = AN.perturb(wd, A)
+    for v, f in pert.items():
+        assert AN.funded(f, ln) == go, "a perturbed input files another set: %s" % v
+    st = A["study"]
+    k = A["gm"]["k"]
+    could = C.W_CP * k * wd["n_s"]
+    # ---- the figures the answer blocks state ----
+    F = {}
+    F["funded"] = [NAMES[m] for m in ORDER if m in go]
+    F["rejected"] = [NAMES[m] for m in ORDER if m not in go]
+    F["proposals"] = {}
+    for m in ORDER:
+        lo, hi = bands[m]
+        F["proposals"][m] = dict(name=NAMES[m], kw=rnd(gold[m]), band=[rnd(lo), rnd(hi)], breakeven=rnd(ln[m]),
+                                 breakeven_1=rnd(ln[m], 1), funded=m in go,
+                                 premises=cnt.get(m), cost=rnd(ln[m] * C.VALUE),
+                                 cost_per_kw=rnd(ln[m] * C.VALUE / gold[m], 1) if gold[m] > 0 else None,
+                                 margin=rnd(gold[m] - ln[m]))
+    pct = lambda x: int(round(100 * float(x)))
+    b1, b2, b3 = bands["c1_fringe_loss"], bands["c2_failed_old"], bands["c3_unwired"]
+    F["c1_lost"] = pct(gold["c1_fringe_loss"])
+    F["c1_through"] = 100 - F["c1_lost"]
+    F["c1_lost_band"] = [pct(b1[0]), pct(b1[1])]
+    F["c1_through_band"] = [100 - pct(b1[1]), 100 - pct(b1[0])]
+    F["c2_failed"] = pct(gold["c2_failed_old"])
+    F["c2_work"] = 100 - F["c2_failed"]
+    F["c2_failed_band"] = [pct(b2[0]), pct(b2[1])]
+    F["c2_work_band"] = [100 - pct(b2[1]), 100 - pct(b2[0])]
+    F["c3_unwired"] = pct(gold["c3_unwired"])
+    F["c3_wired"] = 100 - F["c3_unwired"]
+    F["c3_unwired_band"] = [pct(b3[0]), pct(b3[1])]
+    F["c3_wired_band"] = [100 - pct(b3[1]), 100 - pct(b3[0])]
+    F["could_shed"] = rnd(could)
+    for kk in ("lost_reach", "lost_hw", "lost_unwired", "delivered"):
+        F[kk] = rnd(gold[kk])
+        F[kk + "_band"] = [rnd(bands[kk][0]), rnd(bands[kk][1])]
+    F["plan_kw"] = rnd(gold["plan_kw"])
+    F["plan_kw_band"] = [rnd(bands["plan_kw"][0]), rnd(bands["plan_kw"][1])]
+    F["plan_cost_per_kw"] = rnd(gold["plan_cost_per_kw"], 1)
+    F["plan_cost_per_kw_band"] = [rnd(bands["plan_cost_per_kw"][0], 1), rnd(bands["plan_cost_per_kw"][1], 1)]
+    F["plan_cost"] = rnd(sum(ln[m] for m in go) * C.VALUE)
+    F["plan_value"] = rnd(gold["plan_kw"] * C.VALUE)
+    # the record behind the figures (the Step-by-Step's counts and fitted terms)
+    gm = A["gm"]
+    F["counts"] = dict(switches=int(wd["n_s"]), steps=int(len(wd["step"])), events=int(wd["n_events"]),
+                       commands=int(wd["disp"].sum()), feeders=int(wd["n_feed"]), groups=16, study_homes=int(len(ex["hid"])),
+                       flagged=int(wd["flag"].sum()), old=int((wd["yr"] <= 2015).sum()), fix_t=cnt["fix_t"], fix_w=cnt["fix_w"],
+                       recon_in=cnt["recon_in"], recon_out=cnt["recon_out"],
+                       fringe=int((wd["now"] > 20).sum()), near=int((wd["now"] <= 8).sum()),
+                       variants=len(names))
+    F["fit"] = dict(q=[rnd(v, 3) for v in gm["q"]], c_connected=rnd(gm["c"][1], 3), working_kw=rnd(k, 3),
+                    study_itt=rnd(st["itt"], 3), study_share=pct(st["share"]), a=[rnd(v, 3) for v in gm["a"]],
+                    h=[rnd(v, 3) for v in gm["h"]], index=C.W_CP, value=C.VALUE)
+    F["routes"] = {}
+    for lab, f in (("reflex", A["reflex"]), ("rigorous", A["rig"]), ("generous", A["gen"]), ("cutoff", A["cut"]["14 km, 2011"])):
+        F["routes"][lab] = {m: rnd(f[m]) for m in ORDER}
+        F["routes"][lab]["funded"] = [NAMES[m] for m in ORDER if f[m] >= ln[m]]
+    F["routes"]["rigorous"]["delivered"] = rnd(A["rig"]["delivered"])
+    F["reflex_bridge"] = {kk: rnd(A["reflex"][kk]) for kk in ("lost_reach", "lost_hw", "lost_unwired")}
+    F["reflex_bridge"]["total"] = rnd(sum(A["reflex"][kk] for kk in ("lost_reach", "lost_hw", "lost_unwired")))
+    F["lattice"] = {}
+    for kk, f in A["lat"].items():
+        F["lattice"][kk] = {"funded": [NAMES[m] for m in ORDER if f[m] >= ln[m]],
+                            **{m: rnd(f[m]) for m in ORDER},
+                            "c1_through": 100 - pct(f["c1_fringe_loss"]), "c2_work": 100 - pct(f["c2_failed_old"]),
+                            "c3_wired": 100 - pct(f["c3_unwired"])}
+    F["over"] = {kk: {"funded": [NAMES[m] for m in ORDER if f[m] >= ln[m]], **{m: rnd(f[m]) for m in ORDER}}
+                 for kk, f in A["over"].items()}
+    F["fals"] = {kk: rnd(v, 3) for kk, v in A["fals"].items()}
+    F["bands_raw"] = {kk: [float(v) for v in b] for kk, b in bands.items()}
+    F["golden_raw"] = {kk: float(gold[kk]) for kk in KEYS}
+    F["family"] = {v: {kk: float(fam[v][kk]) for kk in KEYS} for v in names}
+    F["perturb"] = {v: {kk: float(f[kk]) for kk in ORDER} for v, f in pert.items()}
+    F["quick"] = quick(wd, A)
+    # the constants the work plan files, as the blocks state them
+    F["appraisal"] = dict(fringe_km=20, near_km=8, split_km=int(C.OUT_KM), index=C.W_CP, value_usd_kw_year=int(C.VALUE),
+                          demand_rate=22.0, through_year=C.OLD_YEAR)
+    # the table results effort.json grades, keyed as figures.json holds them
+    F["bridge"] = {"could": F["could_shed"], "delivered": F["delivered"], "lost_reach": F["lost_reach"], "lost_hw": F["lost_hw"],
+                   "lost_unwired": F["lost_unwired"]}
+    F["proposal_kw"] = {m: F["proposals"][m]["kw"] for m in ORDER}
+    F["plan"] = {"plan_kw": F["plan_kw"], "plan_cost_per_kw": F["plan_cost_per_kw"]}
+    E = effort(F, A, fam, pert)
+    return F, E, wd, ex, A
 
 
-def quick(R):
-    """ten minutes: the export summed as it comes (re-sent rows in), the trial as ON days' mean energy over OFF days',
-    the trial's 4.8 V on every feeder all year, the customer meters' saving taken as the substation's"""
-    raw = np.zeros(P.NF)
-    for r in csv.DictReader(open(os.path.join(R.target, "mdm_feeder_interval_kwh_2026.csv"))):
-        raw[R.ids.index(r["feeder_id"])] += float(r["kwh"])
-    out = {"raw_mwh": raw / 1000.0}
-    tr = {}
-    for f in R.trial:
-        E = R.ami[f].reshape(P.ND, P.Q).sum(axis=1)[R.trial_days]
-        a = R.assign[f][R.trial_days]
-        tr[f] = (1 - E[a == 1].mean() / E[a == 0].mean()) / (P.TRIAL_DV / P.VNOM)
-    eta = float(np.mean(list(tr.values())))
-    out["trial"] = tr
-    out["room"] = np.full(P.NF, P.TRIAL_DV)
-    out["cust"] = np.array([eta * P.TRIAL_DV / P.VNOM * R.ami[f].sum() for f in range(P.NF)])
-    out["save"] = out["cust"].copy()
-    out["loss"] = np.zeros(P.NF)
-    out["vc"] = out["save"] * P.PRICE * P.ANNUITY / np.array(R.cost)
-    out["set"] = tuple(int(f) for f in np.where(out["vc"] >= 1)[0])
-    out["cvrf"] = out["cust"] / (out["raw_mwh"] * out["room"] / P.VNOM)
-    return out
+def quick(wd, A):
+    """Ten minutes: last year's planning figure of 1.0 kW a switch and the three records read as they stand."""
+    ln, cnt = A["ln"], A["cnt"]
+    n = wd["n_s"]
+    out = {"rep_w": 0.0, "rep_n": 0.0}
+    for m in ("fix_t", "fix_w"):
+        out[m] = C.W_CP * cnt[m] * 1.0 * (1 - C.FACE["test_pass"])
+    for m in ("recon_in", "recon_out"):
+        out[m] = C.W_CP * cnt[m] * 1.0 * C.FACE["test_pass"] * (1 - C.FACE["wo_connected"])
+    out["c1_fringe_loss"], out["c2_failed_old"], out["c3_unwired"] = 0.0, 1 - C.FACE["test_pass"], 1 - C.FACE["wo_connected"]
+    could = C.W_CP * n * 1.0
+    out["could"] = could
+    out["lost_reach"] = 0.0
+    out["lost_hw"] = could * (1 - C.FACE["test_pass"])
+    out["lost_unwired"] = C.W_CP * int(wd["flag"].sum()) * C.FACE["test_pass"] * (1 - C.FACE["wo_connected"])
+    out["delivered"] = could - out["lost_hw"] - out["lost_unwired"]
+    go = [m for m in ORDER if out[m] >= ln[m]]
+    out["plan_kw"] = float(sum(out[m] for m in go))
+    out["plan_cost_per_kw"] = 0.0
+    out["funded"] = go
+    return {kk: (float(v) if not isinstance(v, list) else v) for kk, v in out.items()}
 
 
-def energy_mwh(R):
-    return np.array([R.ami[f].sum() for f in range(P.NF)])
+def effort(F, A, fam, pert):
+    gold, ln = A["gold"], A["ln"]
+    B = F["bands_raw"]
+    reflex = A["reflex"]
+    Q = F["quick"]
+    pct = lambda x: 100 * float(x)
 
+    def tab(f, keys):
+        return {kk: round(float(f[kk]), 1) for kk in keys}
 
-def _band(vals, rel, floor):
-    lo, hi = min(vals), max(vals)
-    w = max(rel * abs(np.mean(vals)), floor)
-    return [round(lo - w, 2), round(hi + w, 2)]
-
-
-def tmean(out, R):
-    """the trial's response averaged over the trial feeders, each counted once"""
-    return float(np.mean([out["trial"][f] for f in R.trial]))
-
-
-def run_all(target):
-    R = V.read_pack(target)
-    ids = R.ids
-    G = run(R, GOLD)
-    riv = {nm: run(R, GOLD, **kw) for nm, kw in RIVALS.items()}
-    C = run(R, J(*REFLEX_ROUTE))
-    drops = {j: run(R, J(j)) for j in STUMPS}
-    alone = {j: run(R, J(*[k for k in STUMPS if k != j])) for j in STUMPS}
-    assigned = run(R, J(1))
-    nominal = run(R, GOLD, lossv=False)
-    E = energy_mwh(R)
-    fam = [G] + list(riv.values())
-    nf = range(P.NF)
-    bands = {
-        "save": {ids[f]: _band([x["save"][f] for x in fam], 0.03, 8.0) for f in nf},
-        "cust": {ids[f]: _band([x["cust"][f] for x in fam], 0.03, 8.0) for f in nf},
-        "room": {ids[f]: _band([x["room"][f] for x in fam], 0.02, 0.05) for f in nf},
-        "loss": {ids[f]: _band([x["loss"][f] for x in fam], 0.10, 3.0) for f in nf},
-        "cvrf": {ids[f]: _band([x["cvrf"][f] for x in fam], 0.03, 0.01) for f in nf},
-        "trial_mean": _band([tmean(x, R) for x in fam], 0.02, 0.01),
-        "energy": {ids[f]: [round(E[f] * 0.995, 0), round(E[f] * 1.005, 0)] for f in nf},
-    }
-    tot = [float(sum(x["save"][f] for f in G["set"])) for x in fam]
-    bands["total"] = [round(min(tot) * 0.97, 0), round(max(tot) * 1.03, 0)]
-    fig = {
-        "ids": ids, "trial": [ids[f] for f in R.trial], "headmetered": [ids[f] for f in R.headmetered],
-        "kind": {ids[f]: R.kind[f] for f in nf}, "cost": {ids[f]: R.cost[f] for f in nf},
-        "energy_mwh": {ids[f]: round(float(E[f]), 0) for f in nf},
-        "trial_effect": {ids[f]: round(float(G["trial"][f]), 2) for f in R.trial},
-        "trial_mean": round(tmean(G, R), 2), "trial_mean_assigned": round(tmean(assigned, R), 2),
-        "room_v": {ids[f]: round(float(G["room"][f]), 2) for f in nf},
-        "cvrf": {ids[f]: round(float(G["cvrf"][f]), 2) for f in nf},
-        "cust_mwh": {ids[f]: round(float(G["cust"][f]), 0) for f in nf},
-        "loss_mwh": {ids[f]: round(float(G["loss"][f]), 0) for f in nf},
-        "save_mwh": {ids[f]: round(float(G["save"][f]), 0) for f in nf},
-        "value_ratio": {ids[f]: round(float(G["vc"][f]), 2) for f in nf},
-        "break_even_mwh": {ids[f]: round(R.cost[f] / (P.PRICE * P.ANNUITY), 0) for f in nf},
-        "funded": [ids[f] for f in G["set"]],
-        "bands": bands,
-        "routes": {"the careful route (the reflex route)": [ids[f] for f in C["set"]]},
-        "price": P.PRICE, "annuity": P.ANNUITY, "loss_rate_report": P.LOSS_RATE_REPORT, "vnom": P.VNOM,
-        "largest_loss_rise_mwh": round(float(max(G["loss"])), 0), "n_loss_rise": int((G["loss"] > 0).sum()),
-        "cvrf_lo": round(float(min(G["cvrf"])), 2), "cvrf_hi": round(float(max(G["cvrf"])), 2),
-        "total_save_mwh": round(float(sum(G["save"][f] for f in G["set"])), 0),
-        "total_cost": round(float(sum(R.cost[f] for f in G["set"])), 0),
-    }
-    for j, d in drops.items():
-        fig["routes"]["%s dropped (%s)" % (STUMPS[j][0], STUMPS[j][1])] = [ids[f] for f in d["set"]]
-    fig["routes"]["the losses fitted with current at nominal kV"] = [ids[f] for f in nominal["set"]]
-    fig["on_day_loss_rise_pct"] = {}
-    for g in [g for g in R.trial if g in R.headmetered]:
-        S = R.ami[g] * 4
-        L = R.head[g] * 4 - S
-        on = np.repeat(R.dose_daily[g] > 1.0, P.Q)
-        off = np.zeros(P.NQ, bool)
-        for d in R.trial_days:
-            if R.assign[g][d] == 0:
-                off[d * P.Q:(d + 1) * P.Q] = True
-        k_on = (L[on] * S[on] ** 2).sum() / (S[on] ** 4).sum()
-        k_off = (L[off] * S[off] ** 2).sum() / (S[off] ** 4).sum()
-        fig["on_day_loss_rise_pct"][ids[g]] = round(float(100 * (k_on / k_off - 1)), 1)
-    eff = effort(R, ids, G, C, drops, alone, riv, fig)
-    eff["routes"].append({"name": "the losses fitted with current at nominal kV", "answer": fig["routes"]["the losses fitted with current at nominal kV"]})
-    eff["forcing"]["shortcuts"].append({"name": "the losses fitted with current at nominal kV", "answer": fig["routes"]["the losses fitted with current at nominal kV"]})
-    return fig, eff
-
-
-def effort(R, ids, G, C, drops, alone, riv, fig):
-    b = fig["bands"]
-    nf = range(P.NF)
-
-    def tab(vals, nd=2):
-        return {ids[f]: round(float(vals[f]), nd) for f in nf}
-    Qk = quick(R)
+    k = A["gm"]["k"]
+    could = C.W_CP * k * A["gm"]["th"].size
+    bridge_keys = ["lost_reach", "lost_hw", "lost_unwired"]
     res = [
-        {"id": "R1", "name": "each feeder's 2026 energy at the customer meters (MWh)", "graded_as": "Ask 1", "figure": "energy_mwh",
-         "depends": [], "independent": "the customer-meter sums", "golden": fig["energy_mwh"], "bands": b["energy"],
-         "passes": {"quick": tab(Qk["raw_mwh"], 0), "careful": fig["energy_mwh"], "thorough": fig["energy_mwh"]}},
-        {"id": "R2", "name": "the trial's change in energy per 1 percent of voltage removed, averaged over the trial feeders",
-         "graded_as": "Ask 2", "figure": "trial_mean", "depends": [], "independent": "the trial records",
-         "golden": fig["trial_mean"], "band": b["trial_mean"],
-         "passes": {"quick": round(float(np.mean([Qk["trial"][f] for f in R.trial])), 2),
-                    "careful": round(tmean(C, R), 2), "thorough": fig["trial_mean"]}},
-        {"id": "R3", "name": "the average reduction in volts each feeder could be held at over the year", "graded_as": "Ask 3",
-         "figure": "room_v", "depends": [], "independent": "the far-end meters", "golden": fig["room_v"], "bands": b["room"],
-         "passes": {"quick": tab(Qk["room"]), "careful": tab(C["room"]), "thorough": fig["room_v"]}},
-        {"id": "R4", "name": "each feeder's yearly change in customer energy per 1 percent of voltage removed", "graded_as": "Component 2",
-         "figure": "cvrf", "depends": ["R2"], "independent": "", "golden": fig["cvrf"], "bands": b["cvrf"],
-         "precedent": ["N25", "N12", "L15"], "partly_share": 0.75,
-         "passes": {"quick": tab(Qk["cvrf"]), "careful": tab(C["cvrf"]), "thorough": fig["cvrf"]}},
-        {"id": "R5", "name": "each feeder's yearly energy saving at the customer meters (MWh)", "graded_as": "Ask 4", "figure": "cust_mwh",
-         "depends": ["R3", "R4"], "independent": "", "golden": fig["cust_mwh"], "bands": b["cust"], "precedent": ["N25", "N12", "L15"],
-         "partly_share": 0.75, "passes": {"quick": tab(Qk["cust"], 0), "careful": tab(C["cust"], 0), "thorough": fig["cust_mwh"]}},
-        {"id": "R6", "name": "the rise in each feeder's own line losses (MWh a year)", "graded_as": "Component 3", "figure": "loss_mwh",
-         "depends": ["R3", "R5"], "independent": "", "golden": fig["loss_mwh"], "bands": b["loss"], "precedent": ["N21", "L22"],
-         "partly_share": 0.75, "passes": {"quick": tab(Qk["loss"], 0), "careful": tab(C["loss"], 0), "thorough": fig["loss_mwh"]}},
-        {"id": "R7", "name": "each feeder's yearly energy saving at the substation (MWh)", "graded_as": "Component 1", "figure": "save_mwh",
-         "depends": ["R5", "R6"], "independent": "", "golden": fig["save_mwh"], "bands": b["save"], "precedent": ["N25", "N12", "L15"],
-         "partly_share": 0.75, "passes": {"quick": tab(Qk["save"], 0), "careful": tab(C["save"], 0), "thorough": fig["save_mwh"]}},
-        {"id": "R9", "name": "the 2027 program's total yearly saving at the substation (MWh)", "graded_as": "Ask 5", "figure": "total_save_mwh",
-         "depends": ["R7", "R8"], "independent": "", "golden": fig["total_save_mwh"], "band": b["total"], "precedent": ["N25", "L15"],
-         "passes": {"quick": round(float(sum(Qk["save"][f] for f in Qk["set"])), 0), "careful": round(float(sum(C["save"][f] for f in C["set"])), 0),
-                    "thorough": fig["total_save_mwh"]}},
-        {"id": "R8", "name": "the feeders that receive voltage optimization in 2027", "graded_as": "Recommendation", "figure": "funded",
-         "depends": ["R7"], "independent": "", "golden": fig["funded"], "precedent": ["N25", "L15"],
-         "passes": {"quick": [ids[f] for f in Qk["set"]], "careful": [ids[f] for f in C["set"]], "thorough": fig["funded"]}},
+        {"id": "R1", "name": "the share of shed commands that get through at the fringe, against switches within 8 km (per 100)",
+         "graded_as": "Component 1", "figure": "c1_through", "depends": [], "independent": "the transmitter register, the outage log and the steps",
+         "golden": F["c1_through"], "band": F["c1_through_band"], "precedent": ["N09", "N27", "L38", "L70"],
+         "passes": {"quick": 100.0, "careful": round(100 - pct(reflex["c1_fringe_loss"]), 1), "thorough": F["c1_through"]}},
+        {"id": "R2", "name": "the share of switches installed through 2015 that still work, at premises with no replaced unit (per 100)",
+         "graded_as": "Component 2", "figure": "c2_work", "depends": [], "independent": "the install batches, the study homes and the steps",
+         "golden": F["c2_work"], "band": F["c2_work_band"], "precedent": ["L28", "N11", "N46", "N35"],
+         "passes": {"quick": round(100 - pct(Q["c2_failed_old"]), 1), "careful": round(100 - pct(reflex["c2_failed_old"]), 1),
+                    "thorough": F["c2_work"]}},
+        {"id": "R3", "name": "the share of switches still wired in where the air conditioner was replaced since (per 100)",
+         "graded_as": "Component 3", "figure": "c3_wired", "depends": [], "independent": "the rebate and permit records and the steps",
+         "golden": F["c3_wired"], "band": F["c3_wired_band"], "precedent": ["L26", "L58", "N14", "L56", "N36"],
+         "passes": {"quick": round(100 - pct(Q["c3_unwired"]), 1), "careful": round(100 - pct(reflex["c3_unwired"]), 1),
+                    "thorough": F["c3_wired"]}},
+        {"id": "R4", "name": "the bridge from the kW the switches could take off at peak to the kW they deliver",
+         "graded_as": "Ask 2", "figure": "bridge", "depends": ["R1", "R2", "R3"], "independent": "",
+         "golden": {"could": F["could_shed"], "delivered": F["delivered"], **{kk: F[kk] for kk in bridge_keys}},
+         "bands": {"could": [F["could_shed"] - 1, F["could_shed"] + 1], "delivered": F["delivered_band"],
+                   **{kk: F[kk + "_band"] for kk in bridge_keys}},
+         "partly_share": 0.4, "precedent": ["L63", "L06"],
+         "passes": {"quick": {"could": round(Q["could"], 1), "delivered": round(Q["delivered"], 1), **tab(Q, bridge_keys)},
+                    "careful": {"could": round(could, 1), "delivered": F["delivered"], **tab(reflex, bridge_keys)},
+                    "thorough": {"could": F["could_shed"], "delivered": F["delivered"], **{kk: F[kk] for kk in bridge_keys}}}},
+        {"id": "R5", "name": "the peak kW each proposal adds in 2027", "graded_as": "Ask 1", "figure": "proposal_kw",
+         "depends": ["R1", "R2", "R3"], "independent": "",
+         "golden": {m: F["proposals"][m]["kw"] for m in ORDER}, "bands": {m: F["proposals"][m]["band"] for m in ORDER},
+         "partly_share": 0.5, "precedent": ["L63", "L06"],
+         "passes": {"quick": tab(Q, ORDER), "careful": tab(reflex, ORDER), "thorough": {m: F["proposals"][m]["kw"] for m in ORDER}}},
+        {"id": "R6", "name": "the funded plan's kW and its cost per kW-year", "graded_as": "Ask 3", "figure": "plan",
+         "depends": ["R5"], "independent": "",
+         "golden": {"plan_kw": F["plan_kw"], "plan_cost_per_kw": F["plan_cost_per_kw"]},
+         "bands": {"plan_kw": F["plan_kw_band"], "plan_cost_per_kw": F["plan_cost_per_kw_band"]},
+         "precedent": ["L63"],
+         "passes": {"quick": {"plan_kw": Q["plan_kw"], "plan_cost_per_kw": Q["plan_cost_per_kw"]},
+                    "careful": {"plan_kw": round(float(reflex["plan_kw"]), 1), "plan_cost_per_kw": round(float(reflex["plan_cost_per_kw"]), 1)},
+                    "thorough": {"plan_kw": F["plan_kw"], "plan_cost_per_kw": F["plan_cost_per_kw"]}}},
+        {"id": "R7", "name": "the proposals funded", "graded_as": "Recommendation", "figure": "funded", "depends": ["R5", "R6"],
+         "independent": "", "golden": F["funded"], "precedent": ["L26", "L63"],
+         "passes": {"quick": [NAMES[m] for m in Q["funded"]], "careful": F["routes"]["reflex"]["funded"], "thorough": F["funded"]}},
     ]
-    byid = {r["id"]: r for r in res}
 
-    def inb(vals, rid):
-        bb = byid[rid]["bands"]
-        return all(bb[ids[f]][0] <= vals[f] <= bb[ids[f]][1] for f in nf)
-
-    def rescued(out):
+    def right(f):
+        """The results a route lands (graded the way effort.py grades them) from its figure dict."""
         got = []
-        lo, hi = byid["R2"]["band"]
-        if lo <= tmean(out, R) <= hi:
+        if F["c1_through_band"][0] <= 100 - pct(f["c1_fringe_loss"]) <= F["c1_through_band"][1]:
+            got.append("R1")
+        if F["c2_work_band"][0] <= 100 - pct(f["c2_failed_old"]) <= F["c2_work_band"][1]:
             got.append("R2")
-        for rid, key in (("R3", "room"), ("R4", "cvrf"), ("R5", "cust"), ("R6", "loss"), ("R7", "save")):
-            if inb(out[key], rid):
-                got.append(rid)
-        if out["set"] == G["set"]:
-            got.append("R8")
+        if F["c3_wired_band"][0] <= 100 - pct(f["c3_unwired"]) <= F["c3_wired_band"][1]:
+            got.append("R3")
+        cells = [B[kk][0] <= f[kk] <= B[kk][1] for kk in bridge_keys]
+        if all(cells):
+            got.append("R4")
+        if all(B[m][0] <= f[m] <= B[m][1] for m in ORDER):
+            got.append("R5")
+        if all(B[kk][0] <= f[kk] <= B[kk][1] for kk in ("plan_kw", "plan_cost_per_kw")):
+            got.append("R6")
+        if [NAMES[m] for m in ORDER if f[m] >= ln[m]] == F["funded"]:
+            got.append("R7")
         return got
-    careful_right = set(rescued(C))
 
-    def moved(out):
-        return [r for r in ("R2", "R3", "R4", "R5", "R6", "R7", "R8") if r not in rescued(out)]
-    judg = []
-    for j, (jid, name, prec) in STUMPS.items():
-        judg.append({"id": jid, "name": name, "kind": "stump", "precedent": prec,
-                     "dropped": {"answer": [ids[f] for f in drops[j]["set"]], "results_moved": moved(drops[j])},
-                     "alone": {"answer": [ids[f] for f in alone[j]["set"]],
-                               "results_rescued": [r for r in rescued(alone[j]) if r not in careful_right]}})
-    for j, (jid, name, prec) in FILED.items():
-        judg.append({"id": jid, "name": name, "kind": "reflex", "precedent": prec})
-    for i, (name, prec) in enumerate(REFLEXES, 6):
-        judg.append({"id": "J%d" % i, "name": name, "kind": "reflex", "precedent": prec})
-    hints = [{"sentence": STUMPS[j][1], "rescues": [r for r in rescued(alone[j]) if r not in careful_right]} for j in STUMPS]
-    pert = [{"input": nm, "answer": [ids[f] for f in run(R, GOLD, **kw)["set"]]} for nm, kw in PERTURB]
-    fam = [{"name": "the golden", "answer": fig["funded"]}] + [{"name": nm, "answer": [ids[f] for f in r["set"]]} for nm, r in riv.items()]
-    shortcuts = [{"name": "%s dropped" % STUMPS[j][0], "answer": [ids[f] for f in drops[j]["set"]]} for j in STUMPS]
-    routes = [{"name": "the golden", "answer": fig["funded"], "golden": True},
-              {"name": "the careful route (the reflex route)", "answer": [ids[f] for f in C["set"]]}] + \
-             [{"name": "%s dropped" % STUMPS[j][0], "answer": [ids[f] for f in drops[j]["set"]]} for j in STUMPS] + \
-             [{"name": "the quick route", "answer": [ids[f] for f in Qk["set"]]}]
+    allr = ["R1", "R2", "R3", "R4", "R5", "R6", "R7"]
+    careful_right = set(right(reflex))
+    stumps = {"S1": ("J1", "reception by reach to an on-air transmitter of the switch's own paging system, not the coverage map",
+                     ["N09", "N27", "L38", "L70"]),
+              "S2": ("J2", "switches still working by install batch, not the test log's pass rate", ["L28", "N11", "N46", "N35"]),
+              "S3": ("J3", "switches still wired where the air conditioner was replaced, not the work orders' finding",
+                     ["L26", "L58", "N14", "L56", "N36"])}
+    others = {"S1": "S2+S3", "S2": "S1+S3", "S3": "S1+S2"}
+    judg, hints = [], []
+    for s, (jid, nm, prec) in stumps.items():
+        dropped = A["lat"][s]
+        alone = A["lat"][others[s]]
+        judg.append({"id": jid, "name": nm, "kind": "stump", "precedent": prec,
+                     "dropped": {"answer": [NAMES[m] for m in ORDER if dropped[m] >= ln[m]],
+                                 "results_moved": [r for r in allr if r not in right(dropped)]},
+                     "alone": {"answer": [NAMES[m] for m in ORDER if alone[m] >= ln[m]],
+                               "results_rescued": [r for r in right(alone) if r not in careful_right]}})
+    for jid, nm, prec in (("J4", "the delivered total found by regressing the steps on the switches dispatched", ["R102"]),
+                          ("J5", "the study homes' randomised comparison with a placebo and an interval clustered by home", ["R55", "R92"]),
+                          ("J6", "feeder membership as operated, from the switching log", ["R38"]),
+                          ("J7", "the SCADA, encoder and register hygiene (clocks, retries, held readings, renamed points, re-keyed premises)", ["R01"])):
+        judg.append({"id": jid, "name": nm, "kind": "reflex", "precedent": prec})
+    s1_alone = A["lat"]["S2+S3"]
+    hints.append({"sentence": "a one-way switch far from an on-air transmitter of its own paging system misses most of its pages",
+                  "rescues": [r for r in right(s1_alone) if r not in careful_right]})
+    for s, sent in (("S2", "a switch that passed its last test is not a switch that works now: the share still shedding falls with the install batch's age"),
+                    ("S3", "where the air conditioner was replaced after the switch went in, most switches were left unwired")):
+        hints.append({"sentence": sent, "rescues": [r for r in right(A["lat"][others[s]]) if r not in careful_right]})
+    fam_rows = [{"name": "the golden", "answer": F["funded"]}] + \
+        [{"name": v, "answer": [NAMES[m] for m in ORDER if fam[v][m] >= ln[m]]} for v in fam]
+    pert_rows = [{"input": v, "answer": [NAMES[m] for m in ORDER if f[m] >= ln[m]]} for v, f in pert.items()]
+    short = [{"name": "%s read at face value" % s, "answer": [NAMES[m] for m in ORDER if A["lat"][s][m] >= ln[m]]} for s in ("S1", "S2", "S3")]
+    short += [{"name": "the study homes carried to the fleet", "answer": F["routes"]["rigorous"]["funded"]},
+              {"name": "the nearest listed transmitter of either system", "answer": F["routes"]["generous"]["funded"]},
+              {"name": "the three records at face value (the reflex route)", "answer": F["routes"]["reflex"]["funded"]},
+              {"name": "beyond 14 km lost, through 2011 dead, flagged unwired", "answer": F["routes"]["cutoff"]["funded"]}]
+    routes = [{"name": "the golden", "answer": F["funded"], "golden": True},
+              {"name": "the careful route (the reflex route)", "answer": F["routes"]["reflex"]["funded"]},
+              {"name": "the quick route", "answer": [NAMES[m] for m in Q["funded"]]}] + \
+             [{"name": r_["name"], "answer": r_["answer"]} for r_ in short[:3] + short[3:5]]
     return {"results": res, "hints": hints,
-            "factorial": {"golden_answer": fig["funded"], "reflex_route": {"answer": [ids[f] for f in C["set"]]}, "judgments": judg},
-            "forcing": {"kind": "set", "golden_answer": fig["funded"], "golden_family": fam, "perturbations": pert, "shortcuts": shortcuts},
-            "routes": routes, "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7}}
+            "factorial": {"golden_answer": F["funded"], "reflex_route": {"answer": F["routes"]["reflex"]["funded"]}, "judgments": judg},
+            "forcing": {"kind": "set", "golden_answer": F["funded"], "golden_family": fam_rows, "perturbations": pert_rows,
+                        "shortcuts": short},
+            "routes": routes, "weights": {"recommendation": 18, "components": 20, "asks": 53, "instruction": 9}}

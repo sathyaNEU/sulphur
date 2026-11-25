@@ -2,2009 +2,1226 @@
  "results": [
   {
    "id": "R1",
-   "name": "each feeder's 2026 energy at the customer meters (MWh)",
-   "graded_as": "Ask 1",
-   "figure": "energy_mwh",
+   "name": "the share of shed commands that get through at the fringe, against switches within 8 km (per 100)",
+   "graded_as": "Component 1",
+   "figure": "c1_through",
    "depends": [],
-   "independent": "the customer-meter sums",
-   "golden": {
-    "ASH-113": 35368.0,
-    "CDB-113": 40884.0,
-    "ELC-113": 45883.0,
-    "FRV-113": 48533.0,
-    "GBR-113": 58643.0,
-    "HOL-113": 35902.0,
-    "ASH-116": 16982.0,
-    "CDB-116": 38928.0,
-    "ELC-116": 24705.0,
-    "FRV-116": 35672.0,
-    "GBR-116": 28409.0,
-    "HOL-116": 38346.0,
-    "ASH-219": 46451.0,
-    "CDB-219": 31469.0,
-    "ELC-219": 52258.0,
-    "FRV-219": 25136.0,
-    "GBR-219": 30106.0,
-    "HOL-219": 29238.0,
-    "ASH-222": 30144.0,
-    "CDB-222": 43403.0,
-    "ELC-222": 22077.0,
-    "FRV-222": 21966.0,
-    "GBR-222": 59671.0,
-    "HOL-222": 28944.0
-   },
-   "bands": {
-    "ASH-113": [
-     35191.0,
-     35545.0
-    ],
-    "CDB-113": [
-     40680.0,
-     41088.0
-    ],
-    "ELC-113": [
-     45654.0,
-     46112.0
-    ],
-    "FRV-113": [
-     48290.0,
-     48776.0
-    ],
-    "GBR-113": [
-     58350.0,
-     58937.0
-    ],
-    "HOL-113": [
-     35722.0,
-     36081.0
-    ],
-    "ASH-116": [
-     16897.0,
-     17067.0
-    ],
-    "CDB-116": [
-     38734.0,
-     39123.0
-    ],
-    "ELC-116": [
-     24581.0,
-     24828.0
-    ],
-    "FRV-116": [
-     35494.0,
-     35851.0
-    ],
-    "GBR-116": [
-     28267.0,
-     28551.0
-    ],
-    "HOL-116": [
-     38154.0,
-     38538.0
-    ],
-    "ASH-219": [
-     46219.0,
-     46683.0
-    ],
-    "CDB-219": [
-     31312.0,
-     31626.0
-    ],
-    "ELC-219": [
-     51996.0,
-     52519.0
-    ],
-    "FRV-219": [
-     25010.0,
-     25262.0
-    ],
-    "GBR-219": [
-     29955.0,
-     30257.0
-    ],
-    "HOL-219": [
-     29092.0,
-     29384.0
-    ],
-    "ASH-222": [
-     29993.0,
-     30295.0
-    ],
-    "CDB-222": [
-     43186.0,
-     43620.0
-    ],
-    "ELC-222": [
-     21967.0,
-     22187.0
-    ],
-    "FRV-222": [
-     21856.0,
-     22076.0
-    ],
-    "GBR-222": [
-     59373.0,
-     59969.0
-    ],
-    "HOL-222": [
-     28799.0,
-     29089.0
-    ]
-   },
+   "independent": "the transmitter register, the outage log and the steps",
+   "golden": 17,
+   "band": [
+    10,
+    22
+   ],
+   "precedent": [
+    "N09",
+    "N27",
+    "L38",
+    "L70"
+   ],
    "passes": {
-    "quick": {
-     "ASH-113": 35368.0,
-     "CDB-113": 40884.0,
-     "ELC-113": 45883.0,
-     "FRV-113": 49436.0,
-     "GBR-113": 58643.0,
-     "HOL-113": 35902.0,
-     "ASH-116": 16982.0,
-     "CDB-116": 38928.0,
-     "ELC-116": 24705.0,
-     "FRV-116": 35672.0,
-     "GBR-116": 28409.0,
-     "HOL-116": 38346.0,
-     "ASH-219": 46451.0,
-     "CDB-219": 31469.0,
-     "ELC-219": 52258.0,
-     "FRV-219": 25136.0,
-     "GBR-219": 30106.0,
-     "HOL-219": 29238.0,
-     "ASH-222": 30144.0,
-     "CDB-222": 43403.0,
-     "ELC-222": 22077.0,
-     "FRV-222": 21966.0,
-     "GBR-222": 59671.0,
-     "HOL-222": 28944.0
-    },
-    "careful": {
-     "ASH-113": 35368.0,
-     "CDB-113": 40884.0,
-     "ELC-113": 45883.0,
-     "FRV-113": 48533.0,
-     "GBR-113": 58643.0,
-     "HOL-113": 35902.0,
-     "ASH-116": 16982.0,
-     "CDB-116": 38928.0,
-     "ELC-116": 24705.0,
-     "FRV-116": 35672.0,
-     "GBR-116": 28409.0,
-     "HOL-116": 38346.0,
-     "ASH-219": 46451.0,
-     "CDB-219": 31469.0,
-     "ELC-219": 52258.0,
-     "FRV-219": 25136.0,
-     "GBR-219": 30106.0,
-     "HOL-219": 29238.0,
-     "ASH-222": 30144.0,
-     "CDB-222": 43403.0,
-     "ELC-222": 22077.0,
-     "FRV-222": 21966.0,
-     "GBR-222": 59671.0,
-     "HOL-222": 28944.0
-    },
-    "thorough": {
-     "ASH-113": 35368.0,
-     "CDB-113": 40884.0,
-     "ELC-113": 45883.0,
-     "FRV-113": 48533.0,
-     "GBR-113": 58643.0,
-     "HOL-113": 35902.0,
-     "ASH-116": 16982.0,
-     "CDB-116": 38928.0,
-     "ELC-116": 24705.0,
-     "FRV-116": 35672.0,
-     "GBR-116": 28409.0,
-     "HOL-116": 38346.0,
-     "ASH-219": 46451.0,
-     "CDB-219": 31469.0,
-     "ELC-219": 52258.0,
-     "FRV-219": 25136.0,
-     "GBR-219": 30106.0,
-     "HOL-219": 29238.0,
-     "ASH-222": 30144.0,
-     "CDB-222": 43403.0,
-     "ELC-222": 22077.0,
-     "FRV-222": 21966.0,
-     "GBR-222": 59671.0,
-     "HOL-222": 28944.0
-    }
+    "quick": 100.0,
+    "careful": 100.0,
+    "thorough": 17
    }
   },
   {
    "id": "R2",
-   "name": "the trial's change in energy per 1 percent of voltage removed, averaged over the trial feeders",
-   "graded_as": "Ask 2",
-   "figure": "trial_mean",
+   "name": "the share of switches installed through 2015 that still work, at premises with no replaced unit (per 100)",
+   "graded_as": "Component 2",
+   "figure": "c2_work",
    "depends": [],
-   "independent": "the trial records",
-   "golden": 0.7,
+   "independent": "the install batches, the study homes and the steps",
+   "golden": 67,
    "band": [
-    0.66,
-    0.72
+    63,
+    70
+   ],
+   "precedent": [
+    "L28",
+    "N11",
+    "N46",
+    "N35"
    ],
    "passes": {
-    "quick": 0.75,
-    "careful": 0.7,
-    "thorough": 0.7
+    "quick": 96.0,
+    "careful": 96.0,
+    "thorough": 67
    }
   },
   {
    "id": "R3",
-   "name": "the average reduction in volts each feeder could be held at over the year",
-   "graded_as": "Ask 3",
-   "figure": "room_v",
+   "name": "the share of switches still wired in where the air conditioner was replaced since (per 100)",
+   "graded_as": "Component 3",
+   "figure": "c3_wired",
    "depends": [],
-   "independent": "the far-end meters",
-   "golden": {
-    "ASH-113": 4.8,
-    "CDB-113": 4.8,
-    "ELC-113": 4.8,
-    "FRV-113": 4.8,
-    "GBR-113": 4.8,
-    "HOL-113": 4.8,
-    "ASH-116": 4.8,
-    "CDB-116": 4.79,
-    "ELC-116": 4.8,
-    "FRV-116": 4.43,
-    "GBR-116": 4.79,
-    "HOL-116": 2.43,
-    "ASH-219": 4.62,
-    "CDB-219": 4.68,
-    "ELC-219": 4.8,
-    "FRV-219": 4.8,
-    "GBR-219": 4.8,
-    "HOL-219": 4.8,
-    "ASH-222": 4.8,
-    "CDB-222": 4.8,
-    "ELC-222": 4.79,
-    "FRV-222": 4.8,
-    "GBR-222": 4.8,
-    "HOL-222": 4.23
-   },
-   "bands": {
-    "ASH-113": [
-     4.7,
-     4.89
-    ],
-    "CDB-113": [
-     4.7,
-     4.89
-    ],
-    "ELC-113": [
-     4.7,
-     4.9
-    ],
-    "FRV-113": [
-     4.7,
-     4.9
-    ],
-    "GBR-113": [
-     4.7,
-     4.9
-    ],
-    "HOL-113": [
-     4.7,
-     4.9
-    ],
-    "ASH-116": [
-     4.7,
-     4.9
-    ],
-    "CDB-116": [
-     4.69,
-     4.88
-    ],
-    "ELC-116": [
-     4.7,
-     4.9
-    ],
-    "FRV-116": [
-     4.34,
-     4.52
-    ],
-    "GBR-116": [
-     4.69,
-     4.88
-    ],
-    "HOL-116": [
-     2.38,
-     2.48
-    ],
-    "ASH-219": [
-     4.53,
-     4.72
-    ],
-    "CDB-219": [
-     4.59,
-     4.77
-    ],
-    "ELC-219": [
-     4.7,
-     4.89
-    ],
-    "FRV-219": [
-     4.7,
-     4.89
-    ],
-    "GBR-219": [
-     4.7,
-     4.9
-    ],
-    "HOL-219": [
-     4.7,
-     4.9
-    ],
-    "ASH-222": [
-     4.7,
-     4.9
-    ],
-    "CDB-222": [
-     4.7,
-     4.9
-    ],
-    "ELC-222": [
-     4.69,
-     4.89
-    ],
-    "FRV-222": [
-     4.7,
-     4.9
-    ],
-    "GBR-222": [
-     4.7,
-     4.9
-    ],
-    "HOL-222": [
-     4.14,
-     4.31
-    ]
-   },
+   "independent": "the rebate and permit records and the steps",
+   "golden": 32,
+   "band": [
+    27,
+    37
+   ],
+   "precedent": [
+    "L26",
+    "L58",
+    "N14",
+    "L56",
+    "N36"
+   ],
    "passes": {
-    "quick": {
-     "ASH-113": 4.8,
-     "CDB-113": 4.8,
-     "ELC-113": 4.8,
-     "FRV-113": 4.8,
-     "GBR-113": 4.8,
-     "HOL-113": 4.8,
-     "ASH-116": 4.8,
-     "CDB-116": 4.8,
-     "ELC-116": 4.8,
-     "FRV-116": 4.8,
-     "GBR-116": 4.8,
-     "HOL-116": 4.8,
-     "ASH-219": 4.8,
-     "CDB-219": 4.8,
-     "ELC-219": 4.8,
-     "FRV-219": 4.8,
-     "GBR-219": 4.8,
-     "HOL-219": 4.8,
-     "ASH-222": 4.8,
-     "CDB-222": 4.8,
-     "ELC-222": 4.8,
-     "FRV-222": 4.8,
-     "GBR-222": 4.8,
-     "HOL-222": 4.8
-    },
-    "careful": {
-     "ASH-113": 4.8,
-     "CDB-113": 4.8,
-     "ELC-113": 4.8,
-     "FRV-113": 4.8,
-     "GBR-113": 4.8,
-     "HOL-113": 4.8,
-     "ASH-116": 4.8,
-     "CDB-116": 4.79,
-     "ELC-116": 4.8,
-     "FRV-116": 4.43,
-     "GBR-116": 4.79,
-     "HOL-116": 2.43,
-     "ASH-219": 4.62,
-     "CDB-219": 4.68,
-     "ELC-219": 4.8,
-     "FRV-219": 4.8,
-     "GBR-219": 4.8,
-     "HOL-219": 4.8,
-     "ASH-222": 4.8,
-     "CDB-222": 4.8,
-     "ELC-222": 4.79,
-     "FRV-222": 4.8,
-     "GBR-222": 4.8,
-     "HOL-222": 4.23
-    },
-    "thorough": {
-     "ASH-113": 4.8,
-     "CDB-113": 4.8,
-     "ELC-113": 4.8,
-     "FRV-113": 4.8,
-     "GBR-113": 4.8,
-     "HOL-113": 4.8,
-     "ASH-116": 4.8,
-     "CDB-116": 4.79,
-     "ELC-116": 4.8,
-     "FRV-116": 4.43,
-     "GBR-116": 4.79,
-     "HOL-116": 2.43,
-     "ASH-219": 4.62,
-     "CDB-219": 4.68,
-     "ELC-219": 4.8,
-     "FRV-219": 4.8,
-     "GBR-219": 4.8,
-     "HOL-219": 4.8,
-     "ASH-222": 4.8,
-     "CDB-222": 4.8,
-     "ELC-222": 4.79,
-     "FRV-222": 4.8,
-     "GBR-222": 4.8,
-     "HOL-222": 4.23
-    }
+    "quick": 91.0,
+    "careful": 91.0,
+    "thorough": 32
    }
   },
   {
    "id": "R4",
-   "name": "each feeder's yearly change in customer energy per 1 percent of voltage removed",
-   "graded_as": "Component 2",
-   "figure": "cvrf",
+   "name": "the bridge from the kW the switches could take off at peak to the kW they deliver",
+   "graded_as": "Ask 2",
+   "figure": "bridge",
    "depends": [
-    "R2"
+    "R1",
+    "R2",
+    "R3"
    ],
    "independent": "",
    "golden": {
-    "ASH-113": 0.47,
-    "CDB-113": 0.8,
-    "ELC-113": 0.52,
-    "FRV-113": 0.8,
-    "GBR-113": 0.48,
-    "HOL-113": 0.8,
-    "ASH-116": 0.55,
-    "CDB-116": 0.45,
-    "ELC-116": 0.64,
-    "FRV-116": 0.47,
-    "GBR-116": 0.66,
-    "HOL-116": 0.46,
-    "ASH-219": 0.58,
-    "CDB-219": 0.49,
-    "ELC-219": 0.49,
-    "FRV-219": 0.79,
-    "GBR-219": 0.43,
-    "HOL-219": 0.47,
-    "ASH-222": 0.79,
-    "CDB-222": 0.54,
-    "ELC-222": 0.67,
-    "FRV-222": 0.8,
-    "GBR-222": 0.43,
-    "HOL-222": 0.52
+    "could": 10997,
+    "delivered": 5200,
+    "lost_reach": 1775,
+    "lost_hw": 2396,
+    "lost_unwired": 1626
    },
    "bands": {
-    "ASH-113": [
-     0.45,
-     0.51
+    "could": [
+     10996,
+     10998
     ],
-    "CDB-113": [
-     0.77,
-     0.85
+    "delivered": [
+     5108,
+     5346
     ],
-    "ELC-113": [
-     0.5,
-     0.56
+    "lost_reach": [
+     1527,
+     2018
     ],
-    "FRV-113": [
-     0.77,
-     0.85
+    "lost_hw": [
+     2056,
+     2823
     ],
-    "GBR-113": [
-     0.46,
-     0.51
-    ],
-    "HOL-113": [
-     0.77,
-     0.85
-    ],
-    "ASH-116": [
-     0.53,
-     0.59
-    ],
-    "CDB-116": [
-     0.43,
-     0.48
-    ],
-    "ELC-116": [
-     0.61,
-     0.68
-    ],
-    "FRV-116": [
-     0.45,
-     0.5
-    ],
-    "GBR-116": [
-     0.63,
-     0.71
-    ],
-    "HOL-116": [
-     0.44,
-     0.49
-    ],
-    "ASH-219": [
-     0.56,
-     0.62
-    ],
-    "CDB-219": [
-     0.47,
-     0.53
-    ],
-    "ELC-219": [
-     0.47,
-     0.53
-    ],
-    "FRV-219": [
-     0.77,
-     0.85
-    ],
-    "GBR-219": [
-     0.41,
-     0.45
-    ],
-    "HOL-219": [
-     0.45,
-     0.5
-    ],
-    "ASH-222": [
-     0.77,
-     0.85
-    ],
-    "CDB-222": [
-     0.52,
-     0.58
-    ],
-    "ELC-222": [
-     0.64,
-     0.71
-    ],
-    "FRV-222": [
-     0.78,
-     0.86
-    ],
-    "GBR-222": [
-     0.41,
-     0.46
-    ],
-    "HOL-222": [
-     0.5,
-     0.55
+    "lost_unwired": [
+     1451,
+     1787
     ]
    },
+   "partly_share": 0.4,
    "precedent": [
-    "N25",
-    "N12",
-    "L15"
+    "L63",
+    "L06"
    ],
-   "partly_share": 0.75,
    "passes": {
     "quick": {
-     "ASH-113": 0.75,
-     "CDB-113": 0.75,
-     "ELC-113": 0.75,
-     "FRV-113": 0.74,
-     "GBR-113": 0.75,
-     "HOL-113": 0.75,
-     "ASH-116": 0.75,
-     "CDB-116": 0.75,
-     "ELC-116": 0.75,
-     "FRV-116": 0.75,
-     "GBR-116": 0.75,
-     "HOL-116": 0.75,
-     "ASH-219": 0.75,
-     "CDB-219": 0.75,
-     "ELC-219": 0.75,
-     "FRV-219": 0.75,
-     "GBR-219": 0.75,
-     "HOL-219": 0.75,
-     "ASH-222": 0.75,
-     "CDB-222": 0.75,
-     "ELC-222": 0.75,
-     "FRV-222": 0.75,
-     "GBR-222": 0.75,
-     "HOL-222": 0.75
+     "could": 13711.4,
+     "delivered": 12715.3,
+     "lost_reach": 0.0,
+     "lost_hw": 548.5,
+     "lost_unwired": 447.7
     },
     "careful": {
-     "ASH-113": 0.7,
-     "CDB-113": 0.7,
-     "ELC-113": 0.7,
-     "FRV-113": 0.7,
-     "GBR-113": 0.7,
-     "HOL-113": 0.8,
-     "ASH-116": 0.7,
-     "CDB-116": 0.7,
-     "ELC-116": 0.65,
-     "FRV-116": 0.67,
-     "GBR-116": 0.7,
-     "HOL-116": 0.46,
-     "ASH-219": 0.67,
-     "CDB-219": 0.69,
-     "ELC-219": 0.59,
-     "FRV-219": 0.8,
-     "GBR-219": 0.59,
-     "HOL-219": 0.7,
-     "ASH-222": 0.8,
-     "CDB-222": 0.7,
-     "ELC-222": 0.7,
-     "FRV-222": 0.79,
-     "GBR-222": 0.7,
-     "HOL-222": 0.66
+     "could": 10996.6,
+     "delivered": 5200,
+     "lost_reach": 0.0,
+     "lost_hw": 439.9,
+     "lost_unwired": 359.1
     },
     "thorough": {
-     "ASH-113": 0.47,
-     "CDB-113": 0.8,
-     "ELC-113": 0.52,
-     "FRV-113": 0.8,
-     "GBR-113": 0.48,
-     "HOL-113": 0.8,
-     "ASH-116": 0.55,
-     "CDB-116": 0.45,
-     "ELC-116": 0.64,
-     "FRV-116": 0.47,
-     "GBR-116": 0.66,
-     "HOL-116": 0.46,
-     "ASH-219": 0.58,
-     "CDB-219": 0.49,
-     "ELC-219": 0.49,
-     "FRV-219": 0.79,
-     "GBR-219": 0.43,
-     "HOL-219": 0.47,
-     "ASH-222": 0.79,
-     "CDB-222": 0.54,
-     "ELC-222": 0.67,
-     "FRV-222": 0.8,
-     "GBR-222": 0.43,
-     "HOL-222": 0.52
+     "could": 10997,
+     "delivered": 5200,
+     "lost_reach": 1775,
+     "lost_hw": 2396,
+     "lost_unwired": 1626
     }
    }
   },
   {
    "id": "R5",
-   "name": "each feeder's yearly energy saving at the customer meters (MWh)",
-   "graded_as": "Ask 4",
-   "figure": "cust_mwh",
+   "name": "the peak kW each proposal adds in 2027",
+   "graded_as": "Ask 1",
+   "figure": "proposal_kw",
    "depends": [
-    "R3",
-    "R4"
+    "R1",
+    "R2",
+    "R3"
    ],
    "independent": "",
    "golden": {
-    "ASH-113": 671.0,
-    "CDB-113": 1302.0,
-    "ELC-113": 955.0,
-    "FRV-113": 1548.0,
-    "GBR-113": 1118.0,
-    "HOL-113": 1142.0,
-    "ASH-116": 373.0,
-    "CDB-116": 701.0,
-    "ELC-116": 631.0,
-    "FRV-116": 618.0,
-    "GBR-116": 746.0,
-    "HOL-116": 357.0,
-    "ASH-219": 1038.0,
-    "CDB-219": 607.0,
-    "ELC-219": 1030.0,
-    "FRV-219": 798.0,
-    "GBR-219": 512.0,
-    "HOL-219": 550.0,
-    "ASH-222": 958.0,
-    "CDB-222": 934.0,
-    "ELC-222": 587.0,
-    "FRV-222": 704.0,
-    "GBR-222": 1021.0,
-    "HOL-222": 528.0
+    "rep_w": 250,
+    "rep_n": 185,
+    "fix_t": 505,
+    "fix_w": 264,
+    "recon_in": 1402,
+    "recon_out": 224
    },
    "bands": {
-    "ASH-113": [
-     642.86,
-     718.31
+    "rep_w": [
+     231,
+     262
     ],
-    "CDB-113": [
-     1262.07,
-     1393.51
+    "rep_n": [
+     150,
+     207
     ],
-    "ELC-113": [
-     915.4,
-     1022.21
+    "fix_t": [
+     451,
+     572
     ],
-    "FRV-113": [
-     1501.25,
-     1657.42
+    "fix_w": [
+     208,
+     324
     ],
-    "GBR-113": [
-     1073.46,
-     1196.5
+    "recon_in": [
+     1252,
+     1552
     ],
-    "HOL-113": [
-     1107.72,
-     1222.83
-    ],
-    "ASH-116": [
-     358.31,
-     399.7
-    ],
-    "CDB-116": [
-     674.31,
-     750.1
-    ],
-    "ELC-116": [
-     605.88,
-     675.68
-    ],
-    "FRV-116": [
-     594.55,
-     661.37
-    ],
-    "GBR-116": [
-     716.95,
-     799.02
-    ],
-    "HOL-116": [
-     344.82,
-     381.71
-    ],
-    "ASH-219": [
-     1005.14,
-     1111.54
-    ],
-    "CDB-219": [
-     579.92,
-     649.39
-    ],
-    "ELC-219": [
-     990.87,
-     1102.54
-    ],
-    "FRV-219": [
-     773.83,
-     854.32
-    ],
-    "GBR-219": [
-     494.16,
-     547.87
-    ],
-    "HOL-219": [
-     525.16,
-     588.52
-    ],
-    "ASH-222": [
-     928.53,
-     1025.27
-    ],
-    "CDB-222": [
-     905.12,
-     999.76
-    ],
-    "ELC-222": [
-     566.98,
-     628.04
-    ],
-    "FRV-222": [
-     682.63,
-     753.63
-    ],
-    "GBR-222": [
-     989.56,
-     1093.23
-    ],
-    "HOL-222": [
-     505.44,
-     565.16
+    "recon_out": [
+     195,
+     253
     ]
    },
+   "partly_share": 0.5,
    "precedent": [
-    "N25",
-    "N12",
-    "L15"
+    "L63",
+    "L06"
    ],
-   "partly_share": 0.75,
    "passes": {
     "quick": {
-     "ASH-113": 1061.0,
-     "CDB-113": 1226.0,
-     "ELC-113": 1376.0,
-     "FRV-113": 1456.0,
-     "GBR-113": 1759.0,
-     "HOL-113": 1077.0,
-     "ASH-116": 509.0,
-     "CDB-116": 1168.0,
-     "ELC-116": 741.0,
-     "FRV-116": 1070.0,
-     "GBR-116": 852.0,
-     "HOL-116": 1150.0,
-     "ASH-219": 1393.0,
-     "CDB-219": 944.0,
-     "ELC-219": 1568.0,
-     "FRV-219": 754.0,
-     "GBR-219": 903.0,
-     "HOL-219": 877.0,
-     "ASH-222": 904.0,
-     "CDB-222": 1302.0,
-     "ELC-222": 662.0,
-     "FRV-222": 659.0,
-     "GBR-222": 1790.0,
-     "HOL-222": 868.0
+     "rep_w": 0.0,
+     "rep_n": 0.0,
+     "fix_t": 72.6,
+     "fix_w": 57.1,
+     "recon_in": 324.6,
+     "recon_out": 123.1
     },
     "careful": {
-     "ASH-113": 991.0,
-     "CDB-113": 1145.0,
-     "ELC-113": 1287.0,
-     "FRV-113": 1361.0,
-     "GBR-113": 1644.0,
-     "HOL-113": 1148.0,
-     "ASH-116": 476.0,
-     "CDB-116": 1087.0,
-     "ELC-116": 646.0,
-     "FRV-116": 885.0,
-     "GBR-116": 793.0,
-     "HOL-116": 356.0,
-     "ASH-219": 1208.0,
-     "CDB-219": 845.0,
-     "ELC-219": 1238.0,
-     "FRV-219": 800.0,
-     "GBR-219": 705.0,
-     "HOL-219": 820.0,
-     "ASH-222": 961.0,
-     "CDB-222": 1217.0,
-     "ELC-222": 617.0,
-     "FRV-222": 692.0,
-     "GBR-222": 1673.0,
-     "HOL-222": 671.0
+     "rep_w": 0.0,
+     "rep_n": 0.0,
+     "fix_t": 58.2,
+     "fix_w": 45.8,
+     "recon_in": 260.3,
+     "recon_out": 98.7
     },
     "thorough": {
-     "ASH-113": 671.0,
-     "CDB-113": 1302.0,
-     "ELC-113": 955.0,
-     "FRV-113": 1548.0,
-     "GBR-113": 1118.0,
-     "HOL-113": 1142.0,
-     "ASH-116": 373.0,
-     "CDB-116": 701.0,
-     "ELC-116": 631.0,
-     "FRV-116": 618.0,
-     "GBR-116": 746.0,
-     "HOL-116": 357.0,
-     "ASH-219": 1038.0,
-     "CDB-219": 607.0,
-     "ELC-219": 1030.0,
-     "FRV-219": 798.0,
-     "GBR-219": 512.0,
-     "HOL-219": 550.0,
-     "ASH-222": 958.0,
-     "CDB-222": 934.0,
-     "ELC-222": 587.0,
-     "FRV-222": 704.0,
-     "GBR-222": 1021.0,
-     "HOL-222": 528.0
+     "rep_w": 250,
+     "rep_n": 185,
+     "fix_t": 505,
+     "fix_w": 264,
+     "recon_in": 1402,
+     "recon_out": 224
     }
    }
   },
   {
    "id": "R6",
-   "name": "the rise in each feeder's own line losses (MWh a year)",
-   "graded_as": "Component 3",
-   "figure": "loss_mwh",
+   "name": "the funded plan's kW and its cost per kW-year",
+   "graded_as": "Ask 3",
+   "figure": "plan",
    "depends": [
-    "R3",
     "R5"
    ],
    "independent": "",
    "golden": {
-    "ASH-113": 51.0,
-    "CDB-113": 20.0,
-    "ELC-113": 32.0,
-    "FRV-113": 15.0,
-    "GBR-113": 75.0,
-    "HOL-113": 9.0,
-    "ASH-116": 29.0,
-    "CDB-116": 66.0,
-    "ELC-116": 9.0,
-    "FRV-116": 168.0,
-    "GBR-116": 63.0,
-    "HOL-116": 41.0,
-    "ASH-219": 56.0,
-    "CDB-219": 129.0,
-    "ELC-219": 67.0,
-    "FRV-219": 13.0,
-    "GBR-219": 23.0,
-    "HOL-219": 18.0,
-    "ASH-222": 8.0,
-    "CDB-222": 20.0,
-    "ELC-222": 40.0,
-    "FRV-222": 3.0,
-    "GBR-222": 53.0,
-    "HOL-222": 120.0
+    "plan_kw": 2157,
+    "plan_cost_per_kw": 39.7
    },
    "bands": {
-    "ASH-113": [
-     43.99,
-     56.33
+    "plan_kw": [
+     2046,
+     2285
     ],
-    "CDB-113": [
-     13.1,
-     22.69
-    ],
-    "ELC-113": [
-     27.86,
-     36.15
-    ],
-    "FRV-113": [
-     8.98,
-     17.67
-    ],
-    "GBR-113": [
-     65.03,
-     83.31
-    ],
-    "HOL-113": [
-     4.37,
-     11.95
-    ],
-    "ASH-116": [
-     24.84,
-     32.76
-    ],
-    "CDB-116": [
-     57.8,
-     73.4
-    ],
-    "ELC-116": [
-     5.52,
-     12.4
-    ],
-    "FRV-116": [
-     145.18,
-     185.79
-    ],
-    "GBR-116": [
-     51.61,
-     70.51
-    ],
-    "HOL-116": [
-     34.25,
-     44.87
-    ],
-    "ASH-219": [
-     46.43,
-     61.64
-    ],
-    "CDB-219": [
-     111.84,
-     144.41
-    ],
-    "ELC-219": [
-     57.33,
-     73.85
-    ],
-    "FRV-219": [
-     7.46,
-     15.65
-    ],
-    "GBR-219": [
-     19.4,
-     26.06
-    ],
-    "HOL-219": [
-     14.27,
-     21.12
-    ],
-    "ASH-222": [
-     3.61,
-     11.01
-    ],
-    "CDB-222": [
-     16.35,
-     23.46
-    ],
-    "ELC-222": [
-     32.04,
-     43.69
-    ],
-    "FRV-222": [
-     -0.7,
-     5.8
-    ],
-    "GBR-222": [
-     46.08,
-     58.14
-    ],
-    "HOL-222": [
-     102.31,
-     134.08
+    "plan_cost_per_kw": [
+     37.4,
+     41.8
     ]
    },
    "precedent": [
-    "N21",
-    "L22"
+    "L63"
    ],
-   "partly_share": 0.75,
    "passes": {
     "quick": {
-     "ASH-113": 0.0,
-     "CDB-113": 0.0,
-     "ELC-113": 0.0,
-     "FRV-113": 0.0,
-     "GBR-113": 0.0,
-     "HOL-113": 0.0,
-     "ASH-116": 0.0,
-     "CDB-116": 0.0,
-     "ELC-116": 0.0,
-     "FRV-116": 0.0,
-     "GBR-116": 0.0,
-     "HOL-116": 0.0,
-     "ASH-219": 0.0,
-     "CDB-219": 0.0,
-     "ELC-219": 0.0,
-     "FRV-219": 0.0,
-     "GBR-219": 0.0,
-     "HOL-219": 0.0,
-     "ASH-222": 0.0,
-     "CDB-222": 0.0,
-     "ELC-222": 0.0,
-     "FRV-222": 0.0,
-     "GBR-222": 0.0,
-     "HOL-222": 0.0
+     "plan_kw": 0.0,
+     "plan_cost_per_kw": 0.0
     },
     "careful": {
-     "ASH-113": -60.0,
-     "CDB-113": -70.0,
-     "ELC-113": -78.0,
-     "FRV-113": -83.0,
-     "GBR-113": -100.0,
-     "HOL-113": -70.0,
-     "ASH-116": -29.0,
-     "CDB-116": -66.0,
-     "ELC-116": -39.0,
-     "FRV-116": -54.0,
-     "GBR-116": -48.0,
-     "HOL-116": -22.0,
-     "ASH-219": -74.0,
-     "CDB-219": -52.0,
-     "ELC-219": -76.0,
-     "FRV-219": -49.0,
-     "GBR-219": -43.0,
-     "HOL-219": -50.0,
-     "ASH-222": -59.0,
-     "CDB-222": -74.0,
-     "ELC-222": -38.0,
-     "FRV-222": -42.0,
-     "GBR-222": -102.0,
-     "HOL-222": -41.0
+     "plan_kw": 0.0,
+     "plan_cost_per_kw": 0.0
     },
     "thorough": {
-     "ASH-113": 51.0,
-     "CDB-113": 20.0,
-     "ELC-113": 32.0,
-     "FRV-113": 15.0,
-     "GBR-113": 75.0,
-     "HOL-113": 9.0,
-     "ASH-116": 29.0,
-     "CDB-116": 66.0,
-     "ELC-116": 9.0,
-     "FRV-116": 168.0,
-     "GBR-116": 63.0,
-     "HOL-116": 41.0,
-     "ASH-219": 56.0,
-     "CDB-219": 129.0,
-     "ELC-219": 67.0,
-     "FRV-219": 13.0,
-     "GBR-219": 23.0,
-     "HOL-219": 18.0,
-     "ASH-222": 8.0,
-     "CDB-222": 20.0,
-     "ELC-222": 40.0,
-     "FRV-222": 3.0,
-     "GBR-222": 53.0,
-     "HOL-222": 120.0
+     "plan_kw": 2157,
+     "plan_cost_per_kw": 39.7
     }
    }
   },
   {
    "id": "R7",
-   "name": "each feeder's yearly energy saving at the substation (MWh)",
-   "graded_as": "Component 1",
-   "figure": "save_mwh",
+   "name": "the proposals funded",
+   "graded_as": "Recommendation",
+   "figure": "funded",
    "depends": [
     "R5",
     "R6"
    ],
    "independent": "",
-   "golden": {
-    "ASH-113": 620.0,
-    "CDB-113": 1282.0,
-    "ELC-113": 922.0,
-    "FRV-113": 1534.0,
-    "GBR-113": 1043.0,
-    "HOL-113": 1133.0,
-    "ASH-116": 344.0,
-    "CDB-116": 634.0,
-    "ELC-116": 622.0,
-    "FRV-116": 450.0,
-    "GBR-116": 683.0,
-    "HOL-116": 316.0,
-    "ASH-219": 982.0,
-    "CDB-219": 477.0,
-    "ELC-219": 963.0,
-    "FRV-219": 785.0,
-    "GBR-219": 489.0,
-    "HOL-219": 532.0,
-    "ASH-222": 950.0,
-    "CDB-222": 914.0,
-    "ELC-222": 547.0,
-    "FRV-222": 701.0,
-    "GBR-222": 968.0,
-    "HOL-222": 408.0
-   },
-   "bands": {
-    "ASH-113": [
-     593.07,
-     667.77
-    ],
-    "CDB-113": [
-     1242.95,
-     1376.84
-    ],
-    "ELC-113": [
-     883.44,
-     990.16
-    ],
-    "FRV-113": [
-     1487.01,
-     1645.01
-    ],
-    "GBR-113": [
-     999.86,
-     1121.77
-    ],
-    "HOL-113": [
-     1099.03,
-     1215.2
-    ],
-    "ASH-116": [
-     329.43,
-     370.98
-    ],
-    "CDB-116": [
-     609.49,
-     683.72
-    ],
-    "ELC-116": [
-     596.75,
-     666.88
-    ],
-    "FRV-116": [
-     430.42,
-     494.53
-    ],
-    "GBR-116": [
-     654.5,
-     739.34
-    ],
-    "HOL-116": [
-     305.18,
-     342.23
-    ],
-    "ASH-219": [
-     950.67,
-     1057.93
-    ],
-    "CDB-219": [
-     452.23,
-     520.84
-    ],
-    "ELC-219": [
-     925.62,
-     1036.6
-    ],
-    "FRV-219": [
-     761.55,
-     843.5
-    ],
-    "GBR-219": [
-     471.79,
-     524.78
-    ],
-    "HOL-219": [
-     507.56,
-     570.72
-    ],
-    "ASH-222": [
-     920.76,
-     1018.43
-    ],
-    "CDB-222": [
-     885.27,
-     979.8
-    ],
-    "ELC-222": [
-     528.34,
-     590.96
-    ],
-    "FRV-222": [
-     679.91,
-     751.25
-    ],
-    "GBR-222": [
-     938.25,
-     1040.32
-    ],
-    "HOL-222": [
-     386.81,
-     447.4
-    ]
-   },
-   "precedent": [
-    "N25",
-    "N12",
-    "L15"
-   ],
-   "partly_share": 0.75,
-   "passes": {
-    "quick": {
-     "ASH-113": 1061.0,
-     "CDB-113": 1226.0,
-     "ELC-113": 1376.0,
-     "FRV-113": 1456.0,
-     "GBR-113": 1759.0,
-     "HOL-113": 1077.0,
-     "ASH-116": 509.0,
-     "CDB-116": 1168.0,
-     "ELC-116": 741.0,
-     "FRV-116": 1070.0,
-     "GBR-116": 852.0,
-     "HOL-116": 1150.0,
-     "ASH-219": 1393.0,
-     "CDB-219": 944.0,
-     "ELC-219": 1568.0,
-     "FRV-219": 754.0,
-     "GBR-219": 903.0,
-     "HOL-219": 877.0,
-     "ASH-222": 904.0,
-     "CDB-222": 1302.0,
-     "ELC-222": 662.0,
-     "FRV-222": 659.0,
-     "GBR-222": 1790.0,
-     "HOL-222": 868.0
-    },
-    "careful": {
-     "ASH-113": 1051.0,
-     "CDB-113": 1215.0,
-     "ELC-113": 1365.0,
-     "FRV-113": 1444.0,
-     "GBR-113": 1744.0,
-     "HOL-113": 1218.0,
-     "ASH-116": 505.0,
-     "CDB-116": 1153.0,
-     "ELC-116": 685.0,
-     "FRV-116": 939.0,
-     "GBR-116": 841.0,
-     "HOL-116": 378.0,
-     "ASH-219": 1282.0,
-     "CDB-219": 896.0,
-     "ELC-219": 1313.0,
-     "FRV-219": 849.0,
-     "GBR-219": 748.0,
-     "HOL-219": 870.0,
-     "ASH-222": 1020.0,
-     "CDB-222": 1291.0,
-     "ELC-222": 654.0,
-     "FRV-222": 734.0,
-     "GBR-222": 1775.0,
-     "HOL-222": 712.0
-    },
-    "thorough": {
-     "ASH-113": 620.0,
-     "CDB-113": 1282.0,
-     "ELC-113": 922.0,
-     "FRV-113": 1534.0,
-     "GBR-113": 1043.0,
-     "HOL-113": 1133.0,
-     "ASH-116": 344.0,
-     "CDB-116": 634.0,
-     "ELC-116": 622.0,
-     "FRV-116": 450.0,
-     "GBR-116": 683.0,
-     "HOL-116": 316.0,
-     "ASH-219": 982.0,
-     "CDB-219": 477.0,
-     "ELC-219": 963.0,
-     "FRV-219": 785.0,
-     "GBR-219": 489.0,
-     "HOL-219": 532.0,
-     "ASH-222": 950.0,
-     "CDB-222": 914.0,
-     "ELC-222": 547.0,
-     "FRV-222": 701.0,
-     "GBR-222": 968.0,
-     "HOL-222": 408.0
-    }
-   }
-  },
-  {
-   "id": "R9",
-   "name": "the 2027 program's total yearly saving at the substation (MWh)",
-   "graded_as": "Ask 5",
-   "figure": "total_save_mwh",
-   "depends": [
-    "R7",
-    "R8"
-   ],
-   "independent": "",
-   "golden": 11818.0,
-   "band": [
-    11425.0,
-    12698.0
-   ],
-   "precedent": [
-    "N25",
-    "L15"
-   ],
-   "passes": {
-    "quick": 21164.0,
-    "careful": 19758.0,
-    "thorough": 11818.0
-   }
-  },
-  {
-   "id": "R8",
-   "name": "the feeders that receive voltage optimization in 2027",
-   "graded_as": "Recommendation",
-   "figure": "funded",
-   "depends": [
-    "R7"
-   ],
-   "independent": "",
    "golden": [
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "ELC-116",
-    "ELC-219",
-    "FRV-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
+    "Kettle Ridge VHF repeater",
+    "Larkin find-and-fix round",
+    "Reconnection round within 14 km"
    ],
    "precedent": [
-    "N25",
-    "L15"
+    "L26",
+    "L63"
    ],
    "passes": {
-    "quick": [
-     "ASH-113",
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "CDB-116",
-     "ELC-116",
-     "HOL-116",
-     "ASH-219",
-     "ELC-219",
-     "FRV-219",
-     "GBR-219",
-     "HOL-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
-    ],
-    "careful": [
-     "ASH-113",
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "CDB-116",
-     "ELC-116",
-     "ASH-219",
-     "ELC-219",
-     "FRV-219",
-     "GBR-219",
-     "HOL-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
-    ],
+    "quick": [],
+    "careful": [],
     "thorough": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    }
   }
  ],
  "hints": [
   {
-   "sentence": "each untested feeder's response built from its own makeup, not the trial feeders' average",
-   "rescues": []
+   "sentence": "a one-way switch far from an on-air transmitter of its own paging system misses most of its pages",
+   "rescues": [
+    "R1"
+   ]
   },
   {
-   "sentence": "the response carried through the year hour by hour, thermostatic load giving its energy back",
-   "rescues": []
+   "sentence": "a switch that passed its last test is not a switch that works now: the share still shedding falls with the install batch's age",
+   "rescues": [
+    "R2"
+   ]
   },
   {
-   "sentence": "the change in line losses from current squared, not the annual report's 6.1 percent added in proportion",
-   "rescues": []
+   "sentence": "where the air conditioner was replaced after the switch went in, most switches were left unwired",
+   "rescues": [
+    "R3"
+   ]
   }
  ],
  "factorial": {
   "golden_answer": [
-   "CDB-113",
-   "ELC-113",
-   "FRV-113",
-   "GBR-113",
-   "HOL-113",
-   "ELC-116",
-   "ELC-219",
-   "FRV-219",
-   "ASH-222",
-   "CDB-222",
-   "FRV-222",
-   "GBR-222"
+   "Kettle Ridge VHF repeater",
+   "Larkin find-and-fix round",
+   "Reconnection round within 14 km"
   ],
   "reflex_route": {
-   "answer": [
-    "ASH-113",
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "CDB-116",
-    "ELC-116",
-    "ASH-219",
-    "ELC-219",
-    "FRV-219",
-    "GBR-219",
-    "HOL-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
-   ]
+   "answer": []
   },
   "judgments": [
    {
-    "id": "J2",
-    "name": "each untested feeder's response built from its own makeup, not the trial feeders' average",
+    "id": "J1",
+    "name": "reception by reach to an on-air transmitter of the switch's own paging system, not the coverage map",
     "kind": "stump",
     "precedent": [
-     "N25",
-     "L15"
+     "N09",
+     "N27",
+     "L38",
+     "L70"
     ],
     "dropped": {
      "answer": [
-      "ASH-113",
-      "CDB-113",
-      "ELC-113",
-      "FRV-113",
-      "GBR-113",
-      "HOL-113",
-      "CDB-116",
-      "ELC-116",
-      "ASH-219",
-      "ELC-219",
-      "FRV-219",
-      "HOL-219",
-      "ASH-222",
-      "CDB-222",
-      "FRV-222",
-      "GBR-222"
+      "Larkin find-and-fix round",
+      "Reconnection round within 14 km",
+      "Outlying reconnection round"
      ],
      "results_moved": [
+      "R1",
       "R4",
       "R5",
       "R6",
-      "R7",
-      "R8"
+      "R7"
      ]
     },
     "alone": {
      "answer": [
-      "ASH-113",
-      "CDB-113",
-      "ELC-113",
-      "FRV-113",
-      "GBR-113",
-      "HOL-113",
-      "CDB-116",
-      "ELC-116",
-      "ELC-219",
-      "FRV-219",
-      "GBR-219",
-      "HOL-219",
-      "ASH-222",
-      "CDB-222",
-      "FRV-222",
-      "GBR-222"
+      "Kettle Ridge VHF repeater"
      ],
-     "results_rescued": []
+     "results_rescued": [
+      "R1"
+     ]
+    }
+   },
+   {
+    "id": "J2",
+    "name": "switches still working by install batch, not the test log's pass rate",
+    "kind": "stump",
+    "precedent": [
+     "L28",
+     "N11",
+     "N46",
+     "N35"
+    ],
+    "dropped": {
+     "answer": [
+      "Kettle Ridge VHF repeater",
+      "Reconnection round within 14 km"
+     ],
+     "results_moved": [
+      "R2",
+      "R4",
+      "R5",
+      "R6",
+      "R7"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Larkin find-and-fix round"
+     ],
+     "results_rescued": [
+      "R2"
+     ]
     }
    },
    {
     "id": "J3",
-    "name": "the response carried through the year hour by hour, thermostatic load giving its energy back",
+    "name": "switches still wired where the air conditioner was replaced, not the work orders' finding",
     "kind": "stump",
     "precedent": [
-     "N12",
-     "L15"
+     "L26",
+     "L58",
+     "N14",
+     "L56",
+     "N36"
     ],
     "dropped": {
      "answer": [
-      "ASH-113",
-      "CDB-113",
-      "ELC-113",
-      "FRV-113",
-      "GBR-113",
-      "HOL-113",
-      "CDB-116",
-      "ELC-116",
-      "ELC-219",
-      "FRV-219",
-      "GBR-219",
-      "HOL-219",
-      "ASH-222",
-      "CDB-222",
-      "FRV-222",
-      "GBR-222"
+      "Kettle Ridge VHF repeater",
+      "Larkin find-and-fix round"
      ],
      "results_moved": [
+      "R3",
       "R4",
       "R5",
       "R6",
-      "R7",
-      "R8"
+      "R7"
      ]
     },
     "alone": {
      "answer": [
-      "ASH-113",
-      "CDB-113",
-      "ELC-113",
-      "FRV-113",
-      "GBR-113",
-      "HOL-113",
-      "CDB-116",
-      "ELC-116",
-      "ASH-219",
-      "ELC-219",
-      "FRV-219",
-      "HOL-219",
-      "ASH-222",
-      "CDB-222",
-      "FRV-222",
-      "GBR-222"
+      "Reconnection round within 14 km",
+      "Outlying reconnection round"
      ],
-     "results_rescued": []
-    }
-   },
-   {
-    "id": "J5",
-    "name": "the change in line losses from current squared, not the annual report's 6.1 percent added in proportion",
-    "kind": "stump",
-    "precedent": [
-     "N21",
-     "L22"
-    ],
-    "dropped": {
-     "answer": [
-      "ASH-113",
-      "CDB-113",
-      "ELC-113",
-      "FRV-113",
-      "GBR-113",
-      "HOL-113",
-      "CDB-116",
-      "ELC-116",
-      "ELC-219",
-      "FRV-219",
-      "ASH-222",
-      "CDB-222",
-      "FRV-222",
-      "GBR-222"
-     ],
-     "results_moved": [
-      "R6",
-      "R7",
-      "R8"
+     "results_rescued": [
+      "R3"
      ]
-    },
-    "alone": {
-     "answer": [
-      "ASH-113",
-      "CDB-113",
-      "ELC-113",
-      "FRV-113",
-      "GBR-113",
-      "HOL-113",
-      "CDB-116",
-      "ELC-116",
-      "ASH-219",
-      "ELC-219",
-      "FRV-219",
-      "GBR-219",
-      "HOL-219",
-      "ASH-222",
-      "CDB-222",
-      "FRV-222",
-      "GBR-222"
-     ],
-     "results_rescued": []
     }
-   },
-   {
-    "id": "J1",
-    "name": "the trial read on the volts its regulators actually took off (VO-1 3.1: feeder-head voltage is the pilot regulator's output)",
-    "kind": "reflex",
-    "precedent": []
    },
    {
     "id": "J4",
-    "name": "the volts each feeder can give hour by hour from its far-end meters (VO-1 2.3 and 3.1)",
+    "name": "the delivered total found by regressing the steps on the switches dispatched",
     "kind": "reflex",
-    "precedent": []
+    "precedent": [
+     "R102"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "the study homes' randomised comparison with a placebo and an interval clustered by home",
+    "kind": "reflex",
+    "precedent": [
+     "R55",
+     "R92"
+    ]
    },
    {
     "id": "J6",
-    "name": "the customer-meter sums cleaned (re-sent rows, estimated intervals, the far-end meters' lowest reading)",
+    "name": "feeder membership as operated, from the switching log",
     "kind": "reflex",
-    "precedent": []
+    "precedent": [
+     "R38"
+    ]
    },
    {
     "id": "J7",
-    "name": "daily energy regressed on the trial with weather and day-type terms against comparable untested feeders",
+    "name": "the SCADA, encoder and register hygiene (clocks, retries, held readings, renamed points, re-keyed premises)",
     "kind": "reflex",
-    "precedent": []
-   },
-   {
-    "id": "J8",
-    "name": "energy at the substation, the 115 V floor and the 4.8 V cap, valued at USD 48 and 9.4 (filed in VO-1)",
-    "kind": "reflex",
-    "precedent": []
+    "precedent": [
+     "R01"
+    ]
    }
   ]
  },
  "forcing": {
   "kind": "set",
   "golden_answer": [
-   "CDB-113",
-   "ELC-113",
-   "FRV-113",
-   "GBR-113",
-   "HOL-113",
-   "ELC-116",
-   "ELC-219",
-   "FRV-219",
-   "ASH-222",
-   "CDB-222",
-   "FRV-222",
-   "GBR-222"
+   "Kettle Ridge VHF repeater",
+   "Larkin find-and-fix round",
+   "Reconnection round within 14 km"
   ],
   "golden_family": [
    {
     "name": "the golden",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "name": "a resistive home at 2.5 times a heat pump home's heating draw",
+    "name": "bands 7/13/19 km",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "name": "a resistive home at 3.2 times a heat pump home's heating draw",
+    "name": "bands 9/15/21 km",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "name": "the trial's weather terms without squares",
+    "name": "bands 8/12/18 km",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "name": "the trial's control every untested feeder, not the same class",
+    "name": "bands 10/15/20 km",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "name": "the trial's scale the mean of the trial feeders' ratios, not the median",
+    "name": "unweighted least squares",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "name": "the loss fit with a no-load term",
+    "name": "no district term",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "batch term a line in age",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "first six event days dropped",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "last six event days dropped",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "even event days only",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "odd event days only",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "study responders cut at 0.15 kW",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "study responders cut at 0.35 kW",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "steps beyond 2.5 sd of the feeder's residual trimmed",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "cooling index measured from 0.1",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 3 minutes before, 3 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 3 minutes before, 4 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 3 minutes before, 5 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 3 minutes before, 6 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 3 minutes before, 7 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 3 minutes before, 8 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 3 minutes before, 9 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 3 minutes before, 10 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 4 minutes before, 3 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 4 minutes before, 4 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 4 minutes before, 5 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 4 minutes before, 6 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 4 minutes before, 7 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 4 minutes before, 8 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 4 minutes before, 9 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 4 minutes before, 10 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 5 minutes before, 3 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 5 minutes before, 4 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 5 minutes before, 6 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 5 minutes before, 7 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 5 minutes before, 8 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 5 minutes before, 9 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 5 minutes before, 10 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 6 minutes before, 3 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 6 minutes before, 4 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 6 minutes before, 5 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 6 minutes before, 6 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 6 minutes before, 7 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 6 minutes before, 8 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 6 minutes before, 9 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 6 minutes before, 10 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 7 minutes before, 3 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 7 minutes before, 4 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 7 minutes before, 5 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 7 minutes before, 6 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 7 minutes before, 7 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 7 minutes before, 8 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 7 minutes before, 9 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 7 minutes before, 10 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 8 minutes before, 3 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 8 minutes before, 4 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 8 minutes before, 5 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 8 minutes before, 6 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 8 minutes before, 7 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 8 minutes before, 8 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 8 minutes before, 9 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 8 minutes before, 10 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 9 minutes before, 3 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 9 minutes before, 4 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 9 minutes before, 5 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 9 minutes before, 6 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 9 minutes before, 7 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 9 minutes before, 8 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 9 minutes before, 9 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 9 minutes before, 10 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 10 minutes before, 3 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 10 minutes before, 4 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 10 minutes before, 5 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 10 minutes before, 6 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 10 minutes before, 7 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 10 minutes before, 8 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 10 minutes before, 9 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "step window 10 minutes before, 10 after",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    }
   ],
   "perturbations": [
    {
-    "input": "the trial-calibrated response 4.6 percent higher (twice its sampling error)",
+    "input": "far band reception 20 per cent lower",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "input": "the trial-calibrated response 4.6 percent lower (twice its sampling error)",
+    "input": "far band reception 20 per cent higher",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "input": "the loss coefficient 20 percent higher",
+    "input": "middle bands' reception 20 per cent lower",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "input": "the loss coefficient 20 percent lower",
+    "input": "middle bands' reception 20 per cent higher",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "input": "the far-end readings 0.2 V higher",
+    "input": "batch term 20 per cent up",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "input": "the far-end readings 0.2 V lower",
+    "input": "batch term 20 per cent down",
     "answer": [
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "input": "replaced-unit term 20 per cent up",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "input": "replaced-unit term 20 per cent down",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "input": "working level 10 per cent up",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "input": "working level 10 per cent down",
+    "answer": [
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    }
   ],
   "shortcuts": [
    {
-    "name": "J2 dropped",
+    "name": "S1 read at face value",
     "answer": [
-     "ASH-113",
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "CDB-116",
-     "ELC-116",
-     "ASH-219",
-     "ELC-219",
-     "FRV-219",
-     "HOL-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Larkin find-and-fix round",
+     "Reconnection round within 14 km",
+     "Outlying reconnection round"
     ]
    },
    {
-    "name": "J3 dropped",
+    "name": "S2 read at face value",
     "answer": [
-     "ASH-113",
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "CDB-116",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "GBR-219",
-     "HOL-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Reconnection round within 14 km"
     ]
    },
    {
-    "name": "J5 dropped",
+    "name": "S3 read at face value",
     "answer": [
-     "ASH-113",
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "CDB-116",
-     "ELC-116",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Kettle Ridge VHF repeater",
+     "Larkin find-and-fix round"
     ]
    },
    {
-    "name": "the losses fitted with current at nominal kV",
+    "name": "the study homes carried to the fleet",
+    "answer": []
+   },
+   {
+    "name": "the nearest listed transmitter of either system",
     "answer": [
-     "ASH-113",
-     "CDB-113",
-     "ELC-113",
-     "FRV-113",
-     "GBR-113",
-     "HOL-113",
-     "CDB-116",
-     "ELC-116",
-     "ASH-219",
-     "ELC-219",
-     "FRV-219",
-     "ASH-222",
-     "CDB-222",
-     "FRV-222",
-     "GBR-222"
+     "Larkin find-and-fix round",
+     "Medora Flats find-and-fix round",
+     "Reconnection round within 14 km"
+    ]
+   },
+   {
+    "name": "the three records at face value (the reflex route)",
+    "answer": []
+   },
+   {
+    "name": "beyond 14 km lost, through 2011 dead, flagged unwired",
+    "answer": [
+     "Larkin find-and-fix round",
+     "Medora Flats find-and-fix round",
+     "Reconnection round within 14 km"
     ]
    }
   ]
@@ -2013,152 +1230,59 @@
   {
    "name": "the golden",
    "answer": [
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "ELC-116",
-    "ELC-219",
-    "FRV-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
+    "Kettle Ridge VHF repeater",
+    "Larkin find-and-fix round",
+    "Reconnection round within 14 km"
    ],
    "golden": true
   },
   {
    "name": "the careful route (the reflex route)",
-   "answer": [
-    "ASH-113",
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "CDB-116",
-    "ELC-116",
-    "ASH-219",
-    "ELC-219",
-    "FRV-219",
-    "GBR-219",
-    "HOL-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
-   ]
-  },
-  {
-   "name": "J2 dropped",
-   "answer": [
-    "ASH-113",
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "CDB-116",
-    "ELC-116",
-    "ASH-219",
-    "ELC-219",
-    "FRV-219",
-    "HOL-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
-   ]
-  },
-  {
-   "name": "J3 dropped",
-   "answer": [
-    "ASH-113",
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "CDB-116",
-    "ELC-116",
-    "ELC-219",
-    "FRV-219",
-    "GBR-219",
-    "HOL-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
-   ]
-  },
-  {
-   "name": "J5 dropped",
-   "answer": [
-    "ASH-113",
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "CDB-116",
-    "ELC-116",
-    "ELC-219",
-    "FRV-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
-   ]
+   "answer": []
   },
   {
    "name": "the quick route",
+   "answer": []
+  },
+  {
+   "name": "S1 read at face value",
    "answer": [
-    "ASH-113",
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "CDB-116",
-    "ELC-116",
-    "HOL-116",
-    "ASH-219",
-    "ELC-219",
-    "FRV-219",
-    "GBR-219",
-    "HOL-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
+    "Larkin find-and-fix round",
+    "Reconnection round within 14 km",
+    "Outlying reconnection round"
    ]
   },
   {
-   "name": "the losses fitted with current at nominal kV",
+   "name": "S2 read at face value",
    "answer": [
-    "ASH-113",
-    "CDB-113",
-    "ELC-113",
-    "FRV-113",
-    "GBR-113",
-    "HOL-113",
-    "CDB-116",
-    "ELC-116",
-    "ASH-219",
-    "ELC-219",
-    "FRV-219",
-    "ASH-222",
-    "CDB-222",
-    "FRV-222",
-    "GBR-222"
+    "Kettle Ridge VHF repeater",
+    "Reconnection round within 14 km"
+   ]
+  },
+  {
+   "name": "S3 read at face value",
+   "answer": [
+    "Kettle Ridge VHF repeater",
+    "Larkin find-and-fix round"
+   ]
+  },
+  {
+   "name": "the study homes carried to the fleet",
+   "answer": []
+  },
+  {
+   "name": "the nearest listed transmitter of either system",
+   "answer": [
+    "Larkin find-and-fix round",
+    "Medora Flats find-and-fix round",
+    "Reconnection round within 14 km"
    ]
   }
  ],
  "weights": {
-  "recommendation": 14,
-  "components": 24,
-  "asks": 55,
-  "instruction": 7
+  "recommendation": 18,
+  "components": 20,
+  "asks": 53,
+  "instruction": 9
  }
 }

@@ -1,145 +1,175 @@
-"""The memo's text, the workbook's method notes and submission.md, every figure from figures.json."""
+"""submission.md, emitted from figures.json: the tags and the four platform blocks (Final Recommendation, Supplementary
+Questions, Critical Components, Step-by-Step). Every number is a figures.json value; texts() adds the few derived
+figures the Step-by-Step states, before figures.json is written."""
+import deliver as DL
+
+ORDER = DL.ORDER
 
 
-def mwh(x):
-    return format(int(round(x)), ",")
+def n(x):
+    return format(int(x), ",")
 
 
-def usd(x):
-    return "$" + format(int(round(x, -2)), ",")
+def usd(x, dec=0):
+    return ("USD {:,.%df}" % dec).format(x)
+
+
+def band(b, fmt=n):
+    return "%s to %s" % (fmt(b[0]), fmt(b[1]))
 
 
 def texts(F):
-    fund = sorted(F["funded"])
-    care = sorted(F["routes"]["the careful route (the reflex route)"])
-    F["memo_head"] = [F["org"] + ", System Planning",
-                      "To: Joseph Harmon, manager of distribution engineering    From: Mary Wilson, system planning    Date: 14 January 2027"]
-    F["memo_title"] = "Voltage optimization in 2027: %d feeders, %s" % (len(fund), usd(F["total_cost"]))
-    F["memo_call"] = ("Put voltage optimization on %s in the 2027 capital program. Under VO-1 each of them saves more "
-                      "energy at its substation breaker over a year like 2026 than its equipment costs: together %s MWh a "
-                      "year for %s installed. The other %d feeders do not clear their cost." %
-                      (", ".join(fund), mwh(F["total_save_mwh"]), usd(F["total_cost"]), len(F["ids"]) - len(fund)))
-    F["memo_body"] = [
-        ("What the trial measured", "On the eight trial feeders the energy drawn fell by %.2f percent on average (%s, feeder by "
-         "feeder) for each 1 percent the regulators actually took off the feeder-head voltage. The ON days did not all run: "
-         "on some the pilot regulators stayed in local mode, and each ON day ramped down over its first hour." %
-         (F["trial_mean"], ", ".join("%.2f" % F["trial_effect"][i] for i in F["trial"]))),
-        ("Carrying it to every feeder and every hour", "The trial ran in spring and autumn on eight feeders. Water heaters and "
-         "resistive heat draw less at a lower voltage only until their thermostats keep them on longer, so over a day they "
-         "give their energy back; every other load answers in proportion to its share. Each feeder's share of thermostatic "
-         "load hour by hour comes from its own load against the weather, the 2025 appliance survey and the 2024 load "
-         "research; scaled to what the trial measured, that gives each feeder's response through the whole year, from %.2f "
-         "to %.2f percent per 1 percent, lowest where resistive heat is common." % (F["cvrf_lo"], F["cvrf_hi"])),
-        ("How far each feeder can go", "VO-1 keeps every customer at or above 115 V in every hour. The far-end meters set what "
-         "each feeder can give hour by hour: the trial's 4.8 V on the short, lightly loaded feeders, much less at the far end "
-         "of the long rural lines and on the heaviest summer and winter hours."),
-        ("Losses", "Lowering the voltage raises the current the constant-power loads draw, so on %d of the 24 feeders the "
-         "lines' own losses rise and give back part of the customers' saving, by up to %s MWh a year; current squared, "
-         "fitted on the feeders with substation revenue meters, sets the change. The annual report's 6.1 percent loss rate, "
-         "added in proportion, gets the sign wrong." % (F["n_loss_rise"], mwh(F["largest_loss_rise_mwh"]))),
-        ("What a quicker reading would fund", "Carrying the trial feeders' average response to the rest, flat through the "
-         "year, and adding 6.1 percent for losses funds %s instead." % ", ".join(care)),
-    ]
-    F["method"] = [
-        "Customer energy: the meter data management system's feeder interval sums, the October re-sent rows dropped.",
-        "Trial: each trial feeder's daily customer energy over its same-class untested feeders' on the same day, on the trial "
-        "days, regressed on the day's achieved feeder-head reduction (bus SCADA less the pilot regulator's output) with "
-        "heating, cooling and day-type terms.",
-        "Makeup: each feeder's quarter-hour load regressed on its quarter-of-day by day-type profile with heating and cooling "
-        "degrees; heating split between resistive heat and heat pumps by the survey's holdings at the 2024 load research's "
-        "draws; water heating at the load research's yearly use a heater of the survey's holding.",
-        "Response: thermostatic load gives its energy back; every other load answers in proportion to its share, scaled to "
-        "the trial's measured response (the median over the trial feeders of trial response over non-thermostatic share).",
-        "Volts: hour by hour, the far-end meters' lowest reading less 115 V, at most 4.8 V; the trial's ON days restored "
-        "to normal running.",
-        "Losses: head-meter energy less customer energy against current squared times the register's ohms, fitted on the "
-        "head-metered feeders; applied at each feeder's load and voltage with and without VO.",
-        "Value: yearly MWh at the substation times USD 48 times 9.4 (VO-1 2.4), against the 2027 capital plan's estimate.",
-    ]
+    """Derived figures the Step-by-Step states (kept in figures.json so every number in the blocks is one)."""
+    lost_face = F["could_shed"] - F["delivered"]
+    F["derived"] = dict(
+        shortfall=int(F["could_shed"] - F["delivered"]),
+        face=dict(test_pass=96, wo_unwired=9),
+        rigorous_delivered=F["routes"]["rigorous"]["delivered"],
+        fals_face_lo=min(F["fals"]["S1"], F["fals"]["S2"], F["fals"]["S3"]),
+        fals_face_hi=max(F["fals"]["S1"], F["fals"]["S2"], F["fals"]["S3"]),
+        planning_kw=int(round(F["counts"]["switches"] * 1.0)),
+        breakeven_reflex=[F["proposals"][m]["breakeven"] for m in ("rep_w", "fix_t", "recon_in")],
+        unexplained=int(round(lost_face)),
+    )
     return F
 
 
-def write(path, F, bands):
-    ids = F["ids"]
-    fund = sorted(F["funded"])
-    care = sorted(F["routes"]["the careful route (the reflex route)"])
-    b = bands
+def write(path, F):
+    p = F["proposals"]
+    C = F["counts"]
+    fit = F["fit"]
+    R = F["routes"]
+    L = F["lattice"]
+    nm = lambda m: p[m]["name"]
+    ln = DL.lname
+    out = []
+    w = out.append
+    w("## Tags")
+    w("")
+    w("**Domain:** Engineering and Physical Sciences, Energy Systems & Utilities, energy efficiency and demand response "
+      "evaluation (a one-way air-conditioner load control fleet's 2026 dispatch trial).")
+    w("**Analytical objective:** Experiment & Causal Analysis.")
+    w("")
+    w("## Final Recommendation")
+    w("")
+    w("**%s** Read as they stand, the cooperative's own records (a coverage map that covers every premise, a test log "
+      "that passes %d in 100 switches, work orders that find %d in 100 unwired after a new unit) fund none of the six: "
+      "they put the %s at %s kW, the %s at %s and the %s at %s, against break-evens of %s, %s and %s kW." % (
+          DL.call_sentence(F), F["derived"]["face"]["test_pass"], F["derived"]["face"]["wo_unwired"],
+          ln(nm("rep_w")), n(R["reflex"]["rep_w"]), ln(nm("fix_t")), n(R["reflex"]["fix_t"]), ln(nm("recon_in")),
+          n(R["reflex"]["recon_in"]), n(p["rep_w"]["breakeven"]), n(p["fix_t"]["breakeven"]), n(p["recon_in"]["breakeven"])))
+    w("")
+    w("## Supplementary Questions")
+    w("")
+    w("### %s" % DL.FILES["csv"])
+    w("One row per proposal in the work plan's order, with the kW it adds at the 2027 coincident peak (and its band), "
+      "its break-even kW, its annual cost and whether it is funded.")
+    w("1. The peak kW each proposal adds in 2027, against its break-even:")
+    for i, m in enumerate(ORDER):
+        w("   %s. %s: %s kW (band %s), break-even %s kW, %s." % (
+            "abcdef"[i], nm(m), n(p[m]["kw"]), band(p[m]["band"]), n(p[m]["breakeven"]),
+            "funded" if p[m]["funded"] else "not funded"))
+    w("")
+    w("### %s" % DL.FILES["xlsx"])
+    w("The call on the first sheet, then the step record, the fitted model, the bridge, the proposals in full, the "
+      "routes each record gives taken as it stands, and the rebuilds.")
+    w("2. How the kW the switches could take off at peak splits, at the coincident-peak index:")
+    w("   a. Lost to commands not received: %s kW (band %s)." % (n(F["lost_reach"]), band(F["lost_reach_band"])))
+    w("   b. Lost to switches that received the command and failed: %s kW (band %s)." % (n(F["lost_hw"]), band(F["lost_hw_band"])))
+    w("   c. Lost to working switches not connected to the air conditioner: %s kW (band %s)." % (
+        n(F["lost_unwired"]), band(F["lost_unwired_band"])))
+    w("3. The funded plan: %s kW added at the coincident peak (band %s), at %s a kW-year (band %s to %s)." % (
+        n(F["plan_kw"]), band(F["plan_kw_band"]), usd(F["plan_cost_per_kw"], 1), "%.1f" % F["plan_cost_per_kw_band"][0],
+        "%.1f" % F["plan_cost_per_kw_band"][1]))
+    w("")
+    w("### %s" % DL.FILES["pptx"])
+    w("Three slides: the call, the bridge as a waterfall, and each proposal's kW beside its break-even.")
+    w("")
+    w("## Critical Components")
+    w("")
+    w("1. Shed commands that get through at the fringe (switches more than 20 km from the nearest transmitter serving "
+      "them), against switches within 8 km: **%d in 100** (band **%d to %d**)." % (
+          F["c1_through"], F["c1_through_band"][0], F["c1_through_band"][1]))
+    w("2. Switches installed through 2015 that still work, at premises with no replaced unit: **%d in 100** (band **%d to "
+      "%d**)." % (F["c2_work"], F["c2_work_band"][0], F["c2_work_band"][1]))
+    w("3. Switches still wired in where the air conditioner was replaced after the switch went in: **%d in 100** (band "
+      "**%d to %d**)." % (F["c3_wired"], F["c3_wired_band"][0], F["c3_wired_band"][1]))
+    w("")
+    w("## Step-by-Step")
+    w("")
+    w("1. Assembled the trial: %s active A/C switches on `lm_switch_register.csv`; %d event days and %s group shed "
+      "commands in `paging_encoder_log_2026.csv` (local time, each group's first transmit, the encoder's repeats dropped); "
+      "`scada_feeder_1min_2026.csv` read in UTC, mapped to feeders through `scada_point_list.csv` (two Pruett points "
+      "renamed mid-July), duplicate rows dropped and held readings (three or more equal readings in a row) left out. Each "
+      "feeder's step at each command is the mean of the five minutes from the transmit minute less the mean of the five "
+      "before: %s steps." % (n(C["switches"]), C["events"], n(C["commands"]), n(C["steps"])))
+    w("2. Set the footing: a working switch near a transmitter takes off %.3f kW at index 1 (the %d study homes' "
+      "responders, from `study_meters_hourly_2026.csv` against each day's held-out homes in "
+      "`study_event_assignments_2026.csv`); at the Appraisal's index of %.2f the switches could take off %s kW, and the "
+      "steps hold %s kW delivered." % (fit["working_kw"], C["study_homes"], fit["index"], n(F["could_shed"]),
+                                        n(F["delivered"])))
+    w("3. Rejected the records read as they stand: they explain %s kW of a %s kW shortfall and fund nothing (the %s %s kW, "
+      "the %s %s, the %s %s). Rejected the study homes carried to the fleet (%.3f kW an enrolled switch): it puts %s kW on "
+      "feeders whose steps hold %s, and funds nothing; the study homes are all within 8 km, installed in 2019 and 2020, "
+      "with no unit replaced since." % (
+          n(F["reflex_bridge"]["total"]),
+          n(F["derived"]["shortfall"]), ln(nm("rep_w")), n(R["reflex"]["rep_w"]), ln(nm("fix_t")), n(R["reflex"]["fix_t"]),
+          ln(nm("recon_in")), n(R["reflex"]["recon_in"]), fit["study_itt"], n(F["derived"]["rigorous_delivered"]),
+          n(F["delivered"])))
+    w("4. Rebuilt each switch's reach on each event day: the distance to the nearest transmitter of its own paging "
+      "system (the register's receiver field) that was on the air, from `paging_transmitters.xlsx` and "
+      "`radio_shop_outage_log_2026.xlsx`; then apportioned the steps among the switches each command addressed by reach "
+      "band, install batch, district and replaced unit together. Reception relative to the switches within 8 km is "
+      "%.2f at 8 to 14 km, %.2f at 14 to 20 km and %.2f beyond 20 km: %d in 100 commands get through at the fringe. Reach "
+      "to the nearest listed transmitter of either system instead puts the %s at %s kW, because the western VHF fringe "
+      "sits beside the carrier's Sandhill site, which those receivers do not hear." % (
+          fit["q"][1], fit["q"][2], fit["q"][3], F["c1_through"], ln(nm("rep_w")), n(R["generous"]["rep_w"])))
+    w("5. Read the hardware off the batches: the paging groups are install batches, so each group's own steps net of "
+      "reach and replaced units give its delivery against the study homes' working level: %d in 100 of the switches "
+      "installed through 2015 still work (the test log's bench signal passes %d in 100)." % (
+          F["c2_work"], F["derived"]["face"]["test_pass"]))
+    w("6. Built the replaced-unit list: a rebate in `hvac_rebates_2012_2026.csv` (by premise number, pre-2021 numbers "
+      "through the register's old-number field) or a permit in `county_mechanical_permits_2010_2026.csv` (by normalised "
+      "address) for a replacement central air conditioner or heat pump, dated after the switch was installed: %s switches. "
+      "In the same fit %d in 100 of them still deliver (the work orders' chance finding is %d in 100 unwired)." % (
+          n(C["flagged"]), F["c3_wired"], F["derived"]["face"]["wo_unwired"]))
+    w("7. Checked the fit against steps it was not built to match: on the steps where a transmitter change moved a "
+      "switch's band, the four oldest batches and the quarter of feeders with most replaced units, the largest gap "
+      "between predicted and recorded steps is %.3f; each record read as it stands leaves %.3f to %.3f, the either-system "
+      "reach %.3f and the study homes carried to the fleet %.3f." % (
+          F["fals"]["golden"], F["derived"]["fals_face_lo"], F["derived"]["fals_face_hi"], F["fals"]["generous"],
+          F["fals"]["calibrated"]))
+    w("8. Carried the fit to 2027 on the Appraisal's footing (every listed transmitter on the air, index %.2f, each "
+      "proposal alone): the premises in scope are %s (Larkin round), %s (Medora Flats round), %s (within 14 km) and %s "
+      "(outlying); each break-even is the annual cost over USD %d a kW-year. The %s, the %s and the %s clear theirs." % (
+          fit["index"], n(C["fix_t"]), n(C["fix_w"]), n(C["recon_in"]), n(C["recon_out"]), int(fit["value"]),
+          ln(nm("rep_w")), ln(nm("fix_t")), ln(nm("recon_in"))))
+    w("9. Totalled the plan: %s kW for %s a year, %s a kW-year; the bridge closes on %s kW delivered of %s." % (
+        n(F["plan_kw"]), usd(F["plan_cost"]), usd(F["plan_cost_per_kw"], 1), n(F["delivered"]), n(F["could_shed"])))
+    w("")
+    w("No other set survives. The study homes hold none of the three conditions, and the records each measure something "
+      "shallower than delivery on a peak afternoon. All %d rebuilds of the fit's conventions (band edges, weighting, the "
+      "district and batch terms, halves of the event days, the responder cut, trimmed steps, the step window from three "
+      "to ten minutes either side, the index origin) file the same three. Each step left out alone moves a different "
+      "proposal: without the reach rebuild the set is %s (the %s falls to %s kW); without the batch reading it is %s (the "
+      "%s falls to %s kW); without the replaced-unit list it is %s (the %s falls to %s kW). With the reach rebuild and the "
+      "batch reading both left out the set is %s; with the reach rebuild and the list, %s; with the batch reading and the "
+      "list, %s; with all three, none. Each share holds its value in every row where its own step is kept. The thinnest "
+      "margin is the %s: %s kW at the top of its band against a break-even of %s." % (
+          C["variants"],
+          joined(L["S1"]["funded"]), ln(nm("rep_w")), n(L["S1"]["rep_w"]),
+          joined(L["S2"]["funded"]), ln(nm("fix_t")), n(L["S2"]["fix_t"]),
+          joined(L["S3"]["funded"]), ln(nm("recon_in")), n(L["S3"]["recon_in"]),
+          joined(L["S1+S2"]["funded"]), joined(L["S1+S3"]["funded"]), joined(L["S2+S3"]["funded"]),
+          ln(nm("fix_w")), n(p["fix_w"]["band"][1]), n(p["fix_w"]["breakeven"])))
+    text = "\n".join(out) + "\n"
+    open(path, "w").write(text)
+    return text
 
-    def per(key, bkey, fmt):
-        return "; ".join(("%s " + fmt + " (" + fmt + " to " + fmt + ")") % (i, F[key][i], b[bkey][i][0], b[bkey][i][1]) for i in ids)
-    L = ["# task7: Platte Ridge PPD, voltage optimization in the 2027 capital program", "", "## Tags", "",
-         "**Domain:** Energy Systems & Utilities (Energy efficiency & demand response evaluation).",
-         "**Analytical objective:** Experiment & Causal Analysis.", "", "## Final Recommendation", "",
-         "Put voltage optimization on %s in the 2027 capital program (%s installed, %s MWh a year saved at the substation): "
-         "each saves more energy at its breaker over a year like 2026 than its equipment costs under VO-1. Not the careful "
-         "reading that carries the trial feeders' average response to every feeder flat through the year and adds the annual "
-         "report's 6.1 percent for losses, which funds %s." %
-         (", ".join(fund), usd(F["total_cost"]), mwh(F["total_save_mwh"]), ", ".join(care)), "",
-         "## Supplementary Questions", "", "### vo_program_2027.xlsx", ""]
-    items = [
-        "Sheet Decision: one row per feeder with its yearly saving at the customer meters, the rise in its own line losses, "
-        "its yearly saving at the substation, the saving's present value, its installed cost, the ratio and the decision; "
-        "sheets Trial and Feeders carry the figures below.",
-        "The feeders that receive VO in 2027 (exact): %s." % ", ".join(fund),
-        "The 2027 program's total yearly saving at the substation, MWh: %s (%s to %s), for %s installed." %
-        (mwh(F["total_save_mwh"]), mwh(b["total"][0]), mwh(b["total"][1]), usd(F["total_cost"])),
-        "Each feeder's expected yearly energy saving at the substation, MWh (band in brackets): " + per("save_mwh", "save", "%.0f") + ".",
-        "Each feeder's expected yearly energy saving at the customer meters, MWh (band in brackets): " + per("cust_mwh", "cust", "%.0f") + ".",
-        "The rise in each feeder's own line losses under VO, MWh a year, negative where they fall (band in brackets): " +
-        per("loss_mwh", "loss", "%.0f") + ".",
-        "Each feeder's yearly change in customer energy per 1 percent of voltage removed, percent (band in brackets): " +
-        per("cvrf", "cvrf", "%.2f") + ".",
-        "Each feeder's 2026 energy at the customer meters, MWh (within 0.5 percent): " +
-        "; ".join("%s %s" % (i, mwh(F["energy_mwh"][i])) for i in ids) + ".",
-        "The average reduction in volts the equipment could hold each feeder at over the year, 120 V base (band in brackets): " +
-        per("room_v", "room", "%.2f") + ".",
-        "The trial's change in energy per 1 percent of voltage removed, averaged over the eight trial feeders, percent: "
-        "%.2f (%.2f to %.2f); sheet Trial also shows each trial feeder's own figure." % (F["trial_mean"], b["trial_mean"][0], b["trial_mean"][1]),
-    ]
-    q = 0
-    for s in items:
-        q += 1
-        L.append("%d. %s" % (q, s))
-    L += ["", "### vo_program_2027_memo.docx", ""]
-    q += 1
-    L.append("%d. A short memo that opens on the decision, lists the funded feeders with their saving and cost, shows each "
-             "feeder's value over cost, and says what the trial measured and how it was carried to every feeder and hour." % q)
-    L += ["", "## Critical Components", ""]
-    top = sorted(ids, key=lambda i: abs(F["value_ratio"][i] - 1))[:3]
-    L.append("1. The yearly saving at the substation on the feeders nearest the line (forecasting): %s." %
-             "; ".join("%s **%s MWh** against a break-even of %s MWh" % (i, mwh(F["save_mwh"][i]), mwh(F["break_even_mwh"][i])) for i in top))
-    lo = sorted(ids, key=lambda i: F["cvrf"][i])[:3]
-    hi = sorted(ids, key=lambda i: -F["cvrf"][i])[:2]
-    L.append("2. Each feeder's own yearly response, not the trial's %.2f carried flat (modeling): %s at the low end, %s at the high end." %
-             (F["trial_mean"], "; ".join("%s **%.2f**" % (i, F["cvrf"][i]) for i in lo), "; ".join("%s **%.2f**" % (i, F["cvrf"][i]) for i in hi)))
-    up = sorted(ids, key=lambda i: -F["loss_mwh"][i])[:3]
-    L.append("3. The losses that rise under VO (decomposition): %s MWh a year, against the fall the report's 6.1 percent implies." %
-             "; ".join("%s **+%s**" % (i, mwh(F["loss_mwh"][i])) for i in up))
-    L += ["", "## Step-by-Step", ""]
-    steps = [
-        "Assemble the customer energy from mdm_feeder_interval_kwh_2026.csv (the October re-sent rows dropped) and the register's "
-        "feeders, substations and classes.",
-        "Read the trial: the regulator log against the bus SCADA gives the voltage each pilot regulator actually took off each "
-        "day; some ON days stayed in local mode and each ramped down over its first hour. Regress each trial feeder's daily "
-        "energy, over its same-class untested feeders', on that achieved reduction with weather and day-type terms: %.2f percent "
-        "per 1 percent on average (%.2f on the day's assignment)." % (F["trial_mean"], F["trial_mean_assigned"]),
-        "Build each feeder's makeup: its load against its quarter-of-day profile and heating and cooling degrees, the heating "
-        "split by the survey between resistive heat and heat pumps at the load research's draws, water heating at the "
-        "survey's holding and the load research's yearly use a heater. Thermostatic load gives its energy back over the day, "
-        "so the response is the non-thermostatic share times the trial's measured response per unit of that share, hour by "
-        "hour through the year: %.2f to %.2f percent per 1 percent over the year, where the hurried reading carries %.2f to "
-        "every feeder." % (F["cvrf_lo"], F["cvrf_hi"], F["trial_mean"]),
-        "Set the volts each feeder can give from its far-end meters, hour by hour, to keep 115 V, at most 4.8 V, as VO-1 sets it, "
-        "the trial's ON days restored: averages from %.2f to %.2f V." % (min(F["room_v"].values()), max(F["room_v"].values())),
-        "Fit the losses on the head-metered feeders against current squared and apply them with and without VO: losses rise "
-        "on %d feeders, by up to %s MWh a year." % (F["n_loss_rise"], mwh(F["largest_loss_rise_mwh"])),
-        "Value each feeder's yearly saving at the substation at USD 48 and 9.4 against its capital-plan cost: %s clear it." % ", ".join(fund),
-        "The shortcuts land elsewhere: %s." % "; ".join("%s funds %s" % (k, ", ".join(sorted(v))) for k, v in F["routes"].items()),
-    ]
-    for i, s in enumerate(steps, 1):
-        L.append("%d. %s" % (i, s))
-    L += ["", "No other conclusion survives the records: an untested feeder answers as its own makeup does, not as the trial "
-          "feeders' average; thermostatic load gives its energy back, so winter is worth less where resistive heat is common; "
-          "and the lines' losses rise with the current the constant-power loads draw. Every heating ratio, weather form, trial "
-          "control, trial scale and loss fit in the golden family, and every input moved by its spread, funds the same feeders.", ""]
-    open(path, "w").write("\n".join(L))
+
+def joined(names):
+    """A funded set inside a sentence: 'the A, the B and the C', or 'none'."""
+    xs = ["the " + DL.lname(x) for x in names]
+    if not xs:
+        return "none"
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1]
