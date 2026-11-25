@@ -94,10 +94,10 @@ def write(path, f):
     L.append(
         "**%s.** The largest weekly shortfall of the 2027 summer season in the fleet standard's planning case is %s "
         "containers against the maker's minimum order runs of %s; this rejects the order the records give read as they "
-        "stand (the reps' cellar checks as what a line holds, the cold store at summer 2026's weeks of cover and the "
-        "register less the condemned as the fleet; the weeks of cover are, %s), which orders %s." % (
+        "stand (the reps' cellar checks as what a line holds, the cold store at summer 2026's weeks of cover as step 7 "
+        "defines them, and the register less the condemned as the fleet), which orders %s." % (
             deliver.headline(f), each(f, lambda p: k(f["plan"][p])), _list(k(f["min_run"][p]) for p in POOLS),
-            WOC, reflex_words(f)))
+            reflex_words(f)))
     L += ["", "## Supplementary Questions", "", "### %s" % deliver.FILES["wb"], "",
           "The first sheet gives the cover for each container type (largest weekly shortfall in the planning case and the "
           "hot case, the worst week, the maker's minimum order run, the cover, with a chart against the runs); the second "
