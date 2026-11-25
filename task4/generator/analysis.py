@@ -36,7 +36,7 @@ FILES = {
 # the golden's conventions (the core's GOLDEN), with the build's own four conventions at their golden readings
 GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
               count_months="all", harmonics=2, hinge=0.0, share_fit="between", other="week", level="fit", age_fit="wls", age_drop=0,
-              alive="lots", clock="deliveries", last="account", age_from="purchase", run_stat="median", estate="shaped",
+              alive="lots", clock="deliveries", last="account", loss_form="survivors", fullest_window="season", age_from="purchase", run_stat="median", estate="shaped",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)
 HURRIED = {"S1": {"recon": "face"}, "S2": {"store": "cover"}, "S3": {"loss": "none"}}
 OVER = {"S1": {"swing": "prop"}, "S2": {"store": "wholerun"}, "S3": {"loss": "writeoff"}}
@@ -63,6 +63,14 @@ SINGLES = [
     ("the store's stock fitted on the beer-weeks themselves, one cover", {"share_fit": "one_cover"}),
     ("the store's stock fitted on the beer-weeks with a cover for each container type", {"share_fit": "panel"}),
     ("deliveries at the count over its last two weeks", {"level": 2}),
+    ("deliveries at the count as its own week's dockets", {"level": 1}),
+    ("the fall per container sold left free in the fit of the checks", {"recon": "joint"}),
+    ("the year's loss as the fitted rate times the fleet alive at the count", {"loss_form": "hazard"}),
+    ("the year's loss as the yearly share leaving times the fleet alive at the count", {"loss_form": "share"}),
+    ("the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens", {"share_fit": "one_cover_open"}),
+    ("depots' full stock and the wash queue from their own weekly files, the rest scaled", {"other": "files"}),
+    ("the same with the depots' empties bays held at the count", {"other": "files_held"}),
+    ("the store at its fullest over the whole plan year, not the season", {"fullest_window": "year"}),
     ("depots, wash and repair read against the fitted level at the count, not its own week's deliveries", {"other": "level"}),
     ("deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal", {"level": "next"}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
@@ -100,10 +108,8 @@ REFUSED = [
     ("the trade in level: the checks' model for the requirement, the lots' survivors for the fleet", {"swing": "absolute"}),
     ("survival a straight line in a lot's age", {"age_fit": "linear"}),
     ("each type's own regression of its Monday total on deliveries, the intercept read as the run share", {"store": "typeown"}),
-    ("the fall per container sold left free in the fit of the checks", {"recon": "joint"}),
     ("a line's weekly sales from four weeks of its own dockets", {"rate": "count_rate"}),
     ("a line's weekly sales from thirteen weeks of its own dockets", {"rate": "count_rate13"}),
-    ("deliveries at the count as its own week's", {"level": 1}),
     ("one seasonal harmonic in the deliveries fit for every type", {"harmonics": 1}),
     ("the estate's scheduled volume level through the 2027 season", {"estate": "flat"}),
     ("deliveries at the count as the mean of its last four weeks", {"level": 4}),
@@ -230,7 +236,9 @@ def load(target, mess=None):
     R.temp_hist = [R.temp[R.week_dates[i]] for i in range(WH)]
     # the count of 30 November 2026: every site by state, and the tally by lot
     wb = load_workbook(f("count"), read_only=True)
-    R.take = {p: dict(onsite=0.0, store=0.0, idle=0.0, other=0.0) for p in POOLS}
+    R.take = {p: dict(onsite=0.0, store=0.0, idle=0.0, other=0.0, depot_full=0.0, depot_empty=0.0, awaiting=0.0,
+                      inwash=0.0, repair=0.0) for p in POOLS}
+    R.depot_empty_by = {}
     R.tally = {p: {} for p in POOLS}
     R.count_sites = []
     for ws in wb.worksheets:
@@ -251,6 +259,13 @@ def load(target, mess=None):
             p = to_pool[str(cont)]
             R.take[p]["onsite"] += n
             R.take[p]["store" if area == "Cold store" else "idle" if state == "clean empty" else "other"] += n
+            part = {("Full store", "full"): "depot_full", ("Empties bay", "empty"): "depot_empty",
+                    ("Wash line", "awaiting wash"): "awaiting", ("Wash line", "in wash"): "inwash",
+                    ("Repair bay", "in repair"): "repair"}.get((area, state))
+            if part:
+                R.take[p][part] += n
+            if part == "depot_empty":
+                R.depot_empty_by.setdefault(p, {})[ws.title] = n
     # the register: bought before the count and not condemned before it; the lots and their purchase dates
     reg = pd.read_csv(f("register"), dtype=str, keep_default_na=False)
     reg["pool"] = reg["container"].map(to_pool)
@@ -354,13 +369,33 @@ def load(target, mess=None):
             R.estate_volume[named[r[0]]] = float(r[2])
     R.estate_pubs = len(list(wb.worksheets[0].iter_rows(values_only=True))) - 4
     R.season = season_of(R)
+    dp = pd.read_csv(os.path.join(target, "depot_stock_weekly.csv"), dtype={"container": str})
+    dp["week"] = (pd.to_datetime(dp["week_beginning"]) - pd.Timestamp(R.D0)).dt.days // 7
+    R.depot_full = {p: dp[dp["container"].map(to_pool) == p].groupby("week")["full_containers"].sum().reindex(
+        range(WH + 1)).fillna(0.0).to_numpy(dtype=float) for p in POOLS}
+    wl = pd.read_csv(os.path.join(target, "wash_line_daily_log.csv"), dtype={"container": str})
+    wl["week"] = (pd.to_datetime(wl["date"]) - pd.Timestamp(R.D0)).dt.days // 7
+    R.awaiting_close = {p: wl[wl["container"].map(to_pool) == p].sort_values("date").groupby("week")["awaiting_wash"].last()
+                        .reindex(range(WH)).ffill().to_numpy(dtype=float) for p in POOLS}
+    dkd = pd.read_csv(f("dockets"), dtype=str, keep_default_na=False, usecols=["docket_no", "line_no", "delivery_date", "depot",
+                                                                            "sku", "qty"]).drop_duplicates(["docket_no", "line_no"])
+    lastw = (R.D0 + dt.timedelta(days=7 * (WH - 1))).isoformat()
+    x = dkd[dkd["delivery_date"] >= lastw]
+    x = x.assign(pool=x["sku"].map(sku_pool), qty=x["qty"].astype(float))
+    R.depot_week = {p: x[x["pool"] == p].groupby("depot")["qty"].sum().to_dict() for p in POOLS}
     # by 2027 week: the estate's lines listed by its Monday, and the racking runs of the beers on sale
     R.n_live, R.runs_on, R.beers_on, R.plan_on = {}, {}, {}, {}
     R.beer_share = {p: {s: float(v[WH - 52:].sum()) / float(R.flow[p][WH - 52:].sum()) for s, v in R.flow_beer[p].items()}
                     for p in POOLS}
+    last = max(b for p in POOLS for s, a, b, run in R.plan[p])
+    R.plan_end = max(i for i in range(WH, len(R.week_dates)) if R.week_dates[i] <= last)
+    for i in range(R.season[-1] + 1, R.plan_end + 1):              # normals past the record's: the same week a year on
+        d = R.week_dates[i]
+        if d not in R.normal:
+            R.normal[d] = R.normal[d - dt.timedelta(days=364)]
     for p in POOLS:
         R.n_live[p], R.runs_on[p], R.beers_on[p] = {}, {}, {}
-        for i in range(WH, R.season[-1] + 1):
+        for i in range(WH, R.plan_end + 1):
             d = R.week_dates[i]
             R.n_live[p][i] = sum(n for day, n in R.estate[p] if day <= d)
             on = beers_on_sale(R, p, d)
@@ -576,6 +611,8 @@ def fit_store(R, o):
         runs = runs_of(R, p, o["run_stat"])
         for s, run in runs.items():
             st, fl = R.store_beer[p][s][first:], R.flow_beer[p][s][first:]
+            if kind == "one_cover_open":                          # each Monday against the week it opens
+                st, fl = R.store_beer[p][s][first:-1], R.flow_beer[p][s][first + 1:]
             if kind.startswith("between"):                        # each beer's mean stock on its mean deliveries
                 st, fl = np.array([st.mean()]), np.array([fl.mean()])
             for a, b in zip(st, fl):
@@ -588,11 +625,12 @@ def fit_store(R, o):
     use = [j for j in range(X.shape[1]) if np.abs(X[:, j]).sum() > 0]
     beta = np.zeros(X.shape[1])
     Xu = X[:, use]
+    resid_sd = float(np.std(y - Xu @ np.linalg.lstsq(Xu, y, rcond=None)[0]))
     beta[use] = np.linalg.lstsq(Xu, y, rcond=None)[0]
     res = y - Xu @ beta[use]
     cv = np.linalg.inv(Xu.T @ Xu) * float(res @ res) / max(len(y) - len(use), 1)
     return dict(theta=float(beta[-1]), cov={p: float(beta[0 if one else k]) for k, p in enumerate(POOLS)},
-                se=float(np.sqrt(cv[-1, -1])), n=int(len(y)))
+                se=float(np.sqrt(cv[-1, -1])), n=int(len(y)), resid_sd=resid_sd)
 
 
 def beers_on_sale(R, p, d):
@@ -642,7 +680,8 @@ def chain(R, p, opt=None, temps=None):
             lam_y = math.log(1.0 / max(1.0 - lin, 1e-9))
         else:
             alive = float((lots["reg"] * np.exp(-lam_y * age)).sum()) if o["alive"] == "lots" else T["onsite"] / share_on
-            year_loss = alive * (math.exp(lam_y) - 1.0)
+            year_loss = alive * {"survivors": math.exp(lam_y) - 1.0, "hazard": lam_y,
+                                 "share": 1.0 - math.exp(-lam_y)}[o["loss_form"]]
     year_loss *= o["x_lam"]
     lam = year_loss / year                                        # per container delivered
     scrap = R.condemned[p] / year                                 # condemned at the wash, per container delivered
@@ -674,9 +713,18 @@ def chain(R, p, opt=None, temps=None):
     # depots, wash and repair hold what the last week sent through them: their count is read against the count week's
     # own deliveries (the fitted level in the battery)
     c2 = T["other"] / (lev if o["other"] == "level" else float(flow[WH - 1]))
+    if o["other"] in ("files", "files_held"):                     # the depots' full stock and the wash queue from their own
+        dpf = np.polyfit(flow[52:WH], R.depot_full[p][53:WH + 1], 1)      # weekly files, the rest scaled or held
+        awq = np.polyfit(flow[52:WH], R.awaiting_close[p][52:WH], 1)
+        held = T["depot_empty"] if o["other"] == "files_held" else 0.0
+        rest = (T["inwash"] + T["repair"] + (0.0 if held else T["depot_empty"])) / float(flow[WH - 1])
+        other_of = lambda D: float(np.polyval(dpf, D) + np.polyval(awq, D)) + rest * D + held
+    else:
+        other_of = lambda D: c2 * D
     vol = R.estate_volume[p]
     path, cum = [], 0.0
-    for i in range(WH, R.season[-1] + 1):
+    end = R.plan_end if o["fullest_window"] == "year" else R.season[-1]
+    for i in range(WH, end + 1):
         d = R.week_dates[i]
         j = i - 52
         temp = R.normal[d] if temps is None or i not in temps else temps[i]
@@ -709,7 +757,7 @@ def chain(R, p, opt=None, temps=None):
         else:
             store = float(reg[1] + reg[0] * D)
         cum += (lam * D if o["clock"] == "deliveries" else year_loss / 52.18) + scrap * D
-        other, fl = c2 * D, FLOAT * D
+        other, fl = other_of(D), FLOAT * D
         need = swing + store + other + fl                         # beside the trade's containers at the count
         if o["swing"] == "absolute":                              # refused: the trade in level from the checks for the
             need = (a * L + b * m * F + est) + store + other + fl    # requirement and from the lots for the fleet
@@ -720,7 +768,8 @@ def chain(R, p, opt=None, temps=None):
     season = [x for x in path if x["i"] in R.season]
     pick = max(season, key=lambda x: x["short"])
     return dict(short=pick["short"], week=pick["i"], date=pick["date"], swing=pick["swing"], store=pick["store"],
-                year_loss=year_loss, rise=max(x["swing"] for x in season), fullest=max(x["store"] for x in season),
+                year_loss=year_loss, rise=max(x["swing"] for x in season),
+                fullest=max(x["store"] for x in (path if o["fullest_window"] == "year" else season)),
                 lam=lam, a=a, b=b, m=m, alive=alive, alive_out=alive_out, days_coef=bd, cov=cov, c2=c2,
                 theta=part, full26=full26, half26=part * full26, scrap=scrap, lev=lev, hinge=h0, n_counts=n_counts, lam_y=lam_y,
                 share_on=share_on, path=path, pick=pick, onsite=T["onsite"], L=L, slope1=slope(1.0),
