@@ -59,8 +59,8 @@ def reflex_words(f):
         if r[p]["cover"] == f["cover"][p]:
             continue
         x = r[p]["plan"]
-        if abs(x) < 0.05 * f["min_run"][p]:
-            out.append("next to nothing for %s (%s, about nil)" % (f["plural"][p], k(x)))
+        if abs(x) < 0.5 * (f["plan_band"][p][1] - f["plan_band"][p][0]):
+            out.append("about nil for %s (%s; the route sits on the nil line)" % (f["plural"][p], k(x)))
         else:
             out.append("%s for %s (%s)" % ({"buy": "a purchase", "hire": "a seasonal hire", "nothing": "no cover"}[r[p]["cover"]],
                                             f["plural"][p], k(x)))
@@ -162,10 +162,15 @@ def write(path, f):
         "site, weighted by the containers found, falls with the lot's age at %s per cent of the fleet a year by type, "
         "with %s of the fleet on site. Each lot on the register times its survival gives %s alive at the count, and the "
         "trade lost %s over the year to the count, **%s** (Component 3); the fleet carried forward with the "
-        "condemnations only loses none." % (
+        "condemnations only loses none. Survival is exponential in a lot's age (one rate a year, the log of a lot's "
+        "share on site a straight line in its age); survival as a straight line in age fits the lots' found-out-of-"
+        "registered counts worse by a binomial deviance of %s on 50 litre kegs, %s on 30 litre kegs, %s on 20 litre "
+        "kegs, %s on firkins and %s on kilderkins, %s pooled, and is not used (it files %s)." % (
             F["count"], F["register"], five(f, {p: A[p]["leaving_pct"] for p in POOLS}, "%.1f"),
             ", ".join("%.2f" % A[p]["share_on_site"] for p in POOLS), five(f, {p: A[p]["alive"] for p in POOLS}),
-            five(f, f["year_loss_by_pool"]), k(f["year_loss"])),
+            five(f, f["year_loss_by_pool"]), k(f["year_loss"]),
+            *["%.1f" % f["deviance"][p]["gap"] for p in POOLS], "%.1f" % f["deviance"]["pooled"]["gap"],
+            five(f, f["refused"]["survival a straight line in a lot's age"])),
         "Measured the cold store from its Monday position by product (`%s`, the last 104 Mondays) against each "
         "product's deliveries and its racking run (`%s`, the median filled): a beer's stock saws between its cover and "
         "its cover and a run, and a heavy week of deliveries is itself what draws it down, so the beers' means are "
@@ -173,7 +178,8 @@ def write(path, f):
         "the %s beers, ordinary least squares with no intercept, gives a cover of %s weeks of deliveries and a share of "
         "%s of a run (standard error %s). The beer-weeks with a cover for each type read %s, because a heavy week draws a "
         "beer down (the 20 litre cover comes out at %s against %s to %s for the other types); that and the beer-weeks "
-        "with one cover (%s), the same fit on every Monday (%s) and a run as the mean of its rackings are in the battery. "
+        "with one cover (%s), the same fit on every Monday of the record (the 156 Mondays from 11 December 2023 to 30 "
+        "November 2026, each against the week that ended the day before: %s) and a run as the mean of its rackings are in the battery. "
         "Each type's own regression of its Monday total on deliveries with the intercept read as the share is not used: "
         "it runs from %s to %s by type and window, its runs never having changed in the record. Under the 2027 plan's "
         "runs, range and on-sale dates (`%s`, a new beer at the share of its planned run) the store at its fullest in the "
@@ -188,15 +194,28 @@ def write(path, f):
             "%.3f" % f["store_fit"]["one_cover"]["share"], "%.3f" % f["store_fit"]["between_all"]["share"],
             "%.2f" % f["typeown_range"][0], "%.2f" % f["typeown_range"][1], F["plan"],
             five(f, f["store_2027_by_pool"]), k(f["store_2027"]), k(rc["S2"]["C2"]), k(f["beer_cover_C2"])),
-        "Ran each week from the count to the week beginning %s (FS-04 2.1 to 2.3): the trade's rise, the store, the "
-        "depots, wash and repair at the count's weeks of deliveries, and a float of two sevenths, less the containers on "
-        "site at the count, plus the containers lost and condemned since. The planning case's largest week (3.1, 3.2) is "
-        "%s; the hot case, the second highest of the ten summers %s to %s run week by week (3.3), is %s." % (
-            day(f["season"][1]), five(f, f["plan"]), min(f["summers"]["K50"]), max(f["summers"]["K50"]), five(f, f["hot"])),
+        "Ran each week from the count to the week beginning %s (FS-04 2.1 to 2.3). The containers at customers on the "
+        "count's day stand in both the requirement and the fleet, so they are estimated once and cancel: a week's "
+        "shortfall is the trade's rise since the count, the store, the depots, wash and repair and a float of two "
+        "sevenths of the week's deliveries, less the containers counted on site, plus the containers lost and condemned "
+        "since. Taking the trade in level instead, from the checks' model for the requirement and from the lots' "
+        "survivors for the fleet, counts the two instruments' disagreement at the count (%s) as shortfall and files %s; "
+        "it is not used. The rules: the losses and the condemnations accrue per container delivered (step 6's loss and "
+        "the year to the count's condemnations, %s, each over that year's deliveries), cumulated week by week from the "
+        "count's week, the week itself included; the depots', wash line's and repair bay's count is read against the "
+        "count week's own deliveries (%s), which is what they hold, and carried as that many weeks of each 2027 week's "
+        "deliveries (the fitted level instead is in the battery); the Maplestead volume is the schedule's twelve-month "
+        "average times the type's fitted season for the week, at the week's temperature, over the fitted season's mean "
+        "across the same twelve months (October 2025 to September 2026, at their recorded temperatures). The planning "
+        "case's largest week (3.1, 3.2) is %s; the hot case, the second highest of the ten summers %s to %s run week by "
+        "week (3.3), is %s." % (
+            day(f["season"][1]), five(f, f["absolute_gap"]),
+            five(f, f["refused"]["the trade in level: the checks' model for the requirement, the lots' survivors for the fleet"]),
+            five(f, {p: A[p]["condemned_year"] for p in POOLS}), five(f, {p: A[p]["deliveries_week_last"] for p in POOLS}),
+            five(f, f["plan"]), min(f["summers"]["K50"]), max(f["summers"]["K50"]), five(f, f["hot"])),
         "Read the cover on the planning case (4.1) against the minimum runs of `%s`: %s. Rebuilt on %s other "
-        "conventions, each alone and every two together (the bands), every cover holds, the nearest %s containers from "
-        "a line, and so it does with each fitted input moved 20 per cent (deliveries 5) or all four by two measured "
-        "spreads. Not used: a line's own dockets over thirteen or four weeks for its sales (the fitted holding per "
+        "conventions, each alone and every two together (the bands), every cover holds; each pool's nearest approach "
+        "to a line across them is %s. With each fitted input moved alone the covers hold: %s. Not used: a line's own dockets over thirteen or four weeks for its sales (the fitted holding per "
         "container sold on 20 litre kegs rises from %s on the share to %s and %s, as a line's whole containers lump its "
         "own dockets), the count's own recorded week for its level (%s per cent off the fit, a week's scatter) and the mean of its last "
         "four weeks (it files %s, the same covers), the fall per "
@@ -204,7 +223,10 @@ def write(path, f):
         "Maplestead volumes flat through the season (Schedule B files each as the average weekly volume over the "
         "twelve months to September 2026); each files the "
         "same covers." % (
-            F["quotation"], each(f, lambda p: COVER[f["cover"][p]]), k(f["variants"] - 1), k(f["nearest_variant"]["distance"]),
+            F["quotation"], each(f, lambda p: COVER[f["cover"][p]]), k(f["variants"] - 1),
+            each(f, lambda p: "%s (%s from %s)" % (k(f["nearest_by_pool"][p]["figure"]), k(f["nearest_by_pool"][p]["distance"]),
+                                                   k(f["nearest_by_pool"][p]["line"]))),
+            "; ".join("%s, %s" % (x["input"], five(f, x["plan"])) for x in f["perturbations"]),
             "%.2f" % f["rate_diag"]["count_rate_share"]["slope"]["K20"], "%.2f" % f["rate_diag"]["count_rate13"]["slope"]["K20"],
             "%.2f" % f["rate_diag"]["count_rate"]["slope"]["K20"], "%.1f" % (100 * f["level_diag"]["K50"]["count_week"]), five(f, f["level4"]),
             "%.3f" % f["slope_se"]["K50"]["joint"], "%.3f" % f["slope_se"]["K50"]["rebuild"]),

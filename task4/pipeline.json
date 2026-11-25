@@ -11,7 +11,7 @@
  "doctrine": "throughout",
  "architecture": 14,
  "loops": 1,
- "call": "buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (cut pack: planning case 4,585, 1,991, 715, 1,593, -445; hot case 8,635, 2,467, 1,057, 1,600, -445)",
+ "call": "buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (cut pack: planning case 4,653, 2,519, 761, 1,828, -442; hot case 9,047, 3,002, 1,110, 1,836, -442)",
  "chain": "R1 each pool's account at the count of 30 November 2026 (register and count by purchase lot) and its deliveries; R2 the rise in the trade's stock from the count to its summer peak, from full-only cellar counts rebuilt on each line's delivery cycle; R3 the containers the trade loses in a year, from the share of each purchase lot found on site against its age; R4 the store at its fullest under the 2027 brew plan; R5 each pool's largest weekly shortfall in the planning case; R6 the same in the hot case; R7 the cover per pool",
  "stump": "cut pack: the reflex route files -718, -234, -944, -20, -754 (nothing for every pool); S1 lost alone 2,564 fifty-litre and 1,199 thirty-litre (hires), S2 lost alone -488 twenty-litre (nothing), S3 lost alone 693 firkins (a hire); each stump pushed past its fit files a wrong cover, and the four run routes and the cut-off's three settings each file a wrong call",
  "precut": {
@@ -28,9 +28,9 @@
   "nearest": "guard.py check task4 on 2026-11-25: WARN only (template.chain_near task8, overuse.weight task8, repeat.gate_g task1, repeat.deliverables task9, NOTE driver.near 0.18 against this slot's architecture 13), each answered in the note's Template check; skeleton.py check PASS, severity none; registered 2026-11-25"
  },
  "judge": {
-  "verdict": "pass 1 (2026-11-25): NOT_DETERMINISTIC",
-  "disposition": "SEND_BACK on the cold store's run share (the half run, a constant no file held), repaired: the Monday position ships by product and the share is measured between beers (0.508, standard error 0.019; world 0.4995), the by-type panel, every Monday and one cover in the battery, each type's own intercept refused; FIX_NOW block edits a to g made (the count's week named, the four-week level and the recorded week refused with figures, the worst week as either, firkins next to nothing, the stated totals the sums of their parts, the fall check's specification, Schedule B's twelve-month average)",
-  "report": "determinism_check_report.md"
+  "verdict": "pass 2 (2026-11-25): DETERMINISTIC (pass 1: NOT_DETERMINISTIC on the store's run share, repaired)",
+  "disposition": "FIX_NOW on the blocks, done: the shortfall built as a change from the count and the level design refused with its figures (A), survival exponential with the straight line refused by the lots' deviance (B), the accrual, depots and Maplestead rules written in Step 8 (C), the rejected firkin figure as about nil (D), the every-Monday share's window named (E); the architect widened the 30 litre, firkin and 50 litre margins in the core and set the depots against the count week's own deliveries",
+  "report": "determinism_check_report_pass2.md"
  },
  "paper_pair": 26.7,
  "effort": {
@@ -111,7 +111,7 @@
    "commit": ""
   }
  ],
- "resume": "second judge pass (determinism mode) on target.zip md5 9bbf8c214e05e61a6f930185c747976f, then READY",
+ "resume": "third judge pass on the new cut (target.zip md5 0440ca1dac58ae15927361a52098864d), then READY",
  "approved": "",
  "delivered": "",
  "portal": {
@@ -230,6 +230,10 @@
   {
    "date": "2026-11-25",
    "event": "judge pass 1 repaired: the store's run share measured between beers on the Monday position by product, the block edits a to g; gates.py --full 0 FAIL; second judge pass owed"
+  },
+  {
+   "date": "2026-11-25",
+   "event": "judge pass 2 DETERMINISTIC with FIX_NOW; blocks A to E written, the core's wider margins rebuilt; gates.py --full 0 FAIL; third judge pass owed"
   }
  ],
  "runs": {
@@ -310,7 +314,7 @@
    }
   ]
  },
- "gates": "gates.py task4 --full on the repaired cut (target digest a0d909151c31dc3b), 2026-11-25: precut WARN (answered), effort PASS (9.0, 26.7, 100), voice PASS, leak REVIEW (ruled), figures PASS, stump PASS, containers PASS, heart WARN (answered), surface PASS, checks PASS (118 of 118), verify PASS, rebuild PASS; 0 FAIL, 3 WARN; core.py and results.py CORE PASS level 5; audit_containers exit 0",
+ "gates": "gates.py task4 --full on the new cut (target.zip md5 0440ca1dac58ae15927361a52098864d), 2026-11-25: 0 FAIL, 3 WARN (precut nearest chains, leak REVIEW ruled, heart answered); checks, verify 44 of 44, two byte-identical builds; core.py and results.py CORE PASS level 5; audit_containers exit 0",
  "zip_sha256_16": "",
  "golden_zip_sha256_16": "",
  "migrated_from": {

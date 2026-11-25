@@ -35,7 +35,7 @@ FILES = {
 
 # the golden's conventions (the core's GOLDEN), with the build's own four conventions at their golden readings
 GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
-              count_months="all", harmonics=2, hinge=0.0, share_fit="between", level="fit", age_fit="wls", age_drop=0,
+              count_months="all", harmonics=2, hinge=0.0, share_fit="between", other="week", level="fit", age_fit="wls", age_drop=0,
               alive="lots", clock="deliveries", last="account", age_from="purchase", run_stat="median", estate="shaped",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)
 HURRIED = {"S1": {"recon": "face"}, "S2": {"store": "cover"}, "S3": {"loss": "none"}}
@@ -63,6 +63,7 @@ SINGLES = [
     ("the store's stock fitted on the beer-weeks themselves, one cover", {"share_fit": "one_cover"}),
     ("the store's stock fitted on the beer-weeks with a cover for each container type", {"share_fit": "panel"}),
     ("deliveries at the count over its last two weeks", {"level": 2}),
+    ("depots, wash and repair read against the fitted level at the count, not its own week's deliveries", {"other": "level"}),
     ("deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal", {"level": "next"}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
     ("the lots fitted by a binomial model with a log link on the counts found out of registered", {"age_fit": "binom"}),
@@ -96,6 +97,8 @@ BATTERY = family()
 FAMILY = BATTERY
 # readings the files rule out, each by a figure the note states; they file the same covers and set no band
 REFUSED = [
+    ("the trade in level: the checks' model for the requirement, the lots' survivors for the fleet", {"swing": "absolute"}),
+    ("survival a straight line in a lot's age", {"age_fit": "linear"}),
     ("each type's own regression of its Monday total on deliveries, the intercept read as the run share", {"store": "typeown"}),
     ("the fall per container sold left free in the fit of the checks", {"recon": "joint"}),
     ("a line's weekly sales from four weeks of its own dockets", {"rate": "count_rate"}),
@@ -416,7 +419,10 @@ def fit_sales(R, p, harmonics, hinge=0.0):
     sse, beta = fit(h0)
     predict = lambda i, temp: float(math.exp(np.dot(beta, row(i, temp, h0))))
     shape = lambda i, temp: float(math.exp(np.dot(beta, row(i, temp, h0, 0.0))))
-    year = float(np.mean([shape(i, R.normal[R.week_dates[i]]) for i in range(WH - 52, WH)]))
+    # the base the Maplestead volume is shaped against: the fitted season's mean over the twelve months the schedule
+    # averages (the weeks beginning October 2025 to September 2026), at each week's recorded temperature
+    base = [i for i in range(WH) if dt.date(2025, 10, 1) <= R.week_dates[i] <= dt.date(2026, 9, 30)]
+    year = float(np.mean([shape(i, R.temp_hist[i]) for i in base]))
     return predict, shape, year, h0, sse
 
 
@@ -487,6 +493,12 @@ def fit_age(R, p, o):
         return float(-(wt * x * y).sum() / (wt * x * x).sum()), 1.0
     if o["age_fit"] == "ols":
         wt = np.ones(len(x))
+    if o["age_fit"] == "linear":                                  # refused: survival a straight line in age
+        A_ = np.column_stack([np.ones(len(x)), x])
+        s = ons[k] / reg[k]
+        w_ = reg[k]
+        c0, c1 = np.linalg.lstsq(A_ * np.sqrt(w_)[:, None], s * np.sqrt(w_), rcond=None)[0]
+        return ("linear", float(-c1 / c0)), float(c0)
     if o["age_fit"] == "ends":                                    # the oldest four lots against the newest four
         idx = np.argsort(x)
         lo, hi = idx[:4], idx[-4:]
@@ -516,6 +528,24 @@ def fit_age(R, p, o):
                 break
         a, b = th
     return float(-b), float(math.exp(a))
+
+
+def survival_deviance(R, p):
+    """the binomial deviance of the lots' found-on-site counts (out of registered) under the exponential survival the
+    golden fits and under a straight line in age; returns (exponential, straight line)"""
+    L = R.lots[p]
+    k = L["ons"] > 0
+    n_, s_, x = L["reg"][k], L["ons"][k], L["age"][k]
+    lam, f = fit_age(R, p, GOLDEN)
+    p_exp = np.clip(f * np.exp(-lam * x), 1e-9, 1 - 1e-9)
+    (_, lin), c0 = fit_age(R, p, dict(GOLDEN, age_fit="linear"))
+    p_lin = np.clip(c0 * (1.0 - lin * x), 1e-9, 1 - 1e-9)
+
+    def dev(pp):
+        a = np.where(s_ > 0, s_ * np.log(s_ / (n_ * pp)), 0.0)
+        b = np.where(n_ - s_ > 0, (n_ - s_) * np.log((n_ - s_) / (n_ * (1 - pp))), 0.0)
+        return float(2.0 * (a + b).sum())
+    return dev(p_exp), dev(p_lin)
 
 
 def lot_age(L, o):
@@ -604,8 +634,15 @@ def chain(R, p, opt=None, temps=None):
     else:
         lam_y, share_on = cached("age", R, p, o, ("loss", "age_fit", "age_drop", "age_from"), lambda: fit_age(R, p, o))
         age = lot_age(lots, o)
-        alive = float((lots["reg"] * np.exp(-lam_y * age)).sum()) if o["alive"] == "lots" else T["onsite"] / share_on
-        year_loss = alive * (math.exp(lam_y) - 1.0)
+        if isinstance(lam_y, tuple):                              # straight-line survival: each lot loses a fixed
+            lin = lam_y[1]                                        # share of what was bought each year
+            surv = np.clip(1.0 - lin * age, 0.0, 1.0)
+            alive = float((lots["reg"] * surv).sum())
+            year_loss = float((lots["reg"] * lin * (surv > 0)).sum())
+            lam_y = math.log(1.0 / max(1.0 - lin, 1e-9))
+        else:
+            alive = float((lots["reg"] * np.exp(-lam_y * age)).sum()) if o["alive"] == "lots" else T["onsite"] / share_on
+            year_loss = alive * (math.exp(lam_y) - 1.0)
     year_loss *= o["x_lam"]
     lam = year_loss / year                                        # per container delivered
     scrap = R.condemned[p] / year                                 # condemned at the wash, per container delivered
@@ -634,7 +671,9 @@ def chain(R, p, opt=None, temps=None):
         fs = cached("store", R, "all", o, ("share_fit", "run_stat"), lambda: fit_store(R, o))
         part, cov = fs["theta"], fs["cov"][p]
     cov *= o["x_cov"]
-    c2 = T["other"] / lev
+    # depots, wash and repair hold what the last week sent through them: their count is read against the count week's
+    # own deliveries (the fitted level in the battery)
+    c2 = T["other"] / (lev if o["other"] == "level" else float(flow[WH - 1]))
     vol = R.estate_volume[p]
     path, cum = [], 0.0
     for i in range(WH, R.season[-1] + 1):
@@ -672,8 +711,12 @@ def chain(R, p, opt=None, temps=None):
         cum += (lam * D if o["clock"] == "deliveries" else year_loss / 52.18) + scrap * D
         other, fl = c2 * D, FLOAT * D
         need = swing + store + other + fl                         # beside the trade's containers at the count
+        if o["swing"] == "absolute":                              # refused: the trade in level from the checks for the
+            need = (a * L + b * m * F + est) + store + other + fl    # requirement and from the lots for the fleet
+            short_abs = need - (alive - cum)
         path.append(dict(i=i, date=d, D=D, F=F, es=es, est=est, swing=swing, store=store, other=other, float=fl,
-                         drain=cum, need=need, short=need - T["onsite"] + cum, beers=R.beers_on[p][i], temp=temp))
+                         drain=cum, need=need, short=(short_abs if o["swing"] == "absolute" else need - T["onsite"] + cum),
+                         beers=R.beers_on[p][i], temp=temp))
     season = [x for x in path if x["i"] in R.season]
     pick = max(season, key=lambda x: x["short"])
     return dict(short=pick["short"], week=pick["i"], date=pick["date"], swing=pick["swing"], store=pick["store"],
@@ -829,6 +872,11 @@ def run(target):
     X["bat"], X["hot_bat"] = X["fam"], X["hot_fam"]
     X["level4"] = {p: chain(R, p, {"level": 4})["short"] for p in POOLS}
     X["beer_cover"] = {p: chain(R, p, {"store": "beer_cover"}) for p in POOLS}
+    X["deviance"] = {p: survival_deviance(R, p) for p in POOLS}
+    X["absolute_gap"] = {}
+    for p in POOLS:
+        g = X["gold"][p]
+        X["absolute_gap"][p] = float(g["a"] * g["L"] + g["b"] * g["m"] * g["lev"] - (g["alive"] - R.take[p]["onsite"]))
     X["store_fits"] = {name: fit_store(R, dict(GOLDEN, **o)) for name, o in (
         ("between", {}), ("between_all", {"share_fit": "between_all"}), ("one_cover", {"share_fit": "one_cover"}),
         ("panel", {"share_fit": "panel"}), ("mean_run", {"run_stat": "mean"}))}

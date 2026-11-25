@@ -265,6 +265,13 @@ def main(target):
         w, d, c, x = line.strip().split(",")
         dp[(w, c)] = dp.get((w, c), 0) + int(x)
     summer = [dp[(w, "K50")] for (w, c) in dp if c == "K50" and "2026-06-01" <= w <= "2026-08-31"]
+    ok("SF31 the depots, wash and repair read against the count week's own deliveries (golden); the fitted level in "
+       "the battery, same call", A.GOLDEN["other"] == "week" and sc({"other": "level"}))
+    dv = fig["deviance"]
+    ok("SF35 survival exponential in age; the straight line fits the lots worse pooled and is refused, same covers",
+       dv["pooled"]["gap"] > 0 and dv["K50"]["gap"] > 0 and sc({"age_fit": "linear"}), dv)
+    ok("SF36 the trade in level (checks for the requirement, lots for the fleet) refused: FS-04 2.1 and 2.2 put the "
+       "count's trade in both, same covers", sc({"swing": "absolute"}) and "or at its customers" in std, fig["absolute_gap"])
     ok("SF31 the depots' stock moves with deliveries (summer 2026 against the count's week)",
        np.mean(summer) > 1.3 * dp[("2026-11-23", "K50")], "%.0f against %d" % (np.mean(summer), dp[("2026-11-23", "K50")]))
     ok("SF32 the trade's rise and the store are each at their own largest week",

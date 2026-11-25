@@ -214,8 +214,8 @@ def rebuild(target):
             if best is None or e < best[0]:
                 best = (e, h0, b)
         _, h0, b = best
-        yr_shape = float(np.mean(np.exp(design(idx[-52:], mondays[-52:], np.array([norm[m] for m in mondays[-52:]]), h0,
-                                              0.0) @ b)))
+        bm = np.array([(m >= pd.Timestamp(2025, 10, 1)) and (m <= pd.Timestamp(2026, 9, 30)) for m in mondays])
+        yr_shape = float(np.mean(np.exp(design(idx[bm], mondays[bm], tt[bm], h0, 0.0) @ b)))   # Oct 2025 to Sep 2026
         a, b1, b2 = rel[t]
         lines = pd.read_csv(p("dispense_lines.csv"), dtype=str)
         lines = lines[lines["container"].map(typ) == t]
@@ -244,7 +244,7 @@ def rebuild(target):
             runs_on = np.array([sum(rn for s, ty, f0, l0, rn in plan if ty == t and f0 <= m <= l0) for m in weeks27])
             store27 = cover * D + theta * runs_on
             drain = np.cumsum((loss + cond) * D)
-            short = swing + store27 + other / lev * D + D * 2.0 / 7.0 - on_site + drain
+            short = swing + store27 + other / float(fl[-1]) * D + D * 2.0 / 7.0 - on_site + drain   # the count week's own
             ins = np.isin(weeks27, season)
             return short[ins].max(), swing[ins].max(), store27[ins].max()
         plan_v, rise, full27 = path(np.array([norm[m] for m in weeks27]))

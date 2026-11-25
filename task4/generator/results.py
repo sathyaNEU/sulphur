@@ -103,6 +103,7 @@ def figures(X):
                                  leaving_pct=round(100.0 * (1.0 - math.exp(-g["lam_y"])), 1),
                                  share_on_site=round(g["share_on"], 2), condemned_year=int(R.condemned[p]),
                                  deliveries_year=r0(year[p]), deliveries_week_at_count=r0(g["lev"]),
+                                 deliveries_week_last=r0(R.flow[p][R.WH - 1]),
                                  lines=int(g["L"]), estate_lines=int(sum(x for _, x in R.estate[p])),
                                  rise=r0(g["rise"]), store_fullest=r0(g["fullest"]), plan=r0(gold[p]), hot=r0(hot[p]),
                                  lots=len(R.lots[p]["lot"]))
@@ -168,6 +169,17 @@ def figures(X):
     fig["beer_cover"] = {p: {"plan": r0(X["beer_cover"][p]["short"]), "cover": A.cover_of(X["beer_cover"][p]["short"], p),
                              "store": r0(X["beer_cover"][p]["fullest"])} for p in POOLS}
     fig["beer_cover_C2"] = r0(sum(X["beer_cover"][p]["fullest"] for p in POOLS))
+    fig["nearest_by_pool"] = {}
+    for p in POOLS:
+        best = min((min(abs(x - ln) for ln in (0.0, float(A.MIN_RUN[p]))), i) for i, x in enumerate(fam[p]))
+        x = fam[p][best[1]]
+        ln = min((0.0, float(A.MIN_RUN[p])), key=lambda l: abs(x - l))
+        fig["nearest_by_pool"][p] = {"distance": r0(best[0]), "figure": r0(x), "line": r0(ln),
+                                     "variant": A.FAMILY[best[1]][0]}
+    fig["deviance"] = {p: {"exponential": round(v[0], 1), "line": round(v[1], 1), "gap": round(v[1] - v[0], 1)}
+                       for p, v in X["deviance"].items()}
+    fig["deviance"]["pooled"] = {"gap": round(sum(v[1] - v[0] for v in X["deviance"].values()), 1)}
+    fig["absolute_gap"] = {p: r0(v) for p, v in X["absolute_gap"].items()}
     fig["slope_se"] = {p: {k: round(v, 3) for k, v in X["slope_se"][p].items()} for p in POOLS}
     fig["refused"] = {name: {p: r0(v[p]) for p in POOLS} for name, v in X["refused"].items()}
     fig["refused_cover"] = {name: {p: A.cover_of(v[p], p) for p in POOLS} for name, v in X["refused"].items()}
