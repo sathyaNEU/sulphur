@@ -14,7 +14,8 @@ estimator below reads those records only. It proves, before any pack exists, tha
   S1  a rep's cellar count sees the full containers of a line on its order day and never the empties waiting for
       the dray, so what a line holds has to be rebuilt from its own delivery cycle before the trade's stock can be
       carried to a summer week,
-  S2  the store holds each beer a racking run at a time, so its stock follows the runs and the range on sale,
+  S2  the store holds each beer a racking run at a time, so its stock follows the runs and the range on sale; the
+      share of a run a beer holds beyond its cover is measured on the beers' own Monday stocks, never assumed,
   S3  the register never loses a container, so the containers the trade loses have to be estimated from how the
       share of each purchase lot still seen on site falls with the lot's age,
 
@@ -161,6 +162,7 @@ def simulate(seed=SEED):
         cellar = w["a"] * w["L"] + w["b"] * m * level             # a line stocks to what it sells, not to a week's dockets
         store = np.zeros(WH)
         stock = {}
+        by_beer = {code: np.zeros(WH) for code, sh, run in beers_at(p, 0)}
         for i in range(WH):
             for code, sh, run in beers_at(p, i):
                 d = sh * S[i]
@@ -172,6 +174,7 @@ def simulate(seed=SEED):
                     s += run
                 stock[code] = s
                 store[i] += s
+                by_beer[code][i] = s
         other = w["c2"] * S
         lost = rng.binomial(S.astype(int), w["loss"]).astype(float)
         scrap = rng.binomial((S - lost).astype(int), SCRAP).astype(float)
@@ -197,7 +200,7 @@ def simulate(seed=SEED):
         onsite = alive[1:WH + 1] - cellar                         # at each history week's close
         idle = onsite - store - other - FLOAT * S
         idle27 = alive[WH + 1:] - need27
-        q.update(S=S, cellar=cellar, store=store, other=other, lost=lost, scrap=scrap, alive=alive,
+        q.update(S=S, cellar=cellar, store=store, store_beer=by_beer, other=other, lost=lost, scrap=scrap, alive=alive,
                  onsite=onsite, idle=idle, idle27=idle27, fut=fut, peak=WH + pk, need27=need27, alive0=alive0)
         q.update(lots_of(p, q, rng))
         out["pool"][p] = q
@@ -282,6 +285,8 @@ def records(world, seed=SEED + 1):
         sold = np.minimum(np.floor(rate * days / 7.0 * np.exp(rng.normal(0, 0.08, n)) + rng.random(n)), held - 1.0)
         full = held - sold                                       # the count: full containers and the one on dispense
         R["pool"][p] = dict(take=take, flow=q["S"].copy(), store=q["store"].copy(),
+                            store_beer={c: v.copy() for c, v in q["store_beer"].items()},   # the Monday stock by beer
+                            flow_beer={c: sh * q["S"] for c, sh, run in beers_at(p, 0)},     # the dockets by beer
                             # a line's weekly sales at the call: its share of its type's deliveries over the record
                             # times the type's deliveries that week; or its own dockets over thirteen or four weeks,
                             # lumpier because a line takes whole containers
@@ -296,7 +301,7 @@ def records(world, seed=SEED + 1):
 
 # ------------------------------------------------------------------------------------------------- the estimators
 GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
-              count_months="all", harmonics=2, hinge=0.0, cover="mean", level="fit", age_fit="wls", age_drop=0,
+              count_months="all", harmonics=2, hinge=0.0, share_fit="panel", level="fit", age_fit="wls", age_drop=0,
               alive="lots", clock="deliveries",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)   # the forcing battery's multipliers on the fitted inputs
 # the hurried choice at each stump, and the same stump pushed past its fitted value to the far end a run might set
@@ -369,6 +374,32 @@ def fit_cellar(rec, o):
         k = iv == x
         slope[x], icpt[x] = np.polyfit(rate[k], held[k], 1)
     return float(icpt[1.0]), (lambda x: float(slope[x])), None
+
+
+def fit_store(R, o):
+    """the cold store's stock beer by beer: each beer's Monday stock on its deliveries that week (a cover in weeks
+    of deliveries, one for each container type) and on its racking run (the share of a run a beer holds beyond its
+    cover, one for every beer). Nothing files the share and no type's own record can show it, because a type's runs
+    never changed in the record; the beers' different runs do. Returns the share and each type's cover"""
+    first = 0 if o["share_fit"] == "all" else 52
+    rows = []
+    for k, p in enumerate(POOLS):
+        rec = R["pool"][p]
+        for code, sh, run in rec["beers26"]:
+            st, fl = rec["store_beer"][code][first:], rec["flow_beer"][code][first:]
+            if o["share_fit"] == "between":                       # each beer's mean stock on its mean deliveries
+                st, fl = np.array([st.mean()]), np.array([fl.mean()])
+            for a, b in zip(st, fl):
+                x = np.zeros(len(POOLS) + 1)
+                x[0 if o["share_fit"] in ("one_cover", "between") else k] = b
+                x[-1] = run
+                rows.append((x, a))
+    X, y = np.array([r[0] for r in rows]), np.array([r[1] for r in rows])
+    use = [j for j in range(X.shape[1]) if np.abs(X[:, j]).sum() > 0]
+    beta = np.zeros(X.shape[1])
+    beta[use] = np.linalg.lstsq(X[:, use], y, rcond=None)[0]
+    one = o["share_fit"] in ("one_cover", "between")
+    return dict(theta=float(beta[-1]), cov={p: float(beta[0 if one else k]) for k, p in enumerate(POOLS)})
 
 
 def fit_age(rec, o):
@@ -449,12 +480,16 @@ def chain(R, p, opt=None, anom27=None):
     if o["swing"] == "level":                                     # the counts as they stand, scaled to that level
         scale = alive_out / (a * w["L"] + b * m * lev)
         a, b = a * scale, b * scale
-    # the store: its cover in weeks of deliveries, beside the half run each beer on sale holds on average
+    # the store: its cover in weeks of deliveries, beside the share of a racking run each beer on sale holds beyond
+    # it, both measured on the beers' own Monday stocks; or a whole run for each beer, the far end
     full26 = float(sum(run for c, sh, run in rec["beers26"]))
-    part = 1.0 if o["store"] == "wholerun" else 0.5               # a whole run for each beer, or half of one
     reg = np.polyfit(flow[52:], rec["store"][52:], 1)
-    cov = (float(rec["store"][52:].mean()) - part * full26) / float(flow[52:].mean()) if o["cover"] == "mean" else \
-        float(np.median((rec["store"][52:] - part * full26) / flow[52:]))
+    if o["store"] == "wholerun":
+        part = 1.0
+        cov = (float(rec["store"][52:].mean()) - full26) / float(flow[52:].mean())
+    else:
+        fs = cached("store", R, "all", o, ("share_fit",), lambda: fit_store(R, o))
+        part, cov = fs["theta"], fs["cov"][p]
     cov *= o["x_cov"]
     ne, re_ = rec["estate"]
     c2 = T["other"] / (lev if o["level"] == "fit" else float(flow[WH - o["level"]:WH].mean()))
@@ -483,7 +518,7 @@ def chain(R, p, opt=None, anom27=None):
     season = [x for x in path if x["i"] in SEASON]
     pick = max(season, key=lambda x: x["short"])
     return dict(short=pick["short"], week=pick["i"], swing=pick["swing"], store=pick["store"], year_loss=year_loss,
-                rise=max(x["swing"] for x in season), fullest=max(x["store"] for x in season),
+                rise=max(x["swing"] for x in season), fullest=max(x["store"] for x in season), theta=part, cov=cov,
                 lam=lam, a=a, b=b, m=m, alive=alive, days_coef=bd)
 
 
@@ -514,7 +549,9 @@ FAMILY = [
     ("the bend in the weather response a degree higher", {"hinge": 1.0}),
     ("one seasonal harmonic in the deliveries fit", {"harmonics": 1}),
     ("three seasonal harmonics in the deliveries fit", {"harmonics": 3}),
-    ("the store's cover as the median week's, not the mean's", {"cover": "median"}),
+    ("the store's stock fitted with one cover for every container type", {"share_fit": "one_cover"}),
+    ("the store's stock fitted between beers, on each beer's mean stock and mean deliveries", {"share_fit": "between"}),
+    ("the store's stock fitted on every Monday of the record, not the last 104", {"share_fit": "all"}),
     ("deliveries at the count over its last two weeks, not the fit's value for its week", {"level": 2}),
     ("deliveries at the count as its own week's", {"level": 1}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
@@ -558,7 +595,7 @@ def spreads(R, p, reps=120, seed=11):
             r2[k] = rec[k][idx]
         sl = fit_cellar(r2, GOLDEN)[1]
         bm.append(sum(sl(x) * float(lr[li == x].sum()) for x in set(li.tolist())) / float(lr.sum()))
-    half = sum(run for c, sh, run in rec["beers26"]) / 2.0
+    half = sum(run for c, sh, run in rec["beers26"]) * fit_store(R, GOLDEN)["theta"]
     st, fl = rec["store"][52:], rec["flow"][52:]
     cv = []
     for _ in range(reps):
