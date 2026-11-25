@@ -38,9 +38,9 @@ def install_dates(W, r):
         ids = np.flatnonzero(yr == Y)
         ids = ids[np.lexsort((W["order_u"][ids], grp[ids]))]
         n = len(ids)
+        offs = np.sort(r.integers(3, 361, n))           # installs fall on working days through the year, in batch order
         for k, i in enumerate(ids):
-            frac = (k + 0.5) / n
-            d = dt.date(Y, 1, 5) + dt.timedelta(int(frac * 355))
+            d = dt.date(Y, 1, 1) + dt.timedelta(int(offs[k]))
             wd_ = weekday(d)
             out[i] = wd_ if wd_.year == Y else d + dt.timedelta(7 - d.weekday())
     return out
@@ -218,6 +218,12 @@ def rebates_permits(W, PR, inst, REP, r):
             add_permit(j, d, OTHER_PERMIT[int(r.integers(len(OTHER_PERMIT)))])
     reb.sort(key=lambda t: (t[3], t[0]))
     per.sort(key=lambda t: (t[1], t[0]))
+    # the county numbers its permits in issue order within each year (building and electrical permits share the series)
+    seq = {}
+    for row in per:
+        yr_ = int(row[1][:4])
+        seq[yr_] = seq.get(yr_, int(r.integers(30, 120))) + 1 + int(r.poisson(1.8))
+        row[0] = "M%02d-%05d" % (yr_ % 100, seq[yr_])
     # renumber the rebates in date order, the way the rebate system issues them (numbers voided at the counter leave gaps)
     no = 3104
     for row in reb:

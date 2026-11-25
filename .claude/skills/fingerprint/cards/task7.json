@@ -1,784 +1,810 @@
 {
- "task": "task7",
- "project": "sulfur",
- "architecture": "v13",
- "drawn": "2026-11-25",
- "slot_note": "architecture 13, a new world on 2026-11-25 after the author un-retired the slot: Cottonwood Draw Electric Cooperative's one-way air-conditioner load-control fleet, the 2026 randomised dispatch trial read from feeder SCADA steps, and which of six 2027 work-plan proposals earn their cost at the wholesale coincident peak",
- "domain": "energy-systems-utilities",
- "subdomain": "tariff-demand-response-evaluation",
- "niche": "what a one-way paging load-control fleet delivers when no member meter records intervals: the shed commands of a randomised dispatch trial read as steps in each feeder's SCADA load, with non-delivery split into missed pages, failed switches and switches left unwired at replaced air conditioners, and each of six remedies priced on the share it would restore (the client's Energy efficiency & demand response evaluation)",
- "objective": "experiment-causal",
- "shape": "13",
- "decision_type": "designation_set",
- "answer_unit": "set_of_items",
- "answer": "Fund the Kettle Ridge VHF repeater, the Larkin find-and-fix round and the reconnection round at premises within 14 km of their transmitter; do not fund the Halverson carrier fill-in, the Medora Flats find-and-fix round or the outlying reconnection round (about 2,160 kW added at the 2027 coincident peaks for about USD 40 a kW-year; design-stage figures from generator/core.py)",
- "answer_source": "generator/core.py at design (the build's figures.json replaces it)",
- "gap": [
-  "population",
-  "time"
- ],
- "pattern": [
-  "none"
- ],
- "generators": [
-  "G9",
-  "G8",
-  "G3"
- ],
- "gate_g": "decomposition_attribution",
- "calibration_form": "pilot_log",
- "stump_strategy": "causal_design",
- "decisive_rule_filed": false,
- "official_decoy": false,
- "validated_decoy": false,
- "context_artifact": "register",
- "stump_class": "analytical",
- "analyst_test": "A careful but hurried pass measures the randomised sheds on the 380 interval-metered study homes (0.73 kW a switch, clustered, with a placebo), finds no reach, age or wiring effect there because the study homes hold none, takes the carrier's coverage map, the annual test log and the service work orders at face value for the fleet, and funds none of the six proposals, where the feeder steps show a fringe that hears one page in six, a third of the pre-2016 switches dead and two thirds of the switches at replaced air conditioners unwired.",
- "domain_test": "Demand response evaluation of direct load control: the reduction a utility can count at its wholesale coincident peak is commands sent times the share received, working and connected, read here from feeder load steps at each paging group's command; swap switches for coupons and there is no paging reach, no feeder step and no coincident-peak demand charge to price a repeater against.",
- "layer2_family": "estimand_identification",
- "layer2_pattern": "own:a randomised dispatch whose receipt no record holds, apportioned from pooled feeder steps",
- "layer1": [
-  "1-minute feeder SCADA with frozen values, a daylight-saving-free UTC clock and two feeders re-named after a substation rebuild",
-  "a paging encoder log in local time with retried pages",
-  "a switch register with re-keyed premise numbers after the 2021 billing conversion",
-  "a transmitter register and a radio-shop outage log kept by hand",
-  "HVAC rebate records and county mechanical permits matched by address",
-  "monthly drive-by meter reads on billing cycles"
- ],
- "stakeholder_role": "energy services manager at a rural electric cooperative preparing the load-management part of the 2027 work plan for the board",
- "role_family": "programme_officer",
- "scoring_unit": "other",
- "spine": {
-  "file": "scada_feeder_1min_2026.csv",
-  "rows": 1214400,
-  "entity": "one feeder minute of load",
-  "grain": "feeder x minute",
-  "source": "synthetic"
- },
- "forum": "board_of_directors",
- "forcing_event": "vote_or_meeting",
- "org_family": "cooperative_or_member_body",
- "world": {
-  "geography": "United States, Kansas (Cottonwood Draw Electric Cooperative, fictional, south-central plains)",
-  "currency": "USD",
-  "org_type": "rural electric cooperative",
-  "invented_names": [
-   "Cottonwood Draw Electric Cooperative",
-   "Larkin",
-   "Medora Flats",
-   "Halverson",
-   "Pruett",
-   "Kettle Ridge",
-   "Sunflower Basin Power",
-   "TriCounty Paging"
+  "task": "task7",
+  "project": "sulfur",
+  "architecture": "v13",
+  "drawn": "2026-11-25",
+  "slot_note": "architecture 13, a new world on 2026-11-25 after the author un-retired the slot: Cottonwood Draw Electric Cooperative's one-way air-conditioner load-control fleet, the 2026 randomised dispatch trial read from feeder SCADA steps, and which of six 2027 work-plan proposals earn their cost at the wholesale coincident peak",
+  "domain": "energy-systems-utilities",
+  "subdomain": "tariff-demand-response-evaluation",
+  "niche": "what a one-way paging load-control fleet delivers when no member meter records intervals: the shed commands of a randomised dispatch trial read as steps in each feeder's SCADA load, with non-delivery split into missed pages, failed switches and switches left unwired at replaced air conditioners, and each of six remedies priced on the share it would restore (the client's Energy efficiency & demand response evaluation)",
+  "objective": "experiment-causal",
+  "shape": "13",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "Fund the Kettle Ridge VHF repeater, the Larkin find-and-fix round and the reconnection round at premises within 14 km of their transmitter; do not fund the Halverson carrier fill-in, the Medora Flats find-and-fix round or the outlying reconnection round (about 2,160 kW added at the 2027 coincident peaks for about USD 40 a kW-year; design-stage figures from generator/core.py)",
+  "answer_source": "generator/core.py at design (the build's figures.json replaces it)",
+  "gap": [
+    "population",
+    "time"
   ],
-  "people": [
-   "Peter Mitchell",
-   "Timothy Powell",
-   "Caleb Mclean",
-   "Emily Maldonado"
-  ]
- },
- "deliverables": [
-  "load_management_proposals_2027.csv",
-  "load_management_trial_2026.xlsx",
-  "load_management_2027_board.pptx"
- ],
- "opening_move": "question-first",
- "question_form": "what",
- "driver": "The decisive quantities are how much of a commanded action each unit actually carries out when no unit-level record of the outcome exists: the outcome shows only as pooled steps at the moments commands go out, and delivery fails for three reasons the organisation's own records each wave through (the command's reach from the senders that were live that day, the unit's hardware since its last test, the unit's connection after its host equipment was replaced), so each failure share is fitted from how the pooled steps move with each class's count and each remedy is priced on the share it would restore; the three records read at face value fund nothing.",
- "driver_concrete": "Cottonwood Draw funds a load-management proposal when the coincident-peak kW it adds, at USD 88 a kW-year, covers its annualised cost: the 2026 trial's 21,896 feeder steps, apportioned among each paging group's switches by distance to an on-air transmitter of their own paging system that day, by install batch and by a replaced-unit flag, give a fringe that hears 17 pages for every 100 heard near a transmitter, 33 in 100 pre-2016 switches dead and 68 in 100 switches unwired where the air conditioner was replaced, so the Kettle Ridge repeater (250 kW against 185), the Larkin find-and-fix round (505 against 280) and the reconnection round within 14 km (1,402 against 509) are funded and the Halverson fill-in (185 against 280), the Medora Flats round (264 against 401) and the outlying reconnection round (224 against 345) are not.",
- "stump": "The study homes' 0.73 kW a switch with the coverage map, the test log and the work orders at face value funds none of the six (every repeater adds nothing, the rounds 58, 46, 260 and 99 kW); each record corrected alone still leaves two of the three funded proposals unfunded, the three single losses on three different wrong sets.",
- "lineage": [
-  {
-   "domain": "nonprofit-grant-making",
-   "subdomain": "giving-strategy-program-funding",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "allocation_to_total",
-   "answer_unit": "count",
-   "gap": [
-    "time",
-    "objective",
-    "population"
-   ],
-   "pattern": [
-    "none",
-    "C",
-    "E"
-   ],
-   "generators": [
-    "G7",
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G9",
     "G8",
-    "G14",
-    "G16"
-   ],
-   "gate_g": "binding_constraint",
-   "driver": "The decisive quantity is how many of the period's placeable units a fixed team can finish before the period closes, because each unit counts only once that team performs one last step for it, the team's spare weekly capacity is visible only as the ceiling it held through an earlier unrelated surge, and the decision's own volume, bunched by its filed calendar into weeks no closed period approached, queues the later units past the close; the closed record's lag and an annual capacity check both pass, so the placeable count overstates the in-period total wherever the team is small and the units are many.",
-   "architecture": "v1 (heat-pump rebate slots across six co-ops, the crew meter-set queue)",
-   "drawn": "2026-10-10",
-   "fate": "spent 2026-10-10: the determinism judge returned SEND_BACK (binding_constraint, analytical_non_defect): the participation terms' 'an install proceeds only where the feeder has that capacity remaining' read literally fills capped feeders in date order, which moves Uplands from 170 to 200 slots, a competing defensible answer on the main call"
-  },
-  {
-   "domain": "actuarial-science-insurance",
-   "subdomain": "reserving-development-triangles",
-   "objective": "forecasting",
-   "shape": "14",
-   "decision_type": "quantity_figure",
-   "answer_unit": "currency",
-   "gap": [
-    "time"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G16",
-    "G14"
-   ],
-   "gate_g": "forecasting",
-   "driver": "The decisive quantity is a forward total projected from a history of cumulative progress by age in which the units carrying most of the amount began resolving more slowly partway through the record; the share of the amount settled tracks the share of units resolved rather than age, so the history has to be restated at the resolution shares the latest observations show before its age-to-age ratios are carried forward, and carrying them unrestated, or taking them from the latest periods alone, understates the total.",
-   "stump_strategy": "forecast_method_backtest",
-   "architecture": "v3 (Ninebark Mutual motor bodily injury reserve at year end 2026, the paid development restated at the latest closed shares)",
-   "drawn": "2026-10-14",
-   "fate": "spent 2026-10-14: the determinism judge returned NOT_DETERMINISTIC, SEND_BACK (method_or_model_selection, analytical_non_defect, competing_defensible_answer): the reserving basis leaves the method to the actuary, and frequency-severity on paid per closed feature carries $350 million against the restatement's $400 million with nothing shipped selecting between them; the author restored architecture 2"
-  },
-  {
-   "domain": "healthcare-delivery-health-economics",
-   "subdomain": "patient-flow-beds-workforce-optimization",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "allocation_to_total",
-   "answer_unit": "count",
-   "gap": [
-    "population",
-    "objective"
-   ],
-   "pattern": [
-    "C"
-   ],
-   "generators": [
-    "G3",
-    "G11",
-    "G8"
-   ],
-   "gate_g": "decomposition_attribution",
-   "driver": "The decisive quantity is the part of each unit's recorded wait that the offered intervention removes, because the recorded wait fuses the step the intervention replaces with a concurrent step it leaves in place, so only the replaced step's excess over the concurrent one, built by joining separate operational logs, counts; ranking units by the recorded wait, or by the replaced step measured from the same start, credits the units whose concurrent step is slowest.",
-   "stump_strategy": "decomposition_attribution",
-   "architecture": "v2 (re-root after SEND_BACK: winter discharge-to-assess packages across five hospitals)",
-   "drawn": "2026-10-12",
-   "fate": "spent 2026-11-07 at the portal (FAILED_TO_STUMP): both responses filed the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days); the equipment wait running alongside the care wait was a hidden overlap a careful response found by joining the depot's deliveries to the covered patients"
-  },
-  {
-   "domain": "banking-credit-financial-risk",
-   "subdomain": "expected-credit-loss-provisioning",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "ranked_slate_under_cap",
-   "answer_unit": "set_of_items",
-   "gap": [
-    "objective",
-    "population"
-   ],
-   "pattern": [
-    "E"
-   ],
-   "generators": [
-    "G14",
-    "G16",
     "G3"
-   ],
-   "gate_g": "method_or_model_selection",
-   "driver": "The decisive quantity is what preventing one unit's failure removes across a population of units, when some units draw most of their inflow from that unit and in the population's own record failed at a high rate within months of their main payer's failure, so a value read on the unit's own expected loss misses the failures it would set off; the dependence comes from the flows between units and the conditional failure rate from the population's past failures, neither stored in any field.",
-   "stump_strategy": "causal_design",
-   "drawn": "2026-11-07",
-   "architecture": "v4 (Ruahine Bank business support packages, the write-off a package keeps off dependent borrowers)",
-   "fate": "spent 2026-11-08: platform round 1 run 1 98 on the call, run 2 58 off it after computing the dependants and declining to price them (FIX_ASKS); round 2 on the re-sited asks both runs landed Kinloch Engineering and Matai Valley Foods (REDESIGN); the payer dependence was visible in the transactions and the default register"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "pilot_log",
+  "stump_strategy": "causal_design",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "register",
+  "stump_class": "analytical",
+  "analyst_test": "A careful but hurried pass measures the randomised sheds on the 380 interval-metered study homes (0.73 kW a switch, clustered, with a placebo), finds no reach, age or wiring effect there because the study homes hold none, takes the carrier's coverage map, the annual test log and the service work orders at face value for the fleet, and funds none of the six proposals, where the feeder steps show a fringe that hears one page in six, a third of the pre-2016 switches dead and two thirds of the switches at replaced air conditioners unwired.",
+  "domain_test": "Demand response evaluation of direct load control: the reduction a utility can count at its wholesale coincident peak is commands sent times the share received, working and connected, read here from feeder load steps at each paging group's command; swap switches for coupons and there is no paging reach, no feeder step and no coincident-peak demand charge to price a repeater against.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:a randomised dispatch whose receipt no record holds, apportioned from pooled feeder steps",
+  "layer1": [
+    "1-minute feeder SCADA with frozen values, a daylight-saving-free UTC clock and two feeders re-named after a substation rebuild",
+    "a paging encoder log in local time with retried pages",
+    "a switch register with re-keyed premise numbers after the 2021 billing conversion",
+    "a transmitter register and a radio-shop outage log kept by hand",
+    "HVAC rebate records and county mechanical permits matched by address",
+    "monthly drive-by meter reads on billing cycles"
+  ],
+  "stakeholder_role": "energy services manager at a rural electric cooperative preparing the load-management part of the 2027 work plan for the board",
+  "role_family": "programme_officer",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "scada_feeder_1min_2026.csv",
+    "rows": 1255800,
+    "entity": "one feeder minute of load",
+    "grain": "feeder x minute",
+    "source": "synthetic"
   },
-  {
-   "architecture": "v5",
-   "fate": "spent 2026-11-08: platform run 1 landed every graded cell (the memo's V sentence sent it to the record of inspections at default; it fitted the golden's age-and-book model and validated it out of sample)",
-   "driver": "The decisive quantity is what a unit's security fetches if the unit fails, which the record measures by an inspection made at the failure while the forward units carry only a market index rolled forward from an earlier inspection; the security of units that fail falls behind the index by more the longer since that inspection, and the forward units were inspected longer ago than the record's failures mostly were, so the rolled-forward index overstates what the failing units will fetch.",
-   "domain": "banking-credit-financial-risk",
-   "subdomain": "expected-credit-loss-provisioning",
-   "gap": [
-    "objective",
-    "population"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G14",
-    "G6",
-    "G3"
-   ],
-   "gate_g": "method_or_model_selection",
-   "stump_strategy": "population_selection",
-   "shell": null
-  },
-  {
-   "architecture": "v6",
-   "drawn": "2026-11-08",
-   "domain": "energy-systems-utilities",
-   "subdomain": "efficiency-savings-verification",
-   "objective": "experiment-causal",
-   "gap": [
-    "time",
-    "population"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G5",
-    "G16",
-    "G17"
-   ],
-   "gate_g": "decomposition_attribution",
-   "stump_strategy": "causal_design",
-   "decision_type": "designation_set",
-   "driver": "The decisive quantity is the effect of a treatment assigned by lottery, where the units the lottery passed over were reached one area at a time by a second programme that skipped the winners and moved the same outcome for good, so the randomised comparison narrows period by period as if the effect faded; only passed-over units the second programme had not yet reached give the counterfactual, and the effect then decides which options a forward round funds against a cost-per-unit limit.",
-   "driver_concrete": "Haldenau's 2019 retrofit pilot drew its places by lot among the owners who answered the benchmarking notice's offer, so the owners passed over are the natural comparison; but the utility's service team tuned the burners of most of them, district by district from September 2019, and skipped every building with pilot works, so the passed-over buildings' gas use steps down and the measures' savings appear to fade; set against passed-over buildings not yet tuned, the savings hold, and heating optimisation clears the council's cost-per-tonne limit.",
-   "stump": "A competent solver reads the pilot as the randomised trial it was drawn as, measures each measure's saving as the works buildings' weather-normalised gas use against the passed-over buildings' on the notice season, sees the gap narrow every season and averages it or reads it as savings fading, and funds insulation alone in 2026; the step that lands it there is trusting a comparison whose buildings the service team was tuning district by district while it skipped the works buildings, when against passed-over buildings not yet tuned heating optimisation saves about six per cent and clears the limit.",
-   "fate": "spent 2026-11-09 at the platform's preliminary review (sent back for fixes): the funding answer turned on one thing, the service visits in the lottery's passed-over arm (constructed, only in the comparison arm, fixed by one exclusion), and the plan's filed formulas carried every figure past it"
-  },
-  {
-   "architecture": "v7",
-   "drawn": "2026-11-09",
-   "domain": "energy-systems-utilities",
-   "subdomain": "efficiency-savings-verification",
-   "objective": "experiment-causal",
-   "gap": [
-    "population",
-    "time"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G6",
-    "G13",
-    "G17"
-   ],
-   "gate_g": "forecasting",
-   "stump_strategy": "composition_mix",
-   "decision_type": "designation_set",
-   "driver": "The decisive quantities are a randomised effect carried to a forward population and horizon the trial never observed: each option's effect differs by the kind of unit and fades with the treatment's age at rates that differ by option, so the trial's pooled average misstates what the forward round's own units would gain over each option's life, and the round's settled cost needs the late arrivals, which run larger and drop out more, projected by option; different shortcuts fund different options.",
-   "driver_concrete": "Haldenau's 2019 retrofit lottery gives each measure's normal-weather gas saving against the passed-over owners season by season; heating optimisation's saving fades with the works' age, heating controls save almost nothing in the care homes and hotels that made up much of the pilot's controls buildings but few of this year's applicants, and late insulation applications run larger and withdraw more, so the 2026 round funds insulation and controls, not heating optimisation, and the round's settled grant is projected measure by measure.",
-   "stump": "A careful but hurried solver takes each measure's pooled seven-season lottery saving, carries it flat over the measure's life, prices this year's applications at that rate and scales the received grant by the 2019 share in by 12 June: it funds insulation and heating optimisation and not controls and books the round short, because heating optimisation's saving fades, the pilot's controls rate is diluted by round-the-clock buildings, and the late applications run larger and withdraw more.",
-   "fate": "spent 2026-11-09 on the author's platform run (no score pasted, read as not stumped): the run read the lottery as drawn (instrumented on completion), priced each use's saving to this year's applications, carried heating optimisation's fade on its last three seasons and projected the round measure by measure, landing the call at 87, 95 and 139 euro a tonne; it lost only the round's insulation count and heating optimisation's figure, every judgment of the chain being a move a frontier run makes unprompted"
-  },
-  {
-   "domain": "energy-systems-utilities",
-   "subdomain": "efficiency-savings-verification",
-   "objective": "experiment-causal",
-   "gap": [
-    "population",
-    "time"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G2",
-    "G6",
-    "G13"
-   ],
-   "gate_g": "method_or_model_selection",
-   "stump_strategy": "population_selection",
-   "decision_type": "designation_set",
-   "driver": "The decisive quantities are a randomised effect carried to a forward population that chose its treatment knowing what it would gain: each option's effect rises along a property of the unit that the trial's own outcome records do not carry, measurable only from a second record at another grain (an hourly load profile, a roof survey), and the forward units sit far up that property against the trial's units of the same kind, so carrying the trial's effect by kind of unit understates both options that clear the limit and funds neither; carrying one property alone funds only its option. The round's payment is the second judgment the call needs: under a budget for what the round pays, a forward round's payment is the work its contractors can finish by the deadline, measured in the unit the work takes (a roof's area, not the job) off each firm's own completion record, which the same choice made larger this year; every job paid as before, or the work counted in jobs, runs the two options over the budget and funds one.",
-   "driver_concrete": "Haldenau's 2019 retrofit lottery gives each measure's normal-weather gas saving against the passed-over owners; heating controls save with the share of the week a building stands empty (read off the meter operator's 2025 typical weeks, hotels and care homes lived in round the clock told apart from their night dip) and roof insulation with the roof per square metre of floor (the state solar cadastre over the register), this year's controls applicants stand empty 70 per cent of the week against 42 and this year's insulation applicants have 1.13 square metres of roof per floor against 0.79, so priced on their own buildings both clear 120 euro a tonne while each use's pilot saving fails both; heating optimisation's fade fails it on every route.",
-   "stump": "A careful but hurried solver prices this year's applications at each use's pilot saving, faded over the life, and funds nothing (insulation about 132, controls about 129 euro a tonne), because the owners who applied this year chose the measure their building suits: the controls applicants' buildings stand empty far more of the week and the insulation applicants' have far more roof per floor than the pilot's buildings of the same use, and both savings rise along those properties, which only the electricity load profiles and the solar cadastre carry.",
-   "architecture": "v8",
-   "drawn": "2026-11-09",
-   "skeleton": {
-    "decision_form": "allocation_under_budget",
-    "answer_pattern": "naive_set_swaps_members",
-    "lessons": [
-     "transport_effect_modifiers",
-     "self_selection_into_treatment",
-     "instrument_noncompliance",
-     "queue_or_capacity_replay"
+  "forum": "board_of_directors",
+  "forcing_event": "vote_or_meeting",
+  "org_family": "cooperative_or_member_body",
+  "world": {
+    "geography": "United States, Kansas (Cottonwood Draw Electric Cooperative, fictional, south-central plains)",
+    "currency": "USD",
+    "org_type": "rural electric cooperative",
+    "invented_names": [
+      "Cottonwood Draw Electric Cooperative",
+      "Larkin",
+      "Medora Flats",
+      "Halverson",
+      "Pruett",
+      "Kettle Ridge",
+      "Sunflower Basin Power",
+      "TriCounty Paging",
+      "Antelope",
+      "Sandhill",
+      "Ostrander",
+      "Bluff City",
+      "Elm Mills",
+      "Cedar Draw",
+      "Bluestem",
+      "Harlan Bend County"
     ],
-    "mechanisms": [
-     "controls_saving_with_empty_share_of_week",
-     "insulation_saving_with_roof_per_floor",
-     "roofers_pace_limits_completion"
-    ],
-    "detection": [
-     "second_source_at_other_grain"
-    ],
-    "moves": [
-     "instrument_on_assignment",
-     "transport_by_effect_modifiers",
-     "replay_event_by_event"
-    ],
-    "file_roles": [
-     "test_or_trial_register",
-     "primary_record",
-     "second_grain_source",
-     "governing_standard",
-     "quotes_or_costs",
-     "schedule_or_plan",
-     "unused_distractor"
+    "people": [
+      "Peter Mitchell",
+      "Timothy Powell",
+      "Caleb Mclean",
+      "Emily Maldonado",
+      "Alejandra Williams",
+      "Kelsey Mercer",
+      "Jacob Johnson",
+      "James Warren",
+      "Shelly Davis",
+      "Christopher Ortega",
+      "Luke Torres",
+      "Brian Thompson",
+      "Dustin Mcknight",
+      "Bradley Mueller",
+      "Brandon Martinez",
+      "Gregory Preston",
+      "Matthew Malone",
+      "Stephen Ellis",
+      "Derek Smith",
+      "Charles Hammond",
+      "Jason Sanchez",
+      "Ronald Allen"
     ]
-   },
-   "fate": "spent 2026-11-11 at the platform's review (returned): the deciding step was one constructed hidden factor, the roofers' capacity on this year's larger roofs, biting only in insulation and one routine step once named; the runs reproduced the pilot seasons, both per-building transports, the fade, the close counts and every carbon call (runs/review_2026-11-11.md); the holistic audit on the same version had passed it at level 5"
   },
-  {
-   "domain": "energy-systems-utilities",
-   "subdomain": "efficiency-savings-verification",
-   "objective": "experiment-causal",
-   "gap": [
-    "time",
-    "population"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G13",
-    "G17",
-    "G18"
-   ],
-   "gate_g": "method_or_model_selection",
-   "stump_strategy": "causal_design",
-   "decision_type": "designation_set",
-   "driver": "The decisive quantities are an option's effect over a forward life the trial never saw and how sure the trial can be of each option's cost per unit of outcome: in the trial's later periods a programme that has since ended re-applied part of the treatment to every unit and only the treated units held what it gave, so the trial's measured late effect overstates what forward units keep; and the trial was assigned by group, whose units move together, so a range built unit by unit is far too narrow and passes an option the honest range does not. Different shortcuts fund different sets.",
-   "driver_concrete": "Haldenau's 2019 lottery shows heating optimisation's saving levelling at about 3.4 per cent, but from September 2022 to March 2026 the state campaign's heating checks set every taker's heating curve back down and the pilot's balanced works buildings held it while the passed-over owners' systems did not; the works alone keep 1.25 per cent by 2025/26 and the campaign has closed. The pilot was drawn by owner and an owner's facility manager runs all its buildings alike, so controls' range at the owner reaches EUR 158.03 where a building-level range stops at EUR 109.36",
-   "stump": "Heating optimisation's measured seasons carried over its life (EUR 66.35 a tonne) and ranges resampled building by building (controls' upper end EUR 109.36) fund insulation, optimisation and controls; either judgment alone funds a different pair; the golden funds insulation alone.",
-   "answer_shape": "distribution-cut",
-   "weight": "investigation",
-   "chain_signature": [
-    "investigation-loops",
-    "forecasting",
-    "uncertainty",
-    "synthesis",
-    "forecasting",
-    "synthesis"
-   ],
-   "skeleton": {
-    "decision_form": "act_if_interval_clears_line",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-    "lessons": [
-     "forward_window_structure_change",
-     "uncertainty_at_shared_unit",
-     "validation_cannot_see_condition",
-     "concurrent_change_in_comparison",
-     "transport_effect_modifiers",
-     "self_selection_into_treatment"
-    ],
-    "mechanisms": [
-     "campaign_check_held_by_balanced_systems",
-     "owner_facility_management_runs_buildings_alike",
-     "controls_saving_with_empty_share_of_week",
-     "insulation_saving_with_roof_per_floor"
-    ],
-    "detection": [
-     "natural_experiment_in_record",
-     "units_move_together",
-     "second_source_at_other_grain"
-    ],
-    "moves": [
-     "refit_comparison_on_unaffected",
-     "cluster_resample_shared_unit",
-     "transport_by_effect_modifiers",
-     "instrument_on_assignment"
-    ],
-    "file_roles": [
-     "test_or_trial_register",
-     "primary_record",
-     "second_grain_source",
-     "governing_standard",
-     "event_timeline",
-     "reference_register",
-     "unused_distractor"
-    ]
-   },
-   "niche": "a retrofit lottery's measured persistence propped up by a later check campaign, and ranges at the owner the draw used",
-   "shell": {
-    "question form": "which",
-    "second-sentence opener": "the",
-    "deliverable set": "xlsx"
-   },
-   "calibration_form": "other",
-   "role_family": "policy_adviser",
-   "forum": "council_or_assembly",
-   "forcing_event": "vote_or_meeting",
-   "org_family": "local_government",
-   "architecture": "v9",
-   "fate": "landed by the platform run of 2026-11-12 (task7/runs/arch9/run1.md): both deciding judgments were reflexes, an owner-cluster bootstrap because the rules filed the draw by owner and the check campaign separated from the measure's ageing because the heat plan filed it; spent, the world with it"
-  },
-  {
-   "domain": "energy-systems-utilities",
-   "subdomain": "efficiency-savings-verification",
-   "objective": "experiment-causal",
-   "gap": [
-    "population",
-    "time"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G8",
-    "G7",
-    "G6"
-   ],
-   "gate_g": "method_or_model_selection",
-   "stump_strategy": "population_selection",
-   "decision_type": "renew_replace_lapse",
-   "driver": "The decisive quantity is each option's contribution at a few system-wide moments its own trial never sampled: measured on randomised test days in a selected subsample of units, it has to be carried to the moments that set the cost (days chosen by the system's peak, late in runs of hot days, when participants drop out), to next year's participants (an older mix with a new channel's low-availability cohort) and to the full set of units (larger, older homes than the subsample), before it is set against each option's price; each carry alone moves a different option across its line.",
-   "driver_concrete": "Cedar Brake's six thermostat providers are renewed for 2027 only if their 2027 devices' reduction at ERCOT's 4CP intervals, at the transmission rate, beats their quoted price per device: the test-event impacts from the 15-minute research sample have to be carried to the 4CP days (late in heat-wave streaks, where members override and Lumivale's deep, long setback loses most), to each 2027 fleet (Pinecrest Home's growth is a retail-channel cohort often offline), and to the fleet's homes off the appraisal roll (Kitebrook's larger, older homes shed more than the sample's)",
-   "stump": "The research sample's test-event impacts read at the 4CP intervals renew Corvane, Lumivale, Ardena and Pinecrest Home; each correction alone flips one provider (Lumivale out on the peak days' overrides, Pinecrest Home out on its 2027 retail cohort, Kitebrook in on its fleet's homes); the golden renews Corvane, Ardena and Kitebrook.",
-   "answer_shape": "scenarios-flip",
-   "weight": "modeling",
-   "chain_signature": [
+  "deliverables": [
+    "load_management_proposals_2027.csv",
+    "load_management_trial_2026.xlsx",
+    "load_management_2027_board.pptx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "what",
+  "driver": "The decisive quantities are how much of a commanded action each unit actually carries out when no unit-level record of the outcome exists: the outcome shows only as pooled steps at the moments commands go out, and delivery fails for three reasons the organisation's own records each wave through (the command's reach from the senders that were live that day, the unit's hardware since its last test, the unit's connection after its host equipment was replaced), so each failure share is fitted from how the pooled steps move with each class's count and each remedy is priced on the share it would restore; the three records read at face value fund nothing.",
+  "driver_concrete": "Cottonwood Draw funds a load-management proposal when the coincident-peak kW it adds, at USD 88 a kW-year, covers its annualised cost: the 2026 trial's 21,896 feeder steps, apportioned among each paging group's switches by distance to an on-air transmitter of their own paging system that day, by install batch and by a replaced-unit flag, give a fringe that hears 17 pages for every 100 heard near a transmitter, 33 in 100 pre-2016 switches dead and 68 in 100 switches unwired where the air conditioner was replaced, so the Kettle Ridge repeater (250 kW against 185), the Larkin find-and-fix round (505 against 280) and the reconnection round within 14 km (1,402 against 509) are funded and the Halverson fill-in (185 against 280), the Medora Flats round (264 against 401) and the outlying reconnection round (224 against 345) are not.",
+  "stump": "The study homes' 0.73 kW a switch with the coverage map, the test log and the work orders at face value funds none of the six (every repeater adds nothing, the rounds 58, 46, 260 and 99 kW); each record corrected alone still leaves two of the three funded proposals unfunded, the three single losses on three different wrong sets.",
+  "lineage": [
+    {
+      "domain": "nonprofit-grant-making",
+      "subdomain": "giving-strategy-program-funding",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "allocation_to_total",
+      "answer_unit": "count",
+      "gap": [
+        "time",
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none",
+        "C",
+        "E"
+      ],
+      "generators": [
+        "G7",
+        "G8",
+        "G14",
+        "G16"
+      ],
+      "gate_g": "binding_constraint",
+      "driver": "The decisive quantity is how many of the period's placeable units a fixed team can finish before the period closes, because each unit counts only once that team performs one last step for it, the team's spare weekly capacity is visible only as the ceiling it held through an earlier unrelated surge, and the decision's own volume, bunched by its filed calendar into weeks no closed period approached, queues the later units past the close; the closed record's lag and an annual capacity check both pass, so the placeable count overstates the in-period total wherever the team is small and the units are many.",
+      "architecture": "v1 (heat-pump rebate slots across six co-ops, the crew meter-set queue)",
+      "drawn": "2026-10-10",
+      "fate": "spent 2026-10-10: the determinism judge returned SEND_BACK (binding_constraint, analytical_non_defect): the participation terms' 'an install proceeds only where the feeder has that capacity remaining' read literally fills capped feeders in date order, which moves Uplands from 170 to 200 slots, a competing defensible answer on the main call"
+    },
+    {
+      "domain": "actuarial-science-insurance",
+      "subdomain": "reserving-development-triangles",
+      "objective": "forecasting",
+      "shape": "14",
+      "decision_type": "quantity_figure",
+      "answer_unit": "currency",
+      "gap": [
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G16",
+        "G14"
+      ],
+      "gate_g": "forecasting",
+      "driver": "The decisive quantity is a forward total projected from a history of cumulative progress by age in which the units carrying most of the amount began resolving more slowly partway through the record; the share of the amount settled tracks the share of units resolved rather than age, so the history has to be restated at the resolution shares the latest observations show before its age-to-age ratios are carried forward, and carrying them unrestated, or taking them from the latest periods alone, understates the total.",
+      "stump_strategy": "forecast_method_backtest",
+      "architecture": "v3 (Ninebark Mutual motor bodily injury reserve at year end 2026, the paid development restated at the latest closed shares)",
+      "drawn": "2026-10-14",
+      "fate": "spent 2026-10-14: the determinism judge returned NOT_DETERMINISTIC, SEND_BACK (method_or_model_selection, analytical_non_defect, competing_defensible_answer): the reserving basis leaves the method to the actuary, and frequency-severity on paid per closed feature carries $350 million against the restatement's $400 million with nothing shipped selecting between them; the author restored architecture 2"
+    },
+    {
+      "domain": "healthcare-delivery-health-economics",
+      "subdomain": "patient-flow-beds-workforce-optimization",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "allocation_to_total",
+      "answer_unit": "count",
+      "gap": [
+        "population",
+        "objective"
+      ],
+      "pattern": [
+        "C"
+      ],
+      "generators": [
+        "G3",
+        "G11",
+        "G8"
+      ],
+      "gate_g": "decomposition_attribution",
+      "driver": "The decisive quantity is the part of each unit's recorded wait that the offered intervention removes, because the recorded wait fuses the step the intervention replaces with a concurrent step it leaves in place, so only the replaced step's excess over the concurrent one, built by joining separate operational logs, counts; ranking units by the recorded wait, or by the replaced step measured from the same start, credits the units whose concurrent step is slowest.",
+      "stump_strategy": "decomposition_attribution",
+      "architecture": "v2 (re-root after SEND_BACK: winter discharge-to-assess packages across five hospitals)",
+      "drawn": "2026-10-12",
+      "fate": "spent 2026-11-07 at the portal (FAILED_TO_STUMP): both responses filed the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days); the equipment wait running alongside the care wait was a hidden overlap a careful response found by joining the depot's deliveries to the covered patients"
+    },
+    {
+      "domain": "banking-credit-financial-risk",
+      "subdomain": "expected-credit-loss-provisioning",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "ranked_slate_under_cap",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "E"
+      ],
+      "generators": [
+        "G14",
+        "G16",
+        "G3"
+      ],
+      "gate_g": "method_or_model_selection",
+      "driver": "The decisive quantity is what preventing one unit's failure removes across a population of units, when some units draw most of their inflow from that unit and in the population's own record failed at a high rate within months of their main payer's failure, so a value read on the unit's own expected loss misses the failures it would set off; the dependence comes from the flows between units and the conditional failure rate from the population's past failures, neither stored in any field.",
+      "stump_strategy": "causal_design",
+      "drawn": "2026-11-07",
+      "architecture": "v4 (Ruahine Bank business support packages, the write-off a package keeps off dependent borrowers)",
+      "fate": "spent 2026-11-08: platform round 1 run 1 98 on the call, run 2 58 off it after computing the dependants and declining to price them (FIX_ASKS); round 2 on the re-sited asks both runs landed Kinloch Engineering and Matai Valley Foods (REDESIGN); the payer dependence was visible in the transactions and the default register"
+    },
+    {
+      "architecture": "v5",
+      "fate": "spent 2026-11-08: platform run 1 landed every graded cell (the memo's V sentence sent it to the record of inspections at default; it fitted the golden's age-and-book model and validated it out of sample)",
+      "driver": "The decisive quantity is what a unit's security fetches if the unit fails, which the record measures by an inspection made at the failure while the forward units carry only a market index rolled forward from an earlier inspection; the security of units that fail falls behind the index by more the longer since that inspection, and the forward units were inspected longer ago than the record's failures mostly were, so the rolled-forward index overstates what the failing units will fetch.",
+      "domain": "banking-credit-financial-risk",
+      "subdomain": "expected-credit-loss-provisioning",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G14",
+        "G6",
+        "G3"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "population_selection",
+      "shell": null
+    },
+    {
+      "architecture": "v6",
+      "drawn": "2026-11-08",
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G5",
+        "G16",
+        "G17"
+      ],
+      "gate_g": "decomposition_attribution",
+      "stump_strategy": "causal_design",
+      "decision_type": "designation_set",
+      "driver": "The decisive quantity is the effect of a treatment assigned by lottery, where the units the lottery passed over were reached one area at a time by a second programme that skipped the winners and moved the same outcome for good, so the randomised comparison narrows period by period as if the effect faded; only passed-over units the second programme had not yet reached give the counterfactual, and the effect then decides which options a forward round funds against a cost-per-unit limit.",
+      "driver_concrete": "Haldenau's 2019 retrofit pilot drew its places by lot among the owners who answered the benchmarking notice's offer, so the owners passed over are the natural comparison; but the utility's service team tuned the burners of most of them, district by district from September 2019, and skipped every building with pilot works, so the passed-over buildings' gas use steps down and the measures' savings appear to fade; set against passed-over buildings not yet tuned, the savings hold, and heating optimisation clears the council's cost-per-tonne limit.",
+      "stump": "A competent solver reads the pilot as the randomised trial it was drawn as, measures each measure's saving as the works buildings' weather-normalised gas use against the passed-over buildings' on the notice season, sees the gap narrow every season and averages it or reads it as savings fading, and funds insulation alone in 2026; the step that lands it there is trusting a comparison whose buildings the service team was tuning district by district while it skipped the works buildings, when against passed-over buildings not yet tuned heating optimisation saves about six per cent and clears the limit.",
+      "fate": "spent 2026-11-09 at the platform's preliminary review (sent back for fixes): the funding answer turned on one thing, the service visits in the lottery's passed-over arm (constructed, only in the comparison arm, fixed by one exclusion), and the plan's filed formulas carried every figure past it"
+    },
+    {
+      "architecture": "v7",
+      "drawn": "2026-11-09",
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G6",
+        "G13",
+        "G17"
+      ],
+      "gate_g": "forecasting",
+      "stump_strategy": "composition_mix",
+      "decision_type": "designation_set",
+      "driver": "The decisive quantities are a randomised effect carried to a forward population and horizon the trial never observed: each option's effect differs by the kind of unit and fades with the treatment's age at rates that differ by option, so the trial's pooled average misstates what the forward round's own units would gain over each option's life, and the round's settled cost needs the late arrivals, which run larger and drop out more, projected by option; different shortcuts fund different options.",
+      "driver_concrete": "Haldenau's 2019 retrofit lottery gives each measure's normal-weather gas saving against the passed-over owners season by season; heating optimisation's saving fades with the works' age, heating controls save almost nothing in the care homes and hotels that made up much of the pilot's controls buildings but few of this year's applicants, and late insulation applications run larger and withdraw more, so the 2026 round funds insulation and controls, not heating optimisation, and the round's settled grant is projected measure by measure.",
+      "stump": "A careful but hurried solver takes each measure's pooled seven-season lottery saving, carries it flat over the measure's life, prices this year's applications at that rate and scales the received grant by the 2019 share in by 12 June: it funds insulation and heating optimisation and not controls and books the round short, because heating optimisation's saving fades, the pilot's controls rate is diluted by round-the-clock buildings, and the late applications run larger and withdraw more.",
+      "fate": "spent 2026-11-09 on the author's platform run (no score pasted, read as not stumped): the run read the lottery as drawn (instrumented on completion), priced each use's saving to this year's applications, carried heating optimisation's fade on its last three seasons and projected the round measure by measure, landing the call at 87, 95 and 139 euro a tonne; it lost only the round's insulation count and heating optimisation's figure, every judgment of the chain being a move a frontier run makes unprompted"
+    },
+    {
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G2",
+        "G6",
+        "G13"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "population_selection",
+      "decision_type": "designation_set",
+      "driver": "The decisive quantities are a randomised effect carried to a forward population that chose its treatment knowing what it would gain: each option's effect rises along a property of the unit that the trial's own outcome records do not carry, measurable only from a second record at another grain (an hourly load profile, a roof survey), and the forward units sit far up that property against the trial's units of the same kind, so carrying the trial's effect by kind of unit understates both options that clear the limit and funds neither; carrying one property alone funds only its option. The round's payment is the second judgment the call needs: under a budget for what the round pays, a forward round's payment is the work its contractors can finish by the deadline, measured in the unit the work takes (a roof's area, not the job) off each firm's own completion record, which the same choice made larger this year; every job paid as before, or the work counted in jobs, runs the two options over the budget and funds one.",
+      "driver_concrete": "Haldenau's 2019 retrofit lottery gives each measure's normal-weather gas saving against the passed-over owners; heating controls save with the share of the week a building stands empty (read off the meter operator's 2025 typical weeks, hotels and care homes lived in round the clock told apart from their night dip) and roof insulation with the roof per square metre of floor (the state solar cadastre over the register), this year's controls applicants stand empty 70 per cent of the week against 42 and this year's insulation applicants have 1.13 square metres of roof per floor against 0.79, so priced on their own buildings both clear 120 euro a tonne while each use's pilot saving fails both; heating optimisation's fade fails it on every route.",
+      "stump": "A careful but hurried solver prices this year's applications at each use's pilot saving, faded over the life, and funds nothing (insulation about 132, controls about 129 euro a tonne), because the owners who applied this year chose the measure their building suits: the controls applicants' buildings stand empty far more of the week and the insulation applicants' have far more roof per floor than the pilot's buildings of the same use, and both savings rise along those properties, which only the electricity load profiles and the solar cadastre carry.",
+      "architecture": "v8",
+      "drawn": "2026-11-09",
+      "skeleton": {
+        "decision_form": "allocation_under_budget",
+        "answer_pattern": "naive_set_swaps_members",
+        "lessons": [
+          "transport_effect_modifiers",
+          "self_selection_into_treatment",
+          "instrument_noncompliance",
+          "queue_or_capacity_replay"
+        ],
+        "mechanisms": [
+          "controls_saving_with_empty_share_of_week",
+          "insulation_saving_with_roof_per_floor",
+          "roofers_pace_limits_completion"
+        ],
+        "detection": [
+          "second_source_at_other_grain"
+        ],
+        "moves": [
+          "instrument_on_assignment",
+          "transport_by_effect_modifiers",
+          "replay_event_by_event"
+        ],
+        "file_roles": [
+          "test_or_trial_register",
+          "primary_record",
+          "second_grain_source",
+          "governing_standard",
+          "quotes_or_costs",
+          "schedule_or_plan",
+          "unused_distractor"
+        ]
+      },
+      "fate": "spent 2026-11-11 at the platform's review (returned): the deciding step was one constructed hidden factor, the roofers' capacity on this year's larger roofs, biting only in insulation and one routine step once named; the runs reproduced the pilot seasons, both per-building transports, the fade, the close counts and every carbon call (runs/review_2026-11-11.md); the holistic audit on the same version had passed it at level 5"
+    },
+    {
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G13",
+        "G17",
+        "G18"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "causal_design",
+      "decision_type": "designation_set",
+      "driver": "The decisive quantities are an option's effect over a forward life the trial never saw and how sure the trial can be of each option's cost per unit of outcome: in the trial's later periods a programme that has since ended re-applied part of the treatment to every unit and only the treated units held what it gave, so the trial's measured late effect overstates what forward units keep; and the trial was assigned by group, whose units move together, so a range built unit by unit is far too narrow and passes an option the honest range does not. Different shortcuts fund different sets.",
+      "driver_concrete": "Haldenau's 2019 lottery shows heating optimisation's saving levelling at about 3.4 per cent, but from September 2022 to March 2026 the state campaign's heating checks set every taker's heating curve back down and the pilot's balanced works buildings held it while the passed-over owners' systems did not; the works alone keep 1.25 per cent by 2025/26 and the campaign has closed. The pilot was drawn by owner and an owner's facility manager runs all its buildings alike, so controls' range at the owner reaches EUR 158.03 where a building-level range stops at EUR 109.36",
+      "stump": "Heating optimisation's measured seasons carried over its life (EUR 66.35 a tonne) and ranges resampled building by building (controls' upper end EUR 109.36) fund insulation, optimisation and controls; either judgment alone funds a different pair; the golden funds insulation alone.",
+      "answer_shape": "distribution-cut",
+      "weight": "investigation",
+      "chain_signature": [
+        "investigation-loops",
+        "forecasting",
+        "uncertainty",
+        "synthesis",
+        "forecasting",
+        "synthesis"
+      ],
+      "skeleton": {
+        "decision_form": "act_if_interval_clears_line",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "forward_window_structure_change",
+          "uncertainty_at_shared_unit",
+          "validation_cannot_see_condition",
+          "concurrent_change_in_comparison",
+          "transport_effect_modifiers",
+          "self_selection_into_treatment"
+        ],
+        "mechanisms": [
+          "campaign_check_held_by_balanced_systems",
+          "owner_facility_management_runs_buildings_alike",
+          "controls_saving_with_empty_share_of_week",
+          "insulation_saving_with_roof_per_floor"
+        ],
+        "detection": [
+          "natural_experiment_in_record",
+          "units_move_together",
+          "second_source_at_other_grain"
+        ],
+        "moves": [
+          "refit_comparison_on_unaffected",
+          "cluster_resample_shared_unit",
+          "transport_by_effect_modifiers",
+          "instrument_on_assignment"
+        ],
+        "file_roles": [
+          "test_or_trial_register",
+          "primary_record",
+          "second_grain_source",
+          "governing_standard",
+          "event_timeline",
+          "reference_register",
+          "unused_distractor"
+        ]
+      },
+      "niche": "a retrofit lottery's measured persistence propped up by a later check campaign, and ranges at the owner the draw used",
+      "shell": {
+        "question form": "which",
+        "second-sentence opener": "the",
+        "deliverable set": "xlsx"
+      },
+      "calibration_form": "other",
+      "role_family": "policy_adviser",
+      "forum": "council_or_assembly",
+      "forcing_event": "vote_or_meeting",
+      "org_family": "local_government",
+      "architecture": "v9",
+      "fate": "landed by the platform run of 2026-11-12 (task7/runs/arch9/run1.md): both deciding judgments were reflexes, an owner-cluster bootstrap because the rules filed the draw by owner and the check campaign separated from the measure's ageing because the heat plan filed it; spent, the world with it"
+    },
+    {
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G8",
+        "G7",
+        "G6"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "population_selection",
+      "decision_type": "renew_replace_lapse",
+      "driver": "The decisive quantity is each option's contribution at a few system-wide moments its own trial never sampled: measured on randomised test days in a selected subsample of units, it has to be carried to the moments that set the cost (days chosen by the system's peak, late in runs of hot days, when participants drop out), to next year's participants (an older mix with a new channel's low-availability cohort) and to the full set of units (larger, older homes than the subsample), before it is set against each option's price; each carry alone moves a different option across its line.",
+      "driver_concrete": "Cedar Brake's six thermostat providers are renewed for 2027 only if their 2027 devices' reduction at ERCOT's 4CP intervals, at the transmission rate, beats their quoted price per device: the test-event impacts from the 15-minute research sample have to be carried to the 4CP days (late in heat-wave streaks, where members override and Lumivale's deep, long setback loses most), to each 2027 fleet (Pinecrest Home's growth is a retail-channel cohort often offline), and to the fleet's homes off the appraisal roll (Kitebrook's larger, older homes shed more than the sample's)",
+      "stump": "The research sample's test-event impacts read at the 4CP intervals renew Corvane, Lumivale, Ardena and Pinecrest Home; each correction alone flips one provider (Lumivale out on the peak days' overrides, Pinecrest Home out on its 2027 retail cohort, Kitebrook in on its fleet's homes); the golden renews Corvane, Ardena and Kitebrook.",
+      "answer_shape": "scenarios-flip",
+      "weight": "modeling",
+      "chain_signature": [
+        "causal-reasoning",
+        "investigation-loops",
+        "forecasting",
+        "forecasting",
+        "modeling",
+        "synthesis",
+        "synthesis",
+        "synthesis"
+      ],
+      "skeleton": {
+        "decision_form": "set_over_threshold",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "pilot_unrepresentative_selection",
+          "target_subset_selected_by_score",
+          "vintage_or_cohort_drift",
+          "rebound_after_window"
+        ],
+        "mechanisms": [
+          "members_override_late_in_heat_wave_streaks",
+          "retail_channel_devices_offline_and_overriding",
+          "ac_load_set_by_home_size_and_age",
+          "snapback_after_event_window"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "selection_rule_in_the_record",
+          "naive_ignores_what_it_should_depend_on"
+        ],
+        "moves": [
+          "transport_by_effect_modifiers",
+          "per_cohort_curves",
+          "stratify_by_mix_and_reweight_to_target",
+          "measure_response_shape_from_events"
+        ],
+        "file_roles": [
+          "test_or_trial_register",
+          "primary_record",
+          "second_grain_source",
+          "frame_or_roster",
+          "reference_register",
+          "governing_standard",
+          "quotes_or_costs",
+          "event_timeline",
+          "exogenous_long_record",
+          "unused_distractor"
+        ]
+      },
+      "niche": "thermostat demand-response providers renewed on their next-summer fleets' reduction at ERCOT's four coincident peaks",
+      "shell": {
+        "question form": "which",
+        "second-sentence opener": "send",
+        "deliverable set": "docx+xlsx"
+      },
+      "calibration_form": "gold_standard_subsample",
+      "role_family": "programme_officer",
+      "forum": "board_of_directors",
+      "forcing_event": "purchase_order_or_contract",
+      "org_family": "cooperative_or_member_body",
+      "architecture": "v10",
+      "fate": "spent 2026-11-12 before upload: READY at 03:15 (1ec6c72), the client's overused-strategies page filed at 09:37 the same day closes all three deciding carries (the 4CP days late in heat waves is 'Repeated exposure behaves differently from a one-off', whose example is smart-thermostat demand response fading over consecutive hot event days; the 2027 retail cohort and the fleet's homes are 'The pooled effect does not transfer to a target with a different mix'), so the call is a stack of closed lessons; the world goes with it"
+    },
+    {
+      "domain": "energy-systems-utilities",
+      "subdomain": "tariff-demand-response-evaluation",
+      "objective": "experiment-causal",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G2",
+        "G16"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "causal_design",
+      "decision_type": "pick_one_of_n",
+      "driver": "The decisive quantity is each design's effect on the highest load a shared capacity sees over a season: a randomised per-unit effect, measured as an average profile, has to be replayed unit by unit and night by night on each shared resource, because the season's maximum of a few units' blocks depends on how often they coincide, which the average hides; the untested design is replayed on the recorded windows, where some nights force overlaps, and the record's coarser grain is brought to the limit's own by the planning standard's filed factor.",
+      "driver_concrete": "Hollins Creek's board sets the EV Overnight rate's 2027 default at the lowest cost of Quillpoint's fee plus the transformers each design would leave over 120 per cent of nameplate on their highest 15-minute load in a summer like 2026: the pilot's randomised halves show random start taking about 2.6 kW per charger off 23:00 to 23:15, but replayed night by night random start still leaves most of the own-schedule transformers over, coordination leaves the few its forced overlaps put over, and the members' own schedules are rebuilt from the managed half's own timers.",
+      "stump": "The pilot's average managed night times each transformer's chargers, coordination as one charger at a time and own schedules from the 2026 loads as metered file Stagger with 2 transformers over; replayed night by night Stagger leaves 29.7 transformers over, Sequence's own rule leaves 13 (one at a time would say 3), and own schedules restored leave 53 where the 2026 meters show 44.",
+      "skeleton": {
+        "decision_form": "pick_one_of_few_options",
+        "answer_pattern": "no_single_correction_clears",
+        "lessons": [
+          "non_additive_aggregation",
+          "queue_or_capacity_replay",
+          "device_setting_replay"
+        ],
+        "mechanisms": [
+          "off_peak_timers_synchronise_chargers_at_23_00",
+          "random_starts_still_coincide_on_some_nights",
+          "coordination_forced_to_overlap_on_heavy_nights",
+          "within_hour_peaks_above_hourly_reads",
+          "pilot_halves_mixed_on_each_transformer"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "naive_ignores_what_it_should_depend_on",
+          "document_defines_estimand"
+        ],
+        "moves": [
+          "compute_on_joint_path",
+          "replay_event_by_event",
+          "simulate_with_fitted_inputs",
+          "impute_by_model_at_own_drivers"
+        ],
+        "file_roles": [
+          "test_or_trial_register",
+          "primary_record",
+          "second_grain_source",
+          "frame_or_roster",
+          "crosswalk_or_migration_map",
+          "changeover_note",
+          "reference_register",
+          "governing_standard",
+          "quotes_or_costs",
+          "event_timeline",
+          "exogenous_long_record",
+          "unused_distractor"
+        ]
+      },
+      "shell": {
+        "question form": "whether",
+        "second-sentence opener": "a",
+        "deliverable set": "csv+docx"
+      },
+      "answer_shape": "scenarios-flip",
+      "weight": "hard-to-measure",
+      "architecture": "v11 (Hollins Creek's EV Overnight charging default for 2027, Quillpoint Stagger against Sequence on each transformer's summer peak)",
+      "fate": "landed by the platform run of 2026-11-13 (task7/runs/arch11/run1.md): the night-by-night Stagger replay a reflex under EV-4 4.3, Sequence's rule written in the proposal; retired by the author's word for a new world"
+    },
+    {
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "gap": [
+        "objective",
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G13",
+        "G2",
+        "G16"
+      ],
+      "gate_g": "decomposition_attribution",
+      "stump_strategy": "causal_design",
+      "decision_type": "designation_set",
+      "driver": "The decisive quantity is each unit's yearly saving under an intervention a randomized trial measured on a few units in two seasons: the measured response has to be carried to each untested unit through its own makeup and through every hour of the year with the part that recovers itself given back, and netted of a loss that rises as the square of the current; each carry alone moves a different set of units across the cost line.",
+      "driver_concrete": "Platte Ridge funds VO on a feeder when its yearly energy saving at the substation breaker, valued at USD 48 a MWh times 9.4, covers its capital-plan cost: the 2026 trial read on the regulators' achieved volts gives 0.70 percent per percent, carried to each feeder by its non-thermostatic share from its own load against the weather, the survey and the load research (water heaters and resistive heat give their energy back), at the volts its far end allows, less the rise in its line losses from current squared fitted on the head-metered feeders",
+      "stump": "The trial feeders' average carried to every feeder flat through the year, with the report's 6.1 percent added for losses, funds 17 feeders (ASH-113, ASH-219, CDB-116, GBR-219, HOL-219 wrong); each correction alone still leaves four or five feeders wrong; all three give the 12",
+      "answer_shape": "flagged-set",
+      "weight": "hard-to-measure",
+      "chain_signature": [
+        "assembly-reconciliation",
+        "causal-reasoning",
+        "missingness-measurement",
+        "modeling",
+        "forecasting",
+        "decomposition-attribution",
+        "forecasting",
+        "synthesis",
+        "synthesis"
+      ],
+      "skeleton": {
+        "decision_form": "set_over_threshold",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "latent_structure_estimation",
+          "cancellation_of_offsetting_effects",
+          "nonlinear_functional_of_path"
+        ],
+        "mechanisms": [
+          "thermostatic_load_recovers_its_energy",
+          "load_makeup_differs_by_feeder",
+          "constant_power_load_draws_more_current_at_lower_voltage",
+          "far_end_service_floor_caps_reduction",
+          "pilot_regulators_left_in_local_mode_on_on_days"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "naive_ignores_what_it_should_depend_on",
+          "conservation_residual_sign",
+          "document_defines_estimand"
+        ],
+        "moves": [
+          "impute_by_model_at_own_drivers",
+          "simulate_with_fitted_inputs",
+          "compute_on_joint_path"
+        ],
+        "file_roles": [
+          "test_or_trial_register",
+          "primary_record",
+          "second_grain_source",
+          "panel_or_survey_sample",
+          "reference_register",
+          "governing_standard",
+          "quotes_or_costs",
+          "exogenous_long_record",
+          "incumbent_figure_or_method",
+          "unused_distractor"
+        ]
+      },
+      "niche": "a conservation voltage reduction trial's measured energy response carried to every feeder and hour of a year, at the volts each feeder's far end allows and net of its own line losses, against each feeder's capital-plan cost",
+      "shell": {
+        "question form": "where",
+        "second-sentence opener": "a",
+        "deliverable set": "docx+xlsx"
+      },
+      "calibration_form": "other",
+      "role_family": "capacity_planner",
+      "forum": "board_of_directors",
+      "forcing_event": "launch_or_rollout",
+      "org_family": "utility_or_infrastructure",
+      "architecture": "v12 (Platte Ridge Public Power District's 2027 voltage optimization capital program, a randomised day on/off trial carried to 24 feeders)",
+      "fate": "spent 2026-11-13 at the platform's holistic audit of READY b75d025 (never uploaded): the trial-to-year transport was unpinned (10 or 12 feeders across reasonable variants, the golden's 58 F and 68 F degree bases held only by the generator) and the run did the achieved-dose IV, the thermostatic transport, the hourly far-end headroom and the current-squared losses by reflex (R67 to R70); retired on the author's word the same day, un-retired by the author on 2026-11-25 for architecture 13"
+    }
+  ],
+  "lineage_shells": [
+    {
+      "question form": "whether",
+      "second-sentence opener": "the",
+      "rounding opener": "packages",
+      "deliverable set": "svg+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "that",
+      "rounding opener": "write",
+      "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "counting",
+      "rounding opener": "round",
+      "deliverable set": "csv+pptx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "see",
+      "rounding opener": "savings",
+      "deliverable set": "xlsx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "i",
+      "rounding opener": "",
+      "deliverable set": "xlsx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "the",
+      "deliverable set": "xlsx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "send",
+      "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "a",
+      "deliverable set": "csv+docx"
+    },
+    {
+      "question form": "where",
+      "second-sentence opener": "a",
+      "deliverable set": "docx+xlsx"
+    }
+  ],
+  "notes": "architecture 13 (2026-11-25): a new world after the author un-retired the slot. Three deciding judgments, each an observation-process reading the cooperative's own record waves through and each fitted from the pooled feeder steps: commands sent against commands received (instrument_noncompliance, with the on-air transmitter set rebuilt per event day from the dated outage log, time_varying_membership), the working share by install batch that no record holds (latent_structure_estimation) and the pool apportioned between premises with and without a replaced unit (unlabelled_pool_apportioned_by_varying_mix). None is on the client's closed page of 2026-11-21: no checked sample hands over a share, no gross-up from an independent source exists, and the study homes hold none of the three conditions. stump_strategy causal_design is the honest vocabulary key for noncompliance in a randomised dispatch; calibration_form pilot_log is the dispatch trial's own log.",
+  "answer_shape": "scenarios-flip",
+  "weight": "attribution",
+  "chain_signature": [
     "causal-reasoning",
-    "investigation-loops",
-    "forecasting",
-    "forecasting",
     "modeling",
-    "synthesis",
-    "synthesis",
-    "synthesis"
-   ],
-   "skeleton": {
-    "decision_form": "set_over_threshold",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-    "lessons": [
-     "pilot_unrepresentative_selection",
-     "target_subset_selected_by_score",
-     "vintage_or_cohort_drift",
-     "rebound_after_window"
-    ],
-    "mechanisms": [
-     "members_override_late_in_heat_wave_streaks",
-     "retail_channel_devices_offline_and_overriding",
-     "ac_load_set_by_home_size_and_age",
-     "snapback_after_event_window"
-    ],
-    "detection": [
-     "second_source_at_other_grain",
-     "selection_rule_in_the_record",
-     "naive_ignores_what_it_should_depend_on"
-    ],
-    "moves": [
-     "transport_by_effect_modifiers",
-     "per_cohort_curves",
-     "stratify_by_mix_and_reweight_to_target",
-     "measure_response_shape_from_events"
-    ],
-    "file_roles": [
-     "test_or_trial_register",
-     "primary_record",
-     "second_grain_source",
-     "frame_or_roster",
-     "reference_register",
-     "governing_standard",
-     "quotes_or_costs",
-     "event_timeline",
-     "exogenous_long_record",
-     "unused_distractor"
-    ]
-   },
-   "niche": "thermostat demand-response providers renewed on their next-summer fleets' reduction at ERCOT's four coincident peaks",
-   "shell": {
-    "question form": "which",
-    "second-sentence opener": "send",
-    "deliverable set": "docx+xlsx"
-   },
-   "calibration_form": "gold_standard_subsample",
-   "role_family": "programme_officer",
-   "forum": "board_of_directors",
-   "forcing_event": "purchase_order_or_contract",
-   "org_family": "cooperative_or_member_body",
-   "architecture": "v10",
-   "fate": "spent 2026-11-12 before upload: READY at 03:15 (1ec6c72), the client's overused-strategies page filed at 09:37 the same day closes all three deciding carries (the 4CP days late in heat waves is 'Repeated exposure behaves differently from a one-off', whose example is smart-thermostat demand response fading over consecutive hot event days; the 2027 retail cohort and the fleet's homes are 'The pooled effect does not transfer to a target with a different mix'), so the call is a stack of closed lessons; the world goes with it"
-  },
-  {
-   "domain": "energy-systems-utilities",
-   "subdomain": "tariff-demand-response-evaluation",
-   "objective": "experiment-causal",
-   "gap": [
-    "objective",
-    "population"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G2",
-    "G16"
-   ],
-   "gate_g": "method_or_model_selection",
-   "stump_strategy": "causal_design",
-   "decision_type": "pick_one_of_n",
-   "driver": "The decisive quantity is each design's effect on the highest load a shared capacity sees over a season: a randomised per-unit effect, measured as an average profile, has to be replayed unit by unit and night by night on each shared resource, because the season's maximum of a few units' blocks depends on how often they coincide, which the average hides; the untested design is replayed on the recorded windows, where some nights force overlaps, and the record's coarser grain is brought to the limit's own by the planning standard's filed factor.",
-   "driver_concrete": "Hollins Creek's board sets the EV Overnight rate's 2027 default at the lowest cost of Quillpoint's fee plus the transformers each design would leave over 120 per cent of nameplate on their highest 15-minute load in a summer like 2026: the pilot's randomised halves show random start taking about 2.6 kW per charger off 23:00 to 23:15, but replayed night by night random start still leaves most of the own-schedule transformers over, coordination leaves the few its forced overlaps put over, and the members' own schedules are rebuilt from the managed half's own timers.",
-   "stump": "The pilot's average managed night times each transformer's chargers, coordination as one charger at a time and own schedules from the 2026 loads as metered file Stagger with 2 transformers over; replayed night by night Stagger leaves 29.7 transformers over, Sequence's own rule leaves 13 (one at a time would say 3), and own schedules restored leave 53 where the 2026 meters show 44.",
-   "skeleton": {
-    "decision_form": "pick_one_of_few_options",
-    "answer_pattern": "no_single_correction_clears",
-    "lessons": [
-     "non_additive_aggregation",
-     "queue_or_capacity_replay",
-     "device_setting_replay"
-    ],
-    "mechanisms": [
-     "off_peak_timers_synchronise_chargers_at_23_00",
-     "random_starts_still_coincide_on_some_nights",
-     "coordination_forced_to_overlap_on_heavy_nights",
-     "within_hour_peaks_above_hourly_reads",
-     "pilot_halves_mixed_on_each_transformer"
-    ],
-    "detection": [
-     "second_source_at_other_grain",
-     "naive_ignores_what_it_should_depend_on",
-     "document_defines_estimand"
-    ],
-    "moves": [
-     "compute_on_joint_path",
-     "replay_event_by_event",
-     "simulate_with_fitted_inputs",
-     "impute_by_model_at_own_drivers"
-    ],
-    "file_roles": [
-     "test_or_trial_register",
-     "primary_record",
-     "second_grain_source",
-     "frame_or_roster",
-     "crosswalk_or_migration_map",
-     "changeover_note",
-     "reference_register",
-     "governing_standard",
-     "quotes_or_costs",
-     "event_timeline",
-     "exogenous_long_record",
-     "unused_distractor"
-    ]
-   },
-   "shell": {
-    "question form": "whether",
-    "second-sentence opener": "a",
-    "deliverable set": "csv+docx"
-   },
-   "answer_shape": "scenarios-flip",
-   "weight": "hard-to-measure",
-   "architecture": "v11 (Hollins Creek's EV Overnight charging default for 2027, Quillpoint Stagger against Sequence on each transformer's summer peak)",
-   "fate": "landed by the platform run of 2026-11-13 (task7/runs/arch11/run1.md): the night-by-night Stagger replay a reflex under EV-4 4.3, Sequence's rule written in the proposal; retired by the author's word for a new world"
-  },
-  {
-   "domain": "energy-systems-utilities",
-   "subdomain": "efficiency-savings-verification",
-   "objective": "experiment-causal",
-   "gap": [
-    "objective",
-    "population",
-    "time"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G13",
-    "G2",
-    "G16"
-   ],
-   "gate_g": "decomposition_attribution",
-   "stump_strategy": "causal_design",
-   "decision_type": "designation_set",
-   "driver": "The decisive quantity is each unit's yearly saving under an intervention a randomized trial measured on a few units in two seasons: the measured response has to be carried to each untested unit through its own makeup and through every hour of the year with the part that recovers itself given back, and netted of a loss that rises as the square of the current; each carry alone moves a different set of units across the cost line.",
-   "driver_concrete": "Platte Ridge funds VO on a feeder when its yearly energy saving at the substation breaker, valued at USD 48 a MWh times 9.4, covers its capital-plan cost: the 2026 trial read on the regulators' achieved volts gives 0.70 percent per percent, carried to each feeder by its non-thermostatic share from its own load against the weather, the survey and the load research (water heaters and resistive heat give their energy back), at the volts its far end allows, less the rise in its line losses from current squared fitted on the head-metered feeders",
-   "stump": "The trial feeders' average carried to every feeder flat through the year, with the report's 6.1 percent added for losses, funds 17 feeders (ASH-113, ASH-219, CDB-116, GBR-219, HOL-219 wrong); each correction alone still leaves four or five feeders wrong; all three give the 12",
-   "answer_shape": "flagged-set",
-   "weight": "hard-to-measure",
-   "chain_signature": [
-    "assembly-reconciliation",
-    "causal-reasoning",
     "missingness-measurement",
-    "modeling",
-    "forecasting",
     "decomposition-attribution",
     "forecasting",
     "synthesis",
     "synthesis"
-   ],
-   "skeleton": {
+  ],
+  "results": "R1 the share of shed commands lost at switches more than 20 km from an on-air transmitter of their own system; R2 the share of pre-2016 switches that no longer shed; R3 the share of switches left unwired where the air conditioner was replaced; R4 the bridge from the kW the fleet could take off to the kW it does (missed commands, failed switches, unwired switches); R5 the coincident-peak kW each of the six proposals adds in 2027 against its break-even; R6 the funded plan's kW and cost per kW; R7 the proposals funded",
+  "skeleton": {
     "decision_form": "set_over_threshold",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-     "latent_structure_estimation",
-     "cancellation_of_offsetting_effects",
-     "nonlinear_functional_of_path"
+      "instrument_noncompliance",
+      "unlabelled_pool_apportioned_by_varying_mix",
+      "latent_structure_estimation",
+      "time_varying_membership"
     ],
     "mechanisms": [
-     "thermostatic_load_recovers_its_energy",
-     "load_makeup_differs_by_feeder",
-     "constant_power_load_draws_more_current_at_lower_voltage",
-     "far_end_service_floor_caps_reduction",
-     "pilot_regulators_left_in_local_mode_on_on_days"
+      "one_way_page_reception_falls_with_distance_to_own_system_transmitter",
+      "transmitters_off_air_or_commissioned_during_the_trial",
+      "switch_hardware_fails_with_install_batch_age",
+      "switch_left_unwired_when_the_air_conditioner_is_replaced",
+      "feeder_load_steps_at_each_paging_group_command"
     ],
     "detection": [
-     "second_source_at_other_grain",
-     "naive_ignores_what_it_should_depend_on",
-     "conservation_residual_sign",
-     "document_defines_estimand"
+      "natural_experiment_in_record",
+      "second_source_at_other_grain",
+      "naive_ignores_what_it_should_depend_on",
+      "split_half_replication"
     ],
     "moves": [
-     "impute_by_model_at_own_drivers",
-     "simulate_with_fitted_inputs",
-     "compute_on_joint_path"
+      "source_rates_fitted_to_pool_totals",
+      "rebuild_membership_from_operations_log",
+      "em_latent_fit",
+      "bridge_by_contribution",
+      "variant_sweep_holds_call"
     ],
     "file_roles": [
-     "test_or_trial_register",
-     "primary_record",
-     "second_grain_source",
-     "panel_or_survey_sample",
-     "reference_register",
-     "governing_standard",
-     "quotes_or_costs",
-     "exogenous_long_record",
-     "incumbent_figure_or_method",
-     "unused_distractor"
+      "test_or_trial_register",
+      "primary_record",
+      "reference_register",
+      "second_grain_source",
+      "panel_or_survey_sample",
+      "event_timeline",
+      "quotes_or_costs",
+      "incumbent_figure_or_method",
+      "governing_standard",
+      "unused_distractor"
     ]
-   },
-   "niche": "a conservation voltage reduction trial's measured energy response carried to every feeder and hour of a year, at the volts each feeder's far end allows and net of its own line losses, against each feeder's capital-plan cost",
-   "shell": {
-    "question form": "where",
-    "second-sentence opener": "a",
-    "deliverable set": "docx+xlsx"
-   },
-   "calibration_form": "other",
-   "role_family": "capacity_planner",
-   "forum": "board_of_directors",
-   "forcing_event": "launch_or_rollout",
-   "org_family": "utility_or_infrastructure",
-   "architecture": "v12 (Platte Ridge Public Power District's 2027 voltage optimization capital program, a randomised day on/off trial carried to 24 feeders)",
-   "fate": "spent 2026-11-13 at the platform's holistic audit of READY b75d025 (never uploaded): the trial-to-year transport was unpinned (10 or 12 feeders across reasonable variants, the golden's 58 F and 68 F degree bases held only by the generator) and the run did the achieved-dose IV, the thermostatic transport, the hourly far-end headroom and the current-squared losses by reflex (R67 to R70); retired on the author's word the same day, un-retired by the author on 2026-11-25 for architecture 13"
+  },
+  "one_fact_test": "'A one-way switch far from an on-air transmitter of its own paging system misses most pages' rescues R1 and the two repeater figures, 2 of 7 results",
+  "strategy_label": "UNTESTED",
+  "differentiation": {
+    "task6": "task6 v7 rebuilds each service's latency error budget from spans another service's sampler kept, by inverse inclusion weights and dated causes; task7 v13 has no unit-level outcome at all and apportions the feeder load steps of a randomised shed among switch classes (reach to an on-air transmitter, install batch, replaced air conditioner) to price five repair proposals at a wholesale peak",
+    "task13": "task13 conforms a 69 kV fault register and allots crew-days; task7 v13 measures what a load-control dispatch delivered and prices proposals against a demand charge",
+    "task26": "task26 schedules substation relief from conformed loads; task7 v13 is a randomised dispatch trial's delivery split into three causes of non-delivery",
+    "task22": "task22 is a gas district balance for a leak programme; task7 v13 reads shed commands as feeder steps"
+  },
+  "registered": "2026-11-25T19:35:20Z",
+  "shell": {
+    "question form": "what",
+    "second-sentence opener": "our",
+    "deliverable set": "csv+pptx+xlsx"
   }
- ],
- "lineage_shells": [
-  {
-   "question form": "whether",
-   "second-sentence opener": "the",
-   "rounding opener": "packages",
-   "deliverable set": "svg+xlsx"
-  },
-  {
-   "question form": "how-much",
-   "second-sentence opener": "that",
-   "rounding opener": "write",
-   "deliverable set": "docx+xlsx"
-  },
-  {
-   "question form": "how-much",
-   "second-sentence opener": "counting",
-   "rounding opener": "round",
-   "deliverable set": "csv+pptx"
-  },
-  {
-   "question form": "which",
-   "second-sentence opener": "see",
-   "rounding opener": "savings",
-   "deliverable set": "xlsx"
-  },
-  {
-   "question form": "which",
-   "second-sentence opener": "i",
-   "rounding opener": "",
-   "deliverable set": "xlsx"
-  },
-  {
-   "question form": "which",
-   "second-sentence opener": "the",
-   "deliverable set": "xlsx"
-  },
-  {
-   "question form": "which",
-   "second-sentence opener": "send",
-   "deliverable set": "docx+xlsx"
-  },
-  {
-   "question form": "whether",
-   "second-sentence opener": "a",
-   "deliverable set": "csv+docx"
-  },
-  {
-   "question form": "where",
-   "second-sentence opener": "a",
-   "deliverable set": "docx+xlsx"
-  }
- ],
- "notes": "architecture 13 (2026-11-25): a new world after the author un-retired the slot. Three deciding judgments, each an observation-process reading the cooperative's own record waves through and each fitted from the pooled feeder steps: commands sent against commands received (instrument_noncompliance, with the on-air transmitter set rebuilt per event day from the dated outage log, time_varying_membership), the working share by install batch that no record holds (latent_structure_estimation) and the pool apportioned between premises with and without a replaced unit (unlabelled_pool_apportioned_by_varying_mix). None is on the client's closed page of 2026-11-21: no checked sample hands over a share, no gross-up from an independent source exists, and the study homes hold none of the three conditions. stump_strategy causal_design is the honest vocabulary key for noncompliance in a randomised dispatch; calibration_form pilot_log is the dispatch trial's own log.",
- "answer_shape": "scenarios-flip",
- "weight": "attribution",
- "chain_signature": [
-  "causal-reasoning",
-  "modeling",
-  "missingness-measurement",
-  "decomposition-attribution",
-  "forecasting",
-  "synthesis",
-  "synthesis"
- ],
- "results": "R1 the share of shed commands lost at switches more than 20 km from an on-air transmitter of their own system; R2 the share of pre-2016 switches that no longer shed; R3 the share of switches left unwired where the air conditioner was replaced; R4 the bridge from the kW the fleet could take off to the kW it does (missed commands, failed switches, unwired switches); R5 the coincident-peak kW each of the six proposals adds in 2027 against its break-even; R6 the funded plan's kW and cost per kW; R7 the proposals funded",
- "skeleton": {
-  "decision_form": "set_over_threshold",
-  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-  "lessons": [
-   "instrument_noncompliance",
-   "unlabelled_pool_apportioned_by_varying_mix",
-   "latent_structure_estimation",
-   "time_varying_membership"
-  ],
-  "mechanisms": [
-   "one_way_page_reception_falls_with_distance_to_own_system_transmitter",
-   "transmitters_off_air_or_commissioned_during_the_trial",
-   "switch_hardware_fails_with_install_batch_age",
-   "switch_left_unwired_when_the_air_conditioner_is_replaced",
-   "feeder_load_steps_at_each_paging_group_command"
-  ],
-  "detection": [
-   "natural_experiment_in_record",
-   "second_source_at_other_grain",
-   "naive_ignores_what_it_should_depend_on",
-   "split_half_replication"
-  ],
-  "moves": [
-   "source_rates_fitted_to_pool_totals",
-   "rebuild_membership_from_operations_log",
-   "em_latent_fit",
-   "bridge_by_contribution",
-   "variant_sweep_holds_call"
-  ],
-  "file_roles": [
-   "test_or_trial_register",
-   "primary_record",
-   "reference_register",
-   "second_grain_source",
-   "panel_or_survey_sample",
-   "event_timeline",
-   "quotes_or_costs",
-   "incumbent_figure_or_method",
-   "governing_standard",
-   "unused_distractor"
-  ]
- },
- "one_fact_test": "'A one-way switch far from an on-air transmitter of its own paging system misses most pages' rescues R1 and the two repeater figures, 2 of 7 results",
- "strategy_label": "UNTESTED",
- "differentiation": {
-  "task6": "task6 v7 rebuilds each service's latency error budget from spans another service's sampler kept, by inverse inclusion weights and dated causes; task7 v13 has no unit-level outcome at all and apportions the feeder load steps of a randomised shed among switch classes (reach to an on-air transmitter, install batch, replaced air conditioner) to price five repair proposals at a wholesale peak",
-  "task13": "task13 conforms a 69 kV fault register and allots crew-days; task7 v13 measures what a load-control dispatch delivered and prices proposals against a demand charge",
-  "task26": "task26 schedules substation relief from conformed loads; task7 v13 is a randomised dispatch trial's delivery split into three causes of non-delivery",
-  "task22": "task22 is a gas district balance for a leak programme; task7 v13 reads shed commands as feeder steps"
- },
- "registered": "2026-11-25T19:35:20Z",
- "shell": {
-  "question form": "what",
-  "second-sentence opener": "our",
-  "deliverable set": "csv+pptx+xlsx"
- }
 }

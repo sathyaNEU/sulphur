@@ -246,4 +246,9 @@ def switching_rows(S, world, r):
                     t0.strftime("%m/%d/%Y %H:%M"), t1.strftime("%m/%d/%Y %H:%M"), "planned outage avoidance", P.PEOPLE["ops"]))
         no += int(r.integers(3, 40))
     out.sort(key=lambda t: dt.datetime.strptime(t[4], "%m/%d/%Y %H:%M"))
+    # switching orders are numbered as they are written, so in date order
+    no = 26104
+    for k, row in enumerate(out):
+        out[k] = ("SO-%d" % no,) + tuple(row[1:])
+        no += 3 + int(r.integers(0, 40))
     return out

@@ -6,7 +6,8 @@ LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's sol
 
 Stump terms swept: missed, transmitter, switch, feeder, records, repeater, reconnection, system, appraisal, reflex, single, install, demand, register, listed, funded, generator, conditions, command, find-and-fix, one-way, different, careful, bridge, effort
 
-## 3 answer figures in the pack (REVIEW 1)
+## 3 answer figures in the pack (REVIEW 2)
+- **REVIEW** `load_management_report_2025.pdf`: golden figure 505 appears: ...December 2025 that is 11,938 kW, worth USD 1,019,505 a year at the 2025 summer demand charge of USD 2...
 - **REVIEW** `work_plan_2027_load_management.docx`: carries 19 of 21 distinctive words of the committed call: 'Fund the Kettle Ridge VHF repeater, the Larkin find-and-fix round and the reconnection round within 14 km; do not fund t'
 
 ## 4 design-note vocabulary (REVIEW 3)
@@ -40,14 +41,29 @@ Stump terms swept: missed, transmitter, switch, feeder, records, repeater, recon
 
 ## Solver's-eye read
 
-Reader (isolated, prompt and target only), 2026-11-13. Verdict: NO LEAK.
+Stage 4 reader, 2026-11-25 (isolated, Sonnet at medium, a fresh copy of prompt.txt and target/; it solved nothing).
 
-1. Method sentences: VO-1 2.1 to 2.4 and 3.1 (what is compared, the floor and cap, the value, which record is which quantity) and the protocol's ON/OFF mechanics; they fix the estimand and sources, not the estimation.
-2. Ranking file: none.
-3. Helper-only file: none.
-4. Answer-like figure or name: none.
-5. Literal readings: VO-1 2.2 (yearly saving at the breaker against normal running, ON days not normal running), 2.3 (hourly headroom to 115 V capped at 4.8 V), 2.4 (USD 48, 9.4), 3.1 (record per quantity).
-6. One thing: none. Each feeder's response, its carry to untested feeders and the losses' rise are analysis written nowhere; the energy sums and the headroom are close to reading and formula; the asks do not hand over a method.
+1. Sentences that say how part of the analysis is done: the work plan's 6.4 appraisal sentence (population, window,
+   index, footing), its bridge sentence (the four lines in order, each switch counted once), its fringe sentence (more
+   than 20 km against within 8 km), 6.2's trial design and the 6.3 scope sentences; the 2025 report's planning figure
+   labelled as not a measurement; the prompt's "estimated from last summer's dispatch trial". Ruling: harmless; every
+   one is a filed WHAT (estimand, population, comparison basis, bridge definition) and none names an estimator, a
+   covariate, a join or a window.
+2. Files that rank or score the candidates: none.
+3. Files that exist only to help the analyst: none (the coverage map is the carrier's published map; the appraisal
+   constants are definitions).
+4. Figures or names that read as the answer: none.
+5. Sentences that fix a graded figure literally: the 6.4 appraisal and bridge sentences, the 6.3 scopes, the fringe
+   sentence ("nearest transmitter serving them" read as the nearest on-air site on the system carrying that switch).
+   Ruling: each literal execution is the golden's quantity.
+6. One thing that makes most of it routine: none found ("those need several separate estimates"). Items it read as
+   possibly planted (the duplicated outage entry, the Pruett site commissioned mid-trial, the retired VHF site, TEST
+   pages, encoder repeats, removed register rows) are operational texture; checks.py shows each leaves every graded
+   figure in band.
 
-Sweep items: the annual report (harmless: system 2025 totals, a different grain and year), the customer-meter CSV and the revenue-meter CSV (harmless: digit coincidences among hundreds of thousands of readings).
-Realism: no tells found.
+Sweep item: the work plan names the six candidates and describes them; it does not rank, score or recommend among
+them. Harmless.
+
+Realism tells reported and fixed in the generator: the coverage map's edition month fell before the Pruett site's
+commissioning, a town label collided with a site label and the contours were perfect circles; the four invoice
+numbers stepped by exactly 11.

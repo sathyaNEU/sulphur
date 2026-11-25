@@ -342,7 +342,7 @@ def invoices_pdf(path, peaks):
         if not first:
             secs.append((None, ["PAGE"]))
         first = False
-        inv = "SBP-%d-%04d" % (2026, 600 + mo * 11)
+        inv = "SBP-%d-%04d" % (2026, {6: 661, 7: 702, 8: 749, 9: 793}[mo])
         secs.append(("Invoice %s, %s" % (inv, mname), [
             [["Item", "Basis", "Amount"],
              ["Demand", "%s kW at USD 22.00 a kW-month" % format(int(round(kw)), ","), usd(dem, 2)],
@@ -384,9 +384,16 @@ def coverage_png(path, W, pruett_on):
         dr.line([(sx(x0), sy(gy)), (sx(x1), sy(gy))], fill=(220, 220, 215), width=1)
         dr.text((sx(x0) - 34, sy(gy) - 8), "%d" % gy, fill=(120, 120, 120), font=f3)
     # published outdoor contours: generous circles around each site, merged
+    rr_ = np.random.default_rng(P.SEED + 404)
+
     def contour(sites, rad, colour):
+        """Each site's published contour: never inside its nominal radius, pushed out where the terrain carries."""
         for (x, y), rr in zip(sites, rad):
-            dr.ellipse([sx(x - rr), sy(y + rr), sx(x + rr), sy(y - rr)], fill=colour)
+            th = np.linspace(0, 2 * np.pi, 181)
+            a = rr_.uniform(0, 2 * np.pi, 3)
+            bump = 0.07 * (1 + np.sin(3 * th + a[0])) + 0.04 * (1 + np.sin(5 * th + a[1])) + 0.02 * (1 + np.sin(8 * th + a[2]))
+            r = rr * (1 + bump)
+            dr.polygon([(sx(x + r[k] * np.cos(th[k])), sy(y + r[k] * np.sin(th[k]))) for k in range(len(th))], fill=colour)
     # each system's contour reaches past the farthest premise on that system
     rv = float(W["dv"].min(1)[W["vhf"]].max()) + 2.6
     rc = float(W["dc"].min(1)[~W["vhf"]].max()) + 2.4
@@ -395,17 +402,17 @@ def coverage_png(path, W, pruett_on):
     # towns and sites
     for k, (town, (tx, ty)) in P.TOWNS.items():
         dr.rectangle([sx(tx) - 4, sy(ty) - 4, sx(tx) + 4, sy(ty) + 4], fill=(60, 60, 60))
-        dr.text((sx(tx) + 8, sy(ty) - 10), town, fill=(40, 40, 40), font=f2)
+        dr.text((sx(tx) - 20, sy(ty) + 10), town, fill=(40, 40, 40), font=f2)
     for k, (sid, name, _) in enumerate(P.VHF_SITES):
         x, y = W["vt"][k]
         dr.polygon([(sx(x), sy(y) - 10), (sx(x) - 8, sy(y) + 6), (sx(x) + 8, sy(y) + 6)], fill=(30, 80, 170))
-        dr.text((sx(x) + 10, sy(y) + 2), name + " (VHF)", fill=(30, 60, 140), font=f3)
+        dr.text((sx(x) + 10, sy(y) - 22), name + " (VHF)", fill=(30, 60, 140), font=f3)
     for k, (sid, name, _) in enumerate(P.FLEX_SITES):
         x, y = W["ct"][k]
         dr.ellipse([sx(x) - 7, sy(y) - 7, sx(x) + 7, sy(y) + 7], fill=(200, 110, 20))
         dr.text((sx(x) + 10, sy(y) + 2), "TriCounty " + name, fill=(150, 80, 10), font=f3)
     dr.text((70, 22), "Paging coverage, Cottonwood Draw Electric Cooperative service territory", fill=(20, 20, 20), font=f1)
-    dr.text((70, 56), "Published outdoor coverage, %s 2026 edition. TriCounty Paging LLC." % pruett_on.strftime("%B"),
+    dr.text((70, 56), "Published outdoor coverage, %s 2026 edition. TriCounty Paging LLC." % (pruett_on + dt.timedelta(9)).strftime("%B"),
             fill=(60, 60, 60), font=f2)
     ly = Hpx - 60
     dr.rectangle([70, ly, 96, ly + 18], fill=(60, 120, 200, 110))
