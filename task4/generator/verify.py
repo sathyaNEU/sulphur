@@ -108,7 +108,7 @@ def rebuild(target):
     wx["monday"] = pd.to_datetime(wx["week_beginning"])
     temp = dict(zip(wx["monday"], wx["mean_daily_max_c"]))
     norm = dict(zip(wx["monday"], wx["normal_1991_2020_c"]))
-    store = pd.read_csv(p("cold_store_monday_position.csv"))
+    store = pd.read_csv(p("cold_store_monday_position.csv"), dtype={"product": str})
     store["type"] = store["container"].map(typ)
     store["date"] = pd.to_datetime(store["position_date"])
     rk = pd.read_csv(p("racking_log.csv"), dtype={"container": str})
@@ -178,6 +178,19 @@ def rebuild(target):
         alive = float((r.groupby("lot")["live"].sum().reindex(g.index) * np.exp(-lam * g["age"])).sum())
         lots[t] = dict(lam=lam, alive=alive, loss=alive * (math.exp(lam) - 1.0))
     out["lots"] = lots
+    # the cold store, beer by beer: each beer's mean Monday stock over the last 104 Mondays on its mean weekly
+    # deliveries (one cover) and its median racking run (one share), no intercept
+    last104 = sorted(store["date"].unique())[-104:]
+    sb = store[store["date"].isin(last104)].groupby("product")["full_containers"].mean()
+    recent = rk[rk["date"] >= d0 + pd.Timedelta(days=364)]
+    runs_b = recent.groupby("sku")["containers_filled"].median()
+    dkw = dk[(dk["monday"] >= pd.Timestamp(last104[0]) - pd.Timedelta(days=7)) &
+             (dk["monday"] < pd.Timestamp(last104[-1]))].groupby("sku")["qty"].sum() / 104.0
+    beers = sorted(runs_b.index)
+    Xs = np.column_stack([[dkw.get(s, 0.0) for s in beers], [runs_b[s] for s in beers]])
+    cs, th = np.linalg.lstsq(Xs, np.array([sb.get(s, 0.0) for s in beers]), rcond=None)[0]
+    out["store_cover"], out["store_share"] = float(cs), float(th)
+    ok("verify: the run share measured between beers", 0.3 < th < 0.7, "%.3f on %d beers, cover %.3f" % (th, len(beers), cs))
     # the 2027 weeks
     season = [may_monday(asof.year + 1) + pd.Timedelta(days=7 * k) for k in range(21)]
     weeks27 = pd.date_range(asof, season[-1], freq="7D")
@@ -214,10 +227,7 @@ def rebuild(target):
         lev = float(np.exp(design(idx[-1:], mondays[-1:], tt[-1:], h0) @ b)[0])   # the fit's value for the count's week
         on_site = float(site[site["type"] == t]["n"].sum())
         other = float(site[(site["type"] == t) & (site["area"] != "Cold store") & (site["state"] != "clean empty")]["n"].sum())
-        st = store[store["type"] == t].set_index("date")["full_containers"]
-        st_end = st.reindex(mondays + pd.Timedelta(days=7)).to_numpy(dtype=float)
-        meds = rk[(rk["type"] == t) & (rk["date"] >= d0 + pd.Timedelta(days=364))].groupby("sku")["containers_filled"].median()
-        cover = (np.mean(st_end[52:]) - 0.5 * meds.sum()) / np.mean(fl[52:])
+        cover, theta = out["store_cover"], out["store_share"]
         loss = lots[t]["loss"] / float(fl[-52:].sum())
         cond = float(((reg["type"] == t) & (reg["gone"] >= d0 + pd.Timedelta(days=7 * (n_weeks - 52))) &
                       (reg["gone"] < asof)).sum()) / float(fl[-52:].sum())
@@ -232,7 +242,7 @@ def rebuild(target):
             D = F + es
             swing = per_sale * (F - lev) + a * live + b_est * 2.0 * es
             runs_on = np.array([sum(rn for s, ty, f0, l0, rn in plan if ty == t and f0 <= m <= l0) for m in weeks27])
-            store27 = cover * D + 0.5 * runs_on
+            store27 = cover * D + theta * runs_on
             drain = np.cumsum((loss + cond) * D)
             short = swing + store27 + other / lev * D + D * 2.0 / 7.0 - on_site + drain
             ins = np.isin(weeks27, season)

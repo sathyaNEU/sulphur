@@ -35,7 +35,7 @@ FILES = {
 
 # the golden's conventions (the core's GOLDEN), with the build's own four conventions at their golden readings
 GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
-              count_months="all", harmonics=2, hinge=0.0, share_fit="panel", level="fit", age_fit="wls", age_drop=0,
+              count_months="all", harmonics=2, hinge=0.0, share_fit="between", level="fit", age_fit="wls", age_drop=0,
               alive="lots", clock="deliveries", last="account", age_from="purchase", run_stat="median", estate="shaped",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)
 HURRIED = {"S1": {"recon": "face"}, "S2": {"store": "cover"}, "S3": {"loss": "none"}}
@@ -59,9 +59,9 @@ SINGLES = [
     ("the bend in the weather response a degree higher", {"hinge": 1.0}),
     ("one seasonal harmonic where the F test does not ask for two", {"harmonics": "test"}),
     ("three seasonal harmonics in the deliveries fit", {"harmonics": 3}),
-    ("the store's stock fitted with one cover for every container type", {"share_fit": "one_cover"}),
-    ("the store's stock fitted between beers, on each beer's mean stock and mean deliveries", {"share_fit": "between"}),
-    ("the store's stock fitted on every Monday of the record, not the last 104", {"share_fit": "all"}),
+    ("the store's stock fitted between beers on every Monday of the record, not the last 104", {"share_fit": "between_all"}),
+    ("the store's stock fitted on the beer-weeks themselves, one cover", {"share_fit": "one_cover"}),
+    ("the store's stock fitted on the beer-weeks with a cover for each container type", {"share_fit": "panel"}),
     ("deliveries at the count over its last two weeks", {"level": 2}),
     ("deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal", {"level": "next"}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
@@ -531,19 +531,22 @@ def runs_of(R, p, stat="median", start=52):
 
 
 def fit_store(R, o):
-    """the cold store's stock beer by beer: each beer's Monday stock on its deliveries that week (a cover in weeks of
-    deliveries, one for each container type) and on its racking run (the share of a run a beer holds beyond its
-    cover, one for every beer), by ordinary least squares with no intercept; or with one cover for every type, between
-    beers on each beer's means, or on every Monday of the record. Returns the share, each type's cover and the share's
-    standard error"""
-    first = 0 if o["share_fit"] == "all" else 52
-    one = o["share_fit"] in ("one_cover", "between")
+    """the cold store's stock beer by beer. A beer's Monday stock saws between its cover and its cover and a run, and a
+    heavy week of deliveries is itself what draws it down, so the week-to-week movement inside a beer says nothing of
+    its cover; the beers' means do. The golden fits each beer's mean Monday stock over the last 104 Mondays on its mean
+    weekly deliveries (one cover in weeks of deliveries) and on its racking run (one share), across every beer, by
+    ordinary least squares with no intercept; the battery fits the same on every Monday, on the beer-weeks with one
+    cover, and on the beer-weeks with a cover for each container type. Returns the share, each type's cover and the
+    share's standard error"""
+    kind = o["share_fit"]
+    first = 0 if kind == "between_all" else 52
+    one = kind != "panel"
     rows, ys = [], []
     for k, p in enumerate(POOLS):
         runs = runs_of(R, p, o["run_stat"])
         for s, run in runs.items():
             st, fl = R.store_beer[p][s][first:], R.flow_beer[p][s][first:]
-            if o["share_fit"] == "between":
+            if kind.startswith("between"):                        # each beer's mean stock on its mean deliveries
                 st, fl = np.array([st.mean()]), np.array([fl.mean()])
             for a, b in zip(st, fl):
                 x = np.zeros(len(POOLS) + 1)
@@ -827,8 +830,8 @@ def run(target):
     X["level4"] = {p: chain(R, p, {"level": 4})["short"] for p in POOLS}
     X["beer_cover"] = {p: chain(R, p, {"store": "beer_cover"}) for p in POOLS}
     X["store_fits"] = {name: fit_store(R, dict(GOLDEN, **o)) for name, o in (
-        ("panel", {}), ("one_cover", {"share_fit": "one_cover"}), ("between", {"share_fit": "between"}),
-        ("all", {"share_fit": "all"}), ("mean_run", {"run_stat": "mean"}))}
+        ("between", {}), ("between_all", {"share_fit": "between_all"}), ("one_cover", {"share_fit": "one_cover"}),
+        ("panel", {"share_fit": "panel"}), ("mean_run", {"run_stat": "mean"}))}
     X["typeown"] = {}
     for p in POOLS:
         full26 = float(sum(runs_of(R, p).values()))

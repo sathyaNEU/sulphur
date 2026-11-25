@@ -348,12 +348,12 @@ def store_sheet(wb, f):
            "Monday position against the racking log, December 2024 to November 2026; brew plan 2027 issue 1.")
     ws.append([])
     hdr = ["Container type", "Cover beside the runs (weeks of deliveries)", "Beers racked in 2025 and 2026",
-           "Half a run per beer, 2026", "Beers on sale at the store's fullest, 2027", "Runs on sale then, 2027 plan",
+           "Measured share of a run times the 2026 runs", "Beers on sale at the store's fullest, 2027", "Runs on sale then, 2027 plan",
            "Full in the cold store at its fullest", "Same on 2026's weeks of cover", "2026 stock over deliveries (weeks)"]
     rows = []
     for p in POOLS:
         d = f["pool"][p]
-        rows.append([f["names"][p].capitalize(), d["store_cover_weeks"], d["beers_2026"], d["half_runs_2026"],
+        rows.append([f["names"][p].capitalize(), d["store_cover_weeks"], d["beers_2026"], d["share_runs_2026"],
                      d["beers_at_fullest"], d["runs_on_sale_at_fullest"], f["store_2027_by_pool"][p],
                      d["store_cover_route"], d["cover_weeks_2026"]])
     end = _rows(ws, hdr, rows, 4, [((3, 4, 5, 6, 7, 8), "#,##0"), ((2,), "0.000"), ((9,), "0.00")], 62)
@@ -371,6 +371,12 @@ def store_sheet(wb, f):
                           dt.date.fromisoformat(b["first"]), dt.date.fromisoformat(b["last"]), b["run"]])
             rows2[-1][3] = "from 3 May" if b["first"] >= "2027-05-03" else "to 2 May"
     end2 = _rows(ws, hdr2, rows2, r, [((3, 7), "#,##0"), ((5, 6), "dd mmm yyyy")])
+    sf = f["store_fit"]["between"]
+    _note(ws, end2 + 1, "Each beer's mean Monday stock over the last 104 Mondays, fitted on its mean weekly deliveries and its "
+                        "racking run across the %d beers: a beer holds %.2f of a run (standard error %.3f) beyond a cover of "
+                        "%.3f weeks of deliveries. A beer's stock saws between its cover and its cover and a run, and a heavy "
+                        "week of deliveries is what draws it down, so the beers' means measure the cover and the weekly "
+                        "movement inside a beer does not." % (sf["n"], sf["share"], sf["se"], sf["cover"]["K50"]), 7, 46)
     _widths(ws, (16, 14, 14, 13, 14, 13, 13, 13, 13))
     ws.freeze_panes = "B5"
 

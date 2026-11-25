@@ -8,7 +8,7 @@
    "deliveries_year": 72169,
    "depots_wash_repair": 933,
    "estate_lines": 160,
-   "hot": 1477,
+   "hot": 1600,
    "in_trade_alive": 5660,
    "leaving_pct": 11.3,
    "lines": 1700,
@@ -17,12 +17,12 @@
    "lots": 14,
    "never_coming_back": 14622,
    "on_site": 2585,
-   "plan": 1469,
+   "plan": 1593,
    "register": 22867,
    "rise": 385,
    "share_on_site": 0.31,
    "store": 909,
-   "store_fullest": 1472
+   "store_fullest": 1596
   },
   "K20": {
    "alive": 7578,
@@ -32,7 +32,7 @@
    "deliveries_year": 36915,
    "depots_wash_repair": 331,
    "estate_lines": 150,
-   "hot": 881,
+   "hot": 1057,
    "in_trade_alive": 4229,
    "leaving_pct": 2.8,
    "lines": 1800,
@@ -41,12 +41,12 @@
    "lots": 15,
    "never_coming_back": 2114,
    "on_site": 3349,
-   "plan": 522,
+   "plan": 715,
    "register": 9692,
    "rise": 785,
    "share_on_site": 0.44,
    "store": 620,
-   "store_fullest": 2004
+   "store_fullest": 2197
   },
   "K30": {
    "alive": 13960,
@@ -56,7 +56,7 @@
    "deliveries_year": 125546,
    "depots_wash_repair": 1194,
    "estate_lines": 450,
-   "hot": 2397,
+   "hot": 2467,
    "in_trade_alive": 7650,
    "leaving_pct": 7.2,
    "lines": 2600,
@@ -65,12 +65,12 @@
    "lots": 15,
    "never_coming_back": 12913,
    "on_site": 6310,
-   "plan": 1915,
+   "plan": 1991,
    "register": 26873,
    "rise": 2140,
    "share_on_site": 0.45,
    "store": 1046,
-   "store_fullest": 2289
+   "store_fullest": 2365
   },
   "K50": {
    "alive": 19990,
@@ -80,7 +80,7 @@
    "deliveries_year": 235405,
    "depots_wash_repair": 1849,
    "estate_lines": 720,
-   "hot": 8407,
+   "hot": 8635,
    "in_trade_alive": 8223,
    "leaving_pct": 11.1,
    "lines": 2700,
@@ -89,12 +89,12 @@
    "lots": 15,
    "never_coming_back": 36685,
    "on_site": 11767,
-   "plan": 4334,
+   "plan": 4585,
    "register": 56675,
    "rise": 4644,
    "share_on_site": 0.59,
    "store": 1582,
-   "store_fullest": 4090
+   "store_fullest": 4340
   },
   "KIL": {
    "alive": 1776,
@@ -104,7 +104,7 @@
    "deliveries_year": 11742,
    "depots_wash_repair": 141,
    "estate_lines": 0,
-   "hot": -470,
+   "hot": -445,
    "in_trade_alive": 720,
    "leaving_pct": 11.8,
    "lines": 170,
@@ -113,12 +113,12 @@
    "lots": 13,
    "never_coming_back": 3669,
    "on_site": 1056,
-   "plan": -470,
+   "plan": -445,
    "register": 5445,
    "rise": -27,
    "share_on_site": 0.6,
    "store": 146,
-   "store_fullest": 232
+   "store_fullest": 257
   }
  },
  "account_at_count": {
@@ -154,11 +154,11 @@
     "KIL": "nothing"
    },
    "plan": {
-    "FIR": 1482,
-    "K20": 436,
-    "K30": 1703,
-    "K50": 3815,
-    "KIL": -466
+    "FIR": 1605,
+    "K20": 629,
+    "K30": 1779,
+    "K50": 4066,
+    "KIL": -441
    }
   },
   "whole": {
@@ -171,11 +171,11 @@
     "KIL": "nothing"
    },
    "plan": {
-    "FIR": 1444,
-    "K20": 656,
-    "K30": 2302,
-    "K50": 5285,
-    "KIL": -478
+    "FIR": 1567,
+    "K20": 849,
+    "K30": 2378,
+    "K50": 5535,
+    "KIL": -453
    }
   }
  },
@@ -190,46 +190,46 @@
  },
  "battery_range": {
   "FIR": [
-   1394,
-   1672
+   1411,
+   1697
   ],
   "K20": [
-   399,
-   761
+   411,
+   766
   ],
   "K30": [
-   1772,
-   2093
+   1835,
+   2100
   ],
   "K50": [
-   4054,
-   4810
+   4137,
+   4878
   ],
   "KIL": [
-   -481,
-   -441
+   -478,
+   -439
   ]
  },
  "battery_range_hot": {
   "FIR": [
-   1403,
-   1679
+   1419,
+   1694
   ],
   "K20": [
-   682,
-   1107
+   711,
+   1132
   ],
   "K30": [
-   2207,
-   2572
+   2276,
+   2587
   ],
   "K50": [
-   7680,
-   8997
+   7911,
+   9224
   ],
   "KIL": [
-   -481,
-   -441
+   -478,
+   -439
   ]
  },
  "beer_cover": {
@@ -599,37 +599,38 @@
  "distinct_wrong_calls": 5,
  "falsification": {
   "checks": 5621,
+  "coef": -0.88,
   "fall": 0.88,
   "se": 0.06
  },
  "family_calls_all_golden": true,
  "hot": {
-  "FIR": 1477,
-  "K20": 881,
-  "K30": 2397,
-  "K50": 8407,
-  "KIL": -470
+  "FIR": 1600,
+  "K20": 1057,
+  "K30": 2467,
+  "K50": 8635,
+  "KIL": -445
  },
  "hot_band": {
   "FIR": [
-   1334,
-   1749
+   1349,
+   1764
   ],
   "K20": [
-   576,
-   1213
+   605,
+   1238
   ],
   "K30": [
-   2115,
-   2663
+   2198,
+   2665
   ],
   "K50": [
-   7351,
-   9327
+   7583,
+   9553
   ],
   "KIL": [
-   -491,
-   -430
+   -488,
+   -429
   ]
  },
  "hot_year": {
@@ -640,11 +641,11 @@
   "KIL": 2025
  },
  "joint": {
-  "FIR": 1490,
-  "K20": 447,
-  "K30": 1996,
-  "K50": 3952,
-  "KIL": -475
+  "FIR": 1614,
+  "K20": 640,
+  "K30": 2073,
+  "K50": 4203,
+  "KIL": -450
  },
  "joint_coef": {
   "FIR": -0.59,
@@ -654,11 +655,11 @@
   "KIL": -1.31
  },
  "level4": {
-  "FIR": 1478,
-  "K20": 479,
-  "K30": 1821,
-  "K50": 3975,
-  "KIL": -461
+  "FIR": 1602,
+  "K20": 672,
+  "K30": 1897,
+  "K50": 4226,
+  "KIL": -436
  },
  "level_diag": {
   "FIR": {
@@ -707,6 +708,8 @@
    "two": 249
   }
  },
+ "level_fit_temp": 10.7,
+ "level_fit_week": "2026-11-23",
  "lots": {
   "FIR": [
    {
@@ -1238,22 +1241,22 @@
   "KIL": "kilderkin"
  },
  "nearest_variant": {
-  "distance": 194,
+  "distance": 211,
   "pool": "FIR",
-  "variant": "deliveries at the count over its last two weeks; the loss carried on the calendar, not on deliveries"
+  "variant": "the store's stock fitted on the beer-weeks with a cover for each container type; deliveries at the count over its last two weeks"
  },
  "path": {
   "FIR": [
    {
     "at_customers": 5653,
     "deliveries": 1519,
-    "fleet": 8222,
+    "fleet": 8223,
     "float": 434,
     "in_season": false,
     "other": 928,
-    "requirement": 7609,
-    "shortfall": -613,
-    "store": 594,
+    "requirement": 7543,
+    "shortfall": -680,
+    "store": 528,
     "week": "2026-11-30"
    },
    {
@@ -1263,9 +1266,9 @@
     "float": 436,
     "in_season": false,
     "other": 933,
-    "requirement": 7628,
-    "shortfall": -570,
-    "store": 598,
+    "requirement": 7561,
+    "shortfall": -637,
+    "store": 531,
     "week": "2026-12-07"
    },
    {
@@ -1275,33 +1278,33 @@
     "float": 439,
     "in_season": false,
     "other": 938,
-    "requirement": 7645,
-    "shortfall": -530,
-    "store": 600,
+    "requirement": 7578,
+    "shortfall": -597,
+    "store": 533,
     "week": "2026-12-14"
    },
    {
     "at_customers": 5673,
     "deliveries": 1541,
-    "fleet": 8151,
+    "fleet": 8150,
     "float": 440,
     "in_season": false,
     "other": 941,
-    "requirement": 7657,
-    "shortfall": -494,
-    "store": 603,
+    "requirement": 7589,
+    "shortfall": -561,
+    "store": 535,
     "week": "2026-12-21"
    },
    {
     "at_customers": 5677,
     "deliveries": 1545,
-    "fleet": 8126,
+    "fleet": 8127,
     "float": 442,
     "in_season": false,
     "other": 944,
-    "requirement": 7667,
-    "shortfall": -459,
-    "store": 604,
+    "requirement": 7600,
+    "shortfall": -527,
+    "store": 537,
     "week": "2026-12-28"
    },
    {
@@ -1311,33 +1314,33 @@
     "float": 442,
     "in_season": false,
     "other": 945,
-    "requirement": 7961,
-    "shortfall": -142,
-    "store": 896,
+    "requirement": 7953,
+    "shortfall": -150,
+    "store": 888,
     "week": "2027-01-04"
    },
    {
     "at_customers": 5677,
     "deliveries": 1545,
-    "fleet": 8080,
+    "fleet": 8079,
     "float": 441,
     "in_season": false,
     "other": 944,
-    "requirement": 7958,
-    "shortfall": -122,
-    "store": 896,
+    "requirement": 7949,
+    "shortfall": -130,
+    "store": 887,
     "week": "2027-01-11"
    },
    {
     "at_customers": 5673,
     "deliveries": 1540,
-    "fleet": 8055,
+    "fleet": 8056,
     "float": 440,
     "in_season": false,
     "other": 941,
-    "requirement": 7948,
-    "shortfall": -107,
-    "store": 894,
+    "requirement": 7940,
+    "shortfall": -116,
+    "store": 886,
     "week": "2027-01-18"
    },
    {
@@ -1347,9 +1350,9 @@
     "float": 438,
     "in_season": false,
     "other": 937,
-    "requirement": 7932,
-    "shortfall": -99,
-    "store": 891,
+    "requirement": 7924,
+    "shortfall": -107,
+    "store": 883,
     "week": "2027-01-25"
    },
    {
@@ -1359,21 +1362,21 @@
     "float": 436,
     "in_season": false,
     "other": 932,
-    "requirement": 7915,
-    "shortfall": -92,
-    "store": 888,
+    "requirement": 7907,
+    "shortfall": -100,
+    "store": 880,
     "week": "2027-02-01"
    },
    {
     "at_customers": 5649,
     "deliveries": 1514,
-    "fleet": 7985,
+    "fleet": 7984,
     "float": 433,
     "in_season": false,
     "other": 925,
-    "requirement": 7891,
-    "shortfall": -94,
-    "store": 884,
+    "requirement": 7883,
+    "shortfall": -101,
+    "store": 876,
     "week": "2027-02-08"
    },
    {
@@ -1383,9 +1386,9 @@
     "float": 429,
     "in_season": false,
     "other": 918,
-    "requirement": 7864,
-    "shortfall": -97,
-    "store": 879,
+    "requirement": 7857,
+    "shortfall": -104,
+    "store": 872,
     "week": "2027-02-15"
    },
    {
@@ -1395,9 +1398,9 @@
     "float": 425,
     "in_season": false,
     "other": 909,
-    "requirement": 7831,
-    "shortfall": -107,
-    "store": 873,
+    "requirement": 7825,
+    "shortfall": -113,
+    "store": 867,
     "week": "2027-02-22"
    },
    {
@@ -1407,9 +1410,9 @@
     "float": 421,
     "in_season": false,
     "other": 900,
-    "requirement": 7799,
-    "shortfall": -117,
-    "store": 867,
+    "requirement": 7794,
+    "shortfall": -122,
+    "store": 862,
     "week": "2027-03-01"
    },
    {
@@ -1419,9 +1422,9 @@
     "float": 416,
     "in_season": false,
     "other": 889,
-    "requirement": 7761,
-    "shortfall": -131,
-    "store": 861,
+    "requirement": 7756,
+    "shortfall": -136,
+    "store": 856,
     "week": "2027-03-08"
    },
    {
@@ -1431,9 +1434,9 @@
     "float": 411,
     "in_season": false,
     "other": 879,
-    "requirement": 7724,
-    "shortfall": -146,
-    "store": 854,
+    "requirement": 7720,
+    "shortfall": -150,
+    "store": 850,
     "week": "2027-03-15"
    },
    {
@@ -1443,9 +1446,9 @@
     "float": 406,
     "in_season": false,
     "other": 868,
-    "requirement": 7684,
-    "shortfall": -164,
-    "store": 847,
+    "requirement": 7681,
+    "shortfall": -167,
+    "store": 844,
     "week": "2027-03-22"
    },
    {
@@ -1455,9 +1458,9 @@
     "float": 401,
     "in_season": false,
     "other": 857,
-    "requirement": 7645,
-    "shortfall": -181,
-    "store": 840,
+    "requirement": 7643,
+    "shortfall": -183,
+    "store": 838,
     "week": "2027-03-29"
    },
    {
@@ -1467,21 +1470,21 @@
     "float": 396,
     "in_season": false,
     "other": 848,
-    "requirement": 7611,
-    "shortfall": -194,
-    "store": 834,
+    "requirement": 7609,
+    "shortfall": -196,
+    "store": 832,
     "week": "2027-04-05"
    },
    {
     "at_customers": 5707,
     "deliveries": 1403,
-    "fleet": 7783,
+    "fleet": 7784,
     "float": 401,
     "in_season": false,
     "other": 857,
-    "requirement": 7805,
-    "shortfall": 22,
-    "store": 840,
+    "requirement": 7803,
+    "shortfall": 19,
+    "store": 838,
     "week": "2027-04-12"
    },
    {
@@ -1491,9 +1494,9 @@
     "float": 406,
     "in_season": false,
     "other": 867,
-    "requirement": 8004,
-    "shortfall": 243,
-    "store": 847,
+    "requirement": 8001,
+    "shortfall": 240,
+    "store": 844,
     "week": "2027-04-19"
    },
    {
@@ -1503,33 +1506,33 @@
     "float": 410,
     "in_season": false,
     "other": 878,
-    "requirement": 8200,
-    "shortfall": 461,
-    "store": 853,
+    "requirement": 8196,
+    "shortfall": 457,
+    "store": 849,
     "week": "2027-04-26"
    },
    {
     "at_customers": 6045,
     "deliveries": 1421,
-    "fleet": 7717,
+    "fleet": 7718,
     "float": 406,
     "in_season": true,
     "other": 868,
-    "requirement": 8791,
-    "shortfall": 1074,
-    "store": 1472,
+    "requirement": 8915,
+    "shortfall": 1197,
+    "store": 1596,
     "week": "2027-05-03"
    },
    {
     "at_customers": 6021,
     "deliveries": 1395,
-    "fleet": 7696,
+    "fleet": 7695,
     "float": 398,
     "in_season": true,
     "other": 852,
-    "requirement": 8733,
-    "shortfall": 1037,
-    "store": 1462,
+    "requirement": 8857,
+    "shortfall": 1162,
+    "store": 1586,
     "week": "2027-05-10"
    },
    {
@@ -1539,9 +1542,9 @@
     "float": 391,
     "in_season": true,
     "other": 837,
-    "requirement": 8679,
-    "shortfall": 1005,
-    "store": 1453,
+    "requirement": 8804,
+    "shortfall": 1130,
+    "store": 1578,
     "week": "2027-05-17"
    },
    {
@@ -1551,57 +1554,57 @@
     "float": 385,
     "in_season": true,
     "other": 824,
-    "requirement": 8631,
-    "shortfall": 978,
-    "store": 1444,
+    "requirement": 8757,
+    "shortfall": 1104,
+    "store": 1570,
     "week": "2027-05-24"
    },
    {
     "at_customers": 5961,
     "deliveries": 1330,
-    "fleet": 7634,
+    "fleet": 7633,
     "float": 380,
     "in_season": true,
     "other": 813,
-    "requirement": 8591,
-    "shortfall": 957,
-    "store": 1437,
+    "requirement": 8718,
+    "shortfall": 1085,
+    "store": 1564,
     "week": "2027-05-31"
    },
    {
     "at_customers": 5947,
     "deliveries": 1314,
-    "fleet": 7613,
+    "fleet": 7612,
     "float": 375,
     "in_season": true,
     "other": 803,
-    "requirement": 8556,
-    "shortfall": 943,
-    "store": 1431,
+    "requirement": 8683,
+    "shortfall": 1071,
+    "store": 1558,
     "week": "2027-06-07"
    },
    {
     "at_customers": 5935,
     "deliveries": 1301,
-    "fleet": 7594,
+    "fleet": 7593,
     "float": 372,
     "in_season": true,
     "other": 795,
-    "requirement": 8528,
-    "shortfall": 934,
-    "store": 1426,
+    "requirement": 8656,
+    "shortfall": 1063,
+    "store": 1554,
     "week": "2027-06-14"
    },
    {
     "at_customers": 5925,
     "deliveries": 1291,
-    "fleet": 7573,
+    "fleet": 7572,
     "float": 369,
     "in_season": true,
     "other": 789,
-    "requirement": 8505,
-    "shortfall": 932,
-    "store": 1422,
+    "requirement": 8633,
+    "shortfall": 1061,
+    "store": 1550,
     "week": "2027-06-21"
    },
    {
@@ -1611,21 +1614,21 @@
     "float": 367,
     "in_season": true,
     "other": 784,
-    "requirement": 8489,
-    "shortfall": 936,
-    "store": 1419,
+    "requirement": 8618,
+    "shortfall": 1065,
+    "store": 1548,
     "week": "2027-06-28"
    },
    {
     "at_customers": 5915,
     "deliveries": 1280,
-    "fleet": 7534,
+    "fleet": 7533,
     "float": 366,
     "in_season": true,
     "other": 782,
-    "requirement": 8480,
-    "shortfall": 946,
-    "store": 1417,
+    "requirement": 8609,
+    "shortfall": 1076,
+    "store": 1546,
     "week": "2027-07-05"
    },
    {
@@ -1635,9 +1638,9 @@
     "float": 365,
     "in_season": true,
     "other": 781,
-    "requirement": 8477,
-    "shortfall": 963,
-    "store": 1417,
+    "requirement": 8606,
+    "shortfall": 1092,
+    "store": 1546,
     "week": "2027-07-12"
    },
    {
@@ -1647,9 +1650,9 @@
     "float": 366,
     "in_season": true,
     "other": 782,
-    "requirement": 8480,
-    "shortfall": 986,
-    "store": 1417,
+    "requirement": 8609,
+    "shortfall": 1115,
+    "store": 1546,
     "week": "2027-07-19"
    },
    {
@@ -1659,21 +1662,21 @@
     "float": 367,
     "in_season": true,
     "other": 784,
-    "requirement": 8489,
-    "shortfall": 1015,
-    "store": 1419,
+    "requirement": 8618,
+    "shortfall": 1144,
+    "store": 1548,
     "week": "2027-07-26"
    },
    {
     "at_customers": 5925,
     "deliveries": 1291,
-    "fleet": 7454,
+    "fleet": 7453,
     "float": 369,
     "in_season": true,
     "other": 789,
-    "requirement": 8505,
-    "shortfall": 1051,
-    "store": 1422,
+    "requirement": 8633,
+    "shortfall": 1180,
+    "store": 1550,
     "week": "2027-08-02"
    },
    {
@@ -1683,9 +1686,9 @@
     "float": 372,
     "in_season": true,
     "other": 795,
-    "requirement": 8526,
-    "shortfall": 1092,
-    "store": 1425,
+    "requirement": 8655,
+    "shortfall": 1221,
+    "store": 1554,
     "week": "2027-08-09"
    },
    {
@@ -1695,9 +1698,9 @@
     "float": 375,
     "in_season": true,
     "other": 802,
-    "requirement": 8553,
-    "shortfall": 1140,
-    "store": 1430,
+    "requirement": 8681,
+    "shortfall": 1268,
+    "store": 1558,
     "week": "2027-08-16"
    },
    {
@@ -1707,33 +1710,33 @@
     "float": 380,
     "in_season": true,
     "other": 812,
-    "requirement": 8588,
-    "shortfall": 1195,
-    "store": 1436,
+    "requirement": 8715,
+    "shortfall": 1322,
+    "store": 1563,
     "week": "2027-08-23"
    },
    {
     "at_customers": 5976,
     "deliveries": 1346,
-    "fleet": 7372,
+    "fleet": 7371,
     "float": 385,
     "in_season": true,
     "other": 822,
-    "requirement": 8626,
-    "shortfall": 1254,
-    "store": 1443,
+    "requirement": 8752,
+    "shortfall": 1381,
+    "store": 1569,
     "week": "2027-08-30"
    },
    {
     "at_customers": 5995,
     "deliveries": 1366,
-    "fleet": 7351,
+    "fleet": 7350,
     "float": 390,
     "in_season": true,
     "other": 835,
-    "requirement": 8671,
-    "shortfall": 1320,
-    "store": 1451,
+    "requirement": 8796,
+    "shortfall": 1446,
+    "store": 1576,
     "week": "2027-09-06"
    },
    {
@@ -1743,21 +1746,21 @@
     "float": 397,
     "in_season": true,
     "other": 849,
-    "requirement": 8722,
-    "shortfall": 1392,
-    "store": 1460,
+    "requirement": 8846,
+    "shortfall": 1516,
+    "store": 1584,
     "week": "2027-09-13"
    },
    {
     "at_customers": 6039,
     "deliveries": 1414,
-    "fleet": 7308,
+    "fleet": 7307,
     "float": 404,
     "in_season": true,
     "other": 864,
-    "requirement": 8777,
-    "shortfall": 1469,
-    "store": 1470,
+    "requirement": 8900,
+    "shortfall": 1593,
+    "store": 1593,
     "week": "2027-09-20"
    }
   ],
@@ -1769,9 +1772,9 @@
     "float": 158,
     "in_season": false,
     "other": 318,
-    "requirement": 4935,
-    "shortfall": -2638,
-    "store": 252,
+    "requirement": 4876,
+    "shortfall": -2697,
+    "store": 193,
     "week": "2026-11-30"
    },
    {
@@ -1781,9 +1784,9 @@
     "float": 155,
     "in_season": false,
     "other": 311,
-    "requirement": 4906,
-    "shortfall": -2665,
-    "store": 246,
+    "requirement": 4848,
+    "shortfall": -2723,
+    "store": 188,
     "week": "2026-12-07"
    },
    {
@@ -1793,21 +1796,21 @@
     "float": 152,
     "in_season": false,
     "other": 304,
-    "requirement": 4880,
-    "shortfall": -2686,
-    "store": 241,
+    "requirement": 4823,
+    "shortfall": -2743,
+    "store": 184,
     "week": "2026-12-14"
    },
    {
     "at_customers": 4175,
     "deliveries": 522,
-    "fleet": 7562,
+    "fleet": 7563,
     "float": 149,
     "in_season": false,
     "other": 299,
-    "requirement": 4860,
-    "shortfall": -2702,
-    "store": 237,
+    "requirement": 4804,
+    "shortfall": -2759,
+    "store": 181,
     "week": "2026-12-21"
    },
    {
@@ -1817,21 +1820,21 @@
     "float": 147,
     "in_season": false,
     "other": 296,
-    "requirement": 4847,
-    "shortfall": -2712,
-    "store": 235,
+    "requirement": 4791,
+    "shortfall": -2768,
+    "store": 179,
     "week": "2026-12-28"
    },
    {
     "at_customers": 4165,
     "deliveries": 512,
-    "fleet": 7556,
+    "fleet": 7555,
     "float": 146,
     "in_season": false,
     "other": 294,
-    "requirement": 5244,
-    "shortfall": -2312,
-    "store": 639,
+    "requirement": 5270,
+    "shortfall": -2285,
+    "store": 665,
     "week": "2027-01-04"
    },
    {
@@ -1841,21 +1844,21 @@
     "float": 146,
     "in_season": false,
     "other": 293,
-    "requirement": 5241,
-    "shortfall": -2311,
-    "store": 638,
+    "requirement": 5268,
+    "shortfall": -2284,
+    "store": 665,
     "week": "2027-01-11"
    },
    {
     "at_customers": 4165,
     "deliveries": 512,
-    "fleet": 7549,
+    "fleet": 7548,
     "float": 146,
     "in_season": false,
     "other": 294,
-    "requirement": 5244,
-    "shortfall": -2305,
-    "store": 639,
+    "requirement": 5270,
+    "shortfall": -2278,
+    "store": 665,
     "week": "2027-01-18"
    },
    {
@@ -1865,45 +1868,45 @@
     "float": 147,
     "in_season": false,
     "other": 296,
-    "requirement": 5252,
-    "shortfall": -2293,
-    "store": 640,
+    "requirement": 5279,
+    "shortfall": -2266,
+    "store": 667,
     "week": "2027-01-25"
    },
    {
     "at_customers": 4176,
     "deliveries": 523,
-    "fleet": 7541,
+    "fleet": 7542,
     "float": 149,
     "in_season": false,
     "other": 300,
-    "requirement": 5268,
-    "shortfall": -2273,
-    "store": 643,
+    "requirement": 5294,
+    "shortfall": -2248,
+    "store": 669,
     "week": "2027-02-01"
    },
    {
     "at_customers": 4184,
     "deliveries": 532,
-    "fleet": 7537,
+    "fleet": 7538,
     "float": 152,
     "in_season": false,
     "other": 305,
-    "requirement": 5288,
-    "shortfall": -2249,
-    "store": 647,
+    "requirement": 5313,
+    "shortfall": -2225,
+    "store": 672,
     "week": "2027-02-08"
    },
    {
     "at_customers": 4196,
     "deliveries": 543,
-    "fleet": 7535,
+    "fleet": 7534,
     "float": 155,
     "in_season": false,
     "other": 312,
-    "requirement": 5316,
-    "shortfall": -2219,
-    "store": 653,
+    "requirement": 5339,
+    "shortfall": -2195,
+    "store": 676,
     "week": "2027-02-15"
    },
    {
@@ -1913,45 +1916,45 @@
     "float": 159,
     "in_season": false,
     "other": 320,
-    "requirement": 5347,
-    "shortfall": -2184,
-    "store": 659,
+    "requirement": 5369,
+    "shortfall": -2162,
+    "store": 681,
     "week": "2027-02-22"
    },
    {
     "at_customers": 4225,
     "deliveries": 573,
-    "fleet": 7526,
+    "fleet": 7527,
     "float": 164,
     "in_season": false,
     "other": 329,
-    "requirement": 5384,
-    "shortfall": -2142,
-    "store": 666,
+    "requirement": 5405,
+    "shortfall": -2122,
+    "store": 687,
     "week": "2027-03-01"
    },
    {
     "at_customers": 4243,
     "deliveries": 591,
-    "fleet": 7522,
+    "fleet": 7523,
     "float": 169,
     "in_season": false,
     "other": 339,
-    "requirement": 5425,
-    "shortfall": -2097,
-    "store": 674,
+    "requirement": 5444,
+    "shortfall": -2079,
+    "store": 693,
     "week": "2027-03-08"
    },
    {
     "at_customers": 4262,
     "deliveries": 611,
-    "fleet": 7518,
+    "fleet": 7519,
     "float": 175,
     "in_season": false,
     "other": 351,
-    "requirement": 5471,
-    "shortfall": -2047,
-    "store": 683,
+    "requirement": 5488,
+    "shortfall": -2031,
+    "store": 700,
     "week": "2027-03-15"
    },
    {
@@ -1961,9 +1964,9 @@
     "float": 181,
     "in_season": false,
     "other": 363,
-    "requirement": 5520,
-    "shortfall": -1995,
-    "store": 693,
+    "requirement": 5534,
+    "shortfall": -1981,
+    "store": 707,
     "week": "2027-03-22"
    },
    {
@@ -1973,9 +1976,9 @@
     "float": 187,
     "in_season": false,
     "other": 375,
-    "requirement": 5570,
-    "shortfall": -1939,
-    "store": 703,
+    "requirement": 5582,
+    "shortfall": -1927,
+    "store": 715,
     "week": "2027-03-29"
    },
    {
@@ -1985,21 +1988,21 @@
     "float": 194,
     "in_season": false,
     "other": 389,
-    "requirement": 5625,
-    "shortfall": -1880,
-    "store": 714,
+    "requirement": 5634,
+    "shortfall": -1871,
+    "store": 723,
     "week": "2027-04-05"
    },
    {
     "at_customers": 4475,
     "deliveries": 724,
-    "fleet": 7500,
+    "fleet": 7499,
     "float": 207,
     "in_season": false,
     "other": 415,
-    "requirement": 5832,
-    "shortfall": -1668,
-    "store": 735,
+    "requirement": 5836,
+    "shortfall": -1663,
+    "store": 739,
     "week": "2027-04-12"
    },
    {
@@ -2009,9 +2012,9 @@
     "float": 220,
     "in_season": false,
     "other": 442,
-    "requirement": 6042,
-    "shortfall": -1452,
-    "store": 756,
+    "requirement": 6041,
+    "shortfall": -1453,
+    "store": 755,
     "week": "2027-04-19"
    },
    {
@@ -2021,81 +2024,81 @@
     "float": 234,
     "in_season": false,
     "other": 470,
-    "requirement": 6256,
-    "shortfall": -1233,
-    "store": 778,
+    "requirement": 6250,
+    "shortfall": -1239,
+    "store": 772,
     "week": "2027-04-26"
    },
    {
     "at_customers": 4798,
     "deliveries": 843,
-    "fleet": 7482,
+    "fleet": 7483,
     "float": 241,
     "in_season": true,
     "other": 484,
-    "requirement": 7427,
-    "shortfall": -55,
-    "store": 1904,
+    "requirement": 7644,
+    "shortfall": 161,
+    "store": 2121,
     "week": "2027-05-03"
    },
    {
     "at_customers": 4820,
     "deliveries": 866,
-    "fleet": 7477,
+    "fleet": 7476,
     "float": 247,
     "in_season": true,
     "other": 497,
-    "requirement": 7479,
-    "shortfall": 2,
-    "store": 1915,
+    "requirement": 7693,
+    "shortfall": 217,
+    "store": 2129,
     "week": "2027-05-10"
    },
    {
     "at_customers": 4842,
     "deliveries": 888,
-    "fleet": 7472,
+    "fleet": 7471,
     "float": 254,
     "in_season": true,
     "other": 510,
-    "requirement": 7531,
-    "shortfall": 59,
-    "store": 1925,
+    "requirement": 7742,
+    "shortfall": 271,
+    "store": 2136,
     "week": "2027-05-17"
    },
    {
     "at_customers": 4874,
     "deliveries": 920,
-    "fleet": 7464,
+    "fleet": 7465,
     "float": 263,
     "in_season": true,
     "other": 528,
-    "requirement": 7604,
-    "shortfall": 140,
-    "store": 1939,
+    "requirement": 7813,
+    "shortfall": 348,
+    "store": 2148,
     "week": "2027-05-24"
    },
    {
     "at_customers": 4906,
     "deliveries": 952,
-    "fleet": 7458,
+    "fleet": 7459,
     "float": 272,
     "in_season": true,
     "other": 547,
-    "requirement": 7679,
-    "shortfall": 221,
-    "store": 1954,
+    "requirement": 7884,
+    "shortfall": 425,
+    "store": 2159,
     "week": "2027-05-31"
    },
    {
     "at_customers": 4934,
     "deliveries": 980,
-    "fleet": 7452,
+    "fleet": 7451,
     "float": 280,
     "in_season": true,
     "other": 563,
-    "requirement": 7744,
-    "shortfall": 292,
-    "store": 1967,
+    "requirement": 7945,
+    "shortfall": 494,
+    "store": 2168,
     "week": "2027-06-07"
    },
    {
@@ -2105,21 +2108,21 @@
     "float": 288,
     "in_season": true,
     "other": 578,
-    "requirement": 7805,
-    "shortfall": 360,
-    "store": 1979,
+    "requirement": 8004,
+    "shortfall": 559,
+    "store": 2178,
     "week": "2027-06-14"
    },
    {
     "at_customers": 4981,
     "deliveries": 1028,
-    "fleet": 7438,
+    "fleet": 7437,
     "float": 294,
     "in_season": true,
     "other": 590,
-    "requirement": 7854,
-    "shortfall": 416,
-    "store": 1989,
+    "requirement": 8050,
+    "shortfall": 613,
+    "store": 2185,
     "week": "2027-06-21"
    },
    {
@@ -2129,21 +2132,21 @@
     "float": 298,
     "in_season": true,
     "other": 600,
-    "requirement": 7891,
-    "shortfall": 461,
-    "store": 1996,
+    "requirement": 8086,
+    "shortfall": 656,
+    "store": 2191,
     "week": "2027-06-28"
    },
    {
     "at_customers": 5008,
     "deliveries": 1056,
-    "fleet": 7423,
+    "fleet": 7424,
     "float": 302,
     "in_season": true,
     "other": 606,
-    "requirement": 7917,
-    "shortfall": 494,
-    "store": 2001,
+    "requirement": 8111,
+    "shortfall": 687,
+    "store": 2195,
     "week": "2027-07-05"
    },
    {
@@ -2153,9 +2156,9 @@
     "float": 303,
     "in_season": true,
     "other": 609,
-    "requirement": 7930,
-    "shortfall": 514,
-    "store": 2004,
+    "requirement": 8123,
+    "shortfall": 707,
+    "store": 2197,
     "week": "2027-07-12"
    },
    {
@@ -2165,9 +2168,9 @@
     "float": 303,
     "in_season": true,
     "other": 609,
-    "requirement": 7930,
-    "shortfall": 522,
-    "store": 2004,
+    "requirement": 8123,
+    "shortfall": 715,
+    "store": 2197,
     "week": "2027-07-19"
    },
    {
@@ -2177,9 +2180,9 @@
     "float": 302,
     "in_season": true,
     "other": 606,
-    "requirement": 7918,
-    "shortfall": 518,
-    "store": 2001,
+    "requirement": 8112,
+    "shortfall": 712,
+    "store": 2195,
     "week": "2027-07-26"
    },
    {
@@ -2189,21 +2192,21 @@
     "float": 298,
     "in_season": true,
     "other": 599,
-    "requirement": 7888,
-    "shortfall": 494,
-    "store": 1995,
+    "requirement": 8083,
+    "shortfall": 689,
+    "store": 2190,
     "week": "2027-08-02"
    },
    {
     "at_customers": 4981,
     "deliveries": 1028,
-    "fleet": 7386,
+    "fleet": 7387,
     "float": 294,
     "in_season": true,
     "other": 590,
-    "requirement": 7853,
-    "shortfall": 467,
-    "store": 1988,
+    "requirement": 8050,
+    "shortfall": 663,
+    "store": 2185,
     "week": "2027-08-09"
    },
    {
@@ -2213,9 +2216,9 @@
     "float": 288,
     "in_season": true,
     "other": 579,
-    "requirement": 7807,
-    "shortfall": 428,
-    "store": 1979,
+    "requirement": 8006,
+    "shortfall": 627,
+    "store": 2178,
     "week": "2027-08-16"
    },
    {
@@ -2225,33 +2228,33 @@
     "float": 280,
     "in_season": true,
     "other": 563,
-    "requirement": 7744,
-    "shortfall": 371,
-    "store": 1967,
+    "requirement": 7946,
+    "shortfall": 573,
+    "store": 2169,
     "week": "2027-08-23"
    },
    {
     "at_customers": 4906,
     "deliveries": 953,
-    "fleet": 7366,
+    "fleet": 7367,
     "float": 272,
     "in_season": true,
     "other": 547,
-    "requirement": 7679,
-    "shortfall": 313,
-    "store": 1954,
+    "requirement": 7884,
+    "shortfall": 517,
+    "store": 2159,
     "week": "2027-08-30"
    },
    {
     "at_customers": 4874,
     "deliveries": 920,
-    "fleet": 7359,
+    "fleet": 7360,
     "float": 263,
     "in_season": true,
     "other": 528,
-    "requirement": 7604,
-    "shortfall": 245,
-    "store": 1939,
+    "requirement": 7813,
+    "shortfall": 453,
+    "store": 2148,
     "week": "2027-09-06"
    },
    {
@@ -2261,21 +2264,21 @@
     "float": 253,
     "in_season": true,
     "other": 508,
-    "requirement": 7523,
-    "shortfall": 170,
-    "store": 1923,
+    "requirement": 7735,
+    "shortfall": 382,
+    "store": 2135,
     "week": "2027-09-13"
    },
    {
     "at_customers": 4801,
     "deliveries": 847,
-    "fleet": 7348,
+    "fleet": 7347,
     "float": 242,
     "in_season": true,
     "other": 486,
-    "requirement": 7435,
-    "shortfall": 87,
-    "store": 1906,
+    "requirement": 7651,
+    "shortfall": 304,
+    "store": 2122,
     "week": "2027-09-20"
    }
   ],
@@ -2287,9 +2290,9 @@
     "float": 613,
     "in_season": false,
     "other": 1163,
-    "requirement": 10192,
-    "shortfall": -3748,
-    "store": 816,
+    "requirement": 10121,
+    "shortfall": -3819,
+    "store": 745,
     "week": "2026-11-30"
    },
    {
@@ -2299,9 +2302,9 @@
     "float": 606,
     "in_season": false,
     "other": 1148,
-    "requirement": 10137,
-    "shortfall": -3781,
-    "store": 806,
+    "requirement": 10067,
+    "shortfall": -3851,
+    "store": 736,
     "week": "2026-12-07"
    },
    {
@@ -2311,21 +2314,21 @@
     "float": 599,
     "in_season": false,
     "other": 1137,
-    "requirement": 10093,
-    "shortfall": -3805,
-    "store": 798,
+    "requirement": 10024,
+    "shortfall": -3874,
+    "store": 729,
     "week": "2026-12-14"
    },
    {
     "at_customers": 7545,
     "deliveries": 2081,
-    "fleet": 13880,
+    "fleet": 13879,
     "float": 595,
     "in_season": false,
     "other": 1128,
-    "requirement": 10060,
-    "shortfall": -3820,
-    "store": 792,
+    "requirement": 9991,
+    "shortfall": -3888,
+    "store": 723,
     "week": "2026-12-21"
    },
    {
@@ -2335,9 +2338,9 @@
     "float": 592,
     "in_season": false,
     "other": 1123,
-    "requirement": 10039,
-    "shortfall": -3820,
-    "store": 788,
+    "requirement": 9971,
+    "shortfall": -3888,
+    "store": 720,
     "week": "2026-12-28"
    },
    {
@@ -2347,33 +2350,33 @@
     "float": 590,
     "in_season": false,
     "other": 1119,
-    "requirement": 10322,
-    "shortfall": -3516,
-    "store": 1083,
+    "requirement": 10314,
+    "shortfall": -3524,
+    "store": 1075,
     "week": "2027-01-04"
    },
    {
     "at_customers": 7528,
     "deliveries": 2063,
-    "fleet": 13818,
+    "fleet": 13819,
     "float": 589,
     "in_season": false,
     "other": 1118,
-    "requirement": 10317,
-    "shortfall": -3501,
-    "store": 1082,
+    "requirement": 10310,
+    "shortfall": -3509,
+    "store": 1075,
     "week": "2027-01-11"
    },
    {
     "at_customers": 7530,
     "deliveries": 2065,
-    "fleet": 13799,
+    "fleet": 13798,
     "float": 590,
     "in_season": false,
     "other": 1119,
-    "requirement": 10322,
-    "shortfall": -3477,
-    "store": 1083,
+    "requirement": 10314,
+    "shortfall": -3484,
+    "store": 1075,
     "week": "2027-01-18"
    },
    {
@@ -2383,9 +2386,9 @@
     "float": 592,
     "in_season": false,
     "other": 1123,
-    "requirement": 10337,
-    "shortfall": -3442,
-    "store": 1086,
+    "requirement": 10329,
+    "shortfall": -3450,
+    "store": 1078,
     "week": "2027-01-25"
    },
    {
@@ -2395,9 +2398,9 @@
     "float": 596,
     "in_season": false,
     "other": 1130,
-    "requirement": 10365,
-    "shortfall": -3394,
-    "store": 1091,
+    "requirement": 10356,
+    "shortfall": -3403,
+    "store": 1082,
     "week": "2027-02-01"
    },
    {
@@ -2407,21 +2410,21 @@
     "float": 600,
     "in_season": false,
     "other": 1139,
-    "requirement": 10398,
-    "shortfall": -3341,
-    "store": 1097,
+    "requirement": 10389,
+    "shortfall": -3350,
+    "store": 1088,
     "week": "2027-02-08"
    },
    {
     "at_customers": 7581,
     "deliveries": 2123,
-    "fleet": 13719,
+    "fleet": 13720,
     "float": 607,
     "in_season": false,
     "other": 1151,
-    "requirement": 10444,
-    "shortfall": -3275,
-    "store": 1105,
+    "requirement": 10435,
+    "shortfall": -3285,
+    "store": 1096,
     "week": "2027-02-15"
    },
    {
@@ -2431,9 +2434,9 @@
     "float": 614,
     "in_season": false,
     "other": 1164,
-    "requirement": 10495,
-    "shortfall": -3204,
-    "store": 1115,
+    "requirement": 10484,
+    "shortfall": -3215,
+    "store": 1104,
     "week": "2027-02-22"
    },
    {
@@ -2443,9 +2446,9 @@
     "float": 622,
     "in_season": false,
     "other": 1180,
-    "requirement": 10556,
-    "shortfall": -3121,
-    "store": 1126,
+    "requirement": 10545,
+    "shortfall": -3132,
+    "store": 1115,
     "week": "2027-03-01"
    },
    {
@@ -2455,9 +2458,9 @@
     "float": 631,
     "in_season": false,
     "other": 1197,
-    "requirement": 10621,
-    "shortfall": -3034,
-    "store": 1138,
+    "requirement": 10609,
+    "shortfall": -3046,
+    "store": 1126,
     "week": "2027-03-08"
    },
    {
@@ -2467,9 +2470,9 @@
     "float": 641,
     "in_season": false,
     "other": 1217,
-    "requirement": 10696,
-    "shortfall": -2939,
-    "store": 1152,
+    "requirement": 10682,
+    "shortfall": -2953,
+    "store": 1138,
     "week": "2027-03-15"
    },
    {
@@ -2479,9 +2482,9 @@
     "float": 652,
     "in_season": false,
     "other": 1236,
-    "requirement": 10770,
-    "shortfall": -2842,
-    "store": 1165,
+    "requirement": 10755,
+    "shortfall": -2857,
+    "store": 1150,
     "week": "2027-03-22"
    },
    {
@@ -2491,9 +2494,9 @@
     "float": 663,
     "in_season": false,
     "other": 1257,
-    "requirement": 10851,
-    "shortfall": -2739,
-    "store": 1180,
+    "requirement": 10835,
+    "shortfall": -2755,
+    "store": 1164,
     "week": "2027-03-29"
    },
    {
@@ -2503,21 +2506,21 @@
     "float": 675,
     "in_season": false,
     "other": 1280,
-    "requirement": 10938,
-    "shortfall": -2629,
-    "store": 1196,
+    "requirement": 10921,
+    "shortfall": -2646,
+    "store": 1179,
     "week": "2027-04-05"
    },
    {
     "at_customers": 8322,
     "deliveries": 2598,
-    "fleet": 13542,
+    "fleet": 13543,
     "float": 742,
     "in_season": false,
     "other": 1408,
-    "requirement": 11758,
-    "shortfall": -1784,
-    "store": 1286,
+    "requirement": 11733,
+    "shortfall": -1810,
+    "store": 1261,
     "week": "2027-04-12"
    },
    {
@@ -2527,21 +2530,21 @@
     "float": 812,
     "in_season": false,
     "other": 1539,
-    "requirement": 12592,
-    "shortfall": -923,
-    "store": 1378,
+    "requirement": 12559,
+    "shortfall": -956,
+    "store": 1345,
     "week": "2027-04-19"
    },
    {
     "at_customers": 9411,
     "deliveries": 3089,
-    "fleet": 13486,
+    "fleet": 13485,
     "float": 882,
     "in_season": false,
     "other": 1674,
-    "requirement": 13440,
-    "shortfall": -46,
-    "store": 1473,
+    "requirement": 13398,
+    "shortfall": -87,
+    "store": 1431,
     "week": "2027-04-26"
    },
    {
@@ -2551,33 +2554,33 @@
     "float": 897,
     "in_season": true,
     "other": 1702,
-    "requirement": 14200,
-    "shortfall": 744,
-    "store": 2145,
+    "requirement": 14288,
+    "shortfall": 832,
+    "store": 2233,
     "week": "2027-05-03"
    },
    {
     "at_customers": 9497,
     "deliveries": 3187,
-    "fleet": 13424,
+    "fleet": 13425,
     "float": 910,
     "in_season": true,
     "other": 1727,
-    "requirement": 14296,
-    "shortfall": 872,
-    "store": 2162,
+    "requirement": 14384,
+    "shortfall": 959,
+    "store": 2250,
     "week": "2027-05-10"
    },
    {
     "at_customers": 9539,
     "deliveries": 3235,
-    "fleet": 13393,
+    "fleet": 13392,
     "float": 924,
     "in_season": true,
     "other": 1753,
-    "requirement": 14397,
-    "shortfall": 1004,
-    "store": 2181,
+    "requirement": 14482,
+    "shortfall": 1090,
+    "store": 2266,
     "week": "2027-05-17"
    },
    {
@@ -2587,9 +2590,9 @@
     "float": 940,
     "in_season": true,
     "other": 1783,
-    "requirement": 14513,
-    "shortfall": 1151,
-    "store": 2202,
+    "requirement": 14597,
+    "shortfall": 1235,
+    "store": 2286,
     "week": "2027-05-24"
    },
    {
@@ -2599,21 +2602,21 @@
     "float": 955,
     "in_season": true,
     "other": 1811,
-    "requirement": 14621,
-    "shortfall": 1291,
-    "store": 2222,
+    "requirement": 14703,
+    "shortfall": 1373,
+    "store": 2304,
     "week": "2027-05-31"
    },
    {
     "at_customers": 9673,
     "deliveries": 3387,
-    "fleet": 13299,
+    "fleet": 13298,
     "float": 968,
     "in_season": true,
     "other": 1836,
-    "requirement": 14716,
-    "shortfall": 1417,
-    "store": 2239,
+    "requirement": 14796,
+    "shortfall": 1498,
+    "store": 2319,
     "week": "2027-06-07"
    },
    {
@@ -2623,9 +2626,9 @@
     "float": 980,
     "in_season": true,
     "other": 1859,
-    "requirement": 14804,
-    "shortfall": 1539,
-    "store": 2255,
+    "requirement": 14883,
+    "shortfall": 1618,
+    "store": 2334,
     "week": "2027-06-14"
    },
    {
@@ -2635,9 +2638,9 @@
     "float": 990,
     "in_season": true,
     "other": 1877,
-    "requirement": 14875,
-    "shortfall": 1645,
-    "store": 2268,
+    "requirement": 14953,
+    "shortfall": 1723,
+    "store": 2346,
     "week": "2027-06-21"
    },
    {
@@ -2647,21 +2650,21 @@
     "float": 997,
     "in_season": true,
     "other": 1892,
-    "requirement": 14931,
-    "shortfall": 1734,
-    "store": 2278,
+    "requirement": 15008,
+    "shortfall": 1811,
+    "store": 2355,
     "week": "2027-06-28"
    },
    {
     "at_customers": 9780,
     "deliveries": 3509,
-    "fleet": 13164,
+    "fleet": 13165,
     "float": 1003,
     "in_season": true,
     "other": 1902,
-    "requirement": 14970,
-    "shortfall": 1806,
-    "store": 2285,
+    "requirement": 15047,
+    "shortfall": 1882,
+    "store": 2362,
     "week": "2027-07-05"
    },
    {
@@ -2671,9 +2674,9 @@
     "float": 1005,
     "in_season": true,
     "other": 1907,
-    "requirement": 14989,
-    "shortfall": 1860,
-    "store": 2289,
+    "requirement": 15065,
+    "shortfall": 1936,
+    "store": 2365,
     "week": "2027-07-12"
    },
    {
@@ -2683,9 +2686,9 @@
     "float": 1006,
     "in_season": true,
     "other": 1908,
-    "requirement": 14992,
-    "shortfall": 1896,
-    "store": 2289,
+    "requirement": 15068,
+    "shortfall": 1972,
+    "store": 2365,
     "week": "2027-07-19"
    },
    {
@@ -2695,9 +2698,9 @@
     "float": 1004,
     "in_season": true,
     "other": 1904,
-    "requirement": 14978,
-    "shortfall": 1915,
-    "store": 2287,
+    "requirement": 15054,
+    "shortfall": 1991,
+    "store": 2363,
     "week": "2027-07-26"
    },
    {
@@ -2707,9 +2710,9 @@
     "float": 998,
     "in_season": true,
     "other": 1892,
-    "requirement": 14932,
-    "shortfall": 1904,
-    "store": 2278,
+    "requirement": 15009,
+    "shortfall": 1981,
+    "store": 2355,
     "week": "2027-08-02"
    },
    {
@@ -2719,9 +2722,9 @@
     "float": 991,
     "in_season": true,
     "other": 1879,
-    "requirement": 14882,
-    "shortfall": 1887,
-    "store": 2269,
+    "requirement": 14960,
+    "shortfall": 1965,
+    "store": 2347,
     "week": "2027-08-09"
    },
    {
@@ -2731,9 +2734,9 @@
     "float": 982,
     "in_season": true,
     "other": 1862,
-    "requirement": 14816,
-    "shortfall": 1853,
-    "store": 2257,
+    "requirement": 14895,
+    "shortfall": 1932,
+    "store": 2336,
     "week": "2027-08-16"
    },
    {
@@ -2743,9 +2746,9 @@
     "float": 969,
     "in_season": true,
     "other": 1837,
-    "requirement": 14721,
-    "shortfall": 1791,
-    "store": 2240,
+    "requirement": 14801,
+    "shortfall": 1871,
+    "store": 2320,
     "week": "2027-08-23"
    },
    {
@@ -2755,9 +2758,9 @@
     "float": 955,
     "in_season": true,
     "other": 1811,
-    "requirement": 14622,
-    "shortfall": 1724,
-    "store": 2222,
+    "requirement": 14704,
+    "shortfall": 1806,
+    "store": 2304,
     "week": "2027-08-30"
    },
    {
@@ -2767,33 +2770,33 @@
     "float": 940,
     "in_season": true,
     "other": 1782,
-    "requirement": 14509,
-    "shortfall": 1643,
-    "store": 2201,
+    "requirement": 14593,
+    "shortfall": 1727,
+    "store": 2285,
     "week": "2027-09-06"
    },
    {
     "at_customers": 9533,
     "deliveries": 3229,
-    "fleet": 12834,
+    "fleet": 12835,
     "float": 922,
     "in_season": true,
     "other": 1750,
-    "requirement": 14383,
-    "shortfall": 1549,
-    "store": 2178,
+    "requirement": 14469,
+    "shortfall": 1634,
+    "store": 2264,
     "week": "2027-09-13"
    },
    {
     "at_customers": 9476,
     "deliveries": 3163,
-    "fleet": 12805,
+    "fleet": 12806,
     "float": 904,
     "in_season": true,
     "other": 1714,
-    "requirement": 14247,
-    "shortfall": 1442,
-    "store": 2153,
+    "requirement": 14335,
+    "shortfall": 1529,
+    "store": 2241,
     "week": "2027-09-20"
    }
   ],
@@ -2801,13 +2804,13 @@
    {
     "at_customers": 8121,
     "deliveries": 3435,
-    "fleet": 19951,
+    "fleet": 19950,
     "float": 981,
     "in_season": false,
     "other": 1788,
-    "requirement": 12120,
-    "shortfall": -7831,
-    "store": 1230,
+    "requirement": 12083,
+    "shortfall": -7867,
+    "store": 1193,
     "week": "2026-11-30"
    },
    {
@@ -2817,9 +2820,9 @@
     "float": 959,
     "in_season": false,
     "other": 1747,
-    "requirement": 11961,
-    "shortfall": -7952,
-    "store": 1202,
+    "requirement": 11925,
+    "shortfall": -7988,
+    "store": 1166,
     "week": "2026-12-07"
    },
    {
@@ -2829,21 +2832,21 @@
     "float": 940,
     "in_season": false,
     "other": 1712,
-    "requirement": 11824,
-    "shortfall": -8051,
-    "store": 1178,
+    "requirement": 11789,
+    "shortfall": -8086,
+    "store": 1143,
     "week": "2026-12-14"
    },
    {
     "at_customers": 7947,
     "deliveries": 3234,
-    "fleet": 19836,
+    "fleet": 19837,
     "float": 924,
     "in_season": false,
     "other": 1683,
-    "requirement": 11712,
-    "shortfall": -8124,
-    "store": 1158,
+    "requirement": 11678,
+    "shortfall": -8159,
+    "store": 1124,
     "week": "2026-12-21"
    },
    {
@@ -2853,9 +2856,9 @@
     "float": 913,
     "in_season": false,
     "other": 1663,
-    "requirement": 11634,
-    "shortfall": -8166,
-    "store": 1144,
+    "requirement": 11600,
+    "shortfall": -8200,
+    "store": 1110,
     "week": "2026-12-28"
    },
    {
@@ -2865,9 +2868,9 @@
     "float": 906,
     "in_season": false,
     "other": 1650,
-    "requirement": 11878,
-    "shortfall": -7887,
-    "store": 1431,
+    "requirement": 11904,
+    "shortfall": -7861,
+    "store": 1457,
     "week": "2027-01-04"
    },
    {
@@ -2877,9 +2880,9 @@
     "float": 902,
     "in_season": false,
     "other": 1644,
-    "requirement": 11854,
-    "shortfall": -7873,
-    "store": 1427,
+    "requirement": 11880,
+    "shortfall": -7847,
+    "store": 1453,
     "week": "2027-01-11"
    },
    {
@@ -2889,9 +2892,9 @@
     "float": 904,
     "in_season": false,
     "other": 1646,
-    "requirement": 11863,
-    "shortfall": -7828,
-    "store": 1428,
+    "requirement": 11889,
+    "shortfall": -7802,
+    "store": 1454,
     "week": "2027-01-18"
    },
    {
@@ -2901,9 +2904,9 @@
     "float": 909,
     "in_season": false,
     "other": 1656,
-    "requirement": 11902,
-    "shortfall": -7752,
-    "store": 1435,
+    "requirement": 11928,
+    "shortfall": -7726,
+    "store": 1461,
     "week": "2027-01-25"
    },
    {
@@ -2913,9 +2916,9 @@
     "float": 920,
     "in_season": false,
     "other": 1676,
-    "requirement": 11978,
-    "shortfall": -7639,
-    "store": 1448,
+    "requirement": 12004,
+    "shortfall": -7613,
+    "store": 1474,
     "week": "2027-02-01"
    },
    {
@@ -2925,9 +2928,9 @@
     "float": 934,
     "in_season": false,
     "other": 1702,
-    "requirement": 12080,
-    "shortfall": -7499,
-    "store": 1466,
+    "requirement": 12105,
+    "shortfall": -7474,
+    "store": 1491,
     "week": "2027-02-08"
    },
    {
@@ -2937,21 +2940,21 @@
     "float": 953,
     "in_season": false,
     "other": 1737,
-    "requirement": 12216,
-    "shortfall": -7325,
-    "store": 1490,
+    "requirement": 12241,
+    "shortfall": -7300,
+    "store": 1515,
     "week": "2027-02-15"
    },
    {
     "at_customers": 8104,
     "deliveries": 3415,
-    "fleet": 19502,
+    "fleet": 19501,
     "float": 976,
     "in_season": false,
     "other": 1777,
-    "requirement": 12376,
-    "shortfall": -7126,
-    "store": 1519,
+    "requirement": 12399,
+    "shortfall": -7102,
+    "store": 1542,
     "week": "2027-02-22"
    },
    {
@@ -2961,21 +2964,21 @@
     "float": 1002,
     "in_season": false,
     "other": 1826,
-    "requirement": 12565,
-    "shortfall": -6895,
-    "store": 1552,
+    "requirement": 12587,
+    "shortfall": -6873,
+    "store": 1574,
     "week": "2027-03-01"
    },
    {
     "at_customers": 8274,
     "deliveries": 3611,
-    "fleet": 19420,
+    "fleet": 19419,
     "float": 1032,
     "in_season": false,
     "other": 1879,
-    "requirement": 12774,
-    "shortfall": -6646,
-    "store": 1589,
+    "requirement": 12795,
+    "shortfall": -6624,
+    "store": 1610,
     "week": "2027-03-08"
    },
    {
@@ -2985,9 +2988,9 @@
     "float": 1064,
     "in_season": false,
     "other": 1938,
-    "requirement": 13002,
-    "shortfall": -6375,
-    "store": 1629,
+    "requirement": 13022,
+    "shortfall": -6355,
+    "store": 1649,
     "week": "2027-03-15"
    },
    {
@@ -2997,33 +3000,33 @@
     "float": 1097,
     "in_season": false,
     "other": 1999,
-    "requirement": 13240,
-    "shortfall": -6093,
-    "store": 1671,
+    "requirement": 13259,
+    "shortfall": -6074,
+    "store": 1690,
     "week": "2027-03-22"
    },
    {
     "at_customers": 8579,
     "deliveries": 3963,
-    "fleet": 19287,
+    "fleet": 19286,
     "float": 1132,
     "in_season": false,
     "other": 2062,
-    "requirement": 13488,
-    "shortfall": -5799,
-    "store": 1715,
+    "requirement": 13505,
+    "shortfall": -5781,
+    "store": 1732,
     "week": "2027-03-29"
    },
    {
     "at_customers": 8687,
     "deliveries": 4088,
-    "fleet": 19239,
+    "fleet": 19240,
     "float": 1168,
     "in_season": false,
     "other": 2128,
-    "requirement": 13742,
-    "shortfall": -5497,
-    "store": 1759,
+    "requirement": 13759,
+    "shortfall": -5481,
+    "store": 1776,
     "week": "2027-04-05"
    },
    {
@@ -3033,9 +3036,9 @@
     "float": 1263,
     "in_season": false,
     "other": 2300,
-    "requirement": 14978,
-    "shortfall": -4211,
-    "store": 1878,
+    "requirement": 14991,
+    "shortfall": -4198,
+    "store": 1891,
     "week": "2027-04-12"
    },
    {
@@ -3045,9 +3048,9 @@
     "float": 1360,
     "in_season": false,
     "other": 2477,
-    "requirement": 16230,
-    "shortfall": -2905,
-    "store": 2000,
+    "requirement": 16239,
+    "shortfall": -2896,
+    "store": 2009,
     "week": "2027-04-19"
    },
    {
@@ -3057,9 +3060,9 @@
     "float": 1458,
     "in_season": false,
     "other": 2655,
-    "requirement": 17488,
-    "shortfall": -1587,
-    "store": 2122,
+    "requirement": 17494,
+    "shortfall": -1581,
+    "store": 2128,
     "week": "2027-04-26"
    },
    {
@@ -3069,9 +3072,9 @@
     "float": 1491,
     "in_season": true,
     "other": 2717,
-    "requirement": 19039,
-    "shortfall": 24,
-    "store": 3474,
+    "requirement": 19308,
+    "shortfall": 293,
+    "store": 3743,
     "week": "2027-05-03"
    },
    {
@@ -3081,21 +3084,21 @@
     "float": 1521,
     "in_season": true,
     "other": 2770,
-    "requirement": 19249,
-    "shortfall": 295,
-    "store": 3511,
+    "requirement": 19517,
+    "shortfall": 563,
+    "store": 3779,
     "week": "2027-05-10"
    },
    {
     "at_customers": 11529,
     "deliveries": 5416,
-    "fleet": 18890,
+    "fleet": 18891,
     "float": 1547,
     "in_season": true,
     "other": 2819,
-    "requirement": 19439,
-    "shortfall": 549,
-    "store": 3544,
+    "requirement": 19706,
+    "shortfall": 815,
+    "store": 3811,
     "week": "2027-05-17"
    },
    {
@@ -3105,9 +3108,9 @@
     "float": 1620,
     "in_season": true,
     "other": 2951,
-    "requirement": 19960,
-    "shortfall": 1134,
-    "store": 3636,
+    "requirement": 20224,
+    "shortfall": 1398,
+    "store": 3900,
     "week": "2027-05-24"
    },
    {
@@ -3117,9 +3120,9 @@
     "float": 1700,
     "in_season": true,
     "other": 3097,
-    "requirement": 20532,
-    "shortfall": 1773,
-    "store": 3736,
+    "requirement": 20793,
+    "shortfall": 2034,
+    "store": 3997,
     "week": "2027-05-31"
    },
    {
@@ -3129,9 +3132,9 @@
     "float": 1769,
     "in_season": true,
     "other": 3222,
-    "requirement": 21023,
-    "shortfall": 2337,
-    "store": 3822,
+    "requirement": 21281,
+    "shortfall": 2595,
+    "store": 4080,
     "week": "2027-06-07"
    },
    {
@@ -3141,33 +3144,33 @@
     "float": 1837,
     "in_season": true,
     "other": 3346,
-    "requirement": 21509,
-    "shortfall": 2896,
-    "store": 3907,
+    "requirement": 21765,
+    "shortfall": 3152,
+    "store": 4163,
     "week": "2027-06-14"
    },
    {
     "at_customers": 12590,
     "deliveries": 6623,
-    "fleet": 18537,
+    "fleet": 18536,
     "float": 1892,
     "in_season": true,
     "other": 3447,
-    "requirement": 21906,
-    "shortfall": 3369,
-    "store": 3977,
+    "requirement": 22159,
+    "shortfall": 3623,
+    "store": 4230,
     "week": "2027-06-21"
    },
    {
     "at_customers": 12721,
     "deliveries": 6772,
-    "fleet": 18459,
+    "fleet": 18458,
     "float": 1935,
     "in_season": true,
     "other": 3525,
-    "requirement": 22211,
-    "shortfall": 3752,
-    "store": 4030,
+    "requirement": 22463,
+    "shortfall": 4005,
+    "store": 4282,
     "week": "2027-06-28"
    },
    {
@@ -3177,9 +3180,9 @@
     "float": 1964,
     "in_season": true,
     "other": 3578,
-    "requirement": 22420,
-    "shortfall": 4041,
-    "store": 4067,
+    "requirement": 22671,
+    "shortfall": 4292,
+    "store": 4318,
     "week": "2027-07-05"
    },
    {
@@ -3189,9 +3192,9 @@
     "float": 1980,
     "in_season": true,
     "other": 3607,
-    "requirement": 22534,
-    "shortfall": 4235,
-    "store": 4087,
+    "requirement": 22784,
+    "shortfall": 4485,
+    "store": 4337,
     "week": "2027-07-12"
    },
    {
@@ -3201,9 +3204,9 @@
     "float": 1983,
     "in_season": true,
     "other": 3611,
-    "requirement": 22551,
-    "shortfall": 4332,
-    "store": 4090,
+    "requirement": 22801,
+    "shortfall": 4582,
+    "store": 4340,
     "week": "2027-07-19"
    },
    {
@@ -3213,9 +3216,9 @@
     "float": 1972,
     "in_season": true,
     "other": 3592,
-    "requirement": 22474,
-    "shortfall": 4334,
-    "store": 4076,
+    "requirement": 22725,
+    "shortfall": 4585,
+    "store": 4327,
     "week": "2027-07-26"
    },
    {
@@ -3225,21 +3228,21 @@
     "float": 1936,
     "in_season": true,
     "other": 3527,
-    "requirement": 22220,
-    "shortfall": 4159,
-    "store": 4032,
+    "requirement": 22472,
+    "shortfall": 4411,
+    "store": 4284,
     "week": "2027-08-02"
    },
    {
     "at_customers": 12615,
     "deliveries": 6651,
-    "fleet": 17986,
+    "fleet": 17985,
     "float": 1900,
     "in_season": true,
     "other": 3462,
-    "requirement": 21964,
-    "shortfall": 3978,
-    "store": 3987,
+    "requirement": 22217,
+    "shortfall": 4232,
+    "store": 4240,
     "week": "2027-08-09"
    },
    {
@@ -3249,9 +3252,9 @@
     "float": 1853,
     "in_season": true,
     "other": 3375,
-    "requirement": 21623,
-    "shortfall": 3712,
-    "store": 3927,
+    "requirement": 21878,
+    "shortfall": 3967,
+    "store": 4182,
     "week": "2027-08-16"
    },
    {
@@ -3261,45 +3264,45 @@
     "float": 1783,
     "in_season": true,
     "other": 3248,
-    "requirement": 21125,
-    "shortfall": 3286,
-    "store": 3840,
+    "requirement": 21383,
+    "shortfall": 3544,
+    "store": 4098,
     "week": "2027-08-23"
    },
    {
     "at_customers": 12043,
     "deliveries": 6000,
-    "fleet": 17770,
+    "fleet": 17769,
     "float": 1714,
     "in_season": true,
     "other": 3123,
-    "requirement": 20634,
-    "shortfall": 2864,
-    "store": 3754,
+    "requirement": 20894,
+    "shortfall": 3125,
+    "store": 4014,
     "week": "2027-08-30"
    },
    {
     "at_customers": 11804,
     "deliveries": 5728,
-    "fleet": 17703,
+    "fleet": 17704,
     "float": 1637,
     "in_season": true,
     "other": 2981,
-    "requirement": 20078,
-    "shortfall": 2375,
-    "store": 3656,
+    "requirement": 20342,
+    "shortfall": 2638,
+    "store": 3920,
     "week": "2027-09-06"
    },
    {
     "at_customers": 11541,
     "deliveries": 5429,
-    "fleet": 17641,
+    "fleet": 17640,
     "float": 1551,
     "in_season": true,
     "other": 2825,
-    "requirement": 19466,
-    "shortfall": 1825,
-    "store": 3549,
+    "requirement": 19732,
+    "shortfall": 2092,
+    "store": 3815,
     "week": "2027-09-13"
    },
    {
@@ -3309,9 +3312,9 @@
     "float": 1459,
     "in_season": true,
     "other": 2658,
-    "requirement": 18809,
-    "shortfall": 1226,
-    "store": 3434,
+    "requirement": 19079,
+    "shortfall": 1496,
+    "store": 3704,
     "week": "2027-09-20"
    }
   ],
@@ -3323,21 +3326,21 @@
     "float": 69,
     "in_season": false,
     "other": 141,
-    "requirement": 1021,
-    "shortfall": -750,
-    "store": 91,
+    "requirement": 1014,
+    "shortfall": -757,
+    "store": 84,
     "week": "2026-11-30"
    },
    {
     "at_customers": 721,
     "deliveries": 244,
-    "fleet": 1765,
+    "fleet": 1766,
     "float": 70,
     "in_season": false,
     "other": 141,
-    "requirement": 1023,
-    "shortfall": -742,
-    "store": 91,
+    "requirement": 1017,
+    "shortfall": -749,
+    "store": 85,
     "week": "2026-12-07"
    },
    {
@@ -3347,21 +3350,21 @@
     "float": 70,
     "in_season": false,
     "other": 142,
-    "requirement": 1026,
-    "shortfall": -735,
-    "store": 92,
+    "requirement": 1019,
+    "shortfall": -742,
+    "store": 85,
     "week": "2026-12-14"
    },
    {
     "at_customers": 723,
     "deliveries": 246,
-    "fleet": 1755,
+    "fleet": 1756,
     "float": 70,
     "in_season": false,
     "other": 142,
-    "requirement": 1027,
-    "shortfall": -728,
-    "store": 92,
+    "requirement": 1021,
+    "shortfall": -735,
+    "store": 86,
     "week": "2026-12-21"
    },
    {
@@ -3371,9 +3374,9 @@
     "float": 70,
     "in_season": false,
     "other": 143,
-    "requirement": 1028,
-    "shortfall": -722,
-    "store": 92,
+    "requirement": 1022,
+    "shortfall": -728,
+    "store": 86,
     "week": "2026-12-28"
    },
    {
@@ -3415,25 +3418,25 @@
    {
     "at_customers": 722,
     "deliveries": 246,
-    "fleet": 1730,
+    "fleet": 1729,
     "float": 70,
     "in_season": false,
     "other": 142,
     "requirement": 1060,
-    "shortfall": -670,
+    "shortfall": -669,
     "store": 126,
     "week": "2027-01-25"
    },
    {
     "at_customers": 721,
     "deliveries": 245,
-    "fleet": 1724,
+    "fleet": 1725,
     "float": 70,
     "in_season": false,
     "other": 142,
-    "requirement": 1058,
+    "requirement": 1059,
     "shortfall": -666,
-    "store": 125,
+    "store": 126,
     "week": "2027-02-01"
    },
    {
@@ -3451,13 +3454,13 @@
    {
     "at_customers": 719,
     "deliveries": 242,
-    "fleet": 1714,
+    "fleet": 1715,
     "float": 69,
     "in_season": false,
     "other": 140,
-    "requirement": 1052,
+    "requirement": 1053,
     "shortfall": -662,
-    "store": 124,
+    "store": 125,
     "week": "2027-02-15"
    },
    {
@@ -3487,37 +3490,37 @@
    {
     "at_customers": 713,
     "deliveries": 236,
-    "fleet": 1698,
+    "fleet": 1699,
     "float": 67,
     "in_season": false,
     "other": 136,
-    "requirement": 1038,
+    "requirement": 1039,
     "shortfall": -660,
-    "store": 122,
+    "store": 123,
     "week": "2027-03-08"
    },
    {
     "at_customers": 711,
     "deliveries": 233,
-    "fleet": 1694,
+    "fleet": 1695,
     "float": 67,
     "in_season": false,
     "other": 135,
-    "requirement": 1034,
+    "requirement": 1035,
     "shortfall": -660,
-    "store": 121,
+    "store": 122,
     "week": "2027-03-15"
    },
    {
     "at_customers": 708,
     "deliveries": 231,
-    "fleet": 1689,
+    "fleet": 1690,
     "float": 66,
     "in_season": false,
     "other": 134,
-    "requirement": 1028,
+    "requirement": 1029,
     "shortfall": -661,
-    "store": 120,
+    "store": 121,
     "week": "2027-03-22"
    },
    {
@@ -3527,9 +3530,9 @@
     "float": 65,
     "in_season": false,
     "other": 132,
-    "requirement": 1022,
-    "shortfall": -662,
-    "store": 119,
+    "requirement": 1023,
+    "shortfall": -661,
+    "store": 120,
     "week": "2027-03-29"
    },
    {
@@ -3539,9 +3542,9 @@
     "float": 64,
     "in_season": false,
     "other": 130,
-    "requirement": 1016,
-    "shortfall": -663,
-    "store": 118,
+    "requirement": 1017,
+    "shortfall": -662,
+    "store": 119,
     "week": "2027-04-05"
    },
    {
@@ -3551,9 +3554,9 @@
     "float": 64,
     "in_season": false,
     "other": 129,
-    "requirement": 1011,
-    "shortfall": -664,
-    "store": 117,
+    "requirement": 1012,
+    "shortfall": -663,
+    "store": 118,
     "week": "2027-04-12"
    },
    {
@@ -3563,9 +3566,9 @@
     "float": 63,
     "in_season": false,
     "other": 127,
-    "requirement": 1005,
-    "shortfall": -665,
-    "store": 116,
+    "requirement": 1006,
+    "shortfall": -664,
+    "store": 117,
     "week": "2027-04-19"
    },
    {
@@ -3575,21 +3578,21 @@
     "float": 62,
     "in_season": false,
     "other": 126,
-    "requirement": 999,
-    "shortfall": -667,
-    "store": 115,
+    "requirement": 1000,
+    "shortfall": -666,
+    "store": 116,
     "week": "2027-04-26"
    },
    {
     "at_customers": 694,
     "deliveries": 215,
-    "fleet": 1661,
+    "fleet": 1660,
     "float": 61,
     "in_season": true,
     "other": 124,
-    "requirement": 1111,
-    "shortfall": -550,
-    "store": 232,
+    "requirement": 1136,
+    "shortfall": -524,
+    "store": 257,
     "week": "2027-05-03"
    },
    {
@@ -3599,9 +3602,9 @@
     "float": 60,
     "in_season": true,
     "other": 122,
-    "requirement": 1103,
-    "shortfall": -553,
-    "store": 231,
+    "requirement": 1128,
+    "shortfall": -528,
+    "store": 256,
     "week": "2027-05-10"
    },
    {
@@ -3611,9 +3614,9 @@
     "float": 59,
     "in_season": true,
     "other": 120,
-    "requirement": 1096,
-    "shortfall": -556,
-    "store": 230,
+    "requirement": 1121,
+    "shortfall": -531,
+    "store": 255,
     "week": "2027-05-17"
    },
    {
@@ -3623,57 +3626,57 @@
     "float": 58,
     "in_season": true,
     "other": 118,
-    "requirement": 1089,
-    "shortfall": -558,
-    "store": 229,
+    "requirement": 1114,
+    "shortfall": -533,
+    "store": 254,
     "week": "2027-05-24"
    },
    {
     "at_customers": 682,
     "deliveries": 202,
-    "fleet": 1645,
+    "fleet": 1644,
     "float": 58,
     "in_season": true,
     "other": 117,
-    "requirement": 1085,
-    "shortfall": -560,
-    "store": 228,
+    "requirement": 1110,
+    "shortfall": -534,
+    "store": 253,
     "week": "2027-05-31"
    },
    {
     "at_customers": 680,
     "deliveries": 200,
-    "fleet": 1640,
+    "fleet": 1639,
     "float": 57,
     "in_season": true,
     "other": 115,
-    "requirement": 1079,
-    "shortfall": -561,
-    "store": 227,
+    "requirement": 1104,
+    "shortfall": -535,
+    "store": 252,
     "week": "2027-06-07"
    },
    {
     "at_customers": 678,
     "deliveries": 198,
-    "fleet": 1635,
+    "fleet": 1634,
     "float": 56,
     "in_season": true,
     "other": 114,
-    "requirement": 1074,
-    "shortfall": -561,
-    "store": 226,
+    "requirement": 1099,
+    "shortfall": -535,
+    "store": 251,
     "week": "2027-06-14"
    },
    {
     "at_customers": 676,
     "deliveries": 196,
-    "fleet": 1630,
+    "fleet": 1631,
     "float": 56,
     "in_season": true,
     "other": 113,
-    "requirement": 1070,
-    "shortfall": -560,
-    "store": 225,
+    "requirement": 1096,
+    "shortfall": -535,
+    "store": 251,
     "week": "2027-06-21"
    },
    {
@@ -3683,21 +3686,21 @@
     "float": 56,
     "in_season": true,
     "other": 113,
-    "requirement": 1069,
-    "shortfall": -558,
-    "store": 225,
+    "requirement": 1094,
+    "shortfall": -533,
+    "store": 250,
     "week": "2027-06-28"
    },
    {
     "at_customers": 675,
     "deliveries": 194,
-    "fleet": 1623,
+    "fleet": 1622,
     "float": 55,
     "in_season": true,
     "other": 112,
-    "requirement": 1067,
-    "shortfall": -556,
-    "store": 225,
+    "requirement": 1092,
+    "shortfall": -530,
+    "store": 250,
     "week": "2027-07-05"
    },
    {
@@ -3707,45 +3710,45 @@
     "float": 55,
     "in_season": true,
     "other": 112,
-    "requirement": 1066,
-    "shortfall": -552,
-    "store": 225,
+    "requirement": 1091,
+    "shortfall": -527,
+    "store": 250,
     "week": "2027-07-12"
    },
    {
     "at_customers": 675,
     "deliveries": 194,
-    "fleet": 1615,
+    "fleet": 1614,
     "float": 55,
     "in_season": true,
     "other": 112,
-    "requirement": 1067,
-    "shortfall": -548,
-    "store": 225,
+    "requirement": 1092,
+    "shortfall": -522,
+    "store": 250,
     "week": "2027-07-19"
    },
    {
     "at_customers": 675,
     "deliveries": 195,
-    "fleet": 1612,
+    "fleet": 1611,
     "float": 56,
     "in_season": true,
     "other": 113,
-    "requirement": 1069,
-    "shortfall": -543,
-    "store": 225,
+    "requirement": 1094,
+    "shortfall": -517,
+    "store": 250,
     "week": "2027-07-26"
    },
    {
     "at_customers": 676,
     "deliveries": 196,
-    "fleet": 1606,
+    "fleet": 1607,
     "float": 56,
     "in_season": true,
     "other": 113,
-    "requirement": 1070,
-    "shortfall": -536,
-    "store": 225,
+    "requirement": 1096,
+    "shortfall": -511,
+    "store": 251,
     "week": "2027-08-02"
    },
    {
@@ -3755,33 +3758,33 @@
     "float": 56,
     "in_season": true,
     "other": 114,
-    "requirement": 1073,
-    "shortfall": -529,
-    "store": 226,
+    "requirement": 1098,
+    "shortfall": -504,
+    "store": 251,
     "week": "2027-08-09"
    },
    {
     "at_customers": 679,
     "deliveries": 199,
-    "fleet": 1598,
+    "fleet": 1599,
     "float": 57,
     "in_season": true,
     "other": 115,
-    "requirement": 1077,
-    "shortfall": -521,
-    "store": 226,
+    "requirement": 1103,
+    "shortfall": -496,
+    "store": 252,
     "week": "2027-08-16"
    },
    {
     "at_customers": 681,
     "deliveries": 201,
-    "fleet": 1593,
+    "fleet": 1594,
     "float": 57,
     "in_season": true,
     "other": 116,
-    "requirement": 1081,
-    "shortfall": -512,
-    "store": 227,
+    "requirement": 1107,
+    "shortfall": -487,
+    "store": 253,
     "week": "2027-08-23"
    },
    {
@@ -3791,45 +3794,45 @@
     "float": 58,
     "in_season": true,
     "other": 118,
-    "requirement": 1087,
-    "shortfall": -503,
-    "store": 228,
+    "requirement": 1112,
+    "shortfall": -478,
+    "store": 253,
     "week": "2027-08-30"
    },
    {
     "at_customers": 686,
     "deliveries": 206,
-    "fleet": 1586,
+    "fleet": 1585,
     "float": 59,
     "in_season": true,
     "other": 119,
-    "requirement": 1093,
-    "shortfall": -493,
-    "store": 229,
+    "requirement": 1118,
+    "shortfall": -467,
+    "store": 254,
     "week": "2027-09-06"
    },
    {
     "at_customers": 688,
     "deliveries": 209,
-    "fleet": 1581,
+    "fleet": 1580,
     "float": 60,
     "in_season": true,
     "other": 121,
-    "requirement": 1099,
-    "shortfall": -482,
-    "store": 230,
+    "requirement": 1124,
+    "shortfall": -456,
+    "store": 255,
     "week": "2027-09-13"
    },
    {
     "at_customers": 691,
     "deliveries": 212,
-    "fleet": 1576,
+    "fleet": 1577,
     "float": 61,
     "in_season": true,
     "other": 123,
-    "requirement": 1106,
-    "shortfall": -470,
-    "store": 231,
+    "requirement": 1132,
+    "shortfall": -445,
+    "store": 257,
     "week": "2027-09-20"
    }
   ]
@@ -3839,140 +3842,140 @@
    "call_holds": true,
    "input": "what a line holds per container sold, 20 per cent down",
    "plan": {
-    "FIR": 1488,
-    "K20": 426,
-    "K30": 1678,
-    "K50": 3738,
-    "KIL": -464
+    "FIR": 1612,
+    "K20": 619,
+    "K30": 1754,
+    "K50": 3989,
+    "KIL": -439
    }
   },
   {
    "call_holds": true,
    "input": "what a line holds per container sold, 20 per cent up",
    "plan": {
-    "FIR": 1450,
-    "K20": 619,
-    "K30": 2152,
-    "K50": 4935,
-    "KIL": -476
+    "FIR": 1573,
+    "K20": 812,
+    "K30": 2228,
+    "K50": 5185,
+    "KIL": -451
    }
   },
   {
    "call_holds": true,
    "input": "the store's cover, 20 per cent down",
    "plan": {
-    "FIR": 1359,
-    "K20": 426,
-    "K30": 1648,
-    "K50": 3840,
-    "KIL": -486
+    "FIR": 1494,
+    "K20": 642,
+    "K30": 1747,
+    "K50": 4105,
+    "KIL": -460
    }
   },
   {
    "call_holds": true,
    "input": "the store's cover, 20 per cent up",
    "plan": {
-    "FIR": 1580,
-    "K20": 619,
-    "K30": 2182,
-    "K50": 4829,
-    "KIL": -454
+    "FIR": 1691,
+    "K20": 789,
+    "K30": 2235,
+    "K50": 5064,
+    "KIL": -430
    }
   },
   {
    "call_holds": true,
    "input": "the containers lost in a year, 20 per cent down",
    "plan": {
-    "FIR": 1292,
-    "K20": 493,
-    "K30": 1753,
-    "K50": 4007,
-    "KIL": -508
+    "FIR": 1416,
+    "K20": 686,
+    "K30": 1830,
+    "K50": 4257,
+    "KIL": -483
    }
   },
   {
    "call_holds": true,
    "input": "the containers lost in a year, 20 per cent up",
    "plan": {
-    "FIR": 1646,
-    "K20": 552,
-    "K30": 2076,
-    "K50": 4673,
-    "KIL": -432
+    "FIR": 1770,
+    "K20": 745,
+    "K30": 2153,
+    "K50": 4924,
+    "KIL": -407
    }
   },
   {
    "call_holds": true,
    "input": "the season's deliveries, 5 per cent down",
    "plan": {
-    "FIR": 1279,
-    "K20": 403,
-    "K30": 1582,
-    "K50": 3638,
-    "KIL": -503
+    "FIR": 1405,
+    "K20": 601,
+    "K30": 1663,
+    "K50": 3892,
+    "KIL": -478
    }
   },
   {
    "call_holds": true,
    "input": "the season's deliveries, 5 per cent up",
    "plan": {
-    "FIR": 1660,
-    "K20": 642,
-    "K30": 2248,
-    "K50": 5030,
-    "KIL": -437
+    "FIR": 1781,
+    "K20": 830,
+    "K30": 2320,
+    "K50": 5277,
+    "KIL": -412
    }
   },
   {
    "call_holds": true,
    "input": "all four fitted inputs down together, two measured spreads each",
    "plan": {
-    "FIR": 1326,
-    "K20": 332,
-    "K30": 1606,
-    "K50": 3801,
-    "KIL": -507
+    "FIR": 1450,
+    "K20": 531,
+    "K30": 1685,
+    "K50": 4054,
+    "KIL": -481
    }
   },
   {
    "call_holds": true,
    "input": "all four fitted inputs up together, two measured spreads each",
    "plan": {
-    "FIR": 1620,
-    "K20": 724,
-    "K30": 2233,
-    "K50": 4881,
-    "KIL": -431
+    "FIR": 1743,
+    "K20": 910,
+    "K30": 2307,
+    "K50": 5130,
+    "KIL": -406
    }
   }
  ],
  "plan": {
-  "FIR": 1469,
-  "K20": 522,
-  "K30": 1915,
-  "K50": 4334,
-  "KIL": -470
+  "FIR": 1593,
+  "K20": 715,
+  "K30": 1991,
+  "K50": 4585,
+  "KIL": -445
  },
  "plan_band": {
   "FIR": [
-   1324,
-   1742
+   1339,
+   1769
   ],
   "K20": [
-   309,
-   852
+   322,
+   855
   ],
   "K30": [
-   1692,
-   2173
+   1769,
+   2166
   ],
   "K50": [
-   3864,
-   5000
+   3951,
+   5064
   ],
   "KIL": [
-   -491,
-   -430
+   -488,
+   -429
   ]
  },
  "plan_week": {
@@ -4004,7 +4007,6 @@
    "face_rise": 432,
    "fixed_per_line": 2.96,
    "float": 404,
-   "half_runs_2026": 289,
    "leaving_rate": 0.1203,
    "mean_added_back": 0.44,
    "mean_days": 3.9,
@@ -4014,10 +4016,12 @@
    "per_sale_half": 0.5,
    "per_sale_twice": 0.77,
    "per_sale_weekly": 0.99,
+   "runs_2026_total": 685,
    "runs_on_sale_at_fullest": 2170,
-   "store": 1470,
+   "share_runs_2026": 348,
+   "store": 1593,
    "store_cover_route": 877,
-   "store_cover_weeks": 0.391,
+   "store_cover_weeks": 0.347,
    "swing": 378,
    "temp_at_week": 17.2,
    "trade_per_sale": 0.91,
@@ -4037,7 +4041,6 @@
    "face_rise": 479,
    "fixed_per_line": 2.02,
    "float": 303,
-   "half_runs_2026": 402,
    "leaving_rate": 0.0287,
    "mean_added_back": 0.23,
    "mean_days": 4.1,
@@ -4047,10 +4050,12 @@
    "per_sale_half": 0.52,
    "per_sale_twice": 0.81,
    "per_sale_weekly": 1.04,
+   "runs_2026_total": 952,
    "runs_on_sale_at_fullest": 3600,
-   "store": 2004,
+   "share_runs_2026": 483,
+   "store": 2197,
    "store_cover_route": 996,
-   "store_cover_weeks": 0.455,
+   "store_cover_weeks": 0.347,
    "swing": 785,
    "temp_at_week": 21.0,
    "trade_per_sale": 0.98,
@@ -4070,7 +4075,6 @@
    "face_rise": 1324,
    "fixed_per_line": 2.11,
    "float": 1004,
-   "half_runs_2026": 296,
    "leaving_rate": 0.0749,
    "mean_added_back": 0.53,
    "mean_days": 3.9,
@@ -4080,10 +4084,12 @@
    "per_sale_half": 0.47,
    "per_sale_twice": 0.71,
    "per_sale_weekly": 0.94,
+   "runs_2026_total": 700,
    "runs_on_sale_at_fullest": 2250,
-   "store": 2287,
+   "share_runs_2026": 355,
+   "store": 2363,
    "store_cover_route": 1777,
-   "store_cover_weeks": 0.38,
+   "store_cover_weeks": 0.347,
    "swing": 2133,
    "temp_at_week": 21.0,
    "trade_per_sale": 0.86,
@@ -4103,7 +4109,6 @@
    "face_rise": 2643,
    "fixed_per_line": 2.26,
    "float": 1972,
-   "half_runs_2026": 294,
    "leaving_rate": 0.1172,
    "mean_added_back": 0.94,
    "mean_days": 4.0,
@@ -4113,10 +4118,12 @@
    "per_sale_half": 0.48,
    "per_sale_twice": 0.71,
    "per_sale_weekly": 0.95,
+   "runs_2026_total": 695,
    "runs_on_sale_at_fullest": 3800,
-   "store": 4076,
+   "share_runs_2026": 353,
+   "store": 4327,
    "store_cover_route": 2714,
-   "store_cover_weeks": 0.358,
+   "store_cover_weeks": 0.347,
    "swing": 4611,
    "temp_at_week": 21.0,
    "trade_per_sale": 0.87,
@@ -4136,7 +4143,6 @@
    "face_rise": -11,
    "fixed_per_line": 3.03,
    "float": 61,
-   "half_runs_2026": 34,
    "leaving_rate": 0.1253,
    "mean_added_back": 0.73,
    "mean_days": 4.0,
@@ -4146,10 +4152,12 @@
    "per_sale_half": 0.54,
    "per_sale_twice": 0.7,
    "per_sale_weekly": 1.09,
+   "runs_2026_total": 80,
    "runs_on_sale_at_fullest": 360,
-   "store": 231,
+   "share_runs_2026": 41,
+   "store": 257,
    "store_cover_route": 122,
-   "store_cover_weeks": 0.374,
+   "store_cover_weeks": 0.347,
    "swing": -29,
    "temp_at_week": 17.2,
    "trade_per_sale": 0.92,
@@ -4190,39 +4198,39 @@
  },
  "refused": {
   "a line's weekly sales from four weeks of its own dockets": {
-   "FIR": 1450,
-   "K20": 585,
-   "K30": 1961,
-   "K50": 4425,
-   "KIL": -471
+   "FIR": 1573,
+   "K20": 778,
+   "K30": 2038,
+   "K50": 4676,
+   "KIL": -446
   },
   "a line's weekly sales from thirteen weeks of its own dockets": {
-   "FIR": 1460,
-   "K20": 562,
-   "K30": 1929,
-   "K50": 4404,
-   "KIL": -470
+   "FIR": 1583,
+   "K20": 755,
+   "K30": 2005,
+   "K50": 4655,
+   "KIL": -445
   },
   "deliveries at the count as its own week's": {
-   "FIR": 1427,
-   "K20": 611,
-   "K30": 2143,
-   "K50": 4675,
-   "KIL": -461
+   "FIR": 1550,
+   "K20": 804,
+   "K30": 2219,
+   "K50": 4926,
+   "KIL": -436
   },
   "deliveries at the count as the mean of its last eight weeks": {
-   "FIR": 1545,
-   "K20": 396,
-   "K30": 1677,
-   "K50": 3588,
-   "KIL": -453
+   "FIR": 1669,
+   "K20": 589,
+   "K30": 1754,
+   "K50": 3839,
+   "KIL": -428
   },
   "deliveries at the count as the mean of its last four weeks": {
-   "FIR": 1478,
-   "K20": 479,
-   "K30": 1821,
-   "K50": 3975,
-   "KIL": -461
+   "FIR": 1602,
+   "K20": 672,
+   "K30": 1897,
+   "K50": 4226,
+   "KIL": -436
   },
   "each type's own regression of its Monday total on deliveries, the intercept read as the run share": {
    "FIR": 1249,
@@ -4232,25 +4240,25 @@
    "KIL": -504
   },
   "one seasonal harmonic in the deliveries fit for every type": {
-   "FIR": 1498,
-   "K20": 556,
-   "K30": 1922,
-   "K50": 4666,
-   "KIL": -472
+   "FIR": 1621,
+   "K20": 747,
+   "K30": 1998,
+   "K50": 4915,
+   "KIL": -446
   },
   "the estate's scheduled volume level through the 2027 season": {
-   "FIR": 1479,
-   "K20": 466,
-   "K30": 1698,
-   "K50": 3785,
-   "KIL": -470
+   "FIR": 1602,
+   "K20": 662,
+   "K30": 1778,
+   "K50": 4038,
+   "KIL": -445
   },
   "the fall per container sold left free in the fit of the checks": {
-   "FIR": 1490,
-   "K20": 447,
-   "K30": 1996,
-   "K50": 3952,
-   "KIL": -475
+   "FIR": 1614,
+   "K20": 640,
+   "K30": 2073,
+   "K50": 4203,
+   "KIL": -450
   }
  },
  "refused_cover": {
@@ -4477,7 +4485,7 @@
   ],
   "run calibrated": [
    "50 litre kegs: seasonal hire",
-   "30 litre kegs: seasonal hire",
+   "30 litre kegs: purchase",
    "20 litre kegs: seasonal hire",
    "firkins: purchase",
    "kilderkins: no cover"
@@ -4528,7 +4536,7 @@
  "route_components": {
   "S1": {
    "C1": 4867,
-   "C2": 10088,
+   "C2": 10755,
    "C3": 5083
   },
   "S1+S2": {
@@ -4543,7 +4551,7 @@
   },
   "S1+S3": {
    "C1": 4867,
-   "C2": 10088,
+   "C2": 10755,
    "C3": 0
   },
   "S2": {
@@ -4558,7 +4566,7 @@
   },
   "S3": {
    "C1": 7927,
-   "C2": 10088,
+   "C2": 10755,
    "C3": 0
   },
   "rigorous": {
@@ -4568,27 +4576,27 @@
   },
   "run calibrated": {
    "C1": 5617,
-   "C2": 10088,
+   "C2": 10755,
    "C3": 5083
   },
   "run cutoff": {
    "C1": 5481,
-   "C2": 10088,
+   "C2": 10755,
    "C3": 5083
   },
   "run cutoff:summer counts": {
    "C1": 4836,
-   "C2": 10088,
+   "C2": 10755,
    "C3": 5083
   },
   "run cutoff:three days": {
    "C1": 5931,
-   "C2": 10088,
+   "C2": 10755,
    "C3": 5083
   },
   "run cutoff:weekly rounds": {
    "C1": 4680,
-   "C2": 10088,
+   "C2": 10755,
    "C3": 5083
   },
   "run generous": {
@@ -4606,28 +4614,28 @@
   "S1": {
    "FIR": {
     "cover": "buy",
-    "hot": 1526,
-    "plan": 1521
+    "hot": 1650,
+    "plan": 1644
    },
    "K20": {
     "cover": "hire",
-    "hot": 474,
-    "plan": 217
+    "hot": 650,
+    "plan": 410
    },
    "K30": {
     "cover": "hire",
-    "hot": 1469,
-    "plan": 1105
+    "hot": 1539,
+    "plan": 1182
    },
    "K50": {
     "cover": "hire",
-    "hot": 5211,
-    "plan": 2354
+    "hot": 5440,
+    "plan": 2605
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -454,
-    "plan": -454
+    "hot": -428,
+    "plan": -428
    }
   },
   "S1+S2": {
@@ -4687,28 +4695,28 @@
   "S1+S3": {
    "FIR": {
     "cover": "hire",
-    "hot": 642,
-    "plan": 635
+    "hot": 766,
+    "plan": 759
    },
    "K20": {
     "cover": "hire",
-    "hot": 325,
-    "plan": 69
+    "hot": 502,
+    "plan": 262
    },
    "K30": {
     "cover": "hire",
-    "hot": 675,
-    "plan": 304
+    "hot": 744,
+    "plan": 380
    },
    "K50": {
     "cover": "hire",
-    "hot": 3715,
-    "plan": 706
+    "hot": 3944,
+    "plan": 957
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -645,
-    "plan": -644
+    "hot": -619,
+    "plan": -619
    }
   },
   "S2": {
@@ -4768,28 +4776,28 @@
   "S3": {
    "FIR": {
     "cover": "hire",
-    "hot": 593,
-    "plan": 584
+    "hot": 717,
+    "plan": 707
    },
    "K20": {
     "cover": "hire",
-    "hot": 724,
-    "plan": 375
+    "hot": 901,
+    "plan": 568
    },
    "K30": {
     "cover": "hire",
-    "hot": 1632,
-    "plan": 1119
+    "hot": 1700,
+    "plan": 1195
    },
    "K50": {
     "cover": "hire",
-    "hot": 6895,
-    "plan": 2708
+    "hot": 7123,
+    "plan": 2958
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -661,
-    "plan": -660
+    "hot": -636,
+    "plan": -635
    }
   },
   "direct": {
@@ -4822,55 +4830,55 @@
   "golden": {
    "FIR": {
     "cover": "buy",
-    "hot": 1477,
-    "plan": 1469
+    "hot": 1600,
+    "plan": 1593
    },
    "K20": {
     "cover": "hire",
-    "hot": 881,
-    "plan": 522
+    "hot": 1057,
+    "plan": 715
    },
    "K30": {
     "cover": "buy",
-    "hot": 2397,
-    "plan": 1915
+    "hot": 2467,
+    "plan": 1991
    },
    "K50": {
     "cover": "buy",
-    "hot": 8407,
-    "plan": 4334
+    "hot": 8635,
+    "plan": 4585
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -470,
-    "plan": -470
+    "hot": -445,
+    "plan": -445
    }
   },
   "over S1": {
    "FIR": {
     "cover": "hire",
     "hot": null,
-    "plan": 673
+    "plan": 796
    },
    "K20": {
     "cover": "buy",
     "hot": null,
-    "plan": 3293
+    "plan": 3486
    },
    "K30": {
     "cover": "buy",
     "hot": null,
-    "plan": 4329
+    "plan": 4406
    },
    "K50": {
     "cover": "buy",
     "hot": null,
-    "plan": 7526
+    "plan": 7776
    },
    "KIL": {
     "cover": "nothing",
     "hot": null,
-    "plan": -534
+    "plan": -509
    }
   },
   "over S2": {
@@ -4904,27 +4912,27 @@
    "FIR": {
     "cover": "buy",
     "hot": null,
-    "plan": 4462
+    "plan": 4585
    },
    "K20": {
     "cover": "hire",
     "hot": null,
-    "plan": 861
+    "plan": 1055
    },
    "K30": {
     "cover": "buy",
     "hot": null,
-    "plan": 4642
+    "plan": 4725
    },
    "K50": {
     "cover": "buy",
     "hot": null,
-    "plan": 10945
+    "plan": 11198
    },
    "KIL": {
     "cover": "hire",
     "hot": null,
-    "plan": 319
+    "plan": 344
    }
   },
   "rigorous": {
@@ -4957,136 +4965,136 @@
   "run calibrated": {
    "FIR": {
     "cover": "buy",
-    "hot": 1532,
-    "plan": 1526
+    "hot": 1655,
+    "plan": 1650
    },
    "K20": {
     "cover": "hire",
-    "hot": 526,
-    "plan": 263
+    "hot": 702,
+    "plan": 456
    },
    "K30": {
-    "cover": "hire",
-    "hot": 1808,
-    "plan": 1429
+    "cover": "buy",
+    "hot": 1878,
+    "plan": 1506
    },
    "K50": {
     "cover": "hire",
-    "hot": 5674,
-    "plan": 2727
+    "hot": 5903,
+    "plan": 2978
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -456,
-    "plan": -456
+    "hot": -431,
+    "plan": -431
    }
   },
   "run cutoff": {
    "FIR": {
     "cover": "buy",
-    "hot": 1536,
-    "plan": 1530
+    "hot": 1659,
+    "plan": 1653
    },
    "K20": {
     "cover": "hire",
-    "hot": 528,
-    "plan": 257
+    "hot": 703,
+    "plan": 450
    },
    "K30": {
     "cover": "hire",
-    "hot": 1686,
-    "plan": 1294
+    "hot": 1756,
+    "plan": 1371
    },
    "K50": {
     "cover": "hire",
-    "hot": 5841,
-    "plan": 2727
+    "hot": 6069,
+    "plan": 2978
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -459,
-    "plan": -459
+    "hot": -434,
+    "plan": -434
    }
   },
   "run cutoff:summer counts": {
    "FIR": {
     "cover": "buy",
-    "hot": 1513,
-    "plan": 1507
+    "hot": 1636,
+    "plan": 1631
    },
    "K20": {
     "cover": "hire",
-    "hot": 458,
-    "plan": 204
+    "hot": 634,
+    "plan": 397
    },
    "K30": {
     "cover": "hire",
-    "hot": 1487,
-    "plan": 1120
+    "hot": 1557,
+    "plan": 1197
    },
    "K50": {
     "cover": "hire",
-    "hot": 5170,
-    "plan": 2333
+    "hot": 5398,
+    "plan": 2584
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -453,
-    "plan": -453
+    "hot": -428,
+    "plan": -428
    }
   },
   "run cutoff:three days": {
    "FIR": {
     "cover": "buy",
-    "hot": 1561,
-    "plan": 1555
+    "hot": 1684,
+    "plan": 1679
    },
    "K20": {
     "cover": "hire",
-    "hot": 770,
-    "plan": 435
+    "hot": 945,
+    "plan": 628
    },
    "K30": {
     "cover": "hire",
-    "hot": 1711,
-    "plan": 1316
+    "hot": 1781,
+    "plan": 1392
    },
    "K50": {
     "cover": "hire",
-    "hot": 6258,
-    "plan": 2951
+    "hot": 6486,
+    "plan": 3202
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -461,
-    "plan": -461
+    "hot": -436,
+    "plan": -436
    }
   },
   "run cutoff:weekly rounds": {
    "FIR": {
     "cover": "buy",
-    "hot": 1503,
-    "plan": 1496
+    "hot": 1626,
+    "plan": 1620
    },
    "K20": {
     "cover": "hire",
-    "hot": 423,
-    "plan": 180
+    "hot": 599,
+    "plan": 373
    },
    "K30": {
     "cover": "hire",
-    "hot": 1447,
-    "plan": 1088
+    "hot": 1517,
+    "plan": 1165
    },
    "K50": {
     "cover": "hire",
-    "hot": 5015,
-    "plan": 2252
+    "hot": 5244,
+    "plan": 2503
    },
    "KIL": {
     "cover": "nothing",
-    "hot": -459,
-    "plan": -459
+    "hot": -434,
+    "plan": -434
    }
   },
   "run generous": {
@@ -5222,19 +5230,19 @@
  "spreads_pct": {
   "FIR": {
    "x_b": 6.7,
-   "x_cov": 2.4,
+   "x_cov": 2.8,
    "x_del": 0.8,
    "x_lam": 4.2
   },
   "K20": {
    "x_b": 8.2,
-   "x_cov": 2.8,
+   "x_cov": 3.2,
    "x_del": 1.3,
    "x_lam": 9.1
   },
   "K30": {
    "x_b": 2.7,
-   "x_cov": 1.0,
+   "x_cov": 1.1,
    "x_del": 1.1,
    "x_lam": 4.8
   },
@@ -5246,7 +5254,7 @@
   },
   "KIL": {
    "x_b": 7.5,
-   "x_cov": 2.8,
+   "x_cov": 3.1,
    "x_del": 1.3,
    "x_lam": 5.2
   }
@@ -5287,26 +5295,26 @@
    13
   ]
  },
- "store_2027": 10088,
+ "store_2027": 10755,
  "store_2027_band": [
-  9890,
-  10944
+  9896,
+  10949
  ],
  "store_2027_band_by_pool": {
   "FIR": [
    1435,
-   1630
+   1632
   ],
   "K20": [
-   1951,
+   1952,
    2247
   ],
   "K30": [
    2267,
-   2389
+   2390
   ],
   "K50": [
-   4005,
+   4007,
    4422
   ],
   "KIL": [
@@ -5315,25 +5323,13 @@
   ]
  },
  "store_2027_by_pool": {
-  "FIR": 1472,
-  "K20": 2004,
-  "K30": 2289,
-  "K50": 4090,
-  "KIL": 232
+  "FIR": 1596,
+  "K20": 2197,
+  "K30": 2365,
+  "K50": 4340,
+  "KIL": 257
  },
  "store_fit": {
-  "all": {
-   "cover": {
-    "FIR": 0.376,
-    "K20": 0.415,
-    "K30": 0.369,
-    "K50": 0.354,
-    "KIL": 0.361
-   },
-   "n": 2808,
-   "se": 0.021,
-   "share": 0.449
-  },
   "between": {
    "cover": {
     "FIR": 0.347,
@@ -5346,17 +5342,29 @@
    "se": 0.019,
    "share": 0.508
   },
+  "between_all": {
+   "cover": {
+    "FIR": 0.347,
+    "K20": 0.347,
+    "K30": 0.347,
+    "K50": 0.347,
+    "KIL": 0.347
+   },
+   "n": 18,
+   "se": 0.016,
+   "share": 0.505
+  },
   "mean_run": {
    "cover": {
-    "FIR": 0.391,
-    "K20": 0.455,
-    "K30": 0.38,
-    "K50": 0.358,
-    "KIL": 0.375
+    "FIR": 0.347,
+    "K20": 0.347,
+    "K30": 0.347,
+    "K50": 0.347,
+    "KIL": 0.347
    },
-   "n": 1872,
-   "se": 0.026,
-   "share": 0.422
+   "n": 18,
+   "se": 0.019,
+   "share": 0.508
   },
   "one_cover": {
    "cover": {
@@ -5385,64 +5393,64 @@
  },
  "summers": {
   "FIR": {
-   "2017": 1480,
-   "2018": 1462,
-   "2019": 1467,
-   "2020": 1427,
-   "2021": 1459,
-   "2022": 1476,
-   "2023": 1476,
-   "2024": 1450,
-   "2025": 1477,
-   "2026": 1465
+   "2017": 1603,
+   "2018": 1585,
+   "2019": 1591,
+   "2020": 1551,
+   "2021": 1582,
+   "2022": 1599,
+   "2023": 1599,
+   "2024": 1574,
+   "2025": 1600,
+   "2026": 1589
   },
   "K20": {
-   "2017": 784,
-   "2018": 745,
-   "2019": 892,
-   "2020": 732,
-   "2021": 785,
-   "2022": 715,
-   "2023": 881,
-   "2024": 571,
-   "2025": 705,
-   "2026": 806
+   "2017": 965,
+   "2018": 928,
+   "2019": 1069,
+   "2020": 914,
+   "2021": 964,
+   "2022": 898,
+   "2023": 1057,
+   "2024": 762,
+   "2025": 889,
+   "2026": 984
   },
   "K30": {
-   "2017": 2274,
-   "2018": 2269,
-   "2019": 2501,
-   "2020": 2228,
-   "2021": 2159,
-   "2022": 2109,
-   "2023": 2397,
-   "2024": 1989,
-   "2025": 2204,
-   "2026": 2211
+   "2017": 2344,
+   "2018": 2340,
+   "2019": 2569,
+   "2020": 2301,
+   "2021": 2228,
+   "2022": 2180,
+   "2023": 2467,
+   "2024": 2064,
+   "2025": 2277,
+   "2026": 2280
   },
   "K50": {
-   "2017": 7218,
-   "2018": 6925,
-   "2019": 8781,
-   "2020": 6849,
-   "2021": 7635,
-   "2022": 6567,
-   "2023": 8407,
-   "2024": 4868,
-   "2025": 6408,
-   "2026": 7734
+   "2017": 7454,
+   "2018": 7163,
+   "2019": 9010,
+   "2020": 7084,
+   "2021": 7866,
+   "2022": 6805,
+   "2023": 8635,
+   "2024": 5116,
+   "2025": 6649,
+   "2026": 7965
   },
   "KIL": {
-   "2017": -470,
-   "2018": -471,
-   "2019": -470,
-   "2020": -471,
-   "2021": -471,
-   "2022": -470,
-   "2023": -470,
-   "2024": -473,
-   "2025": -470,
-   "2026": -470
+   "2017": -445,
+   "2018": -445,
+   "2019": -445,
+   "2020": -446,
+   "2021": -446,
+   "2022": -445,
+   "2023": -445,
+   "2024": -448,
+   "2025": -445,
+   "2026": -445
   }
  },
  "trade_rise": 7927,
@@ -5526,46 +5534,46 @@
  ],
  "variant_range": {
   "FIR": [
-   1394,
-   1672
+   1411,
+   1697
   ],
   "K20": [
-   399,
-   761
+   411,
+   766
   ],
   "K30": [
-   1772,
-   2093
+   1835,
+   2100
   ],
   "K50": [
-   4054,
-   4810
+   4137,
+   4878
   ],
   "KIL": [
-   -481,
-   -441
+   -478,
+   -439
   ]
  },
  "variant_range_hot": {
   "FIR": [
-   1403,
-   1679
+   1419,
+   1694
   ],
   "K20": [
-   682,
-   1107
+   711,
+   1132
   ],
   "K30": [
-   2207,
-   2572
+   2276,
+   2587
   ],
   "K50": [
-   7680,
-   8997
+   7911,
+   9224
   ],
   "KIL": [
-   -481,
-   -441
+   -478,
+   -439
   ]
  },
  "variants": 264,
@@ -5611,7 +5619,30 @@
    "year_loss": 230
   }
  },
- "year_loss": 5083,
+ "worst_weeks": {
+  "FIR": [
+   "2027-09-20"
+  ],
+  "K20": [
+   "2027-07-12",
+   "2027-07-19",
+   "2027-07-26"
+  ],
+  "K30": [
+   "2027-07-19",
+   "2027-07-26",
+   "2027-08-02",
+   "2027-08-09"
+  ],
+  "K50": [
+   "2027-07-19",
+   "2027-07-26"
+  ],
+  "KIL": [
+   "2027-09-20"
+  ]
+ },
+ "year_loss": 5082,
  "year_loss_band": [
   5006,
   5109

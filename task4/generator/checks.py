@@ -234,8 +234,26 @@ def main(target):
     ok("SF24 the loss on the calendar, same call", sc({"clock": "calendar"}))
     ok("SF25 the wash line's condemnations are dated and netted", all(R.condemned[p] > 0 for p in POOLS),
        {p: R.condemned[p] for p in POOLS})
-    ok("SF26 the median week's cover, same call; the fitted split is the rigorous route and files a wrong call",
-       sc({"cover": "median"}) and fig["route_calls"]["rigorous"] != fig["call"])
+    sf = fig["store_fit"]
+    ok("SF26 the run share measured between beers (each beer's mean stock on its mean deliveries and its run), the "
+       "rigorous route's regression files a wrong call", A.GOLDEN["share_fit"] == "between" and 0.3 < sf["between"]["share"] < 0.7
+       and sf["between"]["n"] == sum(len(A.runs_of(R, p)) for p in POOLS) and fig["route_calls"]["rigorous"] != fig["call"],
+       "%.3f (se %.3f, %d beers)" % (sf["between"]["share"], sf["between"]["se"], sf["between"]["n"]))
+    ok("SF26 the battery's store fits file the same call (one cover, every Monday, the by-type panel, the mean run)",
+       all(sc(o) for o in ({"share_fit": "one_cover"}, {"share_fit": "between_all"}, {"share_fit": "panel"},
+                           {"run_stat": "mean"})), {k: v["share"] for k, v in sf.items()})
+    ok("SF26 the by-type panel is not central: a heavy week draws a beer down, the 20 litre cover stands above every "
+       "other type's", sf["panel"]["cover"]["K20"] > max(v for q, v in sf["panel"]["cover"].items() if q != "K20"),
+       sf["panel"]["cover"])
+    ok("SF26 each type's own intercept read as the share refused: it ranges over more than ten of the between-beer "
+       "share's standard errors", fig["typeown_range"][1] - fig["typeown_range"][0] > 10 * sf["between"]["se"],
+       fig["typeown_range"])
+    ok("SF26 the Monday position ships by product", "product" in open(os.path.join(target, F["store"])).readline())
+    sub = open(os.path.join(os.path.dirname(HERE), "submission.md")).read()
+    ok("SF26 no assumed half run in the blocks", not re.search(r"half (a|of each|the) (beer's )?(racking )?run", sub, re.I))
+    for key in ("trade_rise", "store_2027", "year_loss"):
+        ok("blocks: %s's stated total is the sum of its stated parts" % key,
+           fig[key] == sum(fig[key + "_by_pool"][p] for p in POOLS), fig[key])
     ok("SF27 a beer's run as the mean of its rackings, same call", sc({"run_stat": "mean"}))
     ok("SF28 the brew plan files each beer's on-sale dates", all(len(R.plan[p]) > 0 for p in POOLS))
     ok("SF29 the bend a degree either way, same call", sc({"hinge": -1.0}) and sc({"hinge": 1.0}))

@@ -5,13 +5,13 @@
  "subdomain": "regression-classification-model-diagnostics",
  "client_domain": "general-statistics-data-science",
  "objective": "forecasting",
- "stage": 3,
+ "stage": 4,
  "stage_name": "build",
  "updated": "2026-11-25",
  "doctrine": "throughout",
  "architecture": 14,
  "loops": 1,
- "call": "buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (cut pack: planning case 4,544, 2,009, 699, 1,578, -448; hot case 8,590, 2,486, 1,043, 1,586, -448; lines nil and 3,500, 1,500, 1,200, 1,200, 600)",
+ "call": "buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (cut pack: planning case 4,585, 1,991, 715, 1,593, -445; hot case 8,635, 2,467, 1,057, 1,600, -445)",
  "chain": "R1 each pool's account at the count of 30 November 2026 (register and count by purchase lot) and its deliveries; R2 the rise in the trade's stock from the count to its summer peak, from full-only cellar counts rebuilt on each line's delivery cycle; R3 the containers the trade loses in a year, from the share of each purchase lot found on site against its age; R4 the store at its fullest under the 2027 brew plan; R5 each pool's largest weekly shortfall in the planning case; R6 the same in the hot case; R7 the cover per pool",
  "stump": "cut pack: the reflex route files -718, -234, -944, -20, -754 (nothing for every pool); S1 lost alone 2,564 fifty-litre and 1,199 thirty-litre (hires), S2 lost alone -488 twenty-litre (nothing), S3 lost alone 693 firkins (a hire); each stump pushed past its fit files a wrong cover, and the four run routes and the cut-off's three settings each file a wrong call",
  "precut": {
@@ -28,8 +28,8 @@
   "nearest": "guard.py check task4 on 2026-11-25: WARN only (template.chain_near task8, overuse.weight task8, repeat.gate_g task1, repeat.deliverables task9, NOTE driver.near 0.18 against this slot's architecture 13), each answered in the note's Template check; skeleton.py check PASS, severity none; registered 2026-11-25"
  },
  "judge": {
-  "verdict": "NOT_DETERMINISTIC (pass 1, 2026-11-25)",
-  "disposition": "SEND_BACK: the cold store's run share (half a run) was a constant no file holds; FIX_NOW block edits a to g",
+  "verdict": "pass 1 (2026-11-25): NOT_DETERMINISTIC",
+  "disposition": "SEND_BACK on the cold store's run share (the half run, a constant no file held), repaired: the Monday position ships by product and the share is measured between beers (0.508, standard error 0.019; world 0.4995), the by-type panel, every Monday and one cover in the battery, each type's own intercept refused; FIX_NOW block edits a to g made (the count's week named, the four-week level and the recorded week refused with figures, the worst week as either, firkins next to nothing, the stated totals the sums of their parts, the fall check's specification, Schedule B's twelve-month average)",
   "report": "determinism_check_report.md"
  },
  "paper_pair": 26.7,
@@ -111,7 +111,7 @@
    "commit": ""
   }
  ],
- "resume": "back to the architect: the Monday position now ships by product and the golden measures the run share on the beer panel (core.py fit_store mirrored); on the cut pack the panel gives 0.422 (se 0.026, 1,872 beer-weeks) against the world's 0.50 (the world's beers 0.42 to 0.54, mean 0.4995); the between-beers fit gives 0.508 (se 0.019), one cover for every type 0.506 (se 0.012), every Monday 0.449 (se 0.021). corelib passes every row and the battery holds every cover, but C2 is 10,088 against the world's 10,661. Once ruled: finish the block edits a to g of the coordinator's message, the note (SF26, Pinning list, Hidden factor record, Stump core, Files and Frozen lines, pre-ship check, Tried and rejected), checks and verify for the measured share, gates.py --full, then the second judge pass and READY",
+ "resume": "second judge pass (determinism mode) on target.zip md5 9bbf8c214e05e61a6f930185c747976f, then READY",
  "approved": "",
  "delivered": "",
  "portal": {
@@ -226,6 +226,10 @@
   {
    "date": "2026-11-25",
    "event": "judge pass 1 NOT_DETERMINISTIC (the store's run share); repair started: position by product, the share measured on the beer panel; stopped, the panel's share 0.42 against the world's 0.50"
+  },
+  {
+   "date": "2026-11-25",
+   "event": "judge pass 1 repaired: the store's run share measured between beers on the Monday position by product, the block edits a to g; gates.py --full 0 FAIL; second judge pass owed"
   }
  ],
  "runs": {
@@ -306,7 +310,7 @@
    }
   ]
  },
- "gates": "STOPPED in the repair of judge pass 1: the beer-panel run share measures 0.422 (se 0.026) on the cut pack against the world's 0.50; corelib CORE PASS level 5 with every row PASS; gates.py not re-run on this cut (target digest a0d909151c31dc3b)",
+ "gates": "gates.py task4 --full on the repaired cut (target digest a0d909151c31dc3b), 2026-11-25: precut WARN (answered), effort PASS (9.0, 26.7, 100), voice PASS, leak REVIEW (ruled), figures PASS, stump PASS, containers PASS, heart WARN (answered), surface PASS, checks PASS (118 of 118), verify PASS, rebuild PASS; 0 FAIL, 3 WARN; core.py and results.py CORE PASS level 5; audit_containers exit 0",
  "zip_sha256_16": "",
  "golden_zip_sha256_16": "",
  "migrated_from": {

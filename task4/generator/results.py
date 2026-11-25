@@ -84,7 +84,7 @@ def figures(X):
            "min_run": dict(A.MIN_RUN), "names": dict(A.NAMES), "plural": dict(A.PLURAL)}
     for cid, field, key in COMPS:
         c = comp[cid]
-        fig[key] = r0(c["golden"])
+        fig[key] = int(sum(r0(c["by_pool"][p]) for p in POOLS))           # the stated total is the sum of its parts
         fig[key + "_band"] = band_of(c["golden"], c["family"])
         fig[key + "_by_pool"] = {p: r0(c["by_pool"][p]) for p in POOLS}
         fig[key + "_band_by_pool"] = {p: band_of(X["gold"][p][field], [x[field] for x in X["fam"][p]]) for p in POOLS}
@@ -120,7 +120,8 @@ def figures(X):
                               mean_full=round(float(c["count_full"].mean()), 2),
                               mean_added_back=round(float(sold.mean()), 2),
                               mean_days=round(float(c["count_days"].mean()), 1),
-                              store_cover_weeks=round(g["cov"], 3), half_runs_2026=r0(g["half26"]),
+                              store_cover_weeks=round(g["cov"], 3), share_runs_2026=r0(g["half26"]),
+                              runs_2026_total=r0(g["full26"]),
                               beers_2026=len(A.runs_of(R, p)), beers_at_fullest=int(max(R.beers_on[p][i] for i in R.season)),
                               runs_on_sale_at_fullest=r0(max(R.runs_on[p][i] for i in R.season)),
                               other_weeks=round(g["c2"], 3), leaving_rate=round(g["lam_y"], 4), bend_c=round(g["hinge"], 1),
@@ -157,6 +158,8 @@ def figures(X):
                          for k in X["allowances"]}
     fig["joint"] = {p: r0(X["joint"][p]["short"]) for p in POOLS}
     fig["joint_coef"] = {p: round(X["joint"][p]["days_coef"], 2) for p in POOLS}
+    fig["level_fit_week"] = iso(R.week_dates[R.WH - 1])
+    fig["level_fit_temp"] = round(R.temp_hist[R.WH - 1], 1)
     fig["store_fit"] = {k: {"share": round(v["theta"], 3), "se": round(v["se"], 3), "n": v["n"],
                             "cover": {p: round(c, 3) for p, c in v["cov"].items()}} for k, v in X["store_fits"].items()}
     fig["typeown"] = {p: {str(w): round(v, 2) for w, v in d.items()} for p, d in X["typeown"].items()}
@@ -176,8 +179,21 @@ def figures(X):
         fig["level_diag"][p]["count_week_pct"] = round(100.0 * X["level_diag"][p]["count_week"], 1)
         fig["level_diag"][p]["scatter_pct"] = round(100.0 * X["level_diag"][p]["scatter"], 1)
     fig["level4"] = {p: r0(X["level4"][p]) for p in POOLS}
+    # the worst week, with any week next to it that sits within the worst week's own measured spread of deliveries
+    fig["worst_weeks"] = {}
+    for p in POOLS:
+        g = X["gold"][p]
+        sea = [x for x in g["path"] if x["i"] in R.season]
+        k = [x["i"] for x in sea].index(g["week"])
+        tol = X["spreads"][p]["x_del"] * g["pick"]["D"]
+        lo, hi = k, k
+        while lo > 0 and sea[lo - 1]["short"] >= g["short"] - tol:
+            lo -= 1
+        while hi < len(sea) - 1 and sea[hi + 1]["short"] >= g["short"] - tol:
+            hi += 1
+        fig["worst_weeks"][p] = [iso(x["date"]) for x in sea[lo:hi + 1]]
     dc, se, nn = X["days_check"]
-    fig["falsification"] = dict(fall=round(-dc, 2), se=round(se, 2), checks=nn)
+    fig["falsification"] = dict(fall=round(-dc, 2), coef=round(dc, 2), se=round(se, 2), checks=nn)
     fig["variants"] = n
     fig["battery"] = len(A.BATTERY)
     bat = {p: [x["short"] for x in X["bat"][p]] for p in POOLS}
@@ -285,6 +301,7 @@ def effort(X, fig, Rr):
     comps_at = lambda k: {c: Rr["comp"][c]["lattice"][k] for c in ("C1", "C2", "C3")}
     acct = fig["account_at_count"]
     gold = result_values(Rr["gold"], Rr["hot"], {c: Rr["comp"][c]["golden"] for c in ("C1", "C2", "C3")}, acct)
+    gold.update(R2=fig["trade_rise"], R3=fig["year_loss"], R4=fig["store_2027"])     # the stated totals
     quick = {"R1": None, "R2": None, "R3": None, "R4": None, "R5": {p: int(round(X["direct"][p])) for p in POOLS},
              "R6": {p: int(round(X["hot_direct"][p])) for p in POOLS}, "R7": cover_set(X["direct"])}
     careful = result_values(Rr["lat"][REFLEX], Rr["hlat"][REFLEX], comps_at(REFLEX), acct)
@@ -322,7 +339,7 @@ def effort(X, fig, Rr):
     nm = {"S1": "a cellar check is of the full containers of a line on the account's order day, so what each checked "
                 "line held is rebuilt from the dray's last call and the line's weekly sales before what a line holds "
                 "is fitted and carried to the trade's summer peak",
-          "S2": "the store's stock is split into its cover and half a racking run for each beer on sale, and rebuilt "
+          "S2": "the store's stock is split into its cover and the measured share of a racking run for each beer on sale, and rebuilt "
                 "from the 2027 brew plan's runs, range and on-sale dates",
           "S3": "the containers the trade loses are estimated from the share of each purchase lot found on site "
                 "against the lot's age, the share on site fitted beside the rate, never taken as nil"}
