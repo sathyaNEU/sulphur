@@ -61,11 +61,11 @@ LOT_YEARS = tuple(range(2011, 2024))  # the purchase lots older than the docket 
 W = {
     "K50": dict(S0=4300, amp=0.20, k=0.045, g=0.000, L=2700, a=2.2, b=0.50, loss=0.0100, c2=0.55, cover=0.35,
                 beers=[("PIL", 0.62, 400, 2400), ("GLD", 0.38, 300, 1400)], new27=[],
-                estate=(720, 0.90), place=4800, lots=[(15, 1800), (70, 1200)], moq=3500, counts=1800),
+                estate=(720, 1.40), place=4800, lots=[(15, 1800), (70, 1200)], moq=3500, counts=1800),
     "K30": dict(S0=2400, amp=0.10, k=0.012, g=0.005, L=2600, a=2.1, b=0.50, loss=0.0085, c2=0.55, cover=0.35,
                 beers=[("PAL", 0.35, 250, 800), ("IPA", 0.25, 165, 550), ("HER", 0.22, 165, 500),
                        ("BLK", 0.18, 125, 400)], new27=[],
-                estate=(450, 1.30), place=2000, lots=[(15, 900), (70, 600)], moq=1500, counts=1800),
+                estate=(450, 1.30), place=2400, lots=[(15, 900), (70, 600)], moq=1500, counts=1800),
     "K20": dict(S0=640, amp=0.22, k=0.024, g=0.030, L=1800, a=2.0, b=0.50, loss=0.0060, c2=0.60, cover=0.35,
                 beers=[("F%02d" % i, 1.0 / 8, 120, 200) for i in range(1, 9)],
                 new27=[("F%02d" % i, 200) for i in range(9, 19)],
@@ -73,7 +73,7 @@ W = {
     "FIR": dict(S0=1500, amp=-0.15, k=0.0, g=-0.020, L=1700, a=3.0, b=0.50, loss=0.0150, c2=0.60, cover=0.35,
                 beers=[("BIT", 0.60, 300, 700), ("MLD", 0.20, 150, 270), ("SEA", 0.20, 240, 600)],
                 new27=[("SUM", 300), ("HAR", 300)],
-                estate=(160, 0.60), place=1600, lots=[(40, 800)], moq=1200, counts=900),
+                estate=(220, 0.60), place=1850, lots=[(40, 800)], moq=1200, counts=900),
     "KIL": dict(S0=250, amp=-0.15, k=0.0, g=-0.030, L=170, a=3.0, b=0.50, loss=0.0200, c2=0.60, cover=0.35,
                 beers=[("BIK", 1.0, 80, 360)], new27=[],
                 estate=(0, 0.0), place=-450, lots=[], moq=600, counts=250),
@@ -301,7 +301,7 @@ def records(world, seed=SEED + 1):
 
 # ------------------------------------------------------------------------------------------------- the estimators
 GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
-              count_months="all", harmonics=2, hinge=0.0, share_fit="between", level="fit", age_fit="wls", age_drop=0,
+              count_months="all", harmonics=2, hinge=0.0, share_fit="between", other="week", level="fit", age_fit="wls", age_drop=0,
               alive="lots", clock="deliveries",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)   # the forcing battery's multipliers on the fitted inputs
 # the hurried choice at each stump, and the same stump pushed past its fitted value to the far end a run might set
@@ -497,7 +497,9 @@ def chain(R, p, opt=None, anom27=None):
         part, cov = fs["theta"], fs["cov"][p]
     cov *= o["x_cov"]
     ne, re_ = rec["estate"]
-    c2 = T["other"] / (lev if o["level"] == "fit" else float(flow[WH - o["level"]:WH].mean()))
+    # depots, wash and repair hold what the last week sent through them, so their stock at the count is read
+    # against the count week's own deliveries (the fitted level in the battery)
+    c2 = T["other"] / (lev if o["other"] == "level" else float(flow[WH - 1]))
     path, cum = [], 0.0
     for i in range(WH, WH + WF):
         j = i - 52
@@ -559,6 +561,7 @@ FAMILY = [
     ("the store's stock fitted on the beer-weeks with a cover for each container type", {"share_fit": "panel"}),
     ("deliveries at the count over its last two weeks, not the fit's value for its week", {"level": 2}),
     ("deliveries at the count as its own week's", {"level": 1}),
+    ("depots, wash and repair read against the fitted level at the count, not its own week's deliveries", {"other": "level"}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
     ("the lots fitted without the newest lot", {"age_drop": "newest"}),
     ("the lots fitted without the oldest lot", {"age_drop": "oldest"}),
