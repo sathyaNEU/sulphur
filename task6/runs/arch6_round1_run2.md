@@ -1,4 +1,4 @@
-Platform run 2 of architecture 6, as the author pasted it on 2026-11-08 (score 83 against runs/rubric.csv).
+Platform run 2 of architecture 6, as the author pasted it on 2026-11-08 (score 83 against runs/arch6_round1_rubric.csv).
 
 Reviewed 45 resources
 Recommendation. Assign 5 reliability engineers for January-June 2027: one each to journey-search, places, seat-map, partner-gateway and notifications.

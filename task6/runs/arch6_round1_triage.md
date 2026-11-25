@@ -1,14 +1,14 @@
 # task6 architecture 6, platform round 1: triage
 
 Recorded 2026-11-08 in the /fix-rubric session from the scores the author reported and the generated rubric
-(runs/rubric.csv, 30 criteria, 100 points). The author named the route; no run-triage agent was spawned.
+(runs/arch6_round1_rubric.csv, 30 criteria, 100 points). The author named the route; no run-triage agent was spawned.
 
 ## Scores
 
 | Run | Score | Call | Criteria lost | Points lost |
 |---|---|---|---|---|
-| run 1 (runs/run1.md) | 73 | off: four services, partner-gateway 1.4 against 2.0 | 1 recommendation (18), 2 partner-gateway SLI 2.8 to 3.0 (7), 21 the five flagged as over in the CSV (2) | 27 |
-| run 2 (runs/run2.md) | 83 | on: five services, partner-gateway 2.9 | 5 to 9 incident minutes for partner-gateway, places, booking, notifications and fares (4, 4, 3, 3, 3) | 17 |
+| run 1 (runs/arch6_round1_run1.md) | 73 | off: four services, partner-gateway 1.4 against 2.0 | 1 recommendation (18), 2 partner-gateway SLI 2.8 to 3.0 (7), 21 the five flagged as over in the CSV (2) | 27 |
+| run 2 (runs/arch6_round1_run2.md) | 83 | on: five services, partner-gateway 2.9 | 5 to 9 incident minutes for partner-gateway, places, booking, notifications and fares (4, 4, 3, 3, 3) | 17 |
 
 Average 78.0. Counterfactual average 86.5: run 2's incident loss is a misread of PR-SLO-3 5.2 ("named it at the
 time"), a surface class, given back.

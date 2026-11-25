@@ -1,4 +1,4 @@
-Platform run 1 of architecture 6, as the author pasted it on 2026-11-08 (score 73 against runs/rubric.csv).
+Platform run 1 of architecture 6, as the author pasted it on 2026-11-08 (score 73 against runs/arch6_round1_rubric.csv).
 
 Reviewed 40 resources
 Recommendation. Assign one reliability engineer to each of journey-search, places, seat-map and notifications for January-June 2027: 4 of 10 services exceeded their 2026 latency error budget.

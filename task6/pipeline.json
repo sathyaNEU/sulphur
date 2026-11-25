@@ -1,11 +1,11 @@
 {
  "task": "task6",
- "status": "APPROVED",
+ "status": "RETURNED",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 7,
- "stage_name": "approved",
- "updated": "2026-11-13",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-25",
  "stump": "",
  "architecture": 7,
  "loops": 1,
@@ -60,23 +60,32 @@
    "review": "It was initially approved, but on a closer look the list of services over budget turns on one thing. The one thing: traces are kept whole at the edge, so each span should be weighted by its root service's hourly keep rate, not its own service's hourly request count. That matters only for the one service called from journey-search, seat-map and booking traces in a near-even 33/33/34 split. Weight by the root and its SLI goes from about 1.4% (within its 2.0% budget, four services over) to about 2.9% (five over). This is a shallow hidden factor: a sound idea, but built into the data so it decides only that service, and a single weight once noticed. What works well: seeing that kept spans undercount traffic unevenly by hour and reweighting to request counts is real analysis. How to fix: make the sampling affect several services in different, partial ways, each with a checkable SLI; let the breach list depend on several connected pieces (weighting, periods, incident attribution), not one weight; trace-level weighting can stay as one step among several, but it cannot decide the answer on its own.",
    "repair": "design (re-root to a results chain, the reviewer's own direction, same world)",
    "commit": "RESHIPPED (task6) 2026-11-09"
+  },
+  {
+   "date": "2026-11-22",
+   "source": "review",
+   "portal": "Review sheet of November 22 (version 17, reward 45.0): Stumped passed, Determinism (main) failed, every other check passed. Initially approved (2026-11-11), then sent back for fixes.",
+   "review": "Accepted in review, but on a closer check before delivery held back because whether five or six services ran over their budgets turns on an estimation choice that neither the prompt nor PR-SLO-3 settles. The deciding item is journey-search's December latency SLI against its 1.0% budget, which turns on how the 274 hours missing from the trace export are counted. PR-SLO-3 2.2 says a request counts whether or not the tracing store kept it, but neither the policy nor the prompt says how to estimate the slow share for hours with no spans. The committed answer counts each missing hour at the slow share of the service's clean export hours in the same decile of hourly load (journey-search 0.9%, five services). The same approach with coarser load bands is just as reasonable, and the held-out check on 12 to 17 December cannot tell 4 bands from 10: with 2, 3, 4, 5 or 6 bands journey-search comes out at 1.31%, 1.29%, 1.23%, 1.18% and 1.02%, over budget, so six services; with 7 to 30 bands 0.89% to 0.90%. How to fix: remove the open choice rather than describing a method in the prompt, either (1) ship the spans or the per-hour slow request counts for 1 to 12 December so nothing has to be estimated for the deciding service, or (2) move journey-search so it lands clearly on one side under every reasonable treatment (2 to 30 load bands, weekday and hour matching, a flat December rate). Keep the keep-share weighting and the onset-dated root causes as the deciding steps; they are well built and settled by the data. Ways to make it harder: each over-budget service's SLI on the traced days beside the full month; an incident where the tool and the status page disagree by hours on the resolution; an internal service called mostly from a thinly kept edge service in part of the month; which services' status is not settled at the 90% level.",
+   "reproduced": "2026-11-25 on the shipped pack: journey-search 1.33, 1.31, 1.17, 1.13, 0.97 with 2 to 6 load bands, 0.89 with 7 to 30, isotonic and both logits; 1.18 matching weekday and hour, 1.36 flat; 1.32 on the export's hours alone. A flat fill is the export's own share, so no fill of unrecorded hours can both decide a member and be forced.",
+   "repair": "design (the fork is the untraced-hours result's own difficulty: closing it in either direction puts the hurried figure in the band, so the result is redesigned, not pinned)",
+   "commit": ""
   }
  ],
- "resume": "none: approved on review (architecture 7, levelled up, the cut on file)",
- "approved": "2026-11-11",
+ "resume": "/draw task6 repair: the untraced-hours result redesigned so the record holds the deciding configuration; then /build task6 from 3",
+ "approved": null,
  "approval_source": "the author's report of 2026-11-11 (approved on review; architecture 7 levelled up, the cut on file; the run scores are not in the repo), already filed in corpus/approved.json and the run record; confirmed by the author on 2026-11-13",
  "delivered": null,
  "portal": {
-  "status": "Failed final review",
-  "date": "2026-11-09",
+  "status": "Sent back for fixes (review 1, review sheet of November 22)",
+  "date": "2026-11-22",
   "version": 17,
-  "reward": 28.0,
-  "checks": "stumped, determinism main and supp, solution main and supp, duplicate, task type match and stumped type match all passed; prelim verdict approved",
-  "note": "returned at final review: the breach list turns on one thing"
+  "reward": 45.0,
+  "checks": "stumped, determinism (supp), solution main and supp, duplicate, task type match and stumped type match passed; determinism (main) failed",
+  "note": "accepted in review, then held back before delivery: journey-search's over or within status turns on how the 274 untraced hours are filled"
  },
  "portal_id": "4b456953-2f2b-421b-96c8-ea3ec25c3a32",
- "portal_status": "APPROVED",
- "portal_status_date": "2026-11-11",
+ "portal_status": "RETURNED",
+ "portal_status_date": "2026-11-22",
  "seed": "analytical_tasks/03_descriptive_distribution/DA18_quick-commerce-pilot-service-hours-population.md (header and Situation only)",
  "seed_world": 273,
  "zip_md5": "b8177b9bc9e3845148aebe0fc3915220",
@@ -105,7 +114,7 @@
   },
   "triage": "",
   "recorded": "",
-  "note": "architecture 7 (levelled up) approved on review; its run scores are not in the repo",
+  "note": "architecture 7's platform runs (approved 2026-11-11, returned 2026-11-22 at reward 45.0) are not in the repo; the pair saved under runs/ is architecture 6's round of 2026-11-08, archived as runs/arch6_round1_*; no pair exists for the repaired cut",
   "history": [
    {
     "architecture": 6,
@@ -120,6 +129,12 @@
     },
     "triage": "FIX_ASKS"
    }
+  ],
+  "archived": [
+   "runs/arch6_round1_run1.md",
+   "runs/arch6_round1_run2.md",
+   "runs/arch6_round1_rubric.csv",
+   "runs/arch6_round1_triage.md"
   ]
  },
  "gates_at_reship": "gates.py task6 --full, 2026-11-09 (hardened): checks (incl. the backtest and placebo-calibrated detectors), verify, rebuild byte-identical, precut, effort, figures, containers, surface PASS; voice and leak WARN (ruled); heart BLOCK on ban.pairing only (accepted)",
