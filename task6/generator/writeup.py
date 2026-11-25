@@ -92,15 +92,14 @@ def write(R, F):
         "out." % (K.FILES["incidents"], K.FILES["timeline"], K.FILES["status"]),
         "The reasonable route that falls short: each service's own spans reweighted on its own hourly RequestCount "
         "from %s over the hours the export holds, with each December incident put on the named service furthest over "
-        "its load curve across the incident, gives %s as the services over budget (partner-gateway %s%%, "
-        "journey-search %s%%)." % (K.FILES["lb_h2"], names(F["careful_over"]), F["careful_sli"][pg],
-                                   F["careful_sli"][js]),
+        "its load curve across the incident, gives %s as the services over budget, with partner-gateway, fares and "
+        "notifications within theirs." % (K.FILES["lb_h2"], names(F["careful_over"])),
         "The traces overturn the weighting: the store kept a near-fixed number of whole traces an hour per edge "
         "service, so an internal service's kept spans carry its callers' keep shares. Counted each kept span at its "
         "trace root's hourly keep share (the root's RequestCount over the roots kept that hour): partner-gateway's "
         "slow calls come in through busy, thinly kept journey-search and weigh far more than its own count gives "
-        "them, while payments' slow calls come through quiet, thickly kept booking and weigh less (%s%% on its own "
-        "count, %s%% at the roots' shares)." % (own[pay], sli[pay]),
+        "them, while payments' slow calls come through quiet, thickly kept booking and weigh less than its own count "
+        "gives them (%s%% at the roots' shares)." % sli[pay],
         "The export overturns the period: its first span starts at %s, so the first %s hours of December, %s%% of "
         "the month's edge requests, have no spans, and the standard counts a request whether or not a span was kept. "
         "%s holds those hours: the hourly duration histogram of every span the store ingested, by service and span "
@@ -111,15 +110,16 @@ def write(R, F):
             F["held_from"], F["gone_hours"], F["gone_pct"], K.FILES["spanmetrics"], names(F["exact"])),
         "For %s the threshold sits inside a bucket, and the bucket was split at the share of its spans over the "
         "threshold that the service's held, incident-free spans show in the same band of hourly load (five bands). "
-        "Straight-line interpolation inside the bucket is the shortcut that fails: on the hours the export holds it "
-        "rebuilds %s times the over-threshold requests the spans themselves show for places and %s times for "
-        "journey-search, and would put places at %s%% and fares at %s%%. With the hours counted, journey-search falls "
-        "from %s%% on the export's hours to %s%% and places from %s%% to %s%%." % (
-            names(F["bridged"]), F["linear_check"][pl], F["linear_check"][js], F["linear_sli"][pl],
-            F["linear_sli"][fa], exp[js], sli[js], exp[pl], sli[pl]),
-        "Dated each December incident's cause: for every service it named, the own handling time of each span (less "
-        "the calls it waited on) against a load curve fitted on the export's incident-free hours, a changepoint on "
-        "the residuals; the earliest sustained rise owns the cause. Over the whole incident %s ran furthest above "
+        "Straight-line interpolation inside the bucket is the shortcut that fails: on the hours the export holds, "
+        "counted as requests or as spans and with or without the incident hours, it rebuilds %s times or more what "
+        "the spans themselves show over the threshold for places and %s times or more for journey-search, and it would "
+        "start the order with %s. With the hours counted, journey-search falls from %s%% on the export's hours to "
+        "%s%% and places from %s%% to %s%%." % (
+            names(F["bridged"]), F["linear_floor"][pl], F["linear_floor"][js], F["linear_first"],
+            exp[js], sli[js], exp[pl], sli[pl]),
+        "Dated each December incident's cause: for every service it named, span name by span name, the own handling "
+        "time of each span (less the calls it waited on) against a load curve fitted on the export's incident-free "
+        "hours, a changepoint on the residuals; the earliest sustained rise owns the cause. Over the whole incident %s ran furthest above "
         "their curves, but each rose only after the service it calls had: %s own them." % (
             names(["%s in %s" % (x["careful_cause"], x["id"]) for x in mis]), names([x["cause"] for x in mis])),
         "Left each named service's requests out from when the timeline added it to the incident's end unless it "
@@ -127,7 +127,7 @@ def write(R, F):
         "Took each over-budget SLI's %s per cent interval by linearisation over strata of root service and hour with "
         "the kept traces as units, the hours read from the span metrics adding their own sampling error and the "
         "error of each bucket's split; a trace bootstrap with the splits refitted agrees within %s." % (
-            F["interval_level_pct"], F["ci_room"]),
+            F["interval_level_pct"], F["ci_methods_room"]),
         "Each service's weighted spans over its threshold are the requests its SLI counts: the engineers start with "
         "%s (%s%%), and the %s served %s more than their budgets allow." % (
             order[0], share[order[0]], n_over, F["beyond_budget"]),
@@ -135,20 +135,25 @@ def write(R, F):
     L += ["%d. %s" % (i, s) for i, s in enumerate(steps, 1)]
     L += ["", "No other conclusion survives, and the three judgments are independent. Leave out the trace roots' "
           "weights alone and the list is %s (partner-gateway %s%%, fares %s%%, notifications %s%%). Leave out the "
-          "dated causes alone and it is %s (fares %s%%, notifications %s%%, journey-search %s%%). Leave out the hours "
-          "before the export alone and it is the %s with journey-search (%s%%). Leave out the weights and the dated "
-          "causes and it is %s; the weights and the early hours, %s; the dated causes and the early hours, %s. Every "
-          "split of a threshold's bucket the held spans support (one pooled share, two to thirty load bands, a logit "
-          "in load, the hour of day) gives the same %s, the same order and SLIs inside the ranges above; so do "
-          "interpolation inside the bucket and the bucket's two bounds for the list, though not for the figures. A "
-          "fill that reads no span metrics and gives the early hours the export's own share puts partner-gateway at "
-          "%s%%, where the span metrics, whose %s ms boundary is its threshold, count %s%% with nothing estimated. The "
-          "thinnest margin is in the start order: %s counts %s per cent more over-threshold requests than %s, and "
-          "holds that place under every split." % (
+          "dated causes alone and it is %s: fares and notifications fall under their budgets and journey-search rises "
+          "over its own. Leave out the hours before the export alone and it is the %s with journey-search (%s%%). "
+          "Leave out the weights and the dated causes and it is %s; the weights and the early hours, %s; the dated "
+          "causes and the early hours, %s. Every split of a threshold's bucket the held spans support (one pooled "
+          "share, two to thirty load bands, a logit in load, the hour of day) and a lognormal curve fitted to each "
+          "early hour's own histogram give the same %s, the same order and SLIs inside the ranges above. "
+          "Interpolation inside the bucket gives the same %s with other figures and another order, and the bucket's "
+          "lower bound the same five in the same order with lower figures. The bucket's upper bound, every span in it "
+          "counted as over the threshold, puts journey-search at %s%%, just over its line, and it rebuilds %s times "
+          "or more journey-search's real count on the hours the export holds; it is a bound, not an estimate. Read "
+          "from the export's hours alone "
+          "partner-gateway is %s%%, where the span metrics, whose %s ms boundary is its threshold, count %s%% across "
+          "December with nothing estimated. The thinnest margin is in the start order: %s counts %s per cent more "
+          "over-threshold requests than %s, and holds that place under every split." % (
               names(F["own_over"]), own[pg], own[fa], own[no],
-              names(F["window_over"]), win[fa], win[no], win[js],
+              names(F["window_over"]),
               n_over, exp[js],
               names(F["own_window_over"]), names(F["own_export_over"]), names(F["window_export_over"]),
-              n_over, F["flat_sli"][pg], F["span_metrics_bounds"], sli[pg],
+              n_over, n_over, F["upper_sli2"][js], F["upper_floor"][js],
+              exp[pg], F["span_metrics_bounds"], sli[pg],
               F["order_last_two"][0], F["order_last_gap_pct"], F["order_last_two"][1]), ""]
     return "\n".join(L), F

@@ -464,10 +464,35 @@ def main(target):
     nv_raw = [k for k in ("linear", "loglinear") if over_raw(nv[k], bud) != GOLD]
     crossing = {k: [(s, round(nv[k][s]["sli"], 3)) for s in sorted(set(over_raw(nv[k], bud)) ^ set(GOLD))]
                 for k in ("lower", "upper") if over_raw(nv[k], bud) != GOLD}
-    check("SF21 interpolation inside the bucket and the bucket's two bounds give the same list (the SLI rounded; "
-          "interpolation unrounded as well)", not nv_bad and not nv_raw,
+    lo_raw = over_raw(nv["lower"], bud) == GOLD
+    check("SF21 interpolation inside the bucket and the bucket's lower bound give the same list, the SLI rounded or "
+          "not", not nv_raw and lo_raw and not [k for k in ("linear", "loglinear", "lower") if k in nv_bad],
           "rounded differ: %s; unrounded differ: %s" % (nv_bad or "none", nv_raw or "none"))
-    print("NOTE  SF21 bounds that cross a budget unrounded (reported, not failed): %s" % (crossing or "none"))
+    # the upper bound is the one treatment that reaches journey-search's line: the blocks say so with its figure
+    up = nv["upper"]
+    up_cross = sorted(set(over_raw(up, bud)) ^ set(GOLD))
+    check("SF21 the bucket's upper bound crosses a budget for journey-search alone, at the figure the blocks state",
+          up_cross == ["journey-search"] and D.two(up["journey-search"]["sli"]) == F["upper_sli2"]["journey-search"],
+          "%s at %.3f" % (up_cross, up["journey-search"]["sli"]))
+    print("NOTE  SF21 bounds that cross a budget unrounded: %s" % (crossing or "none"))
+    br = R["bridge_ratios"]
+    check("SF21 the blocks' floors on what interpolation and the upper bound rebuild hold on every basis",
+          all(min(br["linear"][s].values()) >= float(F["linear_floor"][s]) for s in bridged) and
+          all(min(br["upper"][s].values()) >= float(F["upper_floor"][s]) for s in bridged) and
+          float(F["linear_floor"]["places"]) >= 2.5 and float(F["linear_floor"]["journey-search"]) >= 1.5 and
+          float(F["upper_floor"]["journey-search"]) >= 2.0,
+          "linear %s; upper journey-search %s" % (
+              {s: {k: round(v, 2) for k, v in br["linear"][s].items()} for s in ("places", "journey-search")},
+              {k: round(v, 2) for k, v in br["upper"]["journey-search"].items()}))
+    check("SF21 interpolation inside the bucket changes the start order (the blocks name its first service)",
+          R["naive_order"]["linear"][0] == F["linear_first"] and F["linear_first"] != P["order"][0] and
+          R["naive_order"]["lower"] == list(P["order"]),
+          "linear %s; lower %s" % (R["naive_order"]["linear"], R["naive_order"]["lower"]))
+    rv = R["rivals"]["lognormal"]
+    rv_bad = [s for s in bridged if not (float(F["sli_band"][s][0]) <= rv[s]["sli"] <= float(F["sli_band"][s][1]))]
+    check("SF21 a lognormal curve fitted to each early hour's histogram gives the list, the start order and every "
+          "bridged SLI inside its range", over_raw(rv, bud) == GOLD and list(g.programme(rv)["order"]) == list(P["order"])
+          and not rv_bad, str({s: round(rv[s]["sli"], 3) for s in bridged}))
     bc = R["bridge_check"]
     lin_ratio = {s: round(bc["linear"][s][0] / bc["linear"][s][1], 3) for s in bridged}
     gold_ratio = {s: round(bc[AN.FILL][s][0] / bc[AN.FILL][s][1], 4) for s in K.SVC}

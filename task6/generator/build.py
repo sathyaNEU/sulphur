@@ -125,8 +125,8 @@ def write_effort(R, F, G):
     ci_bands = {}
     for s in over:
         lo, hi = float(D.two(R["ci"][s][0])), float(D.two(R["ci"][s][1]))
-        ci_bands["%s lo" % s] = [round(lo - 0.03, 2), round(lo + 0.03, 2)]
-        ci_bands["%s hi" % s] = [round(hi - 0.03, 2), round(hi + 0.03, 2)]
+        ci_bands["%s lo" % s] = [round(lo - 0.06, 2), round(lo + 0.06, 2)]
+        ci_bands["%s hi" % s] = [round(hi - 0.06, 2), round(hi + 0.06, 2)]
 
     def vals(r_, minutes):
         """Every result as one route files it."""

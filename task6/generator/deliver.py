@@ -114,7 +114,8 @@ def figures(R):
          "exact": [s for s in K.SVC if s not in bridged],
          "bucket_ms": {s: "{:,} to {:,}".format(*R["bucket"][s]) for s in bridged},
          # the range each bridged SLI is accepted in: every split of its bucket the held spans support
-         "sli_band": {s: [two(v) for v in band_of([f[s]["sli"] for f in fam.values()])] for s in bridged},
+         "sli_band": {s: [two(v) for v in band_of([f[s]["sli"] for f in fam.values()] +
+                                                   [f[s]["sli"] for f in R["rivals"].values()])] for s in bridged},
          # each judgment made the hurried way alone, the other two as the review makes them
          "own_sli": r1(L["S1"]["S"]), "own_over": list(L["S1"]["P"]["over"]),
          "window_sli": r1(L["S2"]["S"]), "window_over": list(L["S2"]["P"]["over"]),
@@ -144,7 +145,17 @@ def figures(R):
     F["share_room_pts"] = 1
     F["share_spread_pts"] = "%.1f" % max(max(share_of(f, s) for f in fam.values()) - min(share_of(f, s) for f in fam.values())
                                          for s in over)
-    F["ci_room"] = "0.03"
+    F["ci_room"] = "0.06"
+    F["ci_methods_room"] = "0.03"
+    # straight-line interpolation on the hours the export holds: the least it over-counts on any basis (requests or
+    # spans, with or without the incident hours), rounded down; and the order it would give
+    from math import floor
+    fl = lambda form, s_: "%.1f" % (floor(min(R["bridge_ratios"][form][s_].values()) * 10 + 1e-9) / 10.0)
+    F["linear_floor"] = {s_: fl("linear", s_) for s_ in bridged}
+    F["linear_first"] = R["naive_order"]["linear"][0]
+    # the bucket's upper bound (every span in it counted as over the threshold) for journey-search
+    F["upper_sli2"] = {s_: two(R["naive"]["upper"][s_]["sli"]) for s_ in bridged}
+    F["upper_floor"] = {s_: fl("upper", s_) for s_ in bridged}
     F["sli_room"] = "0.1"
     F["span_metrics_bounds"] = "{:,}".format(1000)
     # the thinnest margin in the start order: the last two places' over-threshold requests

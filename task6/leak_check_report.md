@@ -1,24 +1,24 @@
 # leak check, task6
 
-**Verdict: REVIEW.** 16 files read, 45 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 16 files read, 44 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: export, journey-search, places, metrics, seat-map, partner-gateway, hourly, bucket, causes, leaves, weights, missed, balancer, record, sample, shortcut, design, method, notifications, pr-slo-, evidence, nothing, another, shares, payments
+Stump terms swept: export, journey-search, places, metrics, seat-map, partner-gateway, hourly, bucket, causes, leaves, weights, missed, balancer, record, sample, shortcut, design, inside, method, another, notifications, pr-slo-, evidence, nothing, shares
 
 ## 1 file names (REVIEW 1)
 - **REVIEW** `capacity_review_2026-Q4.md`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 
 ## 3 answer figures in the pack (REVIEW 5)
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 1.0 appears: ...rney-search 1 1,500 1.0% fares 1 300...
+- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 2.0 appears: ...accounts 1 600 2.0% partner-gateway 2...
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 0.5 appears: ...booking 1 2,500 0.5% payments 1 1,000...
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 2.3 appears: ...own health probes are not requests. 2.3 The server-side duration of a request is the dur...
-- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 2.0 appears: ...accounts 1 600 2.0% partner-gateway 2...
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: carries 10 of 13 distinctive words of the committed call: 'Put reliability engineers on partner-gateway, places, fares, seat-map and notifications, in that order: the five ran ove'
 
 ## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: 11 of 25 stump-paragraph terms appear (journey-search, places, seat-map, partner-gateway, balancer, record); read whether the document names the move
-- **REVIEW** `capacity_review_2026-Q4.md`: 6 of 25 stump-paragraph terms appear (journey-search, places, seat-map, partner-gateway, notifications, payments); read whether the document names the move
+- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: 10 of 25 stump-paragraph terms appear (journey-search, places, seat-map, partner-gateway, balancer, record); read whether the document names the move
+- **REVIEW** `capacity_review_2026-Q4.md`: 5 of 25 stump-paragraph terms appear (journey-search, places, seat-map, partner-gateway, notifications); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -100,4 +100,3 @@ analyst (harmless); the prompt's report and CSV are deliverables by type (harmle
 Realism notes, each checked in the main thread: the timeline's "event" row is the file's header; incident ids step
 unevenly (3 to 17), not by a fixed 8; the H1 and H2 balancer exports differing in layout is the July rename, as
 filed in the catalogue.
-

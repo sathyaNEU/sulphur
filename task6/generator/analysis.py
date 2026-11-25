@@ -505,6 +505,10 @@ class Golden:
                         phi = np.zeros(H)
                     elif form == "upper":
                         phi = np.ones(H)
+                    elif form == "lognormal":
+                        terms = self.split_terms(s, name, w, FILL, quiet, cut, weighted)
+                        phi = self._lognormal_phi(a, HB, lo, hi, thr, terms["phi"] if terms else np.zeros(H))
+                        terms = None
                     else:
                         terms = self.split_terms(s, name, w, form, quiet, cut, weighted)
                         phi = terms["phi"] if terms else np.zeros(H)
@@ -513,6 +517,53 @@ class Golden:
                 det[(s, name)] = {"wt": wt, "cnt": cnt, "slow": slow, "mid": mid, "phi": phi, "terms": terms}
             out[s] = (tot, float(self.N[s][gone].sum()))
         return (out, det) if detail else out
+
+    @staticmethod
+    def _lognormal_phi(a, HB, lo, hi, thr, fallback):
+        """The threshold bucket's split from a lognormal curve fitted to each hour's own histogram (a probit line
+        through the cumulative shares strictly between 0 and 1): the curve's share of the bucket over the threshold.
+        An hour with fewer than two such boundaries keeps `fallback`."""
+        from scipy.stats import norm
+        phi = np.array(fallback, dtype=float).copy()
+        xb = np.log(np.array(HB, dtype=float))
+        for h in range(a.shape[0]):
+            n = a[h, 0]
+            if n <= 0:
+                continue
+            p_ = a[h, 1:] / n
+            ok = (p_ > 0) & (p_ < 1)
+            if ok.sum() < 2:
+                continue
+            b1, b0 = np.polyfit(xb[ok], norm.ppf(p_[ok]), 1)
+            sf = lambda v: 1 - norm.cdf(b1 * np.log(v) + b0)
+            den = (sf(lo) if lo > 0 else 1.0) - sf(hi)
+            if den > 1e-12:
+                phi[h] = min(max((sf(thr) - sf(hi)) / den, 0.0), 1.0)
+        return phi
+
+    def bridge_ratios(self, w, ex, form, incs=None):
+        """A bridge on the hours the export holds, on every basis a reader might count: over-threshold requests
+        (weighted) or spans (unweighted), over the incident-free hours or all the export's hours. {service: {basis:
+        rebuilt over counted}}."""
+        cut = self.held_from()
+        quiet = self.quiet_hours(incs)
+        hrs = np.arange(H)
+        _, det = self.hist_fill(w, ex, form, incs, detail=True)
+        out = {}
+        for s in K.SVC:
+            if self.bucket_of(s) is None:
+                continue
+            O, C = self.hourly(s, w, ex)
+            res = {}
+            for lab, sel in (("incident-free", (hrs >= cut) & quiet), ("all", hrs >= cut)):
+                est = sum(float((d["wt"] * d["slow"])[sel].sum()) for (ss, n), d in det.items() if ss == s)
+                res["requests, %s hours" % lab] = est / max(float(O[sel].sum()), 1e-9)
+                m = self.dec & (self.svc == s) & sel[np.clip(self.h, 0, H - 1)]
+                real = float((self.ms[m] > self.thr[s]).sum())
+                estu = sum(float(d["slow"][sel].sum()) for (ss, n), d in det.items() if ss == s)
+                res["spans, %s hours" % lab] = estu / max(real, 1e-9)
+            out[s] = res
+        return out
 
     def bridge_check(self, w, ex, form, incs=None):
         """The bridge on the hours the export does hold: each service's over-threshold requests in the export's
@@ -924,7 +975,13 @@ class Golden:
                 ["isotonic", "logit2", "weekday-hour", "hour", "daytype-hour", "flat"]:
             loadfill[m_] = self.slis(w_root, ex, fill=self.load_fill(w_root, ex, m_, incs))
         checks_ = {f: self.bridge_check(w_root, ex, f, incs) for f in (FILL, "pooled", "linear", "loglinear")}
+        # the strongest standard rival that reads the span metrics: a lognormal curve fitted to each early hour's own
+        # histogram, used for the bucket's split
+        rivals = {"lognormal": self.slis(w_root, ex, fill=self.hist_fill(w_root, ex, "lognormal", incs))}
+        ratios = {f: self.bridge_ratios(w_root, ex, f, incs) for f in ("linear", "upper")}
+        naive_order = {f: list(self.programme(v)["order"]) for f, v in naive.items()}
         return {"incidents": incs, "attribution": att, "onset": onset, "S": S, "P": P, "ci": ci, "ci_boot": ci_boot,
                 "minutes": mins, "fill": F, "held_from": self.held_from(), "lattice": lattice, "quick": quick,
                 "window": win, "family": family, "naive": naive, "loadfill": loadfill, "bridge_check": checks_,
+                "rivals": rivals, "bridge_ratios": ratios, "naive_order": naive_order,
                 "bucket": {s: self.bucket_of(s) for s in K.SVC}, "thr": self.thr, "bud": self.bud}

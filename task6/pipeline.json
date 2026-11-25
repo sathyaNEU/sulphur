@@ -1,10 +1,10 @@
 {
  "task": "task6",
- "status": "BUILD",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-25",
  "stump": "",
  "architecture": 7,
@@ -24,11 +24,18 @@
   "nearest": "task7 lineage, mark120 (differentiation filed)"
  },
  "judge": {
-  "verdict": "pending",
-  "disposition": "pending",
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW (answer blocks only; made in the generator, no second pass: the pack and the prompt did not move)",
   "report": "task6/determinism_check_report_pass6.md",
   "date": "2026-11-25",
-  "mode": "determinism (Holistic Audit v4 Step 0, Parts A and B)"
+  "mode": "determinism (Holistic Audit v4 Step 0, Parts A and B)",
+  "scope": {
+   "prompt.txt": "872f5a970163e53c0a800ca2255d7e64",
+   "target.zip": "e6a97cf82c049fe58c7a3c96fae6467e",
+   "submission.md at the pass": "9d9c338ffcc0682b046943f4ec7482cc"
+  },
+  "found": "every deciding figure reproduced (the five, the order, ten SLIs, seven owners, twenty incident-minute cells); 20 forks run, every rival that moves the list or the order refuted by a figure from the shipped files; five answer-block findings (a false claim about the bucket's upper bound, two alternative figures on another basis, two wrong-route figures on rounding lines, fares' and accounts' ranges too narrow for a lognormal fit, the interval room)",
+  "earlier": "passes 2 to 5 on architecture 7 before the return"
  },
  "returned": [
   {
@@ -67,10 +74,11 @@
    "review": "Accepted in review, but on a closer check before delivery held back because whether five or six services ran over their budgets turns on an estimation choice that neither the prompt nor PR-SLO-3 settles. The deciding item is journey-search's December latency SLI against its 1.0% budget, which turns on how the 274 hours missing from the trace export are counted. PR-SLO-3 2.2 says a request counts whether or not the tracing store kept it, but neither the policy nor the prompt says how to estimate the slow share for hours with no spans. The committed answer counts each missing hour at the slow share of the service's clean export hours in the same decile of hourly load (journey-search 0.9%, five services). The same approach with coarser load bands is just as reasonable, and the held-out check on 12 to 17 December cannot tell 4 bands from 10: with 2, 3, 4, 5 or 6 bands journey-search comes out at 1.31%, 1.29%, 1.23%, 1.18% and 1.02%, over budget, so six services; with 7 to 30 bands 0.89% to 0.90%. How to fix: remove the open choice rather than describing a method in the prompt, either (1) ship the spans or the per-hour slow request counts for 1 to 12 December so nothing has to be estimated for the deciding service, or (2) move journey-search so it lands clearly on one side under every reasonable treatment (2 to 30 load bands, weekday and hour matching, a flat December rate). Keep the keep-share weighting and the onset-dated root causes as the deciding steps; they are well built and settled by the data. Ways to make it harder: each over-budget service's SLI on the traced days beside the full month; an incident where the tool and the status page disagree by hours on the resolution; an internal service called mostly from a thinly kept edge service in part of the month; which services' status is not settled at the 90% level.",
    "reproduced": "2026-11-25 on the shipped pack: journey-search 1.33, 1.31, 1.17, 1.13, 0.97 with 2 to 6 load bands, 0.89 with 7 to 30, isotonic and both logits; 1.18 matching weekday and hour, 1.36 flat; 1.32 on the export's hours alone. A flat fill is the export's own share, so no fill of unrecorded hours can both decide a member and be forced.",
    "repair": "design (the fork is the untraced-hours result's own difficulty: closing it in either direction puts the hurried figure in the band, so the result is redesigned, not pinned)",
-   "commit": ""
+   "commit": "RETURNED b43db02; BUILD 206fa6b; RESHIPPED (task6) 2026-11-25",
+   "what": "the 274 hours before the export measured from the store's span metrics (a new file, tracing_span_metrics_2026-12.csv) instead of filled by a load model; booking, payments and tickets moved to boundary thresholds (2,500, 1,000, 2,500 ms); journey-search placed at 0.8 across December and 1.1 on the export's hours; accounts and notifications clear of their lines at a bucket bound; the prompt without its rounding sentence and with four asks; components one per judgment"
   }
  ],
- "resume": "collect the determinism judge's pass 6 (determinism mode), fix every finding in the generator in one pass, re-run gates.py, then READY and RESHIPPED",
+ "resume": "the author rewrites prompt.txt for voice (voice-check.py task6 --rewrite, then leak.py), uploads it with target.zip, and pastes the two responses; then /triage-runs task6 (the stump answer and the holistic audit on the pair)",
  "approved": null,
  "approval_source": "the author's report of 2026-11-11 (approved on review; architecture 7 levelled up, the cut on file; the run scores are not in the repo), already filed in corpus/approved.json and the run record; confirmed by the author on 2026-11-13",
  "delivered": null,
@@ -90,7 +98,7 @@
  "zip_md5": "e6a97cf82c049fe58c7a3c96fae6467e",
  "zip_sha256_16": "23e1bf1e8fdbf1af",
  "precut_exit": 1,
- "shipped": "2026-11-07",
+ "shipped": "2026-11-25",
  "call": "Put reliability engineers on partner-gateway, places, fares, seat-map and notifications, in that order: the five ran over their 2026 latency error budgets",
  "gates_at_ship": "checks 0 failures; verify PASS; rebuild byte-identical; figures_check 117 of 117; precut 61 checks 0 FAIL; voice-check exit 0; leak.py REVIEW (ruled harmless); leak reader clean on the shipped cut; determinism judge DETERMINISTIC, APPROVE; heart exit 0 (WARN gate_g repeat and overuse); surface exit 0, no promoted pair",
  "migrated_from": {
@@ -136,7 +144,7 @@
    "runs/arch6_round1_triage.md"
   ]
  },
- "gates_at_reship": "gates.py task6, 2026-11-25: precut, effort, voice, leak, figures, stump, containers, heart, surface: 0 FAIL, 4 WARN (precut's four, the written document, leak.py REVIEW ruled, heart's three WARNs); generator checks all passed, verify PASS, rebuild byte-identical",
+ "gates_at_reship": "gates.py task6, 2026-11-25 on the final cut: 9 gates, 0 FAIL, 4 WARN (precut: no generator/core.py, a near chain with task7, the re-sent batch as routine texture, R2 upstream of four results; voice: the written document; leak.py REVIEW, ruled; heart: three WARNs); audit_containers 0 FAIL 0 WARN; generator checks all passed, verify PASS, rebuild byte-identical",
  "doctrine": "throughout",
  "chain": "R1 incident minutes by half; R2 the December incidents' owners dated by own handling against load; R3 the first to start and payments' SLI (each span at its trace root's keep share); R4 places' and booking's December SLI (the 274 hours before the export counted from the store's span metrics); R5 every SLI; R6 design-based intervals; R7 the five over budget; R8 the order, shares and requests beyond budget",
  "effort": {
@@ -155,12 +163,42 @@
   "added": "the store's 31-day retention: the export begins at 12 December 10:00 and the dropped hours are counted at their load; 60 kept traces an hour; the getaway push moved to 16 December; a New Year sale on the evening of 28 December"
  },
  "prompt_md5": "872f5a970163e53c0a800ca2255d7e64",
- "submission_md5": "9d9c338ffcc0682b046943f4ec7482cc",
+ "submission_md5": "76f25e849e457615bb446d67563b18b9",
  "freeze": {
   "date": "2026-11-25",
   "snapshot": "taken before the first edit (18 main-call figures, 40 figures.json keys)",
   "determinism_mode": "FAIL, 120 frozen items moved",
   "rubric_mode": "FAIL, 27 frozen items moved",
   "note": "expected and not cleared: a result was redesigned after a determinism return, three thresholds and journey-search's level moved and the early hours are measured from a new record; no mode's contract matches, the snapshot was not retaken"
- }
+ },
+ "holistic": [
+  {
+   "date": "2026-11-25",
+   "mode": "determinism",
+   "report": "determinism_check_report_pass6.md",
+   "verdict": "DETERMINISTIC, FIX_NOW",
+   "score": null,
+   "rubric": {
+    "run1": null,
+    "run2": null,
+    "mean": null,
+    "stumped": "open: no platform pair exists for this cut"
+   },
+   "correctness": "correct",
+   "determinism": "pinned",
+   "depth_level": null,
+   "must_fix": [
+    "fares and accounts ranges widened to hold a lognormal fit (made)",
+    "interval room 0.06 (made)",
+    "the bucket's upper bound stated as a bound at 1.04 (made)",
+    "interpolation's over-count stated as a floor on every basis (made)",
+    "the export's own share for partner-gateway 3.1 and the dated-causes leave-out without edge figures (made)"
+   ],
+   "md5": {
+    "prompt.txt": "872f5a970163e53c0a800ca2255d7e64",
+    "target.zip": "e6a97cf82c049fe58c7a3c96fae6467e"
+   }
+  }
+ ],
+ "prompt_rewritten": false
 }

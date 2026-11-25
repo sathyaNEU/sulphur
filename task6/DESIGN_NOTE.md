@@ -80,7 +80,7 @@ span name, which have to be weighted by callers they do not name and split at a 
 not carry; and the incident time PR-SLO-3 3.2 leaves out depends on a root cause no review has recorded yet. The work
 is long because each piece has its own evidence, not because one piece is clever.
 Layer 1: re-sent span rows from the exporter's retries (the same span id twice; the span metrics count each span
-once); traces begun in the hour before the export whose root the store had dropped; the span metrics' rows split by
+once); the span metrics' rows split by
 status code and cumulative by boundary, with no row for a series' empty hour; the balancer's target groups renamed
 on 1 July (the catalogue's crosswalk); the status page in Lisbon local time against the incident tool's UTC; the
 incident export's final service lists against the timeline's add times; 404s, 5xx and a retried partner-gateway call
@@ -115,10 +115,13 @@ Pinned: every rival estimator on every SLI lands on the same one-decimal value i
 span's own hour, the orphans dropped). For the hours before the export, five services are counted exactly (their
 threshold is a histogram boundary); for the other five, every split of the threshold's bucket the held spans support
 (one pooled share, two to thirty bands of hourly load, a logit in load, the hour of day, weighted or not) gives the
-same list, the same order and SLIs within 0.07 of each other, which is each figure's stated range. Straight-line and
-log-linear interpolation inside the bucket and the bucket's two bounds give the same list and other figures; on the
-held hours, where the spans say what the bucket holds, interpolation rebuilds 1.6 to 3.0 times the over-threshold
-requests, so it is ruled out for the figures by the files. Fills that read no span metrics (a flat share, a match on
+same list, the same order and SLIs within 0.07 of each other, which is each figure's stated range. A lognormal curve fitted to each
+early hour's own histogram (the strongest standard rival, the judge's) gives the same list and order and sits inside
+the ranges, which are set to hold it. Straight-line and log-linear interpolation inside the bucket and the bucket's
+lower bound give the same list, another order and other figures; on the held hours, where the spans say what the
+bucket holds, interpolation rebuilds 1.4 to 3.4 times the over-threshold requests, so it is ruled out for the figures
+by the files. The bucket's upper bound puts journey-search at 1.04, over its line unrounded: a bound, not an estimate
+(2.8 times or more its real count on the held hours), and the blocks say so. Fills that read no span metrics (a flat share, a match on
 the hour, two or three load bands) put journey-search over and partner-gateway at 2.8 to 3.0, where the span metrics
 count partner-gateway at 2.3 with nothing estimated. The onset rule (one sustained changepoint, a rise of 2.2 times) fires on 3 of 54
 placebo windows, and every rival detector calibrated the same way names the same seven owners or sees nothing. The trace bootstrap with the splits refitted lands within 0.02 of the linearised interval.
@@ -148,7 +151,7 @@ dated causes.
 | R3 | the service that starts first, and payments' December SLI | Missingness and measurement | each span at its trace root's hourly keep share (the root's RequestCount over the roots kept that hour) | exact (the first to start); payments 0.2 at one decimal | method shortcut: each service's own spans on its own hourly count (places first; payments 0.5) | independent: the kept traces' roots and the balancer's counts | Component 1 |
 | R4 | places' and booking's December SLI | Data discovery | PR-SLO-3 2.2 and 3.1; the span metrics' counts for the 274 hours before the export; places' bucket split at the share its held spans show | places 1.37 to 1.45; booking 0.3 exact | method shortcut: the export's hours read as December (1.7 and 0.5), or the bucket interpolated (places 2.0) | independent: the span metrics and the export's first span | Component 3 |
 | R5 | every service's December latency SLI | Missingness and measurement | R3's weights through both records, R4's hours, the windows R2 leaves out | exact at one decimal for the five boundary services; the split family's range for the five bridged | method shortcut: own hourly counts, the export's hours, the whole-window causes | R2, R3, R4 | Ask 2 |
-| R6 | a 90 per cent confidence interval on each over-budget service's SLI | Uncertainty | the trace store's design: strata of root service and hour, whole traces as units; the early hours' own sampling error and the split's | each end within 0.03 (linearised against bootstrap) | method shortcut: a binomial interval on the kept spans, 0.03 to 0.05 too narrow at one end for the internal services and right for the edge ones; on the reflex route every interval sits on a wrong SLI | R5 | Ask 1 |
+| R6 | a 90 per cent confidence interval on each over-budget service's SLI | Uncertainty | the trace store's design: strata of root service and hour, whole traces as units; the early hours' own sampling error and the split's | each end within 0.06 (the two methods agree within 0.03; the room takes an interval built on any SLI inside its range) | method shortcut: a binomial interval on the kept spans is 0.03 to 0.05 too narrow at one end for the internal services, inside the room on the golden's SLIs; the interval is lost on the reflex route, where every interval sits on a wrong SLI | R5 | Ask 1 |
 | R7 | the services over budget | Synthesis | PR-SLO-3 3.4 on R5 | exact | method shortcut: the SLIs on own counts (partner-gateway, fares and notifications within), from the export's hours (journey-search over) or with the whole-window causes | R5 | Recommendation |
 | R8 | the start order, each one's share of the over-threshold requests the SLIs count, and the requests beyond budget | Decomposition and attribution | R5's weighted numerators and counted requests | order exact; shares within a point; 190,000 to 220,000 | method shortcut: shares of the kept over-threshold spans on the own-hour weights over the export's hours | R5, R7 | Ask 1 |
 
@@ -290,7 +293,7 @@ the Christmas weeks and two campaign evenings (16 and 28 December) (3) queueing 
 (4) per-operation latency that differs by caller (5) incidents that start before they are declared and end after
 mitigation (6) a retried partner-gateway 5xx.
 Problems by process: the exporter re-sends a batch (repeated span ids); the store's retention leaves the export
-starting at 12 December 10:00, with orphan spans of traces begun in the hour before; the span metrics are cumulative
+starting at 12 December 10:00; the span metrics are cumulative
 by boundary, split by status code and silent for a series' empty hours; the balancer renamed its target groups on 1
 July; the status page writes Lisbon local time and the incident tool UTC; the tool's export carries each incident's
 final service list while the timeline dates each addition; December's reviews were still open on the export date.
@@ -324,8 +327,8 @@ December": false by 274 hours, tested by its first span; "a bucket's spans are s
 default): false in a tail, tested where the export holds the same spans.
 Forcing: the lines are the budgets. The golden family (26 splits of the bucket, three weight bases) files the five
 every time, journey-search between 0.78 and 0.85 against 1.0 and the over-budget services no nearer their line than
-partner-gateway's 0.29; the naive bridges and both bounds file the five (journey-search 0.76 to 1.04, the upper bound
-on its line); the shortcuts file seven other lists; the split shares moved 20 per cent either way keep the five
+partner-gateway's 0.29; interpolation and the lower bound file the five (journey-search 0.76 to 0.95); the upper bound puts
+journey-search at 1.04, a bound the held hours refuse as an estimate; the shortcuts file seven other lists; the split shares moved 20 per cent either way keep the five
 (effort.json `forcing`).
 Noun swap: `skeleton.py check task6`: no severity 1 or 2; the nearest client task weights a sample by its design and
 carries neither the second grain nor dated causes.
@@ -375,16 +378,16 @@ mean, because the record is a sample kept at another unit's rate over part of th
 | SF7 | which window a request belongs to | its start or its end | its start | PR-SLO-3 2.4 |
 | SF8 | the weighting base | the balancer's count, or the weighted kept count | either | same call |
 | SF9 | the root's hour or the span's own hour | either | either | same call |
-| SF10 | spans of traces begun before the export (their root dropped) | weighted on their own hour, or dropped | either | same call |
+| SF10 | spans of traces begun before the export (their root dropped) | weighted on their own hour, or dropped | either | same call; this cut holds none (every exported span's root is in the export) |
 | SF11 | when a named service's window starts | the declaration, or the timeline's add time | the add time | PR-SLO-3 3.2; the prompt ("counting it from when the incident tool added it") |
 | SF12 | when an incident ends | the tool's resolve time, or the status page's last operational change | the status page | PR-SLO-3 3.2 and 5.2 |
 | SF13 | a December incident with no status post | left out or not | nothing left out | PR-SLO-3 5.2 (customer-facing means posted) |
 | SF14 | the onset's lead window | two to four hours before the declaration | every lead gives the same causes | same call |
 | SF15 | the shares' base | all ten SLIs' counted over-threshold requests | that | the prompt ("all our services' SLIs count") |
-| SF16 | the interval's method | linearised or a trace bootstrap | either, each end within 0.03 | same call |
+| SF16 | the interval's method | linearised or a trace bootstrap | either: the two agree within 0.03, and the blocks accept each end within 0.06, which takes an interval built on any SLI inside its stated range | same call |
 | SF19 | an onset's clock time | the changepoint's minute, an "about" time, or none | none in the answer blocks: they grade the owner | the verifier's detector dates onsets earlier with the same owner and order |
 | SF20 | December's hours before the export's first span | left out (the export as December), or counted | counted, from the span metrics | PR-SLO-3 2.2 ("whether or not the tracing store kept a span for it") and 3.1; the span metrics' rows from 1 December |
-| SF21 | how a threshold's bucket is split in those hours | one pooled share, two to thirty load bands, a logit in load, the hour of day; straight-line or log-linear interpolation; the bucket's bounds | five load bands | every split: same call, figures inside the stated ranges; interpolation and the bounds: same call, and for the figures ruled out by the held hours, where interpolation rebuilds 1.6 to 3.0 times the spans' own count |
+| SF21 | how a threshold's bucket is split in those hours | one pooled share, two to thirty load bands, a logit in load, the hour of day; a lognormal curve fitted to each early hour's histogram; straight-line or log-linear interpolation; the bucket's bounds | five load bands | every split and the lognormal curve: same call and order, figures inside the stated ranges (which are set to hold them); interpolation and the lower bound: same list, another order, and ruled out for the figures by the held hours, where interpolation rebuilds 1.4 to 3.4 times the spans' own count; the upper bound puts journey-search at 1.04, over its line unrounded, and rebuilds 2.8 times or more its real count on the held hours: a bound, stated as one in the blocks |
 | SF22 | where the export begins | the first span's hour | 12 December 10:00, a whole hour | the export's first span |
 | SF23 | how an onset is dated | the golden's sustained changepoint, ten-minute medians, rolling medians | the sustained changepoint at a rise of 2.2 times | every detector calibrated on placebo windows names the same owners or abstains |
 | SF24 | a fill that reads no span metrics | a flat share, a match on the hour or weekday, load bands | none: the hours are recorded | the span metrics' counts: partner-gateway 2.3 measured against 2.9 flat; load fills of eight bands or more land inside the stated ranges |
@@ -404,11 +407,13 @@ mean, because the record is a sample kept at another unit's rate over part of th
 | the onset rule | a rise of 2.2 times held half an hour and twenty spans | calibrated on placebo windows of the export (3 of 54 fire; at a doubling 4 of 54); spread: the same seven owners at every setting tried |
 
 Variant battery: 33 variants the record supports (26 splits of the threshold bucket, thirteen forms weighted and
-unweighted; three weight bases; four naive bridges) and four onset detectors file the same call, the five, and the 29
-of them that are estimates (not bounds or interpolation) the same order and one-decimal SLIs. Sixteen fills that read
-no span metrics were run beside them: load fills of four bands or more, an isotonic share and a curved logit file
-the five; a flat share, the hour of day, the day type and two or three load bands file six, and the span metrics'
-counts refuse them (partner-gateway 2.9 against 2.3 measured).
+unweighted; three weight bases; a lognormal curve fitted to each early hour's histogram; straight-line and log-linear
+interpolation; the bucket's lower bound) and four onset detectors file the same call, the five, and the 30 of them
+that are estimates the same order and SLIs inside the stated ranges. The bucket's upper bound was run beside them: it
+puts journey-search at 1.04 and is stated as a bound. Sixteen fills that read no span metrics were run as well: load
+fills of four bands or more, an isotonic share and a curved logit file the five; a flat share, the hour of day, the
+day type and two or three load bands file six, and the span metrics' counts refuse them (partner-gateway 3.1 on the
+export's hours against 2.3 measured).
 
 ## Closure table
 
@@ -522,7 +527,10 @@ Free: nothing in the analysis; texture only.
 - freeze.py: determinism mode FAIL (120 frozen items moved) and rubric mode FAIL (27), expected and not cleared: a
   result was redesigned after a determinism return, so no mode's contract matches (pipeline.json `freeze`).
 - Leak reader (2026-11-25): clean on the repaired cut, rulings in Leak sweep rulings. Determinism judge, pass 6
-  (determinism mode, the Holistic Audit v4's Step 0 and Parts A and B): running at this commit.
+  (determinism mode, the Holistic Audit v4's Step 0 and Parts A and B, 20 forks run): DETERMINISTIC, FIX_NOW. Every
+  deciding figure reproduced (the five, the order, ten SLIs, seven owners, twenty incident-minute cells); every rival
+  that moves the list or the order refuted by a figure from the shipped files. Its five answer-block findings are
+  made in the generator (Tried and rejected); the pack and the prompt did not move, so no second pass.
 - Gates on the final cut: `gates.py task6` 9 gates, 0 FAIL, 4 WARN (precut: no `generator/core.py`, a near chain
   with task7, the re-sent batch as routine texture, R2 upstream of four results; voice: the written document;
   leak.py REVIEW, ruled; heart: three WARNs); generator checks all passed, verify PASS, both builds byte-identical.
@@ -664,4 +672,5 @@ Free: nothing in the analysis; texture only.
 - **The start order's tenth-of-a-count margin, restated at a twentieth:** raising notifications clear of its line at the bucket's lower bound brought it to within 8 per cent of seat-map in over-threshold requests; the order holds under all 26 splits and three weight bases, and the answer blocks name the margin.
 - **The world's own unshipped early spans against the split (checks RES5):** the same list and the five boundary services identical; places (1.35) and accounts (1.19) land just under their split ranges, inside their 90 per cent intervals, from the binomial noise of which bucket spans crossed the threshold. The stated ranges are what the record supports, the intervals carry the rest.
 - **A five-times sample of the same world (300 kept traces an hour, scratch run of 2026-11-25) as the truth check:** journey-search 0.71, fares 1.32, places 1.39, seat-map 1.89, booking 0.33, payments 0.22, tickets 0.67, accounts 1.18, partner-gateway 2.26, notifications 1.34 with the standard's exclusions under the world's own faults: the golden five, each of these inside the golden's 90 per cent interval where one is computed.
+- **Judge pass 6 (2026-11-25, determinism mode), FIX_NOW, made in the generator the same day:** (1) the closing passage said both of a bucket's bounds give the list; the upper bound puts journey-search at 1.039, over its line unrounded: the passage now states it as a bound with its figure. (2) "Interpolation rebuilds 3.0 times places' and 1.9 times journey-search's count" held on one basis only (requests, incident-free hours); the judge got 3.2 and 2.0 on all the export's hours: the blocks now give the least on any basis, rounded down. (3) "A flat fill puts partner-gateway at 2.9" was the incident-free share; the export's own share is 3.1: the blocks now quote the export's hours. (4) The dated-causes leave-out's fares 0.8 and journey-search 1.2 sat on rounding lines (the judge's 0.745 and 1.146): wrong-route figures within 0.02 of a line are no longer printed. (5) A lognormal curve fitted to each early hour's histogram put fares at 1.35 and accounts at 1.34, outside their ranges, and is refuted on the held hours for accounts only: it is in the generator as a rival and the ranges hold it. The interval room went from 0.03 to 0.06 (an interval built on any SLI inside its range fits); places' interval stays centred on the golden's own estimate, the judge's 1.26 to 1.52 inside the room. The export holds no orphan spans in this cut; the note's mentions are gone.
 
