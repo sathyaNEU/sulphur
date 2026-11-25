@@ -34,8 +34,8 @@ FILES = {
 }
 
 # the golden's conventions (the core's GOLDEN), with the build's own four conventions at their golden readings
-GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate",
-              count_months="all", harmonics=2, hinge=0.0, cover="mean", level=1, age_fit="wls", age_drop=0,
+GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
+              count_months="all", harmonics=2, hinge=0.0, cover="mean", level="fit", age_fit="wls", age_drop=0,
               alive="lots", clock="deliveries", last="account", age_from="purchase", run_stat="median", estate="shaped",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)
 HURRIED = {"S1": {"recon": "face"}, "S2": {"store": "cover"}, "S3": {"loss": "none"}}
@@ -50,28 +50,29 @@ RUN = {
     "cutoff:summer counts": {"recon": "face", "count_months": "summer"},
     "cutoff:weekly rounds": {"recon": "face", "fit": "weekly"},
 }
-# every convention of the fork table marked "in the battery", alone: the core's sixteen and the build's four
+# every convention of the fork table marked "in the battery", alone (none refused: REFUSED below holds the readings
+# the files rule out, each with its figure, and they set no band)
 SINGLES = [
     ("the cellar checks fitted one line for each delivery interval", {"fit": "byclass"}),
-    ("a line's weekly sales from thirteen weeks of its dockets, not four", {"rate": "count_rate13"}),
     ("the summer's cellar checks only", {"count_months": "summer"}),
     ("the bend in the weather response a degree lower", {"hinge": -1.0}),
     ("the bend in the weather response a degree higher", {"hinge": 1.0}),
-    ("one seasonal harmonic in the deliveries fit", {"harmonics": 1}),
+    ("one seasonal harmonic where the F test does not ask for two", {"harmonics": "test"}),
     ("three seasonal harmonics in the deliveries fit", {"harmonics": 3}),
     ("the store's cover as the median week's, not the mean's", {"cover": "median"}),
-    ("deliveries at the count over its last two weeks, not its own week's", {"level": 2}),
-    ("deliveries at the count as the fit's value for its week", {"level": "fit"}),
+    ("deliveries at the count over its last two weeks", {"level": 2}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
+    ("the lots fitted by a binomial model with a log link on the counts found out of registered", {"age_fit": "binom"}),
+    ("the oldest four lots against the newest four", {"age_fit": "ends"}),
     ("the lots fitted without the newest lot", {"age_drop": "newest"}),
     ("the lots fitted without the oldest lot", {"age_drop": "oldest"}),
-    ("the oldest four lots against the newest four", {"age_fit": "ends"}),
+    ("the lots bought inside the docket record left out", {"age_drop": "record"}),
     ("the fleet alive as the count over the fitted share on site", {"alive": "share"}),
     ("the loss carried on the calendar, not on deliveries", {"clock": "calendar"}),
     ("the dray's last call as the line's own last docket, not the account's", {"last": "line"}),
     ("a lot's age from the middle of the year on its stamp", {"age_from": "lotyear"}),
+    ("a lot's age from the middle of the year each container was delivered", {"age_from": "deliveryyear"}),
     ("a beer's racking run as the mean of its rackings", {"run_stat": "mean"}),
-    ("the estate's scheduled volume level through the year", {"estate": "flat"}),
 ]
 
 
@@ -87,13 +88,18 @@ def family():
     return out
 
 
+# the battery of defensible conventions sets every band (the architect's ruling of 2026-11-25)
 BATTERY = family()
-# the core's own variant battery (core.FAMILY) and the build's four conventions alone: the rebuilds that set every band in
-# the spec corelib prices (every convention of the fork table alone, and the core's three pairs)
-FAMILY = [("the golden's conventions", {})] + list(SINGLES) + [
-    ("thirteen weeks of dockets and the lines by interval together", {"rate": "count_rate13", "fit": "byclass"}),
-    ("the summer checks and the two-week level together", {"count_months": "summer", "level": 2}),
-    ("the unweighted lots and the calendar loss together", {"age_fit": "ols", "clock": "calendar"}),
+FAMILY = BATTERY
+# readings the files rule out, each by a figure the note states; they file the same covers and set no band
+REFUSED = [
+    ("a line's weekly sales from four weeks of its own dockets", {"rate": "count_rate"}),
+    ("a line's weekly sales from thirteen weeks of its own dockets", {"rate": "count_rate13"}),
+    ("deliveries at the count as its own week's", {"level": 1}),
+    ("one seasonal harmonic in the deliveries fit for every type", {"harmonics": 1}),
+    ("the estate's scheduled volume level through the year", {"estate": "flat"}),
+    ("deliveries at the count as the mean of its last four weeks", {"level": 4}),
+    ("deliveries at the count as the mean of its last eight weeks", {"level": 8}),
 ]
 # each fitted input moved by its spread, one at a time: the call has to hold (the core's FORCING)
 FORCING = [
@@ -258,10 +264,13 @@ def load(target, mess=None):
             if mess == "lot_prefix" and lot not in R.tally[p]:
                 continue
             age_y = (R.asof - dt.date(year, 7, 1)).days / 365.25
-            rows.append((lot, age, age_y, int(on[y.index].sum()), int(R.tally[p].get(lot, 0)), len(y)))
+            age_d = float(np.mean([(R.asof - dt.date(z, 7, 1)).days / 365.25 for z in dates.dt.year]))
+            rows.append((lot, age, age_y, int(on[y.index].sum()), int(R.tally[p].get(lot, 0)), len(y), age_d))
         R.lots[p] = dict(lot=[r[0] for r in rows], age=np.array([r[1] for r in rows]),
                          age_y=np.array([r[2] for r in rows]), reg=np.array([r[3] for r in rows], dtype=float),
-                         ons=np.array([r[4] for r in rows], dtype=float), bought=np.array([r[5] for r in rows]))
+                         ons=np.array([r[4] for r in rows], dtype=float), bought=np.array([r[5] for r in rows]),
+                         age_d=np.array([r[6] for r in rows]))
+        R.record_years = (R.asof - R.D0).days / 365.25
     # the cold store's Monday position: the stock at the close of week i is the next Monday's
     st = pd.read_csv(f("store"), dtype={"container": str})
     R.store = {}
@@ -398,6 +407,15 @@ def fit_sales(R, p, harmonics, hinge=0.0):
     return predict, shape, year, h0, sse
 
 
+F_CRIT = 3.06                         # the 5 per cent point of F on 2 and 148 degrees of freedom
+
+
+def harmonic_F(R, p):
+    """the F statistic of the second yearly harmonic in the deliveries fit, on 2 and WH - 8 degrees of freedom"""
+    s1, s2 = fit_sales(R, p, 1)[4], fit_sales(R, p, 2)[4]
+    return float((s1 - s2) / 2.0 / (s2 / (R.WH - 8)))
+
+
 def fit_cellar(R, p, o):
     """containers a line holds: a number whatever it sells (a), a number per container it sells a week (b1) and a
     number per container it sells a week and week between deliveries (b2). A check is of full containers, so what
@@ -441,7 +459,7 @@ def fit_age(R, p, o):
     of the fleet that leaves each year, and its level at age nought the share of the fleet that is on site. Returns
     the yearly rate of leaving (continuous) and the share on site"""
     L = R.lots[p]
-    age = L["age_y"] if o["age_from"] == "lotyear" else L["age"]
+    age = lot_age(L, o)
     reg, ons = L["reg"], L["ons"]
     k = ons > 0
     order = np.argsort(age)
@@ -449,6 +467,8 @@ def fit_age(R, p, o):
         k[order[0]] = False
     elif o["age_drop"] == "oldest":
         k[order[-1]] = False
+    elif o["age_drop"] == "record":                               # the lots bought inside the docket record left out
+        k &= L["age"] > R.record_years
     x, y, wt = age[k], np.log(ons[k] / reg[k]), ons[k]
     if o["loss"] == "origin":                                     # every lot's whole absence from site read as loss
         return float(-(wt * x * y).sum() / (wt * x * x).sum()), 1.0
@@ -464,7 +484,29 @@ def fit_age(R, p, o):
         return float(lam), float(f)
     sw = np.sqrt(wt)
     b, a = np.linalg.lstsq(np.column_stack([x * sw, sw]), y * sw, rcond=None)[0]
+    if o["age_fit"] == "binom":                                   # found on site out of registered, log link, by Newton
+        n_, s_ = reg[k], ons[k]
+        th = np.array([a, b])
+        X = np.column_stack([np.ones(len(x)), x])
+        ll = lambda t: float((s_ * (X @ t) + (n_ - s_) * np.log1p(-np.exp(np.minimum(X @ t, -1e-9)))).sum())
+        for _ in range(100):
+            eta = np.minimum(X @ th, -1e-9)
+            q = np.exp(eta) / (1.0 - np.exp(eta))
+            g = X.T @ (s_ - (n_ - s_) * q)
+            H = -(X.T * ((n_ - s_) * q / (1.0 - np.exp(eta)))) @ X
+            step = np.linalg.solve(H, g)
+            t, cur = 1.0, ll(th)
+            while t > 1e-6 and (np.any(X @ (th - t * step) >= 0) or ll(th - t * step) < cur):
+                t /= 2.0
+            th = th - t * step
+            if abs(t * step).max() < 1e-10:
+                break
+        a, b = th
     return float(-b), float(math.exp(a))
+
+
+def lot_age(L, o):
+    return {"lotyear": L["age_y"], "deliveryyear": L["age_d"]}.get(o["age_from"], L["age"])
 
 
 def runs_of(R, p, stat="median", start=52):
@@ -493,8 +535,9 @@ def chain(R, p, opt=None, temps=None):
     share = {x: float(lr[li == x].sum()) / float(lr.sum()) for x in ivs}
     b, m = slope(1.0) / 2.0, 2.0 * sum(slope(x) * share[x] for x in ivs) / slope(1.0)
     b *= o["x_b"]
-    predict, shape, ys, h0, _ = cached("sales", R, p, o, ("harmonics", "hinge"),
-                                       lambda: fit_sales(R, p, o["harmonics"], o["hinge"]))
+    nh = o["harmonics"] if o["harmonics"] != "test" else (2 if harmonic_F(R, p) > F_CRIT else 1)
+    predict, shape, ys, h0, _ = cached("sales", R, p, dict(o, harmonics=nh), ("harmonics", "hinge"),
+                                       lambda: fit_sales(R, p, nh, o["hinge"]))
     if o["level"] == "fit":
         lev = predict(WH - 1, R.temp_hist[WH - 1])
     else:
@@ -510,7 +553,7 @@ def chain(R, p, opt=None, temps=None):
         alive, year_loss = T["onsite"] + held0, max(R.register[p] - T["onsite"] - held0, 0.0) / 3.0
     else:
         lam_y, share_on = cached("age", R, p, o, ("loss", "age_fit", "age_drop", "age_from"), lambda: fit_age(R, p, o))
-        age = lots["age_y"] if o["age_from"] == "lotyear" else lots["age"]
+        age = lot_age(lots, o)
         alive = float((lots["reg"] * np.exp(-lam_y * age)).sum()) if o["alive"] == "lots" else T["onsite"] / share_on
         year_loss = alive * (math.exp(lam_y) - 1.0)
     year_loss *= o["x_lam"]
@@ -602,14 +645,15 @@ def lattice_opts():
     return keys
 
 
-def days_check(R):
+def days_check(R, rate=None):
     """the falsification check: across every pool's cellar checks in one fit, each pool with its own relation to a
     line's sales and delivery interval, the fall in the full containers counted for each container the line has
     sold since its last delivery"""
     X, y = [], []
+    rate_key = rate or GOLDEN["rate"]
     for k, p in enumerate(POOLS):
         rec = R.counts[p]
-        rate, iv, full, days = rec["count_rate"], rec["count_iv"], rec["count_full"], rec["count_days"]
+        rate, iv, full, days = rec[rate_key], rec["count_iv"], rec["count_full"], rec["count_days"]
         blk = np.zeros((len(rate), 3 * len(POOLS) + 1))
         blk[:, 3 * k], blk[:, 3 * k + 1], blk[:, 3 * k + 2], blk[:, -1] = 1.0, rate, rate * iv, rate * days / 7.0
         X.append(blk)
@@ -674,13 +718,11 @@ def run(target):
     for p in POOLS:
         X["gold"][p] = chain(R, p)
         X["fam"][p] = [chain(R, p, o) for _, o in FAMILY]
-        X["bat"][p] = [chain(R, p, o) for _, o in BATTERY]
         X["lat"][p] = {k: chain(R, p, o) for k, o in lat_o.items()}
         X["runs"][p] = {k: chain(R, p, o) for k, o in RUN.items()}
         X["over"][p] = {s: chain(R, p, o) for s, o in OVER.items()}
         X["hot"][p] = hot(R, lambda t: chain(R, p, None, t)["short"])
         X["hot_fam"][p] = [hot(R, lambda t: chain(R, p, o, t)["short"])[0] for _, o in FAMILY]
-        X["hot_bat"][p] = [hot(R, lambda t: chain(R, p, o, t)["short"])[0] for _, o in BATTERY]
         X["hot_lat"][p] = {k: hot(R, lambda t: chain(R, p, o, t)["short"])[0] for k, o in lat_o.items()}
         X["hot_runs"][p] = {k: hot(R, lambda t: chain(R, p, o, t)["short"])[0] for k, o in RUN.items()}
     X["direct"] = {p: direct(R, p) for p in POOLS}
@@ -694,7 +736,22 @@ def run(target):
     X["days_check"] = days_check(R)
     X["joint"] = {p: chain(R, p, {"recon": "joint"}) for p in POOLS}
     X["allowances"] = {k: {p: chain(R, p, {"recon": k}) for p in POOLS} for k in ("half", "whole")}
+    X["bat"], X["hot_bat"] = X["fam"], X["hot_fam"]
     X["level4"] = {p: chain(R, p, {"level": 4})["short"] for p in POOLS}
+    X["refused"] = {name: {p: chain(R, p, o)["short"] for p in POOLS} for name, o in REFUSED}
+    # the figures that rule between the ways of measuring a line's sales and the level at the count
+    X["rate_diag"] = {}
+    for rate in ("count_rate_share", "count_rate13", "count_rate"):
+        g = dict(GOLDEN, rate=rate)
+        X["rate_diag"][rate] = dict(slope={p: fit_cellar(R, p, g)[1](1.0) for p in POOLS},
+                                    fall=days_check(R, rate)[:2])
+    X["level_diag"] = {}
+    for p in POOLS:
+        predict = fit_sales(R, p, 2)[0]
+        fit = np.array([predict(i, R.temp_hist[i]) for i in range(R.WH)])
+        res = np.log(R.flow[p]) - np.log(fit)
+        X["level_diag"][p] = dict(scatter=float(np.std(res)), count_week=float(res[-1]), fit=float(fit[-1]),
+                                  own=float(R.flow[p][-1]), two=float(R.flow[p][-2:].mean()))
     return X
 
 

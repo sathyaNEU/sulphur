@@ -111,7 +111,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: spawn the leak reader (Sonnet, medium) and the determinism judge (determinism mode: the Holistic Audit v4, Step 0, Part A and Part B) together in the background on target.zip of this cut (target digest bf27139f134520a6); fix every finding in the generator in one pass and re-run gates.py --full; then stage 5 (pre-ship check in the note, READY with both zips and golden/ force-added). Flags for the architect before READY: the golden's clock of a check is the dray's last call at the account (FS-04 5.1), reversing the draw's SF17 reading (the line's own docket reads the falsification check at 0.67, a factor of 2.0); bands from the core's twenty rebuilds and the build's four conventions alone; C3's band is narrow (5,252 to 5,303) against the world's 4,982",
+ "resume": "back to the architect: on the cut pack rebuilt to a6e04d1 (golden share rate and fitted level, estate 720, placement 4,800, C3 over the year to the count, the lots battery widened with the binomial log-link fit, the delivery-year age and the record's own lots left out), with bands from the whole battery less the readings refused with a pack figure (four and thirteen weeks of own dockets, the count's own week, one harmonic for every type, the estate's volume level through the year, the four- and eight-week levels), corelib passes every row but the calibrated run route at 54: it files 2,964, 1,468, 559, 1,668, -422 and lands the 20 litre pool's planning and hot figures (559 and 818) inside the near-miss stretch of their bands (589 to 764; 843 to 1,128) beside the firkins' and kilderkins'. With the whole battery unrefused, S1's worth is 2.7 times the 50 litre spread and the calibrated and cut-off routes earn 75 and 65. Once the architect rules: finish the note (SF14, SF16, SF17, SF19, SF20, Pinning list, closure axis 8, Frozen line, Prompt contract), re-run gates.py --full, then stage 4",
  "approved": "",
  "delivered": "",
  "portal": {
@@ -214,6 +214,10 @@
   {
    "date": "2026-11-25",
    "event": "stage 3 BUILD of architecture 14 loop 1: world.py realised with a steady line draw, full-only cellar checks on the account's order day, one count of every site by state and lot, a register from 2011 that strikes off only the condemned; pack, analysis, results, checks, verify, goldens, submission and metadata rewritten; results.py CORE PASS level 5 with every row PASS on the cut pack; gates.py --full 0 FAIL, 3 WARN; two byte-identical builds"
+  },
+  {
+   "date": "2026-11-25",
+   "event": "stage 3 rebuilt on the architect's rulings (a6e04d1); STOPPED: the calibrated run route earns 54 on the cut pack"
   }
  ],
  "runs": {
@@ -294,7 +298,7 @@
    }
   ]
  },
- "gates": "gates.py task4 --full on the cut pack, 2026-11-25: precut WARN (nearest chains, answered), effort PASS (quick 9.0, careful 26.7, thorough 100), voice PASS, leak REVIEW (ruled in the note), figures PASS (0 of 269 absent), stump PASS, containers PASS, heart WARN (answered), surface PASS, checks PASS (100 of 100), verify PASS (28 of 28), rebuild PASS (two byte-identical builds); 0 FAIL, 3 WARN; core.py and results.py CORE PASS level 5",
+ "gates": "STOPPED at results.py on the rebuilt cut (target digest f1c537fd93b40f08): CORE FAIL, one row: the calibrated run route earns 54 (bar 50); every other corelib row PASS; gates.py not re-run on this cut",
  "zip_sha256_16": "",
  "golden_zip_sha256_16": "",
  "migrated_from": {
