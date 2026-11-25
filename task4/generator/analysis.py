@@ -64,7 +64,7 @@ SINGLES = [
     ("the store's stock fitted on the beer-weeks with a cover for each container type", {"share_fit": "panel"}),
     ("deliveries at the count over its last two weeks", {"level": 2}),
     ("deliveries at the count as its own week's dockets", {"level": 1}),
-    ("the fall per container sold left free in the fit of the checks", {"recon": "joint"}),
+    ("the fall per container sold as the checks' one fit gives it, not one for one", {"recon": "pooled"}),
     ("the year's loss as the fitted rate times the fleet alive at the count", {"loss_form": "hazard"}),
     ("the year's loss as the yearly share leaving times the fleet alive at the count", {"loss_form": "share"}),
     ("the store's stock fitted on the beer-weeks, one cover, each Monday against the week it opens", {"share_fit": "one_cover_open"}),
@@ -81,7 +81,6 @@ SINGLES = [
     ("the lots bought inside the docket record left out", {"age_drop": "record"}),
     ("the fleet alive as the count over the fitted share on site", {"alive": "share"}),
     ("the loss carried on the calendar, not on deliveries", {"clock": "calendar"}),
-    ("the dray's last call as the line's own last docket, not the account's", {"last": "line"}),
     ("a lot's age from the middle of the year on its stamp", {"age_from": "lotyear"}),
     ("a lot's age from the middle of the year each container was delivered", {"age_from": "deliveryyear"}),
     ("a beer's racking run as the mean of its rackings", {"run_stat": "mean"}),
@@ -113,6 +112,8 @@ REFUSED = [
     ("one seasonal harmonic in the deliveries fit for every type", {"harmonics": 1}),
     ("the estate's scheduled volume level through the 2027 season", {"estate": "flat"}),
     ("deliveries at the count as the mean of its last four weeks", {"level": 4}),
+    ("the fall per container sold left free for each container type on its own", {"recon": "joint"}),
+    ("the dray's last call as the line's own last docket, not the account's", {"last": "line"}),
     ("deliveries at the count as the mean of its last eight weeks", {"level": 8}),
 ]
 # each fitted input moved by its spread, one at a time: the call has to hold (the core's FORCING)
@@ -494,6 +495,13 @@ def fit_cellar(R, p, o):
         a, b1, b2, bd = np.linalg.lstsq(np.column_stack([np.ones(len(rate)), rate, rate * iv, sold]), full,
                                         rcond=None)[0]
         return float(a), (lambda x: float(b1 + b2 * x)), float(bd), int(len(full))
+    if recon == "pooled":                                         # the fall the checks' one fit gives, every pool
+        if not hasattr(R, "_fall"):
+            R._fall = {}
+        if o["rate"] not in R._fall:
+            R._fall[o["rate"]] = -days_check(R, o["rate"])[0]
+        sold = R._fall[o["rate"]] * sold
+        recon = "days"
     held = full + {"days": sold, "half": rate * iv / 2.0, "whole": rate * iv}.get(recon, 0.0)
     if o["fit"] == "weekly":                                      # the weekly rounds only: one slope, carried to all
         b, a = np.polyfit(rate, held, 1)
