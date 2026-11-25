@@ -1,394 +1,445 @@
 {
- "task": "task7",
- "status": "RETIRED",
- "domain": "energy-systems-utilities",
- "objective": "experiment-causal",
- "stage": 2,
- "stage_name": "design",
- "updated": "2026-11-13",
- "stump": "level 5 by the stump factorial: each feeder's makeup, the thermostatic give-back through the year, the losses from current squared (the trial's achieved dose and the far end's volts are filed by VO-1 and sit as reflexes)",
- "architecture": 12,
- "loops": 1,
- "precut": {
-  "exit": 0,
-  "date": "2026-11-13",
-  "note": "WARN R2 upstream of R4 to R9 (earned, answered in the note); WARN nearest chains"
- },
- "leak": {
-  "leak_py": "REVIEW (the report's filed 6.1 percent and load research; digit coincidences inside two meter CSVs), each ruled harmless by the reader; dates sweep clean at as-of 2027-01-14",
-  "reader": "NO LEAK: nothing ranks the feeders, no helper file, the hard parts (each feeder's response, the losses) written nowhere; VO-1 fixes what is compared and from which record; its literal reading of 2.2 (ON days dropped) closed as SF20, same call"
- },
- "duplicate_check": {
-  "heart": "WARN only on 2026-11-13 after re-registering with weight, calibration, context artifact and forcing event redrawn against task23 and task24",
-  "surface": "PASS"
- },
- "returned": "the platform's holistic audit of READY b75d025: the transport of the trial response to a year is unpinned (10 or 12 feeders across reasonable variants) and the run did every priced stump by reflex (not valid evidence of difficulty); never uploaded",
- "resume": "RETIRED on the author's word (2026-11-13) after architecture 12's holistic audit and a redesign screen that found no Energy x Experiment layer with three surviving stumps; the slot's work moves to task26 (Energy Systems & Utilities, another analysis type). Lineage kept on the card for the guard.",
- "approved": null,
- "delivered": "2026-11-08",
- "portal": null,
- "history": {
-  "architecture_1": {
-   "domain": "nonprofit-grant-making",
-   "objective": "opportunity-sizing-decision",
-   "stage": "retired",
-   "stage_name": "retired",
-   "stump": "A competent solver builds each co-op's qualifying households from the survey's joint counts, converts them at the pilot's install rate for each heating system, groups neighbourhoods onto their feeders and caps each feeder at its hosting slots, confirms that every placeable buyer's meter would be set inside the pilot's three weeks and that each co-op crew's year has room for its meters, and commits 1,480 placed slots with Lakes taking the most (420); the step that lands it there is carrying the pilot's meter-set lag to a programme several times its size, when every rebate waits on the co-op crew setting the heat-pump rate meter, Lakes' and Uplands' crews have only about ten and seven sets a week left after standing work (the ceiling each held for twelve weeks after the July 2025 exchange batches), and the autumn window's orders queue past 31 December, so 1,170 slots can be placed and Riverbend takes the most (340).",
-   "harden_loops": 0,
-   "solver_rounds": [
-    {
-     "label": "round 1, plain",
-     "date": "2026-10-10",
-     "score": 47.3,
-     "landed": false,
-     "cracked": 3,
-     "items": 9
-    }
-   ],
-   "judge": {
-    "verdict": "SEND_BACK",
-    "disposition": "retired",
-    "report": ""
-   },
-   "source_note": "analytical_tasks/04_opportunity_sizing/OS02_heat-pump-slots-feeder-headroom-split.md",
-   "retired_reason": "Determinism judge SEND_BACK (binding_constraint, analytical_non_defect); retired under build-pipeline's retirement rule, not submitted.",
-   "status": "FAILED_TO_STUMP"
+  "task": "task7",
+  "status": "DESIGN",
+  "domain": "energy-systems-utilities",
+  "subdomain": "tariff-demand-response-evaluation",
+  "objective": "experiment-causal",
+  "stage": 2,
+  "stage_name": "design",
+  "updated": "2026-11-25",
+  "doctrine": "throughout",
+  "architecture": 13,
+  "loops": 0,
+  "stump": "level 5 on generator/core.py: three judgments the cooperative's own records wave through, each fitted from the feeder load steps of the 2026 randomised dispatch trial (S1 shed commands received by reach to an on-air transmitter of the switch's own paging system, S2 switches still working by install batch, S3 switches still wired where the air conditioner was replaced)",
+  "call": "Fund the Kettle Ridge VHF repeater, the Larkin find-and-fix round and the reconnection round within 14 km; do not fund the Halverson carrier fill-in, the Medora Flats find-and-fix round or the outlying reconnection round (2,158 kW added for USD 39.7 a kW-year; design-stage figures from generator/core.py)",
+  "returned": {
+    "2026-11-09": "platform preliminary review of architecture 6 (version 17's predecessor): sent back, the answer turned on the service visits in the lottery's passed-over arm (runs/review_2026-11-09.md)",
+    "2026-11-11": "platform review of version 17 (architecture 8, the Haldenau retrofit grant round): Stumped failed at reward 80 and Stumped type match failed; the deciding step was one constructed hidden factor (roofer capacity, insulation only) and the runs solved every other piece by reflex (runs/review_2026-11-11.md)",
+    "2026-11-13": "architecture 12's READY cut failed the platform's holistic audit (transport unpinned, generator-only constants, every priced stump a reflex); never uploaded; the slot RETIRED on the author's word",
+    "2026-11-25": "un-retired by the author for a fix to the latest rules (guidelines of 11/20, the 45 closed strategies of 11/21, the stump and critical components questions, the approved sheets of 11/14, the Holistic Audit v4 of 11/22): re-rooted as architecture 13 in a new world, the reviewer's own suggestions screened against the closed page and not followed where they are closed cards"
   },
-  "architecture_3": {
-   "status": "RETIRED",
-   "domain": "actuarial-science-insurance",
-   "objective": "forecasting",
-   "stage": 4,
-   "stage_name": "retired at stage 4",
-   "updated": "2026-10-14",
-   "stump": "The default path develops the stitched quarterly paid triangle with all-quarter volume-weighted factors to $316.8 million and would carry $325 million, a release of $19.6 million against the $344.6 million booked; the step that lands it there is carrying the history's development factors onto accident quarters whose represented claims have settled more slowly since the platform went live in July 2024, so the recent quarters have paid less of their ultimate at every age than the history did, and only restating the history at the closed shares the latest diagonal shows gives $399.8 million and a carried $400 million, a strengthening of $55.4 million.",
-   "architecture": 3,
-   "loops": 0,
-   "author_override": "2026-10-14: the author asked for a full refresh of data, domain and objective, tougher than architecture 2; build-pipeline re-roots in the same objective, so the move from Opportunity Sizing to Forecasting is the author's instruction, recorded here and in the design note's Draw",
-   "precut": {
-    "exit": 0,
-    "date": "2026-10-14",
-    "note": "49 checks, 0 FAIL, 0 WARN on the built figures"
-   },
-   "leak": {
-    "leak_py": "REVIEW (no LEAK): the basis's development and method vocabulary; the close calendar's 8 January 2027 close date",
-    "reader": "pass 1 (sonnet, medium): questions 1 to 4 none (2.1 defines the quantity, not the method; the register's 344,600 is the booked comparison); question 6 an analytical choice (how the paid development is projected), nothing planted or announced; the three REVIEW lines harmless; realism notes answered by filed facts, no fix"
-   },
-   "duplicate_check": {
-    "heart": "WARN (repeat.question_form against task453 v2; same_puzzle_older and same_driver_older differentiated), 2026-10-14",
-    "surface": "3 promoted on card axes only (task125, task138, task446), differentiated on the card; adjudicated clone check requested by the author",
-    "nearest": "task133 v1 lineage 0.08",
-    "clone_check": "CLEAN, Track A 0, Track B 0: pre-flight on Sonnet at the author's request (auditor and three adjudicators, sonnet, medium); task125, task446 and task138 promoted on card axes and each adjudicated clean_shares_components (task7/clone_check_report.md)"
-   },
-   "judge": {
-    "verdict": "NOT_DETERMINISTIC",
-    "disposition": "SEND_BACK",
-    "report": "task7/determinism_check_report.md at 6edd337 (architecture 3's report; its leak and clone reports are there too; the path now holds architecture 2's pass 1)",
-    "note": "main call open between the closure restatement ($399.9M, 400) and frequency-severity on paid per closed feature ($343.8M, 350) or trended severity ($356.5M, 350); no filed criterion or shipped back-test forces the method; the asks reproduce to the cent; Gate G method_or_model_selection, analytical_non_defect; Gate H pass (domain, layers, analytical)"
-   },
-   "retired_reason": "Determinism judge NOT_DETERMINISTIC, SEND_BACK (competing_defensible_answer): the reserving basis leaves the method to the actuary and frequency-severity on paid per closed feature carries $350 million against the restatement's $400 million; the author restored architecture 2 on 2026-10-14",
-   "commits": "DRAWN 9063126, PAUSED 2ca8c2f and 6edd337 (its note, generator, reports and pipeline state)"
+  "platform_task": "2d026b3c-65e4-403c-9a40-4bccaac5c1f0 (Energy Systems & Utilities, Experiment & Causal Analysis; the task type match must keep passing)",
+  "precut": {
+    "exit": 1,
+    "date": "2026-11-25",
+    "checks": "118 checks, 115 PASS, 2 WARN, 1 FAIL",
+    "fail": "effort measured on the cut pack: effort.py reads architecture 12's stale generator/effort.json (the launching thread said to leave the old generator files in place, and removing the file was refused by the session's permission system); every design row passes",
+    "without_stale_effort_json": "0 FAIL: the same row reads WARN (effort.json not written yet) on a scratch copy of the note, prompt, pipeline.json, core.py and checks.py without that file",
+    "warn": "R1 upstream of R4 to R7 (each needs R2 and R3 as well); nearest chains by shape and weight"
   },
-  "architecture_2_reship_2026-10-31": {
-   "event": "RESHIPPED: batch 1 keep-and-repair; judge pass 3 DETERMINISTIC APPROVE, leak read clean",
-   "zip": "0747c7d8839d4ed974f2ffa01202567e18b99251186c786ca2eefc6be146dc32"
+  "resume": "/build task7 from 3: the build rewrites architecture 12's generator files around generator/core.py (effort.json and checks.py are stale and are rewritten from the new generator, which clears the one precut FAIL); the Build brief is in DESIGN_NOTE.md, the frozen core in generator/core.py; the author rewrites prompt.txt for voice before upload",
+  "approved": null,
+  "delivered": null,
+  "portal": null,
+  "runs": null,
+  "prompt_rewritten": false,
+  "core": {
+    "date": "2026-11-25",
+    "result": "CORE PASS level 5 (30 rows PASS, 0 WARN, 0 FAIL): three open members opened by three stumps (rep_w by S1, fix_t by S2, recon_in by S3); one stump lost earns 40, 28 and 34; the reflex route 9; the generous run route 21"
   },
-  "2026-11-07": "RESHIPPED: PDF metadata made honest and the prompt de-templated, per the portal's feedback",
-  "2026-11-07 (2)": "RESHIPPED: the allocation note exported by LibreOffice Writer instead of written by ReportLab",
-  "architecture_2": {
-   "domain": "healthcare-delivery-health-economics",
-   "objective": "opportunity-sizing-decision",
-   "stage": 5,
-   "stage_name": "ship (architecture 2, reship 10-31)",
-   "stump": "The default path values a discharge-to-assess package at each hospital by its covered patients' nights after the discharge ready date (every record presents them as the wait for home care, since the brokerage starts care on the day the patient goes home) and fills Ashby Vale Hospital first with 361 packages, then Cleeve Park 285, Wendlebury 350 and Royal Marchford 204, Holmford none, freeing 10,507 occupied bed-days, where the golden gives Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222 and Ashby Vale none, freeing 6,816; most of Ashby Vale's and Cleeve Park's covered patients were also waiting for community equipment from the South depot, a wait that ran alongside the care wait and that a package does not shorten.",
-   "loops": 1,
-   "precut": {
-    "exit": 0,
-    "date": "2026-10-31",
-    "checks": 61
-   },
-   "leak": {
-    "leak_py": "REVIEW, no LEAK, on target.zip 0747c7d8 (2026-10-31), every line answered (leak_check_report.md)",
-    "reader": "10-31 reader on the reship cut: questions 1 to 4 none, question 6 an analytical choice, every sweep line harmless"
-   },
-   "duplicate_check": {
-    "heart": "WARN 2026-10-31 after the stakeholder role was redrawn (ban.role against task449 cleared by drawing finance_controller; driver.near 0.13 against task172, people.last Bird against task450, overuse.org_family)",
-    "surface": "exit 0 on 2026-10-31: 4 pairs promoted on surface similarity in the corpus top 1 percent (task304, task461, task131, task478, each about 0.10), left to the author's optional clone-check"
-   },
-   "judge": {
-    "verdict": "DETERMINISTIC (10-31 pass 3 on the repair cut: the covered counts, the nights a package frees, the fill, 6,816 bed-days, all 45 chart labels and the 9 referral counts reproduced)",
-    "disposition": "APPROVE; the three optional solution-text edits applied in submission.md; the advisory forks (latest submission, ward at midnight, the spot-invoice key) are Ask A's and Ask B's devices, closed by the data",
-    "gate_g": "binding_constraint, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-    "gate_h": "domain pass, layers pass, decisive_step analytical",
-    "report": "task7/determinism_check_report_pass3.md (earlier passes in determinism_check_report.md, _pass2 and the loop2 files)"
-   },
-   "delivered": "2026-10-31",
-   "portal": "FAILED_TO_STUMP",
-   "portal_status": "FAILED_TO_STUMP",
-   "portal_status_date": "2026-11-07",
-   "fate": "FAILED_TO_STUMP at the portal 2026-11-07: both responses filed the golden split; re-rooted as architecture 4"
+  "duplicate_check": {
+    "heart": "WARN only on 2026-11-25 after registration (overuse.forcing_event, repeat.gate_g against task9, house lessons unlabelled_pool_apportioned_by_varying_mix and latent_structure_estimation on two live builds each, house shell set_over_threshold on five live builds); 0 BLOCK",
+    "skeleton": "severity none against every card, lineage entry and client task"
   },
-  "architecture_6": {
-   "domain": "energy-systems-utilities",
-   "subdomain": "efficiency-savings-verification",
-   "objective": "experiment-causal",
-   "stage": "returned",
-   "stump": "The plain lottery comparison (the works buildings against every owner the draw passed over, each against its own 2018/19 season) files 13, 2 and below zero and funds insulation alone, heating optimisation at EUR 280 a tonne; service visits reached most passed-over buildings district by district from August 2019, each followed by normal-weather use about 7 per cent lower, and no works building had one, so against passed-over buildings not yet visited, each dropped from its visit season, the rates are 16, 6 and 2 and heating optimisation is funded at EUR 90 a tonne.",
-   "call": "Fund insulation and heating optimisation in the 2026 round, not heating controls: 16, 6 and 2 per cent, EUR 90, 90 and 220 of grant a tonne against the EUR 120 limit; about EUR 8 million and 90,000 lifetime tonnes once the offer closes; about 3,500 tonnes of CO2 saved in 2025/26.",
-   "precut": {
-    "exit": 0,
-    "date": "2026-11-08",
-    "checks": 75,
-    "note": "final cut, 0 FAIL, 0 WARN"
-   },
-   "leak": {
-    "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-06-15, final cut): the measures named in the plan, rules and federal overview, generic stump terms; ruled in the solver's-eye read",
-    "reader": "2026-11-08 isolated reader twice (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plan's 4.2 averaging sentence reworded to each building's saving, averaged"
-   },
-   "judge": {
-    "verdict": "DETERMINISTIC",
-    "disposition": "first pass NOT_DETERMINISTIC (the saving-rate construction unfiled), fixed by filing plan 4.2's construction; re-judge DETERMINISTIC, FIX_NOW on the solution text (the service-visit wording, the draw-balance figure, why the visit season is dropped), fixed in the generator; the one targeted re-judge of that FIX_NOW DETERMINISTIC, its refinements applied (balance within 1.5 per cent, the visit season 3 to 6 per cent below, step 9's reason stated from the data); pack and prompt untouched by both fixes",
-    "gate_g": "statistical_rigor (a comparison contaminated by a concurrent change), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-    "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, judgment comparison-group contamination and response timing by measure",
-    "report": "task7/determinism_check_report.md"
-   },
-   "duplicate_check": {
-    "heart": "BLOCK (2026-11-08, final cut, corpus at 8607c7e): ban.strategy causal_design and ban.org_family utility_or_infrastructure against task10 v5, which registered both axes at 17:16:44Z after this architecture drew them at 16:17:59Z (DRAWN 0a705d3); kept as the honest labels, the only unbanned pair being a relabel, and handed to the author at sign-off (reduce-house-fixes H27 and H31)",
-    "surface": "exit 0 (2026-11-08, final cut); personas Magda Peukert, Torben Roemer"
-   },
-   "gates": {
-    "date": "2026-11-08",
-    "checks": "79 of 79",
-    "figures_check": "100 of 100",
-    "precut": "exit 0, 75 checks",
-    "voice_check": "exit 0 (shell quota WARN: pptx+xlsx at 30 per cent)",
-    "leak_py": "REVIEW, no LEAK",
-    "surface": "exit 0",
-    "heart": "BLOCK, later-card collision recorded above",
-    "audit_containers": "exit 0, 0 FAIL, 0 WARN",
-    "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME"
-   },
-   "build": {
-    "checks": "79 of 79 (generator/checks.py on the cut pack)",
-    "figures_check": "100 of 100",
-    "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME",
-    "ceiling": "pair 45.8 (landed run 79.0, default path 12.5), shallow keep 9.9 per cent; one second judgment taken 52.3, both 56.2"
-   },
-   "zips_note": "target.zip and golden.zip of architecture 6 are in git at aa2fe65",
-   "fate": "RETURNED at the platform's preliminary review 2026-11-09 (version 17): one thing, the visits in the passed-over arm, the plan's formulas carrying the rest (runs/review_2026-11-09.md)"
-  },
-  "2026-11-09 natural precision": "prompt's rounding sentence dropped at the author's word; the answer blocks and the golden restated at natural precision (percentages to two decimals, grant per tonne to the cent, money to the euro, counts and totals whole, an application's tonnes to a tenth); target.zip unchanged",
-  "architecture_7": {
-   "date": "2026-11-09",
-   "verdict": "READY, judge APPROVE (determinism_check_report_pass2.md, target.zip 00c9970f)",
-   "platform": "the author's test run (task7/runs/arch7/run1.md) landed the call at 87, 95 and 139 euro a tonne; lost only the round's insulation count and heating optimisation's figure; read by the author as not stumped",
-   "fate": "re-rooted as architecture 8 at the author's choice: the transport rebuilt on each measure's driver, read from the electricity load profiles and the solar cadastre"
-  },
-  "architecture_9": {
-   "call": "fund roof insulation alone in the 2026 round: EUR 85.53 a lifetime tonne, its 90 per cent range EUR 79.67 to 94.17; heating optimisation (upper end EUR 233.08, its works' own saving without the closed campaign) and heating controls (upper end EUR 158.03, the pilot's owners drawn again) fail the committee's rule",
-   "chain": "R2 optimisation's own saving in the last three seasons (Component 1); R6 each measure's rate over its life on this year's applications (Ask 1); R7 each grant per tonne and its range's upper end at the owner (Ask 2, Components 2 and 3); R8 the funded set (Recommendation); R9 each measure's round at close (Ask 3); R10 the funded measure's applications and their lifetime tonnes (Ask 4)",
-   "effort": {
-    "quick": 14.0,
-    "careful": 40.5,
-    "thorough": 100.0,
-    "largest_hint": "the closed campaign's held checks: rescues 2 of 6 (R2, R6); the owner sentence none whole"
-   },
-   "judge": {
-    "verdict": "DETERMINISTIC",
-    "disposition": "APPROVE",
-    "gate_g": "analytical_non_defect; surface_read_dependency no; sole_data_defect no",
-    "gate_h": "pass: four areas or more, one_thing none, the best single hint rescues 2 to 3 of 7",
-    "first_pass": "blind, before the blocks: funded insulation and heating optimisation; landed R9's counts and insulation's rate and point, missed R2, optimisation's and controls' rates and ranges, the call and the listing (careful column about 25 on it); insulation's upper end at 102.4 against the then 8 per cent band, widened to 10",
-    "report": "task7/determinism_check_report.md"
-   },
-   "leak": {
-    "leak_py": "REVIEW, no LEAK (2026-11-11, --asof 2026-06-24): six stump-vocabulary lines, ruled harmless in the note's Leak rulings",
-    "reader": "2026-11-11 isolated reader (Sonnet, medium): questions 2 to 4 none; question 1 the plan's WHAT and the committee's range estimand (kept); question 5 literal readings the golden's; question 6 names the lottery as the closest single fact (about two results) and never the campaign; nothing to fix"
-   },
-   "zips": {
-    "target.zip": "5231b1fb3e29fbc65f91a253ffc01e2751362fd05a0d2ec0a1b9d29c2f35953d",
-    "golden.zip": "86668f64581a1ddebc8b72a73ecc7753578037c1036fde89ad83635253d90e50"
-   },
-   "commit": "aa6a526",
-   "fate": "landed by the platform run of 2026-11-12 (runs/arch9/run1.md)"
-  },
-  "architecture_10": {
-   "call": "renew Corvane, Ardena and Kitebrook for summer 2027; not Lumivale, Ondera or Pinecrest Home (3.76 MW at the 4CP intervals, USD 42,500 net)",
-   "chain": "R1 Ondera at the 4CP intervals after its window (Component 4); R2 Lumivale's share in the event on the 4CP days (Component 1); R3 each provider's 2027 devices and cost (Ask 2); R3b Pinecrest Home's 2027 fleet in the event (Component 2); R4 Kitebrook's homes against the research sample (Component 3); R5 each provider's kW per 2027 device (Ask 1); R6 the renewed set (Recommendation); R7 the renewed providers' MW and net (Ask 3)",
-   "effort": {
-    "quick": 14.0,
-    "careful": 40.5,
-    "thorough": 100.0,
-    "largest_hint": "each of the three carries rescues 1 of 8 (R2, R3b, R4)"
-   },
-   "paper_pair": 40.5,
-   "subdomain": "efficiency-savings-verification",
-   "precut": {
-    "exit": 0,
-    "date": "2026-11-12",
-    "note": "1 WARN: nearest chains task21 (the weight only)"
-   },
-   "leak": {
-    "leak_py": "REVIEW, no LEAK (2026-11-12, --asof 2026-11-02): stump-vocabulary lines on the documents' ordinary words, ruled harmless",
-    "reader": "2026-11-12 isolated reader: questions 2 to 4 none; question 6 no one thing, the appraisal roll judged unneeded (the carry the build prices); stamps after today moved: as-of 2 November 2026"
-   },
-   "judge": {
-    "pass1": {
-     "verdict": "DETERMINISTIC",
-     "disposition": "APPROVE",
-     "note": "set aside: the thread opened the blocks before deriving; its one finding (the interval-boundary reading of Lumivale's share) closed as rivals in the generator (SF11)"
+  "open_members": "Kettle Ridge VHF repeater (S1), Larkin find-and-fix round (S2), reconnection round within 14 km (S3); forced: Halverson carrier fill-in, Medora Flats find-and-fix round, outlying reconnection round",
+  "history": {
+    "architecture_1": {
+      "domain": "nonprofit-grant-making",
+      "objective": "opportunity-sizing-decision",
+      "stage": "retired",
+      "stage_name": "retired",
+      "stump": "A competent solver builds each co-op's qualifying households from the survey's joint counts, converts them at the pilot's install rate for each heating system, groups neighbourhoods onto their feeders and caps each feeder at its hosting slots, confirms that every placeable buyer's meter would be set inside the pilot's three weeks and that each co-op crew's year has room for its meters, and commits 1,480 placed slots with Lakes taking the most (420); the step that lands it there is carrying the pilot's meter-set lag to a programme several times its size, when every rebate waits on the co-op crew setting the heat-pump rate meter, Lakes' and Uplands' crews have only about ten and seven sets a week left after standing work (the ceiling each held for twelve weeks after the July 2025 exchange batches), and the autumn window's orders queue past 31 December, so 1,170 slots can be placed and Riverbend takes the most (340).",
+      "harden_loops": 0,
+      "solver_rounds": [
+        {
+          "label": "round 1, plain",
+          "date": "2026-10-10",
+          "score": 47.3,
+          "landed": false,
+          "cracked": 3,
+          "items": 9
+        }
+      ],
+      "judge": {
+        "verdict": "SEND_BACK",
+        "disposition": "retired",
+        "report": ""
+      },
+      "source_note": "analytical_tasks/04_opportunity_sizing/OS02_heat-pump-slots-feeder-headroom-split.md",
+      "retired_reason": "Determinism judge SEND_BACK (binding_constraint, analytical_non_defect); retired under build-pipeline's retirement rule, not submitted.",
+      "status": "FAILED_TO_STUMP"
     },
-    "verdict": "DETERMINISTIC",
-    "disposition": "APPROVE",
-    "gate_h": "pass: 9 graded across 5 areas or more, one_thing none, the best single hint rescues about 1 to 2 of 9",
-    "report": "task7/determinism_check_report.md",
-    "order_kept": true,
-    "first_pass": "blind: renewed Corvane, Lumivale, Ardena and Pinecrest Home (the careful but hurried set); counts within 1 per cent for five providers; none of the three carries; careful column about 20 on it"
-   },
-   "gates_stage3": {
-    "date": "2026-11-12",
-    "checks": "69 of 69",
-    "gates_py": "0 FAIL, 3 WARN (precut, leak REVIEW, heart)",
-    "effort": "careful 40.5, the note agreeing",
-    "make_twice": "SAME"
-   },
-   "gates_stage5": {
-    "date": "2026-11-12",
-    "checks": "69 of 69",
-    "make_twice": "SAME (target, golden, both zips, submission, metadata, figures)",
-    "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW, ruled; heart WARNs answered)",
-    "effort_check_note": "PASS (careful 40.5)",
-    "audit_containers": "PASS"
-   },
-   "zips": {
-    "target.zip": "574e569c612f0e26a8fc6eda748d64e58750349ba3adcbaf50ac0299438cc206",
-    "golden.zip": "0ffdf239d80073de7d35572b09c7a4be23420f5cc9dfda3fea4ff2a8dfe97bed"
-   },
-   "prompt": {
-    "cut": "2026-11-12, at the author's direction: the renewal bar, the 'summer like 2024 to 2026' window and the sentence on why the answer has to be an estimate dropped (Board Policy 412 files the bar, the intervals, the alerts as called and the devices counted); the question, the two files and the asks kept; 420 characters; no graded figure moved; target.zip and golden.zip unchanged",
-    "voice_check": "PASS (draft mode)"
-   },
-   "duplicate_check": {
-    "heart": "",
-    "surface": ""
-   },
-   "stage": "spent",
-   "fate": "READY 1ec6c72 (03:15, 2026-11-12), never uploaded: its three deciding carries are on the client's overused-strategies page filed 09:37 the same day (repeated exposure; the pooled effect to a different mix, twice); the author chose a re-root"
-  }
- },
- "restored": "2026-10-14: architecture 3 (a full refresh at the author's request) drew judge SEND_BACK at stage 4, and the author chose to restore this architecture as task7's live build (pack unchanged from SHIPPED 59aaaba)",
- "portal_status": "RETURNED",
- "portal_status_date": "2026-11-11",
- "migrated_from": {
-  "project": "Mark",
-  "task": "task127",
-  "status_in_mark": "SHIPPED",
-  "date": "2026-11-08",
-  "note": "moved from Project Mark at the author's word: architecture 2 landed on the Mark portal and architecture 4 shipped there on 2026-11-08, pending; carried on here for the Sulfur bar"
- },
- "runs": {
-  "run1": null,
-  "run2": null,
-  "average": null,
-  "counterfactual_average": null,
-  "first_wrong_step": {
-   "run1": "",
-   "run2": ""
+    "architecture_3": {
+      "status": "RETIRED",
+      "domain": "actuarial-science-insurance",
+      "objective": "forecasting",
+      "stage": 4,
+      "stage_name": "retired at stage 4",
+      "updated": "2026-10-14",
+      "stump": "The default path develops the stitched quarterly paid triangle with all-quarter volume-weighted factors to $316.8 million and would carry $325 million, a release of $19.6 million against the $344.6 million booked; the step that lands it there is carrying the history's development factors onto accident quarters whose represented claims have settled more slowly since the platform went live in July 2024, so the recent quarters have paid less of their ultimate at every age than the history did, and only restating the history at the closed shares the latest diagonal shows gives $399.8 million and a carried $400 million, a strengthening of $55.4 million.",
+      "architecture": 3,
+      "loops": 0,
+      "author_override": "2026-10-14: the author asked for a full refresh of data, domain and objective, tougher than architecture 2; build-pipeline re-roots in the same objective, so the move from Opportunity Sizing to Forecasting is the author's instruction, recorded here and in the design note's Draw",
+      "precut": {
+        "exit": 0,
+        "date": "2026-10-14",
+        "note": "49 checks, 0 FAIL, 0 WARN on the built figures"
+      },
+      "leak": {
+        "leak_py": "REVIEW (no LEAK): the basis's development and method vocabulary; the close calendar's 8 January 2027 close date",
+        "reader": "pass 1 (sonnet, medium): questions 1 to 4 none (2.1 defines the quantity, not the method; the register's 344,600 is the booked comparison); question 6 an analytical choice (how the paid development is projected), nothing planted or announced; the three REVIEW lines harmless; realism notes answered by filed facts, no fix"
+      },
+      "duplicate_check": {
+        "heart": "WARN (repeat.question_form against task453 v2; same_puzzle_older and same_driver_older differentiated), 2026-10-14",
+        "surface": "3 promoted on card axes only (task125, task138, task446), differentiated on the card; adjudicated clone check requested by the author",
+        "nearest": "task133 v1 lineage 0.08",
+        "clone_check": "CLEAN, Track A 0, Track B 0: pre-flight on Sonnet at the author's request (auditor and three adjudicators, sonnet, medium); task125, task446 and task138 promoted on card axes and each adjudicated clean_shares_components (task7/clone_check_report.md)"
+      },
+      "judge": {
+        "verdict": "NOT_DETERMINISTIC",
+        "disposition": "SEND_BACK",
+        "report": "task7/determinism_check_report.md at 6edd337 (architecture 3's report; its leak and clone reports are there too; the path now holds architecture 2's pass 1)",
+        "note": "main call open between the closure restatement ($399.9M, 400) and frequency-severity on paid per closed feature ($343.8M, 350) or trended severity ($356.5M, 350); no filed criterion or shipped back-test forces the method; the asks reproduce to the cent; Gate G method_or_model_selection, analytical_non_defect; Gate H pass (domain, layers, analytical)"
+      },
+      "retired_reason": "Determinism judge NOT_DETERMINISTIC, SEND_BACK (competing_defensible_answer): the reserving basis leaves the method to the actuary and frequency-severity on paid per closed feature carries $350 million against the restatement's $400 million; the author restored architecture 2 on 2026-10-14",
+      "commits": "DRAWN 9063126, PAUSED 2ca8c2f and 6edd337 (its note, generator, reports and pipeline state)"
+    },
+    "architecture_2_reship_2026-10-31": {
+      "event": "RESHIPPED: batch 1 keep-and-repair; judge pass 3 DETERMINISTIC APPROVE, leak read clean",
+      "zip": "0747c7d8839d4ed974f2ffa01202567e18b99251186c786ca2eefc6be146dc32"
+    },
+    "2026-11-07": "RESHIPPED: PDF metadata made honest and the prompt de-templated, per the portal's feedback",
+    "2026-11-07 (2)": "RESHIPPED: the allocation note exported by LibreOffice Writer instead of written by ReportLab",
+    "architecture_2": {
+      "domain": "healthcare-delivery-health-economics",
+      "objective": "opportunity-sizing-decision",
+      "stage": 5,
+      "stage_name": "ship (architecture 2, reship 10-31)",
+      "stump": "The default path values a discharge-to-assess package at each hospital by its covered patients' nights after the discharge ready date (every record presents them as the wait for home care, since the brokerage starts care on the day the patient goes home) and fills Ashby Vale Hospital first with 361 packages, then Cleeve Park 285, Wendlebury 350 and Royal Marchford 204, Holmford none, freeing 10,507 occupied bed-days, where the golden gives Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222 and Ashby Vale none, freeing 6,816; most of Ashby Vale's and Cleeve Park's covered patients were also waiting for community equipment from the South depot, a wait that ran alongside the care wait and that a package does not shorten.",
+      "loops": 1,
+      "precut": {
+        "exit": 0,
+        "date": "2026-10-31",
+        "checks": 61
+      },
+      "leak": {
+        "leak_py": "REVIEW, no LEAK, on target.zip 0747c7d8 (2026-10-31), every line answered (leak_check_report.md)",
+        "reader": "10-31 reader on the reship cut: questions 1 to 4 none, question 6 an analytical choice, every sweep line harmless"
+      },
+      "duplicate_check": {
+        "heart": "WARN 2026-10-31 after the stakeholder role was redrawn (ban.role against task449 cleared by drawing finance_controller; driver.near 0.13 against task172, people.last Bird against task450, overuse.org_family)",
+        "surface": "exit 0 on 2026-10-31: 4 pairs promoted on surface similarity in the corpus top 1 percent (task304, task461, task131, task478, each about 0.10), left to the author's optional clone-check"
+      },
+      "judge": {
+        "verdict": "DETERMINISTIC (10-31 pass 3 on the repair cut: the covered counts, the nights a package frees, the fill, 6,816 bed-days, all 45 chart labels and the 9 referral counts reproduced)",
+        "disposition": "APPROVE; the three optional solution-text edits applied in submission.md; the advisory forks (latest submission, ward at midnight, the spot-invoice key) are Ask A's and Ask B's devices, closed by the data",
+        "gate_g": "binding_constraint, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+        "gate_h": "domain pass, layers pass, decisive_step analytical",
+        "report": "task7/determinism_check_report_pass3.md (earlier passes in determinism_check_report.md, _pass2 and the loop2 files)"
+      },
+      "delivered": "2026-10-31",
+      "portal": "FAILED_TO_STUMP",
+      "portal_status": "FAILED_TO_STUMP",
+      "portal_status_date": "2026-11-07",
+      "fate": "FAILED_TO_STUMP at the portal 2026-11-07: both responses filed the golden split; re-rooted as architecture 4"
+    },
+    "architecture_6": {
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "stage": "returned",
+      "stump": "The plain lottery comparison (the works buildings against every owner the draw passed over, each against its own 2018/19 season) files 13, 2 and below zero and funds insulation alone, heating optimisation at EUR 280 a tonne; service visits reached most passed-over buildings district by district from August 2019, each followed by normal-weather use about 7 per cent lower, and no works building had one, so against passed-over buildings not yet visited, each dropped from its visit season, the rates are 16, 6 and 2 and heating optimisation is funded at EUR 90 a tonne.",
+      "call": "Fund insulation and heating optimisation in the 2026 round, not heating controls: 16, 6 and 2 per cent, EUR 90, 90 and 220 of grant a tonne against the EUR 120 limit; about EUR 8 million and 90,000 lifetime tonnes once the offer closes; about 3,500 tonnes of CO2 saved in 2025/26.",
+      "precut": {
+        "exit": 0,
+        "date": "2026-11-08",
+        "checks": 75,
+        "note": "final cut, 0 FAIL, 0 WARN"
+      },
+      "leak": {
+        "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-06-15, final cut): the measures named in the plan, rules and federal overview, generic stump terms; ruled in the solver's-eye read",
+        "reader": "2026-11-08 isolated reader twice (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plan's 4.2 averaging sentence reworded to each building's saving, averaged"
+      },
+      "judge": {
+        "verdict": "DETERMINISTIC",
+        "disposition": "first pass NOT_DETERMINISTIC (the saving-rate construction unfiled), fixed by filing plan 4.2's construction; re-judge DETERMINISTIC, FIX_NOW on the solution text (the service-visit wording, the draw-balance figure, why the visit season is dropped), fixed in the generator; the one targeted re-judge of that FIX_NOW DETERMINISTIC, its refinements applied (balance within 1.5 per cent, the visit season 3 to 6 per cent below, step 9's reason stated from the data); pack and prompt untouched by both fixes",
+        "gate_g": "statistical_rigor (a comparison contaminated by a concurrent change), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+        "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, judgment comparison-group contamination and response timing by measure",
+        "report": "task7/determinism_check_report.md"
+      },
+      "duplicate_check": {
+        "heart": "BLOCK (2026-11-08, final cut, corpus at 8607c7e): ban.strategy causal_design and ban.org_family utility_or_infrastructure against task10 v5, which registered both axes at 17:16:44Z after this architecture drew them at 16:17:59Z (DRAWN 0a705d3); kept as the honest labels, the only unbanned pair being a relabel, and handed to the author at sign-off (reduce-house-fixes H27 and H31)",
+        "surface": "exit 0 (2026-11-08, final cut); personas Magda Peukert, Torben Roemer"
+      },
+      "gates": {
+        "date": "2026-11-08",
+        "checks": "79 of 79",
+        "figures_check": "100 of 100",
+        "precut": "exit 0, 75 checks",
+        "voice_check": "exit 0 (shell quota WARN: pptx+xlsx at 30 per cent)",
+        "leak_py": "REVIEW, no LEAK",
+        "surface": "exit 0",
+        "heart": "BLOCK, later-card collision recorded above",
+        "audit_containers": "exit 0, 0 FAIL, 0 WARN",
+        "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME"
+      },
+      "build": {
+        "checks": "79 of 79 (generator/checks.py on the cut pack)",
+        "figures_check": "100 of 100",
+        "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME",
+        "ceiling": "pair 45.8 (landed run 79.0, default path 12.5), shallow keep 9.9 per cent; one second judgment taken 52.3, both 56.2"
+      },
+      "zips_note": "target.zip and golden.zip of architecture 6 are in git at aa2fe65",
+      "fate": "RETURNED at the platform's preliminary review 2026-11-09 (version 17): one thing, the visits in the passed-over arm, the plan's formulas carrying the rest (runs/review_2026-11-09.md)"
+    },
+    "2026-11-09 natural precision": "prompt's rounding sentence dropped at the author's word; the answer blocks and the golden restated at natural precision (percentages to two decimals, grant per tonne to the cent, money to the euro, counts and totals whole, an application's tonnes to a tenth); target.zip unchanged",
+    "architecture_7": {
+      "date": "2026-11-09",
+      "verdict": "READY, judge APPROVE (determinism_check_report_pass2.md, target.zip 00c9970f)",
+      "platform": "the author's test run (task7/runs/arch7/run1.md) landed the call at 87, 95 and 139 euro a tonne; lost only the round's insulation count and heating optimisation's figure; read by the author as not stumped",
+      "fate": "re-rooted as architecture 8 at the author's choice: the transport rebuilt on each measure's driver, read from the electricity load profiles and the solar cadastre"
+    },
+    "architecture_9": {
+      "call": "fund roof insulation alone in the 2026 round: EUR 85.53 a lifetime tonne, its 90 per cent range EUR 79.67 to 94.17; heating optimisation (upper end EUR 233.08, its works' own saving without the closed campaign) and heating controls (upper end EUR 158.03, the pilot's owners drawn again) fail the committee's rule",
+      "chain": "R2 optimisation's own saving in the last three seasons (Component 1); R6 each measure's rate over its life on this year's applications (Ask 1); R7 each grant per tonne and its range's upper end at the owner (Ask 2, Components 2 and 3); R8 the funded set (Recommendation); R9 each measure's round at close (Ask 3); R10 the funded measure's applications and their lifetime tonnes (Ask 4)",
+      "effort": {
+        "quick": 14.0,
+        "careful": 40.5,
+        "thorough": 100.0,
+        "largest_hint": "the closed campaign's held checks: rescues 2 of 6 (R2, R6); the owner sentence none whole"
+      },
+      "judge": {
+        "verdict": "DETERMINISTIC",
+        "disposition": "APPROVE",
+        "gate_g": "analytical_non_defect; surface_read_dependency no; sole_data_defect no",
+        "gate_h": "pass: four areas or more, one_thing none, the best single hint rescues 2 to 3 of 7",
+        "first_pass": "blind, before the blocks: funded insulation and heating optimisation; landed R9's counts and insulation's rate and point, missed R2, optimisation's and controls' rates and ranges, the call and the listing (careful column about 25 on it); insulation's upper end at 102.4 against the then 8 per cent band, widened to 10",
+        "report": "task7/determinism_check_report.md"
+      },
+      "leak": {
+        "leak_py": "REVIEW, no LEAK (2026-11-11, --asof 2026-06-24): six stump-vocabulary lines, ruled harmless in the note's Leak rulings",
+        "reader": "2026-11-11 isolated reader (Sonnet, medium): questions 2 to 4 none; question 1 the plan's WHAT and the committee's range estimand (kept); question 5 literal readings the golden's; question 6 names the lottery as the closest single fact (about two results) and never the campaign; nothing to fix"
+      },
+      "zips": {
+        "target.zip": "5231b1fb3e29fbc65f91a253ffc01e2751362fd05a0d2ec0a1b9d29c2f35953d",
+        "golden.zip": "86668f64581a1ddebc8b72a73ecc7753578037c1036fde89ad83635253d90e50"
+      },
+      "commit": "aa6a526",
+      "fate": "landed by the platform run of 2026-11-12 (runs/arch9/run1.md)"
+    },
+    "architecture_10": {
+      "call": "renew Corvane, Ardena and Kitebrook for summer 2027; not Lumivale, Ondera or Pinecrest Home (3.76 MW at the 4CP intervals, USD 42,500 net)",
+      "chain": "R1 Ondera at the 4CP intervals after its window (Component 4); R2 Lumivale's share in the event on the 4CP days (Component 1); R3 each provider's 2027 devices and cost (Ask 2); R3b Pinecrest Home's 2027 fleet in the event (Component 2); R4 Kitebrook's homes against the research sample (Component 3); R5 each provider's kW per 2027 device (Ask 1); R6 the renewed set (Recommendation); R7 the renewed providers' MW and net (Ask 3)",
+      "effort": {
+        "quick": 14.0,
+        "careful": 40.5,
+        "thorough": 100.0,
+        "largest_hint": "each of the three carries rescues 1 of 8 (R2, R3b, R4)"
+      },
+      "paper_pair": 40.5,
+      "subdomain": "efficiency-savings-verification",
+      "precut": {
+        "exit": 0,
+        "date": "2026-11-12",
+        "note": "1 WARN: nearest chains task21 (the weight only)"
+      },
+      "leak": {
+        "leak_py": "REVIEW, no LEAK (2026-11-12, --asof 2026-11-02): stump-vocabulary lines on the documents' ordinary words, ruled harmless",
+        "reader": "2026-11-12 isolated reader: questions 2 to 4 none; question 6 no one thing, the appraisal roll judged unneeded (the carry the build prices); stamps after today moved: as-of 2 November 2026"
+      },
+      "judge": {
+        "pass1": {
+          "verdict": "DETERMINISTIC",
+          "disposition": "APPROVE",
+          "note": "set aside: the thread opened the blocks before deriving; its one finding (the interval-boundary reading of Lumivale's share) closed as rivals in the generator (SF11)"
+        },
+        "verdict": "DETERMINISTIC",
+        "disposition": "APPROVE",
+        "gate_h": "pass: 9 graded across 5 areas or more, one_thing none, the best single hint rescues about 1 to 2 of 9",
+        "report": "task7/determinism_check_report.md",
+        "order_kept": true,
+        "first_pass": "blind: renewed Corvane, Lumivale, Ardena and Pinecrest Home (the careful but hurried set); counts within 1 per cent for five providers; none of the three carries; careful column about 20 on it"
+      },
+      "gates_stage3": {
+        "date": "2026-11-12",
+        "checks": "69 of 69",
+        "gates_py": "0 FAIL, 3 WARN (precut, leak REVIEW, heart)",
+        "effort": "careful 40.5, the note agreeing",
+        "make_twice": "SAME"
+      },
+      "gates_stage5": {
+        "date": "2026-11-12",
+        "checks": "69 of 69",
+        "make_twice": "SAME (target, golden, both zips, submission, metadata, figures)",
+        "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW, ruled; heart WARNs answered)",
+        "effort_check_note": "PASS (careful 40.5)",
+        "audit_containers": "PASS"
+      },
+      "zips": {
+        "target.zip": "574e569c612f0e26a8fc6eda748d64e58750349ba3adcbaf50ac0299438cc206",
+        "golden.zip": "0ffdf239d80073de7d35572b09c7a4be23420f5cc9dfda3fea4ff2a8dfe97bed"
+      },
+      "prompt": {
+        "cut": "2026-11-12, at the author's direction: the renewal bar, the 'summer like 2024 to 2026' window and the sentence on why the answer has to be an estimate dropped (Board Policy 412 files the bar, the intervals, the alerts as called and the devices counted); the question, the two files and the asks kept; 420 characters; no graded figure moved; target.zip and golden.zip unchanged",
+        "voice_check": "PASS (draft mode)"
+      },
+      "duplicate_check": {
+        "heart": "",
+        "surface": ""
+      },
+      "stage": "spent",
+      "fate": "READY 1ec6c72 (03:15, 2026-11-12), never uploaded: its three deciding carries are on the client's overused-strategies page filed 09:37 the same day (repeated exposure; the pooled effect to a different mix, twice); the author chose a re-root"
+    },
+    "architecture_12": {
+      "status": "RETIRED",
+      "domain": "energy-systems-utilities",
+      "objective": "experiment-causal",
+      "stage": 2,
+      "stage_name": "design",
+      "updated": "2026-11-13",
+      "stump": "level 5 by the stump factorial: each feeder's makeup, the thermostatic give-back through the year, the losses from current squared (the trial's achieved dose and the far end's volts are filed by VO-1 and sit as reflexes)",
+      "architecture": 12,
+      "loops": 1,
+      "precut": {
+        "exit": 0,
+        "date": "2026-11-13",
+        "note": "WARN R2 upstream of R4 to R9 (earned, answered in the note); WARN nearest chains"
+      },
+      "leak": {
+        "leak_py": "REVIEW (the report's filed 6.1 percent and load research; digit coincidences inside two meter CSVs), each ruled harmless by the reader; dates sweep clean at as-of 2027-01-14",
+        "reader": "NO LEAK: nothing ranks the feeders, no helper file, the hard parts (each feeder's response, the losses) written nowhere; VO-1 fixes what is compared and from which record; its literal reading of 2.2 (ON days dropped) closed as SF20, same call"
+      },
+      "duplicate_check": {
+        "heart": "WARN only on 2026-11-13 after re-registering with weight, calibration, context artifact and forcing event redrawn against task23 and task24",
+        "surface": "PASS"
+      },
+      "returned": "the platform's holistic audit of READY b75d025: the transport of the trial response to a year is unpinned (10 or 12 feeders across reasonable variants) and the run did every priced stump by reflex (not valid evidence of difficulty); never uploaded",
+      "resume": "RETIRED on the author's word (2026-11-13) after architecture 12's holistic audit and a redesign screen that found no Energy x Experiment layer with three surviving stumps; the slot's work moves to task26 (Energy Systems & Utilities, another analysis type). Lineage kept on the card for the guard.",
+      "approved": null,
+      "delivered": "2026-11-08",
+      "portal": null,
+      "restored": "2026-10-14: architecture 3 (a full refresh at the author's request) drew judge SEND_BACK at stage 4, and the author chose to restore this architecture as task7's live build (pack unchanged from SHIPPED 59aaaba)",
+      "portal_status": "RETURNED",
+      "portal_status_date": "2026-11-11",
+      "migrated_from": {
+        "project": "Mark",
+        "task": "task127",
+        "status_in_mark": "SHIPPED",
+        "date": "2026-11-08",
+        "note": "moved from Project Mark at the author's word: architecture 2 landed on the Mark portal and architecture 4 shipped there on 2026-11-08, pending; carried on here for the Sulfur bar"
+      },
+      "runs": {
+        "run1": null,
+        "run2": null,
+        "average": null,
+        "counterfactual_average": null,
+        "first_wrong_step": {
+          "run1": "",
+          "run2": ""
+        },
+        "triage": "",
+        "recorded": "",
+        "history": [
+          {
+            "round": 1,
+            "run1": 98,
+            "run2": 58,
+            "average": 78.0,
+            "verdict": "FIX_ASKS",
+            "architecture": 4,
+            "date": "2026-11-08"
+          },
+          {
+            "round": 2,
+            "architecture": 4,
+            "date": "2026-11-08",
+            "run1": "landed",
+            "run2": "landed",
+            "average": null,
+            "verdict": "REDESIGN",
+            "note": "the author reported both runs on the golden (Kinloch Engineering and Matai Valley Foods); run texts not pasted"
+          },
+          {
+            "round": 1,
+            "architecture": 5,
+            "date": "2026-11-08",
+            "run1": "landed every graded cell: the plan figure (€2.04m unrounded, so €2.0m), the split (€1.27m and €0.77m, so €1.25m and €0.75m) and the five facilities",
+            "run2": "not available (the author has one run)",
+            "average": null,
+            "verdict": "REDESIGN",
+            "note": "the author reported the platform not stumped and pasted run 1 (runs/run1.md); scores and rubric not pasted",
+            "run1_class": "none: on the call; it fitted the golden's own model (the log ratio on inspection age and lending book with book-specific smearing), index-adjusted the prior inspections, validated on 122 held-out recent pairs and bootstrapped by customer"
+          },
+          {
+            "round": "arch9 run 1",
+            "date": "2026-11-12",
+            "run1": null,
+            "run2": null,
+            "average": null,
+            "verdict": "REDESIGN",
+            "note": "landed the call (insulation alone); both deciding judgments reflexes; lost insulation's transport only"
+          },
+          {
+            "round": "arch11 run 1",
+            "date": "2026-11-13",
+            "run1": "landed every graded cell",
+            "run2": null,
+            "average": null,
+            "verdict": "REDESIGN"
+          }
+        ]
+      },
+      "paper_pair": 40.5,
+      "subdomain": "tariff-demand-response-evaluation",
+      "call": "make Quillpoint Sequence the EV Overnight default for 2027 and carry 13 transformer replacements (USD 196,700) in the 2027 work plan: USD 249,200 for the year against Stagger's USD 397,100 and own schedules' USD 812,200",
+      "doctrine": "throughout",
+      "chain": "R1 chargers enrolled (Ask 7) and R1b transformers serving them (Ask 10); R2 the pilot's change at 23:00 to 23:15 (Component 4, Ask 6); R3 own schedules' transformers over (Component 3); R4 Stagger's, at their chance (Component 1); R5 Sequence's (Component 2); R6 each option's fee, replacements and total (Asks 3 to 5); R7 the default and the work plan's replacements (Recommendation, Ask 1); R8 the flip fee (Ask 8)",
+      "effort": {
+        "quick": 20.8,
+        "careful": 40.5,
+        "thorough": 100.0,
+        "largest_hint": "each of three sentences rescues 1 of 9 (R4, R5, R3)"
+      },
+      "prompt_rewritten": false,
+      "zips": {
+        "target.zip": "1baac88003043001413c47ad18a4bd5736e095e2abf7cc40836d29dc05c05e75",
+        "golden.zip": "1bb6070daada3e1aab800f08cc9ca31583b7e1371dc25c47435fb8288df52192"
+      },
+      "level_up": {
+        "date": "2026-11-10",
+        "backup": "~/Documents/task7_arch8_backup_2026-11-09.zip",
+        "why": "a run on the READY cut lost only on the drivers (level 3 in practice); one sentence would have given it the call",
+        "added": "contractors on every quote, the 2019 completions by firm, 12 of 26 roofers still quoting, an EUR 8.2 million budget with its order and the EUR 120 basis filed in the committee's request; R8c and R11 (what the round pays and how many applications are paid once the works are done by 30 September)",
+        "gates": "make.py 237 checks; make.py --twice SAME; gates.py 0 FAIL 4 WARN (precut R1 upstream, voice no rounding sentence at the author's word, leak REVIEW no LEAK, heart WARN as before); effort careful 46.0, hint 5 of 15, 4 wrong sets"
+      },
+      "gates_stage3": {
+        "date": "2026-11-12",
+        "checks": "49 of 49",
+        "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW; heart WARNs answered)",
+        "effort": "careful 40.5 cited",
+        "figures_check": "PASS (69 figures)",
+        "containers": "PASS"
+      },
+      "gates_stage5": {
+        "date": "2026-11-12",
+        "checks": "49 of 49",
+        "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW, ruled; heart WARNs answered)",
+        "effort_check": "careful 40.5 cited, 5 distinct wrong answers, 6 rivals and 4 perturbations on Sequence",
+        "containers": "PASS"
+      },
+      "stump_screen": "run after the build: keeps A (Stagger's season coincidence, the deciding trap); B (Sequence's filed rule) and C (own schedules restored, near a closed card) are graded work a careful run can earn; D (the quarter-hour lift) is texture",
+      "judge": {
+        "verdict": "DETERMINISTIC",
+        "disposition": "APPROVE (one optional FIX_NOW declined: a filed loss-current sentence would hand over J5; SF17 rules the fork out by named data)",
+        "date": "2026-11-13"
+      },
+      "fate": "spent 2026-11-13 at the platform's holistic audit of READY b75d025 (never uploaded): transport unpinned, the golden's degree bases held only by the generator, the run did every priced stump by reflex; retired the same day"
+    }
   },
-  "triage": "",
-  "recorded": "",
-  "history": [
-   {
-    "round": 1,
-    "run1": 98,
-    "run2": 58,
-    "average": 78.0,
-    "verdict": "FIX_ASKS",
-    "architecture": 4,
-    "date": "2026-11-08"
-   },
-   {
-    "round": 2,
-    "architecture": 4,
-    "date": "2026-11-08",
-    "run1": "landed",
-    "run2": "landed",
-    "average": null,
-    "verdict": "REDESIGN",
-    "note": "the author reported both runs on the golden (Kinloch Engineering and Matai Valley Foods); run texts not pasted"
-   },
-   {
-    "round": 1,
-    "architecture": 5,
-    "date": "2026-11-08",
-    "run1": "landed every graded cell: the plan figure (\u20ac2.04m unrounded, so \u20ac2.0m), the split (\u20ac1.27m and \u20ac0.77m, so \u20ac1.25m and \u20ac0.75m) and the five facilities",
-    "run2": "not available (the author has one run)",
-    "average": null,
-    "verdict": "REDESIGN",
-    "note": "the author reported the platform not stumped and pasted run 1 (runs/run1.md); scores and rubric not pasted",
-    "run1_class": "none: on the call; it fitted the golden's own model (the log ratio on inspection age and lending book with book-specific smearing), index-adjusted the prior inspections, validated on 122 held-out recent pairs and bootstrapped by customer"
-   },
-   {
-    "round": "arch9 run 1",
-    "date": "2026-11-12",
-    "run1": null,
-    "run2": null,
-    "average": null,
-    "verdict": "REDESIGN",
-    "note": "landed the call (insulation alone); both deciding judgments reflexes; lost insulation's transport only"
-   },
-   {
-    "round": "arch11 run 1",
-    "date": "2026-11-13",
-    "run1": "landed every graded cell",
-    "run2": null,
-    "average": null,
-    "verdict": "REDESIGN"
-   }
-  ]
- },
- "paper_pair": 40.5,
- "subdomain": "tariff-demand-response-evaluation",
- "call": "make Quillpoint Sequence the EV Overnight default for 2027 and carry 13 transformer replacements (USD 196,700) in the 2027 work plan: USD 249,200 for the year against Stagger's USD 397,100 and own schedules' USD 812,200",
- "doctrine": "throughout",
- "chain": "R1 chargers enrolled (Ask 7) and R1b transformers serving them (Ask 10); R2 the pilot's change at 23:00 to 23:15 (Component 4, Ask 6); R3 own schedules' transformers over (Component 3); R4 Stagger's, at their chance (Component 1); R5 Sequence's (Component 2); R6 each option's fee, replacements and total (Asks 3 to 5); R7 the default and the work plan's replacements (Recommendation, Ask 1); R8 the flip fee (Ask 8)",
- "effort": {
-  "quick": 20.8,
-  "careful": 40.5,
-  "thorough": 100.0,
-  "largest_hint": "each of three sentences rescues 1 of 9 (R4, R5, R3)"
- },
- "prompt_rewritten": false,
- "zips": {
-  "target.zip": "1baac88003043001413c47ad18a4bd5736e095e2abf7cc40836d29dc05c05e75",
-  "golden.zip": "1bb6070daada3e1aab800f08cc9ca31583b7e1371dc25c47435fb8288df52192"
- },
- "level_up": {
-  "date": "2026-11-10",
-  "backup": "~/Documents/task7_arch8_backup_2026-11-09.zip",
-  "why": "a run on the READY cut lost only on the drivers (level 3 in practice); one sentence would have given it the call",
-  "added": "contractors on every quote, the 2019 completions by firm, 12 of 26 roofers still quoting, an EUR 8.2 million budget with its order and the EUR 120 basis filed in the committee's request; R8c and R11 (what the round pays and how many applications are paid once the works are done by 30 September)",
-  "gates": "make.py 237 checks; make.py --twice SAME; gates.py 0 FAIL 4 WARN (precut R1 upstream, voice no rounding sentence at the author's word, leak REVIEW no LEAK, heart WARN as before); effort careful 46.0, hint 5 of 15, 4 wrong sets"
- },
- "gates_stage3": {
-  "date": "2026-11-12",
-  "checks": "49 of 49",
-  "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW; heart WARNs answered)",
-  "effort": "careful 40.5 cited",
-  "figures_check": "PASS (69 figures)",
-  "containers": "PASS"
- },
- "gates_stage5": {
-  "date": "2026-11-12",
-  "checks": "49 of 49",
-  "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW, ruled; heart WARNs answered)",
-  "effort_check": "careful 40.5 cited, 5 distinct wrong answers, 6 rivals and 4 perturbations on Sequence",
-  "containers": "PASS"
- },
- "stump_screen": "run after the build: keeps A (Stagger's season coincidence, the deciding trap); B (Sequence's filed rule) and C (own schedules restored, near a closed card) are graded work a careful run can earn; D (the quarter-hour lift) is texture",
- "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE (one optional FIX_NOW declined: a filed loss-current sentence would hand over J5; SF17 rules the fork out by named data)",
-  "date": "2026-11-13"
- }
+  "drawn": {
+    "date": "2026-11-25",
+    "core": "CORE PASS level 5",
+    "precut": "1 FAIL (architecture 12's stale effort.json), 2 WARN; every design row passes",
+    "guard": "check WARN, heart WARN, 0 BLOCK after the fast-forward to origin/main ea1af52"
+  }
 }
