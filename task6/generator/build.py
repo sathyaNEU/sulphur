@@ -36,7 +36,8 @@ MTIME = calendar.timegm(K.ASSEMBLED.timetuple())
 _U = __import__("datetime").timezone.utc
 _T = lambda *a: __import__("datetime").datetime(*a, tzinfo=_U)
 # each export's own save time, by the system that wrote it (the workbooks and documents carry their own stamps)
-EXPORTED = {"spans": _T(2027, 1, 12, 10, 4, 37), "lb_h1": _T(2026, 7, 2, 7, 40, 3), "lb_h2": _T(2027, 1, 2, 7, 41, 19),
+EXPORTED = {"spans": _T(2027, 1, 12, 10, 4, 37), "spanmetrics": _T(2027, 1, 12, 10, 11, 52),
+            "lb_h1": _T(2026, 7, 2, 7, 40, 3), "lb_h2": _T(2027, 1, 2, 7, 41, 19),
             "incidents": _T(2027, 1, 4, 9, 2, 55), "timeline": _T(2027, 1, 4, 9, 3, 12),
             "status": _T(2027, 1, 4, 11, 27, 38), "billing": _T(2027, 1, 5, 8, 15, 4),
             "invoices": _T(2027, 1, 5, 8, 16, 47), "resources": _T(2027, 1, 5, 8, 18, 22),
@@ -66,9 +67,13 @@ def build_golden(target, golden):
     import analysis as A
     import deliver as D
     import writeup as WU
-    R = A.Golden(target).run()
+    G = A.Golden(target)
+    R = G.run()
     F = D.figures(R)
     text, F = WU.write(R, F)
+    # the critical components' own figures, as the blocks state them
+    F["component1"] = {"first": F["start_order"][0], "payments": F["sli"]["payments"]}
+    F["component3"] = {"places": F["sli"]["places"], "booking": F["sli"]["booking"]}
     if os.path.exists(golden):
         shutil.rmtree(golden)
     os.makedirs(golden)
@@ -81,88 +86,162 @@ def build_golden(target, golden):
     with open(os.path.join(HERE, "figures.json"), "w") as fh:
         json.dump(F, fh, indent=1, sort_keys=True, default=str)
         fh.write("\n")
-    write_effort(R, F)
+    write_effort(R, F, G)
     with open(os.path.join(TASK, "submission.md"), "w", encoding="utf-8") as fh:
         fh.write(text)
     return R, F
 
 
-def write_effort(R, F):
+def write_effort(R, F, G):
     """generator/effort.json: each result's golden (the figures.json value), its band, and what the quick, careful but
-    hurried and thorough passes file, each pass's methods run end to end on the pack; then the hints, each applied
-    alone to the careful pass, with the results it rescues measured by effort.py's own grading."""
+    hurried and thorough passes file, each pass's methods run end to end on the pack; the hints, each applied alone to
+    the careful pass, with the results it rescues measured by effort.py's own grading; the routes; the stump
+    factorial (each judgment dropped alone from the golden and fixed alone on the careful pass); and the forcing
+    block (the golden family, the shortcuts, the perturbations)."""
     import importlib.util
+    import checks as CK
     import deliver as D
     spec = importlib.util.spec_from_file_location("effort", os.path.join(
         os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "stumping", "effort.py"))
     EF = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(EF)
-    over = F["over"]
+    over, bud, L = F["over"], R["bud"], R["lattice"]
+    bridged = F["bridged"]
+    sli_bands = {s: [float(v) for v in F["sli_band"][s]] for s in bridged}
 
     def mins(M):
         return {s: ["%d" % D.whole(v) for v in M[s]] for s in K.SVC}
 
-    def sli(S):
-        return {s: "%.1f" % K.r1(S[s]["sli"]) for s in K.SVC}
+    def sli_cells(S):
+        # a bridged SLI is graded on its range (two decimals filed), a boundary one at its one decimal
+        return {s: (float(D.two(S[s]["sli"])) if s in bridged else "%.1f" % K.r1(S[s]["sli"])) for s in K.SVC}
 
-    bands = {}
+    def comp1(S, P):
+        return {"first": (P["order"] or ["none"])[0], "payments": "%.1f" % K.r1(S["payments"]["sli"])}
+
+    def comp3(S):
+        return {"places": float(D.two(S["places"]["sli"])), "booking": "%.1f" % K.r1(S["booking"]["sli"])}
+
+    ci_bands = {}
     for s in over:
-        lo = sorted([float(D.two(R["ci"][s][0])), float(D.two(R["ci_boot"][s][0]))])
-        hi = sorted([float(D.two(R["ci"][s][1])), float(D.two(R["ci_boot"][s][1]))])
-        bands["%s lo" % s] = [round(lo[0] - 0.02, 2), round(lo[1] + 0.02, 2)]
-        bands["%s hi" % s] = [round(hi[0] - 0.02, 2), round(hi[1] + 0.02, 2)]
-    passes = {"quick": R["quick"], "careful": R["careful"]}
-    res = [
-        {"id": "R1", "name": "incident minutes by half", "graded_as": "Ask 1", "figure": "minutes", "depends": [],
-         "golden": F["minutes"], "passes": {"quick": mins(R["quick"]["minutes"]), "careful": mins(R["minutes"]),
-                                            "thorough": F["minutes"]}},
-        {"id": "R2", "name": "root cause of each December incident", "graded_as": "Component 1",
-         "figure": "root_cause", "depends": ["R1"], "golden": F["root_cause"],
-         "passes": {p: dict(passes[p]["attribution"]) for p in passes} | {"thorough": F["root_cause"]}},
-        {"id": "R3", "name": "every service's December SLI", "graded_as": "Ask 2", "figure": "sli",
-         "depends": ["R1", "R2"], "golden": F["sli"],
-         "passes": {p: sli(passes[p]["S"]) for p in passes} | {"thorough": F["sli"]}},
-        {"id": "R4", "name": "intervals on the over-budget SLIs", "graded_as": "Component 2", "figure": "ci_cells",
-         "depends": ["R3"], "golden": F["ci_cells"], "bands": bands,
-         "passes": {p: D.ci_cells(passes[p]["ci"], over) for p in passes} | {"thorough": F["ci_cells"]}},
-        {"id": "R5", "name": "the services over budget", "graded_as": "Recommendation", "figure": "over",
-         "depends": ["R3"], "golden": list(over),
-         "passes": {p: list(passes[p]["P"]["over"]) for p in passes} | {"thorough": list(over)}},
-        {"id": "R6", "name": "start order, shares, together, beyond", "graded_as": "Ask 3",
-         "figure": "programme_cells", "depends": ["R3", "R5"], "golden": F["programme_cells"],
-         "passes": {p: D.programme_cells(passes[p]["P"]) for p in passes} | {"thorough": F["programme_cells"]}},
+        lo, hi = float(D.two(R["ci"][s][0])), float(D.two(R["ci"][s][1]))
+        ci_bands["%s lo" % s] = [round(lo - 0.03, 2), round(lo + 0.03, 2)]
+        ci_bands["%s hi" % s] = [round(hi - 0.03, 2), round(hi + 0.03, 2)]
+
+    def vals(r_, minutes):
+        """Every result as one route files it."""
+        return {"R1": mins(minutes), "R2": dict(r_["attribution"]), "R3": comp1(r_["S"], r_["P"]),
+                "R4": comp3(r_["S"]), "R5": sli_cells(r_["S"]), "R6": D.ci_cells(r_["ci"], over),
+                "R7": list(r_["P"]["over"]), "R8": D.programme_cells(r_["P"])}
+
+    golden = {"attribution": R["attribution"], "S": R["S"], "P": R["P"], "ci": R["ci"]}
+    V = {"quick": vals(R["quick"], R["quick"]["minutes"]),
+         "careful": vals(L["S1+S2+S3"], R["minutes"]),
+         "thorough": vals(golden, R["minutes"])}
+    meta = [
+        ("R1", "incident minutes by half", "Ask 4", "minutes", [], F["minutes"], None, None),
+        ("R2", "root cause of each December incident", "Component 2", "root_cause", ["R1"], F["root_cause"], None,
+         ["L26"]),
+        ("R3", "the first to start and payments' SLI", "Component 1", "component1", ["R1"], F["component1"], None,
+         ["L08"]),
+        ("R4", "places' and booking's December SLI", "Component 3", "component3", ["R1"], F["component3"],
+         {"places": sli_bands["places"]} if "places" in sli_bands else None, ["L34", "L44", "N27"]),
+        ("R5", "every service's December SLI", "Ask 2", "sli", ["R2", "R3", "R4"], F["sli"], sli_bands,
+         ["L08", "L34", "L26"]),
+        ("R6", "the 90 per cent intervals", "Ask 1", "ci_cells", ["R5"], F["ci_cells"], ci_bands, ["L35"]),
+        ("R7", "the services over budget", "Recommendation", "over", ["R5"], list(over), None, ["L08", "L34", "L26"]),
+        ("R8", "start order, shares, together, beyond", "Ask 1", "programme_cells", ["R5", "R7"],
+         F["programme_cells"], None, ["L08", "L34"]),
     ]
-    # the hints: what each one alone does to the careful pass
-    hinted = {
-        "each kept span counts at its trace root's hourly keep share":
-            {"R3": sli(R["weights_only"]["S"]), "R5": list(R["weights_only"]["P"]["over"]),
-             "R6": D.programme_cells(R["weights_only"]["P"])},
-        "December's first eleven days, which the store had already dropped, still count, at the share each "
-        "service's load gives them":
-            {"R3": sli(R["periods_only"]["S"]), "R5": list(R["periods_only"]["P"]["over"]),
-             "R6": D.programme_cells(R["periods_only"]["P"])},
-        "each December incident's cause is the named service whose own handling rose first, not the one furthest "
-        "over its curve":
-            {"R2": F["root_cause"]},
-        "an SLI's interval takes whole traces as its units within each root service's hour":
-            {"R4": D.ci_cells(R["hint_ci"], over)},
-    }
-    hints = []
-    for sentence, vals in hinted.items():
-        rescued = []
-        for r in res:
-            if r["id"] not in vals:
-                continue
-            before = EF.grade(r["passes"]["careful"], r)[0]
-            after = EF.grade(vals[r["id"]], r)[0]
-            if before != "right" and after == "right":
-                rescued.append(r["id"])
-        hints.append({"sentence": sentence, "rescues": rescued})
+    res = []
+    for rid, name, graded, fig, dep, gold, bands, prec in meta:
+        r = {"id": rid, "name": name, "graded_as": graded, "figure": fig, "depends": dep, "golden": gold,
+             "passes": {p: V[p][rid] for p in ("quick", "careful", "thorough")}}
+        if bands:
+            r["bands"] = bands
+        if prec:
+            r["precedent"] = prec
+        res.append(r)
+    by_id = {r["id"]: r for r in res}
+    grade = lambda rid, v: EF.grade(v, by_id[rid])[0]
+
+    def lost(v):
+        return [rid for rid in sorted(v) if grade(rid, v[rid]) != "right"]
+
+    def rescued(v):
+        return [rid for rid in sorted(v) if grade(rid, V["careful"][rid]) != "right" and grade(rid, v[rid]) == "right"]
+
+    route_vals = {k: vals(L[k], R["minutes"]) for k in L}
+    # the hints: what each one alone does to the careful pass (the lattice's pair routes)
+    hints = [{"sentence": sentence, "rescues": rescued(route_vals[key])} for sentence, key in (
+        ("each kept span counts at its trace root's hourly keep share", "S2+S3"),
+        ("each December incident's cause is the named service whose own handling rose first, not the one furthest "
+         "over its curve", "S1+S3"),
+        ("the trace export begins on 12 December; the hours before it still count, and the tracing store's span "
+         "metrics hold them", "S1+S2"))]
     # the routes: the services each tempting shortcut puts over budget, beside the golden's five
-    routes = [{"name": x["reading"], "answer": list(x["over"]), "golden": bool(x.get("golden"))} for x in F["routes"]]
+    names_ = {"S1": "Each service's own hourly count; causes dated; the hours before the export from the span metrics",
+              "S2": "Each span at its trace root's keep share; each incident on the service furthest over its load "
+                    "curve; the hours before the export from the span metrics",
+              "S3": "Each span at its trace root's keep share; causes dated; the export's hours alone",
+              "S1+S2": "Each service's own hourly count; each incident on the service furthest over its load curve; "
+                       "the hours before the export from the span metrics",
+              "S1+S3": "Each service's own hourly count; causes dated; the export's hours alone",
+              "S2+S3": "Each span at its trace root's keep share; each incident on the service furthest over its load "
+                       "curve; the export's hours alone",
+              "S1+S2+S3": "Each service's own hourly count; each incident on the service furthest over its load curve; "
+                          "the export's hours alone (the careful but hurried pass)"}
+    over_of = lambda S: [s for s in K.SVC if K.r1(S[s]["sli"]) > bud[s]]
+    routes = [{"name": "Kept spans unweighted; each incident on the service named first; the export's hours alone",
+               "answer": list(R["quick"]["P"]["over"]), "golden": False}]
+    routes += [{"name": names_[k], "answer": list(L[k]["P"]["over"]), "golden": False} for k in names_]
+    routes += [{"name": "The review's weights and causes; the threshold's bucket split by straight-line interpolation "
+                        "(the list holds, the SLIs do not)", "answer": over_of(R["naive"]["linear"]), "golden": False},
+               {"name": "The review's weights and causes; the hours before the export at the export's own share, no "
+                        "span metrics read", "answer": over_of(R["loadfill"]["flat"]), "golden": False},
+               {"name": "Each span at its trace root's keep share; causes dated; the hours before the export from the "
+                        "span metrics (this review)", "answer": list(over), "golden": True}]
+    # the stump factorial: each judgment made the hurried way alone, and fixed alone on the careful pass
+    factorial = {"golden_answer": list(over), "reflex_route": {"answer": list(L["S1+S2+S3"]["P"]["over"])},
+                 "judgments": []}
+    for jid, name, prec, drop, alone in (
+            ("J1", "each kept span weighted by its trace root's hourly keep share, not its own service's count",
+             ["L08"], "S1", "S2+S3"),
+            ("J2", "each December incident's cause dated by the earliest sustained rise of own handling over load",
+             ["L26"], "S2", "S1+S3"),
+            ("J3", "the hours before the export counted from the tracing store's span metrics, the threshold's bucket "
+                   "split as the held spans show", ["L34", "N27"], "S3", "S1+S2")):
+        factorial["judgments"].append({
+            "id": jid, "name": name, "kind": "stump", "precedent": prec,
+            "dropped": {"answer": list(L[drop]["P"]["over"]), "results_moved": lost(route_vals[drop])},
+            "alone": {"answer": list(L[alone]["P"]["over"]), "results_rescued": rescued(route_vals[alone])}})
+    # forcing, both sides: every split of the threshold's bucket and every weighting base on the golden's list, the
+    # shortcuts off it, and the bridge's one fitted input (the split shares) moved either way
+    incs = R["incidents"]
+    att = R["attribution"]
+    wr = G.weights("root")
+    ex = G.excluded(att, incs)
+    fam = [{"name": "the threshold's bucket split by %s" % k, "answer": over_of(S_)} for k, S_ in R["family"].items()]
+    fam += [{"name": k, "answer": over_of(S_)} for k, S_ in CK.weight_variants(G, att, incs).items()]
+    pert = [{"input": "the threshold's bucket split by %s" % {"linear": "straight-line interpolation",
+                                                              "loglinear": "interpolation on the log scale",
+                                                              "lower": "nothing over the threshold (its lower bound)",
+                                                              "upper": "everything over the threshold (its upper "
+                                                                       "bound)"}[k], "answer": over_of(R["naive"][k])}
+            for k in A_NAIVE]
+    for f_, lab in ((1.2, "+20%"), (0.8, "-20%")):
+        pert.append({"input": "every split share %s" % lab,
+                     "answer": over_of(G.slis(wr, ex, fill=CK.scaled_fill(G, wr, ex, incs, f_)))})
+    forcing = {"kind": "set", "golden_answer": list(over), "golden_family": fam,
+               "shortcuts": [{"name": names_[k], "answer": list(L[k]["P"]["over"])} for k in names_],
+               "perturbations": pert}
     with open(os.path.join(HERE, "effort.json"), "w") as fh:
-        json.dump({"results": res, "hints": hints, "routes": routes}, fh, indent=1, sort_keys=True)
+        json.dump({"results": res, "hints": hints, "routes": routes, "factorial": factorial, "forcing": forcing}, fh,
+                  indent=1, sort_keys=True)
         fh.write("\n")
+
+
+A_NAIVE = ("linear", "loglinear", "lower", "upper")
 
 
 def write_metadata(n, R):
@@ -173,6 +252,8 @@ def write_metadata(n, R):
              "fictional")
     about = {
         "spans": ("the tracing store's export of the December 2026 spans it still held", "2027-01-12"),
+        "spanmetrics": ("the tracing store's span metrics for December 2026: the spans it ingested each hour and "
+                        "their duration histogram, by service, span name, kind and status", "2027-01-12"),
         "lb_h1": ("the load balancer's hourly request counts by target group, January to June 2026", "2026-07-02"),
         "lb_h2": ("the load balancer's hourly request and 5xx counts by target group, July to December 2026",
                   "2027-01-02"),
@@ -203,7 +284,8 @@ def write_metadata(n, R):
          "answer": ", ".join(R["P"]["over"]),
          "deliverables": [K.DOCX_OUT, K.CSV_OUT],
          "distractor_files": ["target/" + K.FILES[k] for k in K.DISTRACTORS],
-         "rows": sorted([(K.FILES["spans"], n["spans"]), (K.FILES["lb_h1"], n["lb_h1"]), (K.FILES["lb_h2"], n["lb_h2"])]),
+         "rows": sorted([(K.FILES["spans"], n["spans"]), (K.FILES["lb_h1"], n["lb_h1"]), (K.FILES["lb_h2"], n["lb_h2"])]
+                        + ([(K.FILES["spanmetrics"], n["spanmetrics"])] if "spanmetrics" in n else [])),
          "provenance": prov}
     with open(os.path.join(TASK, "metadata.json"), "w") as f:
         json.dump(m, f, indent=1)

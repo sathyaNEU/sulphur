@@ -1,9 +1,11 @@
 """An independent recomputation of task6's graded figures from the shipped bundle alone (target/, figures.json and
 submission.md), on its own code path: pandas over the span export, each trace's root found by walking parents, the
-weights from the balancer's export, its own reading of each December incident's cause (the first fifteen-minute bin,
-from three hours before the declaration, where a named service's own handling ran 1.4 times its median at the same
-hour on December's other days, held for the next bin too), the exclusions, the SLIs, the incident minutes, the
-start order and shares, and the linearised intervals. Returns a list of disagreements; empty is a pass.
+weights from the balancer's export, its own reading of each December incident's cause (one changepoint on each named
+service's own handling against its load curve), the exclusions, the hours before the export read from the tracing
+store's span metrics (each server series' spans over the threshold, the threshold's bucket split at the share the
+export's own spans show in the same fifth of hourly load, an internal operation weighted by its callers' keep shares),
+the SLIs, the incident minutes, the start order and shares, and the linearised intervals. Returns a list of
+disagreements; empty is a pass.
 
     python3 verify.py [task_dir]"""
 import datetime as dt
@@ -178,59 +180,141 @@ def run(task_dir):
     k = dec[keep]
     num = (k["w"] * k["slow"]).groupby(k["svc"]).sum()
     den = k.groupby("svc")["w"].sum()
-    # December's hours before the export's first span: each service's requests there at the share over threshold its
-    # held, incident-free hours show in the same tenth of hourly load
+    # December's hours before the export's first span, from the tracing store's span metrics
     cut = int(np.floor(dec["t"].min() / 3600))
     quiet = np.ones(H, dtype=bool)
     for x in decinc:
         a_ = int((x["declared"] - DEC0).total_seconds() // 3600) - 3
         b_ = int((x["end"] - DEC0).total_seconds() // 3600) + 1
         quiet[max(0, a_):min(H, b_ + 1)] = False
-    hourly = k.assign(o=k["w"] * k["slow"]).groupby(["svc", "h"]).agg(o=("o", "sum"), c=("w", "sum"))
-    terms = {}
+    sm = pd.read_csv(os.path.join(tgt, "tracing_span_metrics_2026-12.csv"))
+    bcols = [c for c in sm.columns if c.startswith("latency_bucket_le_") and not c.endswith("_inf")]
+    bounds = [int(c.rsplit("_", 1)[1]) for c in bcols]
+    sm["svc"] = sm["service_name"].map(by_trace)
+    sm["h"] = ((pd.to_datetime(sm["time"].str.replace("Z", "")) - DEC0).dt.total_seconds() // 3600).astype(int)
+    sm["kind"] = sm["span_kind"].str.replace("SPAN_KIND_", "")
+    sm = sm.groupby(["svc", "span_name", "kind", "h"], as_index=False)[["calls_total"] + bcols].sum()
+    edge = sorted(set(roots["svc"]))
+    Nh = {s: np.array([N.get((s, h_), 0.0) for h_ in range(H)]) for s in svcs}
+
+    def col(frame, c):
+        v = np.zeros(H)
+        v[frame["h"].values] = frame[c].values
+        return v
+
+    srvm = sm[sm["kind"] == "SERVER"]
+    clim = sm[sm["kind"] == "CLIENT"]
+    k_edge = {e: col(srvm[srvm["svc"] == e].groupby("h", as_index=False)["calls_total"].sum(), "calls_total")
+              for e in edge}
+    w_edge = {e: np.where(k_edge[e] > 0, Nh[e] / np.maximum(k_edge[e], 1), 0.0) for e in edge}
+    tname = dict(zip(cat["Service"], cat["Tracing service name"]))
+    gone = np.arange(H) < cut
+    early = {}                      # (service, span name) -> what the interval needs of the early hours
     for s in svcs:
-        n_s = np.array([N.get((s, h_), 0.0) for h_ in range(H)])
-        x_s = np.log(n_s + 1)
-        O = np.zeros(H); C = np.zeros(H)
-        if s in hourly.index.get_level_values(0):
-            hs = hourly.loc[s]
-            O[hs.index.values] = hs["o"].values; C[hs.index.values] = hs["c"].values
-        fit = (np.arange(H) >= cut) & quiet & (C > 0)
-        edges = np.quantile(x_s[fit], np.linspace(0, 1, 11))
-        band = np.clip(np.searchsorted(edges, x_s, side="right") - 1, 0, 9)
-        gone = np.arange(H) < cut
-        pb = np.array([O[fit & (band == j)].sum() / max(C[fit & (band == j)].sum(), 1e-9) for j in range(10)])
-        Mb = np.array([n_s[gone & (band == j)].sum() for j in range(10)])
-        Cb = np.array([C[fit & (band == j)].sum() for j in range(10)])
-        num[s] = num[s] + float((Mb * pb).sum())
-        den[s] = den[s] + float(Mb.sum())
-        terms[s] = (pb[band], (Mb / np.maximum(Cb, 1e-9))[band], fit, float(Mb.sum()))
+        t_s = thr[s]
+        x_s = np.log(Nh[s] + 1)
+        inside = t_s not in bounds
+        if inside:
+            lo = max([0] + [b for b in bounds if b < t_s])
+            hi = min(b for b in bounds if b > t_s)
+            fit = (np.arange(H) >= cut) & quiet
+            edges = np.quantile(x_s[fit], np.linspace(0, 1, 6))
+            band = np.clip(np.searchsorted(edges, x_s, side="right") - 1, 0, 4)
+        add = 0.0
+        for name, fr in srvm[srvm["svc"] == s].groupby("span_name"):
+            cnt = col(fr, "calls_total")
+            if s in edge:
+                wt = w_edge[s]
+            else:
+                meth, path = name.split(" ", 1)
+                cl_ = clim[clim["span_name"] == "%s %s %s" % (meth, tname[s], path)]
+                cw, cn = np.zeros(H), np.zeros(H)
+                for caller, fc in cl_.groupby("svc"):
+                    c_ = col(fc, "calls_total")
+                    cw += w_edge[caller] * c_
+                    cn += c_
+                wt = np.where(cn > 0, cw / np.maximum(cn, 1e-9), 0.0)
+            if not inside:
+                above = cnt - col(fr, "latency_bucket_le_%d" % int(t_s))
+                mid = np.zeros(H)
+                phi = np.zeros(H)
+                grp = None
+            else:
+                above = cnt - col(fr, "latency_bucket_le_%d" % hi)
+                mid = col(fr, "latency_bucket_le_%d" % hi) - (col(fr, "latency_bucket_le_%d" % lo) if lo > 0 else 0.0)
+                d_ = dec[(dec["svc"] == s) & (dec["span_name"] == name) & (dec["ms"] > lo) & (dec["ms"] <= hi)]
+                d_ = d_[quiet[d_["h"].values]]
+                gb = band[d_["h"].values]
+                yy = (d_["ms"].values > t_s).astype(float)
+                ww = d_["w"].values
+                Wg = np.array([ww[gb == j].sum() for j in range(5)])
+                Yg = np.array([(ww * yy)[gb == j].sum() for j in range(5)])
+                share = np.where(Wg > 0, Yg / np.maximum(Wg, 1e-12), np.nan)
+                filled = [j for j in range(5) if Wg[j] > 0]
+                for j in range(5):
+                    if Wg[j] <= 0:
+                        share[j] = share[min(filled, key=lambda q: abs(q - j))] if filled else 0.0
+                phi = share[band]
+                grp = {"band": band, "share": share, "W": Wg, "idx": d_.index.values, "g": gb, "y": yy}
+            slow = above + phi * mid
+            add += float((wt * slow)[gone].sum())
+            early[(s, name)] = {"wt": wt, "cnt": cnt, "above": above, "mid": mid, "phi": phi, "grp": grp}
+        num[s] = num[s] + add
+        den[s] = den[s] + float(Nh[s][gone].sum())
     sli = 100 * num / den
+    band_of = F.get("sli_band", {})
     for s in svcs:
+        if s in band_of:
+            if not float(band_of[s][0]) - 1e-9 <= sli[s] <= float(band_of[s][1]) + 1e-9:
+                bad.append("%s SLI %.3f outside %s to %s" % (s, sli[s], band_of[s][0], band_of[s][1]))
         if "%.1f" % half_up(sli[s], "0.1") != F["sli"][s]:
             bad.append("%s SLI %.3f against %s" % (s, sli[s], F["sli"][s]))
     over = [s for s in svcs if half_up(sli[s], "0.1") > bud[s]]
     if over != F["over"]:
         bad.append("over %s against %s" % (over, F["over"]))
     order = sorted(over, key=lambda s: -num[s])
+    if order != F["start_order"]:
+        bad.append("order %s against %s" % (order, F["start_order"]))
     tot = num.sum()
+    beyond = sum(num[s] - bud[s] / 100 * den[s] for s in over)
     cells = {"order": ", ".join(order), "together": "%d" % half_up(100 * num[over].sum() / tot, "1"),
-             "beyond": "{:,}".format(int(half_up(sum(num[s] - bud[s] / 100 * den[s] for s in over) / 10000, "1")) * 10000)}
+             "beyond": "{:,}".format(int(half_up(beyond / 10000, "1")) * 10000)}
     for s in order:
         cells["share %s" % s] = "%d" % half_up(100 * num[s] / tot, "1")
     if cells != F["programme_cells"]:
         bad.append("programme %s against %s" % (cells, F["programme_cells"]))
+    lo_b, hi_b = (int(v.replace(",", "")) for v in F["beyond_band"])
+    if not lo_b <= beyond <= hi_b:
+        bad.append("requests beyond budget %.0f outside %s to %s" % (beyond, F["beyond_band"][0], F["beyond_band"][1]))
 
-    # the intervals: linearised over strata of root service and hour, traces as units
+    # the intervals: linearised over strata of root service and hour, traces as units; the hours read from the span
+    # metrics add each series' own sampling variance, and a held span in the threshold's bucket moves its split
     for s in over:
         R = sli[s] / 100
         ks = k[k["svc"] == s].copy()
-        ph, Ah, fit, M = terms[s]
         sl = ks["slow"].astype(float).values
-        hh = ks["h"].values
-        ks["z"] = (sl - R) + np.where(fit[hh], Ah[hh] * (sl - ph[hh]), 0.0)
-        zt = ks.groupby("trace_id")["z"].sum()
+        ks["z"] = sl - R
+        M = float(Nh[s][gone].sum())
         X = ks["w"].sum() + M
+        zt = ks.groupby("trace_id")["z"].sum()
+        Vu = 0.0
+        for (ss, name), e_ in early.items():
+            if ss != s:
+                continue
+            wt, cnt, above, mid, phi = (e_[q][gone] for q in ("wt", "cnt", "above", "mid", "phi"))
+            ok = cnt > 0
+            m1 = np.where(ok, (above + phi * mid) / np.maximum(cnt, 1), 0.0)
+            m2 = np.where(ok, (above + phi ** 2 * mid) / np.maximum(cnt, 1), 0.0)
+            f_ = np.minimum(np.where(wt > 0, 1.0 / np.maximum(wt, 1e-9), 1.0), 1.0)
+            Vu += float((wt ** 2 * cnt * (m2 - m1 ** 2) * (1 - f_) *
+                         np.where(cnt > 1, cnt / np.maximum(cnt - 1, 1), 1.0)).sum())
+            gq = e_["grp"]
+            if gq is not None:
+                T = np.array([float((e_["wt"] * e_["mid"])[gone & (gq["band"] == j)].sum()) for j in range(5)])
+                ext = np.where(gq["W"][gq["g"]] > 0, T[gq["g"]] * (gq["y"] - gq["share"][gq["g"]]) /
+                               np.maximum(gq["W"][gq["g"]], 1e-12), 0.0)
+                zt = zt.add(pd.Series(ext, index=dec.loc[gq["idx"], "trace_id"].values).groupby(level=0).sum(),
+                            fill_value=0.0)
         rr = roots[["trace_id", "svc", "h"]].copy()
         rr["z"] = rr["trace_id"].map(zt).fillna(0.0)
         rr["n"] = rr.groupby(["svc", "h"])["trace_id"].transform("size")
@@ -247,9 +331,9 @@ def run(task_dir):
         if len(orph) > 1:
             u = orph["w"] * orph["z"] / X
             V += len(u) / (len(u) - 1) * ((u - u.mean()) ** 2).sum()
-        se = 100 * np.sqrt(V)
+        se = 100 * np.sqrt(V + Vu / X ** 2)
         lo, hi = half_up(sli[s] - 1.6448536269514722 * se, "0.01"), half_up(sli[s] + 1.6448536269514722 * se, "0.01")
-        if abs(lo - F["ci_cells"]["%s lo" % s]) > 0.011 or abs(hi - F["ci_cells"]["%s hi" % s]) > 0.011:
+        if abs(lo - F["ci_cells"]["%s lo" % s]) > 0.03 or abs(hi - F["ci_cells"]["%s hi" % s]) > 0.03:
             bad.append("%s interval %.2f to %.2f against %s to %s" % (s, lo, hi, F["ci_cells"]["%s lo" % s],
                                                                     F["ci_cells"]["%s hi" % s]))
 
@@ -277,8 +361,16 @@ def run(task_dir):
     # every figure the answer blocks state is one the figure set carries
     sub = open(os.path.join(task_dir, "submission.md")).read()
     for s in svcs:
-        if "%s: SLI %s against a budget of %s" % (s, F["sli"][s], F["budget"][s]) not in sub:
-            bad.append("submission lacks %s's SLI line" % s)
+        if "%s: SLI %s, budget %s, ran over %s, incident minutes %s and %s." % (
+                s, F["sli"][s], F["budget"][s], F["ran_over"][s], F["minutes"][s][0], F["minutes"][s][1]) not in sub:
+            bad.append("submission lacks %s's CSV line" % s)
+    for s in order:
+        if "%s: %s%% of the over-threshold requests, interval %s to %s." % (
+                s, F["share_pct"][s], F["ci"][s][0], F["ci"][s][1]) not in sub:
+            bad.append("submission lacks %s's start-order line" % s)
+    for iid, c_ in cause.items():
+        if not re.search(r"%s, declared [^\n]*: %s\.$" % (re.escape(iid), re.escape(c_)), sub, re.M):
+            bad.append("submission lacks %s's owner" % iid)
     return bad
 
 

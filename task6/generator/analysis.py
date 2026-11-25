@@ -33,7 +33,11 @@ DEC0_NS = int((DEC0 - dt.datetime(1970, 1, 1)).total_seconds()) * 10 ** 9
 H = K.REVIEW_HOURS
 H1_END = dt.datetime(2026, 6, 30, 23, 0)            # 1 July 00:00 Lisbon
 Z90 = 1.6448536269514722
-FILL = "bands"                                       # the expired hours: ten bands of each service's hourly load
+FILL = "bands5"                                      # the hours before the export: the threshold bucket split in five
+                                                     # bands of the service's hourly load (hist_fill)
+SPLIT_FAMILY = ("pooled", "bands2", "bands3", "bands4", "bands5", "bands6", "bands8", "bands10", "bands15", "bands20",
+                "bands30", "logit", "hour")          # every split of the threshold bucket the held spans support
+NAIVE_BRIDGES = ("linear", "loglinear", "lower", "upper")   # interpolation inside the bucket, and its two bounds
 
 
 def catalogue(target):
@@ -82,7 +86,7 @@ def sec_of(t):
 
 # a rise is sustained when the later stretch runs half an hour and twenty spans or more, the earlier twenty spans or
 # more; RISE and LEVEL are set on the quiet days (checks R7: at most one placebo window in fourteen fires)
-RISE, LEVEL, MIN_SPANS, MIN_SECONDS = 2.0, 1.75, 20, 1800
+RISE, LEVEL, MIN_SPANS, MIN_SECONDS = 2.2, 1.9, 20, 1800
 
 
 def sustained_split(t, r, min_n=MIN_SPANS, min_s=MIN_SECONDS):
@@ -358,6 +362,175 @@ class Golden:
                     ex[s].append((sec_of(a_), sec_of(x["end"])))
         return ex
 
+    # ------------------------------------------------------------------ the store's span metrics (whole December)
+    def hist(self):
+        """The tracing store's hourly span metrics: {(service, span name, kind): array [hour, 1 + buckets]} with the
+        spans ingested and the cumulative count at each boundary, error and non-error series summed; and the
+        boundaries, read from the file's own header."""
+        if hasattr(self, "_HS"):
+            return self._HS, self._HB
+        HS, HB = {}, None
+        with open(os.path.join(self.t, K.FILES["spanmetrics"])) as fh:
+            rd = csv.DictReader(fh)
+            HB = [int(c.rsplit("_", 1)[1]) for c in rd.fieldnames if c.startswith("latency_bucket_le_")
+                  and not c.endswith("_inf")]
+            for row in rd:
+                t = dt.datetime.strptime(row["time"], "%Y-%m-%dT%H:%M:%SZ")
+                h = int((t - DEC0).total_seconds() // 3600)
+                if not 0 <= h < H:
+                    continue
+                key = (self.by_trace[row["service_name"]], row["span_name"], row["span_kind"].replace("SPAN_KIND_", ""))
+                a = HS.get(key)
+                if a is None:
+                    a = HS[key] = np.zeros((H, 1 + len(HB)))
+                a[h, 0] += float(row["calls_total"])
+                for j, b in enumerate(HB):
+                    a[h, 1 + j] += float(row["latency_bucket_le_%d" % b])
+        self._HS, self._HB = HS, HB
+        return HS, HB
+
+    def hist_edge_weights(self):
+        """Each edge service's hourly keep weight for every December hour: its RequestCount over the root spans the
+        store ingested that hour (every server span of an edge service starts a trace)."""
+        HS, _ = self.hist()
+        out = {}
+        for e in K.EDGE:
+            k = sum(a[:, 0] for (s_, n, kd), a in HS.items() if s_ == e and kd == "SERVER")
+            out[e] = np.where(k > 0, self.N[e] / np.maximum(k, 1), 0.0)
+        return out
+
+    def hist_series_weight(self, s, name, how="root"):
+        """The weight of one server series of the span metrics, hour by hour: an edge service's own keep weight; an
+        internal operation's callers' keep weights averaged over the client spans each caller's kept traces sent it
+        that hour ("root"), or the service's RequestCount over all its ingested server spans ("own")."""
+        HS, _ = self.hist()
+        if how == "own" or s in K.EDGE:
+            if how == "own":
+                k = sum(a[:, 0] for (s_, n, kd), a in HS.items() if s_ == s and kd == "SERVER")
+                return np.where(k > 0, self.N[s] / np.maximum(k, 1), 0.0)
+            return self.hist_edge_weights()[s]
+        We = self.hist_edge_weights()
+        meth, path = name.split(" ", 1)
+        tname = [c["Tracing service name"] for c in self.cat if c["Service"] == s][0]
+        cname = "%s %s %s" % (meth, tname, path)
+        num, den = np.zeros(H), np.zeros(H)
+        for (cs, n, kd), a in HS.items():
+            if kd == "CLIENT" and n == cname and cs in We:
+                num += We[cs] * a[:, 0]
+                den += a[:, 0]
+        return np.where(den > 0, num / np.maximum(den, 1e-9), 0.0)
+
+    def bucket_of(self, s):
+        """The histogram bucket (lo, hi] that holds a service's threshold, or None when the threshold is a boundary."""
+        _, HB = self.hist()
+        thr = self.thr[s]
+        if thr in HB:
+            return None
+        return max([0] + [b for b in HB if b < thr]), min(b for b in HB if b > thr)
+
+    def split_terms(self, s, name, w, form, quiet, cut, weighted=True):
+        """For one server series whose threshold sits inside a bucket: the held, incident-free spans in that bucket,
+        the group each falls in under `form` and each group's share over the threshold. Returns (group of hour ->
+        index, shares, span index, span group, group weights)."""
+        from scipy.special import expit
+        lo, hi = self.bucket_of(s)
+        hrs = np.arange(H)
+        x = np.log(self.N[s] + 1)
+        m = self.dec & (self.svc == s) & (self.name == name) & (self.ms > lo) & (self.ms <= hi)
+        m &= quiet[np.clip(self.h, 0, H - 1)]
+        idx = np.nonzero(m)[0]
+        y = (self.ms[idx] > self.thr[s]).astype(float)
+        ww = w[idx] if weighted else np.ones(len(idx))
+        if form == "logit":
+            if len(idx) < 5:
+                return None
+            X = np.column_stack([np.ones(len(idx)), x[self.h[idx]]])
+            b = self._logit_fit(X, ww * y, ww)
+            return {"kind": "logit", "phi": expit(b[0] + b[1] * x), "idx": idx}
+        if form == "pooled":
+            grp_h = np.zeros(H, dtype=int)
+            ng = 1
+        elif form == "hour":
+            grp_h = hrs % 24
+            ng = 24
+        else:
+            ng = int(form[5:])
+            fit = (hrs >= cut) & quiet
+            edges = np.quantile(x[fit], np.linspace(0, 1, ng + 1))
+            grp_h = np.clip(np.searchsorted(edges, x, side="right") - 1, 0, ng - 1)
+        g = grp_h[self.h[idx]]
+        W = np.array([ww[g == k].sum() for k in range(ng)])
+        Y = np.array([(ww * y)[g == k].sum() for k in range(ng)])
+        pooled = Y.sum() / max(W.sum(), 1e-12)
+        sh = np.where(W > 0, Y / np.maximum(W, 1e-12), np.nan)
+        filled = [k for k in range(ng) if W[k] > 0]
+        for k in range(ng):                                   # a group with no held span takes its nearest neighbour's
+            if W[k] <= 0:
+                sh[k] = sh[min(filled, key=lambda j: abs(j - k))] if filled else pooled
+        return {"kind": "groups", "phi": sh[grp_h], "grp_h": grp_h, "share": sh, "W": W, "idx": idx, "g": g,
+                "y": y, "ww": ww}
+
+    def hist_fill(self, w, ex=None, form=None, incs=None, how="root", weighted=True, detail=False):
+        """The hours before the export begins, measured from the span metrics: for each server series the spans the
+        store ingested over the service's threshold (exact where the threshold is a bucket boundary; otherwise the
+        buckets above it and the threshold's own bucket split at the share its held, incident-free spans show under
+        `form`), each at its series' weight. {service: (over-threshold requests, requests)}; `form` may also be an
+        interpolation inside the bucket ("linear", "loglinear") or a bound ("lower", "upper")."""
+        form = form or FILL
+        HS, HB = self.hist()
+        cut = self.held_from()
+        quiet = self.quiet_hours(incs)
+        gone = np.arange(H) < cut
+        out, det = {}, {}
+        for s in K.SVC:
+            thr, bk, tot = self.thr[s], self.bucket_of(s), 0.0
+            for (ss, name, kd), a in sorted(HS.items()):
+                if ss != s or kd != "SERVER":
+                    continue
+                wt = self.hist_series_weight(s, name, how)
+                cnt = a[:, 0]
+                if bk is None:
+                    slow = cnt - a[:, 1 + HB.index(thr)]
+                    mid, phi, terms = np.zeros(H), np.zeros(H), None
+                else:
+                    lo, hi = bk
+                    above = cnt - a[:, 1 + HB.index(hi)]
+                    mid = a[:, 1 + HB.index(hi)] - (a[:, 1 + HB.index(lo)] if lo > 0 else 0.0)
+                    terms = None
+                    if form == "linear":
+                        phi = np.full(H, (hi - thr) / (hi - lo))
+                    elif form == "loglinear":
+                        phi = np.full(H, np.log(hi / thr) / np.log(hi / max(lo, 1)))
+                    elif form == "lower":
+                        phi = np.zeros(H)
+                    elif form == "upper":
+                        phi = np.ones(H)
+                    else:
+                        terms = self.split_terms(s, name, w, form, quiet, cut, weighted)
+                        phi = terms["phi"] if terms else np.zeros(H)
+                    slow = above + phi * mid
+                tot += float((wt * slow)[gone].sum())
+                det[(s, name)] = {"wt": wt, "cnt": cnt, "slow": slow, "mid": mid, "phi": phi, "terms": terms}
+            out[s] = (tot, float(self.N[s][gone].sum()))
+        return (out, det) if detail else out
+
+    def bridge_check(self, w, ex, form, incs=None):
+        """The bridge on the hours the export does hold: each service's over-threshold requests in the export's
+        incident-free hours rebuilt from the span metrics under `form`, over the same requests counted span by span.
+        {service: (rebuilt, counted)}."""
+        HS, HB = self.hist()
+        cut = self.held_from()
+        quiet = self.quiet_hours(incs)
+        hrs = np.arange(H)
+        sel = (hrs >= cut) & quiet
+        _, det = self.hist_fill(w, ex, form, incs, detail=True)
+        out = {}
+        for s in K.SVC:
+            O, C = self.hourly(s, w, ex)
+            est = sum(float((d["wt"] * d["slow"])[sel].sum()) for (ss, n), d in det.items() if ss == s)
+            out[s] = (est, float(O[sel].sum()))
+        return out
+
     # ------------------------------------------------------------------ the hours the store no longer held
     def held_from(self):
         """The first December hour the export holds: the store deletes whole hours, so it is the hour of the earliest
@@ -408,11 +581,12 @@ class Golden:
         from scipy.special import expit
         x = np.log(self.N[s] + 1)
         xf, of, cf = x[fit], O[fit], C[fit]
-        if form == "bands":
-            edges = np.quantile(xf, np.linspace(0, 1, 11))
-            band = np.clip(np.searchsorted(edges, xf, side="right") - 1, 0, 9)
-            share = np.array([of[band == k].sum() / max(cf[band == k].sum(), 1e-9) for k in range(10)])
-            return lambda n: share[np.clip(np.searchsorted(edges, np.log(n + 1), side="right") - 1, 0, 9)]
+        if form.startswith("bands") and form != "bands20":
+            nb = 10 if form == "bands" else int(form[5:])
+            edges = np.quantile(xf, np.linspace(0, 1, nb + 1))
+            band = np.clip(np.searchsorted(edges, xf, side="right") - 1, 0, nb - 1)
+            share = np.array([of[band == k].sum() / max(cf[band == k].sum(), 1e-9) for k in range(nb)])
+            return lambda n: share[np.clip(np.searchsorted(edges, np.log(n + 1), side="right") - 1, 0, nb - 1)]
         if form == "isotonic":
             o_ = np.argsort(xf)
             xs, y, wt = xf[o_], (of / np.maximum(cf, 1e-9))[o_], cf[o_]
@@ -440,25 +614,6 @@ class Golden:
         b = self._logit_fit(X, of, cf)
         return lambda n: expit(np.column_stack([np.ones(len(np.atleast_1d(n))), np.log(np.atleast_1d(n) + 1)] +
                                                ([np.log(np.atleast_1d(n) + 1) ** 2] if form == "logit2" else [])) @ b)
-
-    def band_terms(self, s, w, ex, incs=None):
-        """For the ten-band fill: each December hour's band share p and its weight A (the expired requests in its band
-        over the band's weighted requests in the fitted hours), and the mask of fitted hours."""
-        cut = self.held_from()
-        quiet = self.quiet_hours(incs)
-        hrs = np.arange(H)
-        O, C = self.hourly(s, w, ex)
-        fit = (hrs >= cut) & quiet & (C > 0)
-        x = np.log(self.N[s] + 1)
-        edges = np.quantile(x[fit], np.linspace(0, 1, 11))
-        band = np.clip(np.searchsorted(edges, x, side="right") - 1, 0, 9)
-        gone = hrs < cut
-        Cb = np.array([C[fit & (band == k)].sum() for k in range(10)])
-        Ob = np.array([O[fit & (band == k)].sum() for k in range(10)])
-        Mb = np.array([self.N[s][gone & (band == k)].sum() for k in range(10)])
-        pb = Ob / np.maximum(Cb, 1e-9)
-        Ab = Mb / np.maximum(Cb, 1e-9)
-        return pb[band], Ab[band], fit, float(self.N[s][gone].sum())
 
     def fill(self, w, ex, form="bands", incs=None):
         """The expired hours, each service's requests there counted at the share its load model gives: {service:
@@ -504,22 +659,6 @@ class Golden:
         self._gone_idx = hrs
         return self.load_model(s, O, C, fit, method)(self.N[s])
 
-    def backtest(self, method, w, ex, incs=None, split_day=17):
-        """The fill earning its place out of sample: fitted on the export's incident-free hours from 18 December, each
-        service's over-threshold requests predicted for its incident-free hours from the export's start to 17 December
-        (held, so observed): {service: (predicted, observed)}."""
-        cut = self.held_from()
-        quiet = self.quiet_hours(incs)
-        hrs = np.arange(H)
-        out = {}
-        for s in K.SVC:
-            O, C = self.hourly(s, w, ex)
-            fit = (hrs >= split_day * 24) & quiet & (C > 0)
-            test = (hrs >= cut) & (hrs < split_day * 24) & quiet & (C > 0)
-            p = self.share_by(method, s, O, C, fit)
-            out[s] = (float((C[test] * p[test]).sum()), float(O[test].sum()))
-        return out
-
     def slis(self, w, ex, ht=False, fill=None):
         """Every service's December SLI from the kept spans; with `fill`, the expired hours' requests counted at their
         load model's share as well (otherwise the SLI covers only the hours the export holds)."""
@@ -541,39 +680,56 @@ class Golden:
                       "kept": int(keep.sum()), "kept_slow": int((slow & keep).sum())}
         return out
 
-    def interval(self, s, w, ex, sli, fill=False, incs=None):
-        """The linearised 90 per cent interval of a ratio estimated from a stratified sample of whole traces: strata
-        are the root service's hours, units the traces the store kept there (every one, touching the service or not).
-        With `fill`, the expired hours counted at their load band's share: a kept span in a fitted hour also moves
-        that band's share, and so the expired requests counted at it."""
+    def _keep(self, s, ex):
         m = self.dec & (self.svc == s)
         keep = m.copy()
         for a_, b_ in ex[s]:
             keep &= ~((self.t0 >= a_) & (self.t0 < b_))
+        return keep
+
+    def interval(self, s, w, ex, sli, det=None, incs=None):
+        """The linearised 90 per cent interval of a ratio estimated from a stratified sample of whole traces: strata
+        are the root service's hours, units the traces the store kept there (every one, touching the service or not).
+        With `det` (hist_fill's detail), the hours before the export are in the ratio as well: their spans are
+        counted in the span metrics, a sample of the same design with no trace to group them, so each series' hour
+        adds its own sampling variance, and a kept span in the threshold's bucket in a held hour also moves the share
+        that bucket was split at."""
+        keep = self._keep(s, ex)
         R = sli / 100.0
         slow = (self.ms > self.thr[s]).astype(float)
-        if fill:
-            ph, Ah, fit, M = self.band_terms(s, w, ex, incs)
-        else:
-            ph, Ah, fit, M = np.zeros(H), np.zeros(H), np.zeros(H, dtype=bool), 0.0
-        z = {}
-        for i in np.nonzero(keep)[0]:
-            h = self.h[i]
-            extra = Ah[h] * (slow[i] - ph[h]) if fit[h] else 0.0
-            z[self.tr[i]] = z.get(self.tr[i], 0.0) + (slow[i] - R) + extra
+        cut = self.held_from()
+        gone = np.arange(H) < cut
+        M = float(self.N[s][gone].sum()) if det is not None else 0.0
         X = float(w[keep].sum()) + M
-        V = 0.0
-        orphan = 0.0
-        for e in K.EDGE:
-            for h in range(H):
-                k = int(self.Kroot[e][h])
-                if k < 2:
+        extra = np.zeros(len(self.t0))
+        Vu = 0.0
+        if det is not None:
+            for (ss, name), d in det.items():
+                if ss != s:
                     continue
-        # per stratum sums over the kept roots
+                wt, cnt, mid, phi = d["wt"][gone], d["cnt"][gone], d["mid"][gone], d["phi"][gone]
+                above = d["slow"][gone] - phi * mid
+                ok = cnt > 0
+                m1 = np.where(ok, (above + phi * mid) / np.maximum(cnt, 1), 0.0)
+                m2 = np.where(ok, (above + phi ** 2 * mid) / np.maximum(cnt, 1), 0.0)
+                f = np.where(wt > 0, 1.0 / np.maximum(wt, 1e-9), 1.0)
+                Vu += float((wt ** 2 * cnt * (m2 - m1 ** 2) * (1 - np.minimum(f, 1.0)) *
+                             np.where(cnt > 1, cnt / np.maximum(cnt - 1, 1), 1.0)).sum())
+                t = d["terms"]
+                if t is not None and t["kind"] == "groups":
+                    T = np.array([float((d["wt"] * d["mid"])[gone & (t["grp_h"] == k)].sum())
+                                  for k in range(len(t["share"]))])
+                    for i, g, y in zip(t["idx"], t["g"], t["y"]):
+                        if t["W"][g] > 0:
+                            extra[i] += T[g] * (y - t["share"][g]) / t["W"][g]
+        z = {}
+        for i in np.nonzero(keep | (extra != 0))[0]:
+            v = ((slow[i] - R) if keep[i] else 0.0) + extra[i]
+            z[self.tr[i]] = z.get(self.tr[i], 0.0) + v
+        V = 0.0
         strata = {}
         for i in np.nonzero(self.root & (self.h >= 0) & (self.h < H))[0]:
-            key = (self.svc[i], int(self.h[i]))
-            strata.setdefault(key, []).append(z.get(self.tr[i], 0.0))
+            strata.setdefault((self.svc[i], int(self.h[i])), []).append(z.get(self.tr[i], 0.0))
         for (e, h), zs in strata.items():
             k = len(zs)
             if k < 2:
@@ -582,83 +738,95 @@ class Golden:
             u = wh * np.array(zs) / X
             f = min(1.0, k / max(self.N[e][h], 1))
             V += (1 - f) * k / (k - 1) * float(((u - u.mean()) ** 2).sum())
-        # spans whose root is not in the export (traces begun in November): their own stratum, with-replacement
+        # spans whose root is not in the export (traces begun in the hour before it): their own stratum
+        orphan = 0.0
         orphans = [i for i in np.nonzero(keep)[0] if self.tr[i] not in self.root_of]
         if len(orphans) > 1:
-            u = np.array([w[i] * ((slow[i] - R) + (Ah[self.h[i]] * (slow[i] - ph[self.h[i]]) if fit[self.h[i]] else 0.0))
-                          / X for i in orphans])
+            u = np.array([w[i] * ((slow[i] - R) + extra[i]) / X for i in orphans])
             orphan = len(u) / (len(u) - 1) * float(((u - u.mean()) ** 2).sum())
-        se = 100 * np.sqrt(V + orphan)
+        se = 100 * np.sqrt(V + orphan + Vu / X ** 2)
         return sli - Z90 * se, sli + Z90 * se, se
 
-    def interval_boot_fill(self, s, w, ex, reps=300, seed=7, incs=None):
-        """The rival interval with the fill: whole traces resampled within each root service's hour, each one's spans
-        of the service summed into their hours, the ten-band fill refitted and the SLI re-estimated."""
+    def interval_boot(self, s, w, ex, det=None, form=None, incs=None, reps=400, seed=7):
+        """The rival interval: whole traces resampled within each root service's hour and the ratio re-estimated; with
+        `det`, the span metrics' counts for the hours before the export redrawn series by series and hour by hour, and
+        the threshold bucket's split refitted on each resample."""
         rng = np.random.default_rng(seed)
+        form = form or FILL
+        keep = self._keep(s, ex)
+        slow = (self.ms > self.thr[s]).astype(float)
         cut = self.held_from()
-        quiet = self.quiet_hours(incs)
-        hrs = np.arange(H)
-        m = self.dec & (self.svc == s)
-        keep = m.copy()
-        for a_, b_ in ex[s]:
-            keep &= ~((self.t0 >= a_) & (self.t0 < b_))
-        slow = (self.ms > self.thr[s]).astype(float)
-        idx = np.nonzero(keep)[0]
-        unit = {}                                          # (trace) -> list of span indices
-        for i in idx:
-            unit.setdefault(self.tr[i], []).append(i)
-        groups = {}
-        for t, lst in unit.items():
-            key = self.root_of.get(t, ("__orphan__", int(self.h[lst[0]])))
-            groups.setdefault(key, []).append(lst)
-        x = np.log(self.N[s] + 1)
-        O0, C0 = self.hourly(s, w, ex)
-        fit0 = (hrs >= cut) & quiet & (C0 > 0)
-        edges = np.quantile(x[fit0], np.linspace(0, 1, 11))
-        band = np.clip(np.searchsorted(edges, x, side="right") - 1, 0, 9)
-        gone = hrs < cut
-        Mb = np.array([self.N[s][gone & (band == k)].sum() for k in range(10)])
-        out = []
-        for _ in range(reps):
-            O = np.zeros(H); C = np.zeros(H)
-            for key, lsts in groups.items():
-                k = len(lsts)
-                pick = rng.integers(0, k, k) if (k >= 2 and key[0] != "__orphan__") else np.arange(k)
-                for j in pick:
-                    for i in lsts[j]:
-                        O[self.h[i]] += w[i] * slow[i]; C[self.h[i]] += w[i]
-            fit = fit0 & (C > 0)
-            pb = np.array([O[fit & (band == kk)].sum() / max(C[fit & (band == kk)].sum(), 1e-9) for kk in range(10)])
-            out.append(100 * (O[~gone].sum() + (Mb * pb).sum()) / (C[~gone].sum() + Mb.sum()))
-        return float(np.percentile(out, 5)), float(np.percentile(out, 95))
-
-    def interval_boot(self, s, w, ex, reps=300, seed=7):
-        """The rival interval: whole traces resampled within each root service's hour, the ratio re-estimated."""
-        rng = np.random.default_rng(seed)
-        m = self.dec & (self.svc == s)
-        keep = m.copy()
-        for a_, b_ in ex[s]:
-            keep &= ~((self.t0 >= a_) & (self.t0 < b_))
-        slow = (self.ms > self.thr[s]).astype(float)
-        yx = {}
+        gone = np.arange(H) < cut
+        M = float(self.N[s][gone].sum()) if det is not None else 0.0
+        series = [(n, d) for (ss, n), d in sorted(det.items()) if ss == s] if det is not None else []
+        split = [(n, d) for n, d in series if d["terms"] is not None and d["terms"]["kind"] == "groups"]
+        # one feature row per trace: weighted over-threshold and weighted spans of the service, then for every split
+        # series and group the weighted bucket spans over the threshold and the weighted bucket spans
+        col = {}
+        ncol = 2
+        for n, d in split:
+            for k in range(len(d["terms"]["share"])):
+                col[(n, k)] = ncol
+                ncol += 2
+        feat = {}
         for i in np.nonzero(keep)[0]:
-            y, x = yx.get(self.tr[i], (0.0, 0.0))
-            yx[self.tr[i]] = (y + w[i] * slow[i], x + w[i])
+            v = feat.setdefault(self.tr[i], np.zeros(ncol))
+            v[0] += w[i] * slow[i]
+            v[1] += w[i]
+        for n, d in split:
+            t = d["terms"]
+            for i, g, y, ww in zip(t["idx"], t["g"], t["y"], t["ww"]):
+                v = feat.setdefault(self.tr[i], np.zeros(ncol))
+                c = col[(n, g)]
+                v[c] += ww * y
+                v[c + 1] += ww
         strata = {}
         for i in np.nonzero(self.root & (self.h >= 0) & (self.h < H))[0]:
-            strata.setdefault((self.svc[i], int(self.h[i])), []).append(yx.get(self.tr[i], (0.0, 0.0)))
-        orphan = [(w[i] * slow[i], w[i]) for i in np.nonzero(keep)[0] if self.tr[i] not in self.root_of]
-        arrs = [np.array(v) for v in strata.values() if len(v) >= 2]
-        fixed = [np.array(v) for v in strata.values() if len(v) < 2]
-        base = sum(a.sum(axis=0) for a in fixed) if fixed else np.zeros(2)
-        if orphan:
-            base = base + np.array(orphan).sum(axis=0)
+            strata.setdefault((self.svc[i], int(self.h[i])), []).append(self.tr[i])
+        in_root = set(self.root_of)
+        rows, off, size, fixed = [], [], [], np.zeros(ncol)
+        zero = np.zeros(ncol)
+        for key in sorted(strata):
+            trs = strata[key]
+            if len(trs) < 2:
+                for t_ in trs:
+                    fixed += feat.get(t_, zero)
+                continue
+            o = len(rows)
+            for t_ in trs:
+                rows.append(feat.get(t_, zero))
+                off.append(o)
+                size.append(len(trs))
+        for t_, v in feat.items():
+            if t_ not in in_root:
+                fixed += v
+        rows = np.array(rows) if rows else np.zeros((0, ncol))
+        off, size = np.array(off), np.array(size)
         out = []
         for _ in range(reps):
-            tot = base.copy()
-            for a in arrs:
-                tot = tot + a[rng.integers(0, len(a), len(a))].sum(axis=0)
-            out.append(100 * tot[0] / tot[1])
+            tot = fixed.copy()
+            if len(rows):
+                tot += rows[off + np.floor(rng.random(len(off)) * size).astype(int)].sum(axis=0)
+            over, counted = tot[0], tot[1] + M
+            for n, d in series:
+                wt, cnt, mid = d["wt"][gone], d["cnt"][gone].astype(int), d["mid"][gone]
+                phi0 = d["phi"][gone]
+                above = np.clip(np.rint(d["slow"][gone] - phi0 * mid), 0, None).astype(int)
+                midc = np.clip(np.rint(mid), 0, None).astype(int)
+                pa = np.where(cnt > 0, above / np.maximum(cnt, 1), 0.0)
+                a_star = rng.binomial(cnt, np.clip(pa, 0, 1))
+                rest = cnt - a_star
+                pm = np.where(cnt - above > 0, midc / np.maximum(cnt - above, 1), 0.0)
+                m_star = rng.binomial(rest, np.clip(pm, 0, 1))
+                t = d["terms"]
+                if t is not None and t["kind"] == "groups":
+                    sh = np.array([tot[col[(n, k)]] / tot[col[(n, k)] + 1] if tot[col[(n, k)] + 1] > 0
+                                   else t["share"][k] for k in range(len(t["share"]))])
+                    phi = sh[t["grp_h"]][gone]
+                else:
+                    phi = phi0
+                over += float((wt * (a_star + phi * m_star)).sum())
+            out.append(100 * over / counted)
         return float(np.percentile(out, 5)), float(np.percentile(out, 95))
 
     def binomial_interval(self, s, ex, sli):
@@ -681,54 +849,82 @@ class Golden:
         return {"over": over, "order": order, "share": share, "together": together, "beyond": beyond}
 
     # ------------------------------------------------------------------ everything
+    def load_fill(self, w, ex, method, incs=None):
+        """A fill that reads no span metrics: the hours before the export counted at a share modelled from the held
+        hours, by a load form of load_model or a match of share_by. The rivals the span metrics rule out."""
+        cut, quiet, hrs = self.held_from(), self.quiet_hours(incs), np.arange(H)
+        out = {}
+        for s in K.SVC:
+            O, C = self.hourly(s, w, ex)
+            fit = (hrs >= cut) & quiet & (C > 0)
+            p_ = self.share_by(method, s, O, C, fit)
+            n = self.N[s][hrs < cut]
+            out[s] = (float((n * p_[hrs < cut]).sum()), float(n.sum()))
+        return out
+
+    def route(self, lost=(), incs=None, curves=None, form=None, cache=None):
+        """Every SLI and the programme with the judgments in `lost` made the hurried way and the rest as the golden
+        makes them: "S1" each service's own hourly count for the trace roots' keep shares, "S2" each December incident
+        on the service furthest over its load curve across the whole incident, "S3" December read from the hours the
+        export holds."""
+        cache = cache if cache is not None else {}
+        incs = incs or self.december()
+        curves = curves or self.load_curves(incs)
+        how = "own" if "S1" in lost else "root"
+        if how not in cache:
+            cache[how] = self.weights(how)
+        w = cache[how]
+        akey = "win" if "S2" in lost else "att"
+        if akey not in cache:
+            cache[akey] = self.window_excess(incs, curves) if akey == "win" else self.attribute(incs, curves)[0]
+        att = cache[akey]
+        ex = self.excluded(att, incs)
+        F = None if "S3" in lost else self.hist_fill(w, ex, form, incs, how=how)
+        S = self.slis(w, ex, fill=F)
+        return {"attribution": att, "S": S, "P": self.programme(S), "w": w, "ex": ex, "fill": F}
+
     def run(self):
         incs = self.december()
         curves = self.load_curves(incs)
         att, onset = self.attribute(incs, curves)
-        w_root, w_own, w_unw = self.weights("root"), self.weights("own"), self.weights("unw")
+        w_root, w_unw = self.weights("root"), self.weights("unw")
         ex = self.excluded(att, incs)
-        F = self.fill(w_root, ex, FILL, incs)
+        F, det = self.hist_fill(w_root, ex, FILL, incs, detail=True)
         S = self.slis(w_root, ex, fill=F)
         P = self.programme(S)
-        ci = {s: self.interval(s, w_root, ex, S[s]["sli"], fill=True, incs=incs) for s in K.SVC}
+        ci = {s: self.interval(s, w_root, ex, S[s]["sli"], det=det, incs=incs) for s in K.SVC}
+        ci_boot = {s: self.interval_boot(s, w_root, ex, det=det, incs=incs) for s in P["over"]}
         mins = self.minutes()
-        # the careful but hurried pass, calibrated to the run record: each service's own spans on its own hourly count,
-        # every December cause dated right, December read from the hours the export holds
-        S_c = self.slis(w_own, ex)
-        P_c = self.programme(S_c)
-        ci_c = {s: self.binomial_interval(s, ex, S_c[s]["sli"]) for s in K.SVC}
-        # the quick pass: the kept spans unweighted, the first-named service at fault, the held hours
+        # the lattice: every combination of the three judgments made the hurried way
+        cache = {"root": w_root, "att": att}
+        lattice = {}
+        for key in ("S1", "S2", "S3", "S1+S2", "S1+S3", "S2+S3", "S1+S2+S3"):
+            r_ = self.route(tuple(key.split("+")), incs, curves, cache=cache)
+            r_["ci"] = {s: self.binomial_interval(s, r_["ex"], r_["S"][s]["sli"]) for s in K.SVC}
+            lattice[key] = r_
+        win = cache["win"]
+        # the quick pass: the kept spans unweighted, the first-named service at fault, the export's hours
         first = {x["id"]: x["named"][0][0] for x in incs}
         ex_q = self.excluded(first, incs)
         S_q = self.slis(w_unw, ex_q)
-        P_q = self.programme(S_q)
-        ci_q = {s: self.binomial_interval(s, ex_q, S_q[s]["sli"]) for s in K.SVC}
-        mins_q = self.minutes(backdate=True, tool_end=True)
-        # the routes a hint opens from the careful pass, and the whole-window reading of the causes
-        S_w = self.slis(w_root, ex)                                            # the trace roots' weights, held hours
-        F_p = self.fill(w_own, ex, FILL, incs)
-        S_p = self.slis(w_own, ex, fill=F_p)                                   # the expired hours filled, own counts
-        win = self.window_excess(incs, curves)
-        ex_w = self.excluded(win, incs)
-        S_x = self.slis(w_root, ex_w, fill=self.fill(w_root, ex_w, FILL, incs))  # root weights, whole-window causes
-        ci_hc = {s: self.interval(s, w_own, ex, S_c[s]["sli"]) for s in K.SVC}
-        ci_boot = {s: self.interval_boot_fill(s, w_root, ex, incs=incs) for s in P["over"]}
-        bt = {m: self.backtest(m, w_root, ex, incs) for m in (FILL, "weekday-hour")}
-        F_wh = {}
-        cut, quiet, hrs = self.held_from(), self.quiet_hours(incs), np.arange(H)
-        for s in K.SVC:
-            O, C = self.hourly(s, w_root, ex)
-            fit = (hrs >= cut) & quiet & (C > 0)
-            p = self.share_by("weekday-hour", s, O, C, fit)
-            n = self.N[s][hrs < cut]
-            F_wh[s] = (float((n * p[hrs < cut]).sum()), float(n.sum()))
-        S_wh = self.slis(w_root, ex, fill=F_wh)
-        return {"incidents": incs, "attribution": att, "onset": onset, "S": S, "P": P, "ci": ci, "minutes": mins,
-                "fill": F, "held_from": self.held_from(),
-                "careful": {"attribution": att, "S": S_c, "P": P_c, "ci": ci_c, "minutes": mins},
-                "quick": {"attribution": first, "S": S_q, "P": P_q, "ci": ci_q, "minutes": mins_q},
-                "weights_only": {"attribution": att, "S": S_w, "P": self.programme(S_w)},
-                "periods_only": {"attribution": att, "S": S_p, "P": self.programme(S_p)},
-                "window": {"attribution": win, "S": S_x, "P": self.programme(S_x)},
-                "weekday_hour": {"attribution": att, "S": S_wh, "P": self.programme(S_wh)}, "backtest": bt,
-                "hint_ci": ci_hc, "ci_boot": ci_boot, "thr": self.thr, "bud": self.bud}
+        quick = {"attribution": first, "S": S_q, "P": self.programme(S_q),
+                 "ci": {s: self.binomial_interval(s, ex_q, S_q[s]["sli"]) for s in K.SVC},
+                 "minutes": self.minutes(backdate=True, tool_end=True)}
+        # the golden family: every split of the threshold bucket the held spans support, weighted and not
+        family = {}
+        for f in SPLIT_FAMILY:
+            for wtd in (True, False):
+                Ff = self.hist_fill(w_root, ex, f, incs, weighted=wtd)
+                family["%s%s" % (f, "" if wtd else " unweighted")] = self.slis(w_root, ex, fill=Ff)
+        # the bridges a tool would apply without the held spans, and the bucket's two bounds
+        naive = {f: self.slis(w_root, ex, fill=self.hist_fill(w_root, ex, f, incs)) for f in NAIVE_BRIDGES}
+        # fills that read no span metrics (the hours before the export modelled from the held hours)
+        loadfill = {}
+        for m_ in ["bands%d" % k for k in (2, 3, 4, 5, 6, 8, 10, 15, 20, 30)] + \
+                ["isotonic", "logit2", "weekday-hour", "hour", "daytype-hour", "flat"]:
+            loadfill[m_] = self.slis(w_root, ex, fill=self.load_fill(w_root, ex, m_, incs))
+        checks_ = {f: self.bridge_check(w_root, ex, f, incs) for f in (FILL, "pooled", "linear", "loglinear")}
+        return {"incidents": incs, "attribution": att, "onset": onset, "S": S, "P": P, "ci": ci, "ci_boot": ci_boot,
+                "minutes": mins, "fill": F, "held_from": self.held_from(), "lattice": lattice, "quick": quick,
+                "window": win, "family": family, "naive": naive, "loadfill": loadfill, "bridge_check": checks_,
+                "bucket": {s: self.bucket_of(s) for s in K.SVC}, "thr": self.thr, "bud": self.bud}

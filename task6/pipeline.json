@@ -1,35 +1,34 @@
 {
  "task": "task6",
- "status": "RETURNED",
+ "status": "BUILD",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-25",
  "stump": "",
  "architecture": 7,
- "loops": 1,
+ "loops": 2,
  "precut": {
   "exit": 0,
-  "date": "2026-11-09",
-  "note": "85 checks, 0 FAIL, 2 WARN; depth level 5 on the run-calibrated pass"
+  "date": "2026-11-25",
+  "note": "118 checks, 0 FAIL, 4 WARN (no generator/core.py: the card predates the core rule; a near chain with task7; the exporter's re-sent batch as routine texture; R2 upstream of four results)"
  },
  "leak": {
-  "leak_py": "REVIEW (the same lines, ruled harmless)",
-  "reader": "clean on the levelled-up cut: no hand-over, ranking, helping or answer file, no one thing; the empty Parquet writer name fixed"
+  "leak_py": "REVIEW (the standard's own budgets, section numbers and service names; ruled harmless in the note)",
+  "reader": "2026-11-25, Sonnet at medium on the repaired cut: no hand-over, ranking, helping or answer file, no one thing; two realism notes checked and not defects"
  },
  "duplicate_check": {
-  "heart": "BLOCK on ban.pairing against task2 v5 only, accepted by the author for this re-ship on 2026-11-09: the pairing is the returned platform task's own subdomain and analysis type, which a re-ship cannot change",
+  "heart": "WARN (no BLOCK) on the updated card: a near chain with task7 v12, the forum, the written document",
   "surface": "clean",
-  "nearest": "mark474 v2 lineage"
+  "nearest": "task7 lineage, mark120 (differentiation filed)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "SEND_BACK (Gate H)",
-  "report": "task6/determinism_check_report_pass5.md",
-  "date": "2026-11-09",
-  "gate_h": "pass 5, on the levelled-up cut before the onset rule was calibrated: the weighting read as found on sight (internal services never root a trace), INC-1611 and INC-1619 read as one flip applied twice",
-  "earlier": "passes 2 to 4 on the cut before the level-up: DETERMINISTIC, APPROVE"
+  "verdict": "pending",
+  "disposition": "pending",
+  "report": "task6/determinism_check_report_pass6.md",
+  "date": "2026-11-25",
+  "mode": "determinism (Holistic Audit v4 Step 0, Parts A and B)"
  },
  "returned": [
   {
@@ -71,7 +70,7 @@
    "commit": ""
   }
  ],
- "resume": "/draw task6 repair: the untraced-hours result redesigned so the record holds the deciding configuration; then /build task6 from 3",
+ "resume": "collect the determinism judge's pass 6 (determinism mode), fix every finding in the generator in one pass, re-run gates.py, then READY and RESHIPPED",
  "approved": null,
  "approval_source": "the author's report of 2026-11-11 (approved on review; architecture 7 levelled up, the cut on file; the run scores are not in the repo), already filed in corpus/approved.json and the run record; confirmed by the author on 2026-11-13",
  "delivered": null,
@@ -88,7 +87,7 @@
  "portal_status_date": "2026-11-22",
  "seed": "analytical_tasks/03_descriptive_distribution/DA18_quick-commerce-pilot-service-hours-population.md (header and Situation only)",
  "seed_world": 273,
- "zip_md5": "b8177b9bc9e3845148aebe0fc3915220",
+ "zip_md5": "e6a97cf82c049fe58c7a3c96fae6467e",
  "zip_sha256_16": "23e1bf1e8fdbf1af",
  "precut_exit": 1,
  "shipped": "2026-11-07",
@@ -101,8 +100,8 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark at the author's word: architecture 5 landed on the Mark portal and architecture 6 shipped there on 2026-11-07, pending; carried on here for the Sulfur bar"
  },
- "golden_zip_md5": "4f9f8968dee3830a9bd6514befee8b06",
- "paper_pair": 44.3,
+ "golden_zip_md5": "b34808ce0c83f4226ce9740f8235296e",
+ "paper_pair": 24.8,
  "runs": {
   "run1": null,
   "run2": null,
@@ -137,21 +136,31 @@
    "runs/arch6_round1_triage.md"
   ]
  },
- "gates_at_reship": "gates.py task6 --full, 2026-11-09 (hardened): checks (incl. the backtest and placebo-calibrated detectors), verify, rebuild byte-identical, precut, effort, figures, containers, surface PASS; voice and leak WARN (ruled); heart BLOCK on ban.pairing only (accepted)",
+ "gates_at_reship": "gates.py task6, 2026-11-25: precut, effort, voice, leak, figures, stump, containers, heart, surface: 0 FAIL, 4 WARN (precut's four, the written document, leak.py REVIEW ruled, heart's three WARNs); generator checks all passed, verify PASS, rebuild byte-identical",
  "doctrine": "throughout",
- "chain": "R1 incident minutes by half; R2 the December incidents' owners dated by own handling against load; R3 every SLI with each span at its trace root's keep share and the hours the store had dropped counted at their load; R4 design-based intervals carrying the fill; R5 the five over budget; R6 the order, shares, together and beyond",
+ "chain": "R1 incident minutes by half; R2 the December incidents' owners dated by own handling against load; R3 the first to start and payments' SLI (each span at its trace root's keep share); R4 places' and booking's December SLI (the 274 hours before the export counted from the store's span metrics); R5 every SLI; R6 design-based intervals; R7 the five over budget; R8 the order, shares and requests beyond budget",
  "effort": {
-  "quick": 7.0,
-  "careful": 44.3,
+  "quick": 11.0,
+  "careful": 24.8,
   "thorough": 100.0,
-  "calibration": "the careful pass is the run on file: own hourly counts, every cause dated right, the export's hours read as December",
-  "largest_hint": "each kept span counts at its trace root's hourly keep share: rescues 0 of 6",
-  "routes": "5 distinct wrong lists over 5 shortcuts"
+  "calibration": "the careful pass is the reflex route: own hourly counts, each incident on the service furthest over its load curve, the export's hours read as December",
+  "largest_hint": "the trace export begins on 12 December and the hours before it still count: rescues 1 of 8",
+  "one_stump_lost": 37,
+  "routes": "6 distinct wrong lists over 10 shortcut routes; level 5 on the factorial (three necessary judgments, none sufficient)"
  },
  "level_up": {
   "date": "2026-11-09",
   "backup": "~/Documents/task6_arch7_backup_2026-11-09.zip",
   "why": "the shipped cut measured level 3 against the strong run (the weighting sentence rescued 3 to 4 of 6 on the run-calibrated pass)",
   "added": "the store's 31-day retention: the export begins at 12 December 10:00 and the dropped hours are counted at their load; 60 kept traces an hour; the getaway push moved to 16 December; a New Year sale on the evening of 28 December"
+ },
+ "prompt_md5": "872f5a970163e53c0a800ca2255d7e64",
+ "submission_md5": "9d9c338ffcc0682b046943f4ec7482cc",
+ "freeze": {
+  "date": "2026-11-25",
+  "snapshot": "taken before the first edit (18 main-call figures, 40 figures.json keys)",
+  "determinism_mode": "FAIL, 120 frozen items moved",
+  "rubric_mode": "FAIL, 27 frozen items moved",
+  "note": "expected and not cleared: a result was redesigned after a determinism return, three thresholds and journey-search's level moved and the early hours are measured from a new record; no mode's contract matches, the snapshot was not retaken"
  }
 }

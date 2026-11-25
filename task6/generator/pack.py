@@ -102,10 +102,39 @@ class PodPool:
         return int(self.n[svc].max())
 
 
-def span_table(w):
+def span_names(w):
+    """The span name of every span the store kept: an edge request's route read off the calls it made, an internal
+    call's method and path, a client span's callee. One pass over the world's spans in their own order, on its own
+    stream, so the span export and the span metrics name every span alike."""
+    r = np.random.default_rng(K.SEED + 406)
+    sp = w.sp
+    calls_of = {}
+    for i in np.nonzero(sp["kind"] == "CLIENT")[0]:
+        calls_of.setdefault(int(sp["parent"][i]), set()).add(str(sp["op"][i]).split(":")[1])
+    names = []
+    for i in range(len(sp["t0"])):
+        svc, op, kind = str(sp["svc"][i]), str(sp["op"][i]), str(sp["kind"][i])
+        if kind == "SERVER" and op == "own":
+            names.append(edge_name(svc, calls_of.get(int(sp["sid"][i]), set()), r))
+        elif kind == "SERVER":
+            meth, path = INT_OPS[(svc, op)]
+            names.append(meth + " " + path)
+        else:
+            callee, cop = op.split(":")
+            meth, path = INT_OPS[(callee, cop)]
+            names.append("%s %s %s" % (meth, K.TRACE_NAME[callee], path))
+    return names
+
+
+def _dur_ns(ms):
+    return max(1000, int(round(ms * 1e6)))
+
+
+def span_table(w, names=None):
     """The kept spans that started in December (UTC) and the exporter's re-sent batches, in export order."""
     r = np.random.default_rng(K.SEED + 404)
     sp = w.sp
+    names = names or span_names(w)
     keep = (sp["t0"] >= K.STORE_FROM_H * 3600) & (sp["t0"] < K.REVIEW_HOURS * 3600)
     idx = np.nonzero(keep)[0]
     pool = PodPool(w)
@@ -127,24 +156,14 @@ def span_table(w):
                              "host_name")}
     base_ns = _ns(DEC0_UTC)
     pod_of = {}
-    calls_of = {}
-    for i in np.nonzero(sp["kind"] == "CLIENT")[0]:
-        calls_of.setdefault(int(sp["parent"][i]), set()).add(str(sp["op"][i]).split(":")[1])
     for i in idx:
         svc, op, kind, t0, ms, code = (str(sp["svc"][i]), str(sp["op"][i]), str(sp["kind"][i]), float(sp["t0"][i]),
                                        float(sp["ms"][i]), int(sp["code"][i]))
         tr = int(sp["trace"][i])
+        name = names[i]
         if kind == "SERVER" and op == "own":
-            name = edge_name(svc, calls_of.get(int(sp["sid"][i]), set()), r)
             if code == 200 and name.startswith("GET") and ms < K.THRESHOLD[svc] / 3 and r.random() < 0.004:
                 code = 404
-        elif kind == "SERVER":
-            meth, path = INT_OPS[(svc, op)]
-            name = meth + " " + path
-        else:
-            callee, cop = op.split(":")
-            meth, path = INT_OPS[(callee, cop)]
-            name = "%s %s %s" % (meth, K.TRACE_NAME[callee], path)
         # a trace's spans in one service come from one pod
         pk = (tr, svc)
         if pk not in pod_of:
@@ -158,7 +177,7 @@ def span_table(w):
         cols["span_kind"].append("SPAN_KIND_" + kind)
         s0 = base_ns + int(round(t0 * 1e9))
         cols["start_time_unix_nano"].append(s0)
-        cols["end_time_unix_nano"].append(s0 + max(1000, int(round(ms * 1e6))))
+        cols["end_time_unix_nano"].append(s0 + _dur_ns(ms))
         cols["status_code"].append("STATUS_CODE_ERROR" if code >= 500 else "STATUS_CODE_UNSET")
         cols["http_status_code"].append(code)
         cols["host_name"].append(pod_of[pk])
@@ -174,8 +193,46 @@ def span_table(w):
     return {k: [v[i] for i in out_idx] for k, v in cols.items()}
 
 
-def write_spans(path, w):
-    c = span_table(w)
+def write_span_metrics(path, w, names=None):
+    """The tracing store's span metrics for December: for every hour, service, span name, span kind and status, the
+    spans the store ingested (calls_total), the sum of their durations and their cumulative duration histogram on the
+    SDK's default boundaries. The store derives them as spans arrive and keeps them for thirteen months, so they
+    cover the whole month, the hours whose spans it has since dropped included; a series with no span in an hour has
+    no row for it."""
+    sp = w.sp
+    names = names or span_names(w)
+    bounds = K.HIST_BOUNDS[1:]
+    t0 = sp["t0"]
+    sel = np.nonzero((t0 >= 0) & (t0 < K.REVIEW_HOURS * 3600))[0]
+    agg = {}
+    for i in sel:
+        svc, kind, code = str(sp["svc"][i]), str(sp["kind"][i]), int(sp["code"][i])
+        ms = _dur_ns(float(sp["ms"][i])) / 1e6
+        key = (int(t0[i] // 3600), K.SVC.index(svc), names[i], kind,
+               "STATUS_CODE_ERROR" if code >= 500 else "STATUS_CODE_UNSET")
+        a = agg.get(key)
+        if a is None:
+            a = agg[key] = [0, 0.0] + [0] * len(bounds)
+        a[0] += 1
+        a[1] += ms
+        for j, b in enumerate(bounds):
+            if ms <= b:
+                a[2 + j] += 1
+    with open(path, "w", newline="") as fh:
+        wr = csv.writer(fh, lineterminator="\n")
+        wr.writerow(["time", "service_name", "span_name", "span_kind", "status_code", "calls_total",
+                     "latency_sum_ms"] + ["latency_bucket_le_%d" % b for b in bounds] + ["latency_bucket_le_inf"])
+        for key in sorted(agg):
+            h, si, name, kind, status = key
+            a = agg[key]
+            t = DEC0_UTC + dt.timedelta(hours=h)
+            wr.writerow([t.strftime("%Y-%m-%dT%H:%M:%SZ"), K.TRACE_NAME[K.SVC[si]], name, "SPAN_KIND_" + kind, status,
+                         a[0], "%.3f" % a[1]] + a[2:] + [a[0]])
+    return len(agg)
+
+
+def write_spans(path, w, names=None):
+    c = span_table(w, names)
     table = pa.table({
         "trace_id": pa.array(c["trace_id"], pa.string()),
         "span_id": pa.array(c["span_id"], pa.string()),
@@ -296,7 +353,9 @@ def write_asks(out):
 def write_pack(out, w=None):
     import docs as D
     w = w or W.World()
-    n = {"spans": write_spans(os.path.join(out, K.FILES["spans"]), w)}
+    names = span_names(w)
+    n = {"spans": write_spans(os.path.join(out, K.FILES["spans"]), w, names)}
+    n["spanmetrics"] = write_span_metrics(os.path.join(out, K.FILES["spanmetrics"]), w, names)
     n["lb_h1"], n["lb_h2"] = write_lb(out, w)
     truths = write_asks(out)
     D.write_docs(out, w)

@@ -56,12 +56,24 @@ def handling(s):
     return HANDLING.get(s, "%s own handling" % (s + "'" if s.endswith("s") else s + "'s"))
 
 
+BRIDGE_ROOM = 0.01          # an accepted range is the split family's own range and a hundredth each side
+
+
+def band_of(vals):
+    """The range a figure is accepted in: every split of the threshold bucket the held spans support, and a
+    hundredth of a point either side, to two decimals."""
+    from math import ceil, floor
+    lo, hi = min(vals) - BRIDGE_ROOM, max(vals) + BRIDGE_ROOM
+    return [floor(lo * 100 + 1e-9) / 100.0, ceil(hi * 100 - 1e-9) / 100.0]
+
+
 def figures(R):
-    S, P, Sc, Pc = R["S"], R["P"], R["careful"]["S"], R["careful"]["P"]
+    S, P = R["S"], R["P"]
+    L = R["lattice"]
     over = list(P["over"])
     import analysis as A
     import datetime as dt
-    win = R["window"]["attribution"]
+    win = R["window"]
     incs = []
     for x in R["incidents"]:
         if x["declared"] < A.DEC0:
@@ -77,8 +89,11 @@ def figures(R):
     held = dt.datetime(2026, 12, 1) + dt.timedelta(hours=R["held_from"])
     gone_req = sum(R["fill"][s][1] for s in K.EDGE)
     all_req = sum(R["S"][s]["counted"] for s in K.EDGE)
+    fam = R["family"]
+    bridged = [s for s in K.SVC if R["bucket"][s] is not None]
     F = {"over": over, "over_count": len(over),
          "sli": r1(S),
+         "sli2": {s: two(S[s]["sli"]) for s in K.SVC},
          "budget": {s: "%.1f" % R["bud"][s] for s in K.SVC},
          "threshold_ms": {s: "{:,}".format(int(R["thr"][s])) for s in K.SVC},
          "ran_over": {s: "yes" if s in over else "no" for s in K.SVC},
@@ -92,50 +107,70 @@ def figures(R):
          # where the export begins, and the share of December's edge requests in the hours before it
          "held_from": held.strftime("%-d December %H:%M"),
          "gone_days": "%d" % int((R["held_from"]) // 24),
+         "gone_hours": "%d" % int(R["held_from"]),
          "gone_pct": "%d" % whole(100 * gone_req / all_req),
-         # the careful but hurried pass, as the run record shows it: each service's own spans on its own hourly
-         # count, every cause dated right, December read from the hours the export holds
-         "careful_over": list(Pc["over"]),
-         "careful_sli": r1(Sc),
-         # the trace roots' weights over the held hours alone
-         "heldonly_sli": r1(R["weights_only"]["S"]),
-         "heldonly_over": list(R["weights_only"]["P"]["over"]),
-         # each service's own hourly count with the expired hours filled: the weighting the only change
-         "owncount_sli": r1(R["periods_only"]["S"]),
-         "owncount_over": list(R["periods_only"]["P"]["over"]),
-         # the root weights and the fill with each incident on the service furthest over its curve
-         "rootcareful_sli": r1(R["window"]["S"]),
-         "rootcareful_over": list(R["window"]["P"]["over"])}
-    # the fill out of sample: the load bands and the same weekday-and-hour match, each fitted from 18 December and
-    # predicting the export's own 12 to 17 December, the over-threshold requests predicted over those observed
-    bt = R["backtest"]
-    ratio = lambda m: sum(v[0] for v in bt[m].values()) / sum(v[1] for v in bt[m].values())
-    F["backtest_bands"] = "%.2f" % ratio(A.FILL)
-    F["backtest_weekday_hour"] = "%.2f" % ratio("weekday-hour")
-    F["weekday_hour_over"] = list(R["weekday_hour"]["P"]["over"])
+         # the services whose threshold sits inside a bucket of the span metrics, and the bucket
+         "bridged": bridged,
+         "exact": [s for s in K.SVC if s not in bridged],
+         "bucket_ms": {s: "{:,} to {:,}".format(*R["bucket"][s]) for s in bridged},
+         # the range each bridged SLI is accepted in: every split of its bucket the held spans support
+         "sli_band": {s: [two(v) for v in band_of([f[s]["sli"] for f in fam.values()])] for s in bridged},
+         # each judgment made the hurried way alone, the other two as the review makes them
+         "own_sli": r1(L["S1"]["S"]), "own_over": list(L["S1"]["P"]["over"]),
+         "window_sli": r1(L["S2"]["S"]), "window_over": list(L["S2"]["P"]["over"]),
+         "export_sli": r1(L["S3"]["S"]), "export_over": list(L["S3"]["P"]["over"]),
+         # in pairs, and all three (the careful but hurried pass)
+         "own_window_over": list(L["S1+S2"]["P"]["over"]),
+         "own_export_over": list(L["S1+S3"]["P"]["over"]),
+         "window_export_over": list(L["S2+S3"]["P"]["over"]),
+         "careful_sli": r1(L["S1+S2+S3"]["S"]), "careful_over": list(L["S1+S2+S3"]["P"]["over"]),
+         "quick_over": list(R["quick"]["P"]["over"]),
+         # the threshold bucket split by straight-line interpolation instead of the held spans' own share
+         "linear_sli": r1(R["naive"]["linear"])}
+    # the bridge on the hours the export does hold: over-threshold requests rebuilt from the span metrics over those
+    # counted span by span, with straight-line interpolation inside the bucket
+    bc = R["bridge_check"]["linear"]
+    F["linear_check"] = {s: "%.1f" % (bc[s][0] / bc[s][1]) for s in bridged}
+    # a flat December share against the span metrics, for the service whose threshold is a boundary
+    F["flat_sli"] = r1(R["loadfill"]["flat"])
     F["interval_level_pct"] = 90
+    # what the split family spans on the programme's figures: the requests beyond budget and each share
+    def beyond_of(SS):
+        return sum(SS[s]["over_requests"] - R["bud"][s] / 100 * SS[s]["counted"] for s in over)
+    def share_of(SS, s):
+        return 100 * SS[s]["over_requests"] / sum(SS[x]["over_requests"] for x in K.SVC)
+    bys = [beyond_of(f) for f in fam.values()]
+    F["beyond_band"] = ["{:,}".format(nearest(min(bys), 10000) - 10000), "{:,}".format(nearest(max(bys), 10000) + 10000)]
+    F["share_room_pts"] = 1
+    F["share_spread_pts"] = "%.1f" % max(max(share_of(f, s) for f in fam.values()) - min(share_of(f, s) for f in fam.values())
+                                         for s in over)
+    F["ci_room"] = "0.03"
+    F["sli_room"] = "0.1"
+    F["span_metrics_bounds"] = "{:,}".format(1000)
+    # the thinnest margin in the start order: the last two places' over-threshold requests
+    od = list(P["order"])
+    F["order_last_gap_pct"] = "%d" % whole(100 * (S[od[-2]]["over_requests"] / S[od[-1]]["over_requests"] - 1))
+    F["order_last_two"] = od[-2:]
     F["root_cause"] = {x["id"]: x["cause"] for x in incs}
     F["ci_cells"] = ci_cells(R["ci"], over)
     F["programme_cells"] = programme_cells(P)
     # the incidents the whole-window reading puts on a caller, and those of them that decide a verdict
     F["misread"] = [x["id"] for x in incs if x["cause"] != x["careful_cause"]]
-    F["deciding"] = [x["id"] for x in incs if x["cause"] != x["careful_cause"] and x["cause"] not in F["rootcareful_over"]]
-    # the other readings of the same spans and the lists they give, each a route a hurried review takes
+    F["deciding"] = [x["id"] for x in incs if x["cause"] != x["careful_cause"] and x["cause"] not in F["window_over"]]
+    # the other readings of the same records and the lists they give, each a route a hurried review takes
     F["routes"] = [
         {"reading": "Kept spans unweighted; each incident on the service named first; the export's hours alone",
-         "over": list(R["quick"]["P"]["over"])},
-        {"reading": "Each service's spans on its own hourly count; causes dated by when own handling rose; the "
-                    "export's hours alone", "over": list(Pc["over"])},
-        {"reading": "Each span at its trace root's keep share; causes dated; the export's hours alone",
-         "over": list(R["weights_only"]["P"]["over"])},
-        {"reading": "Each service's spans on its own hourly count; causes dated; the dropped hours counted at their "
-                    "load", "over": list(R["periods_only"]["P"]["over"])},
-        {"reading": "Each span at its trace root's keep share; causes dated; the dropped hours matched to the export's "
-                    "same weekday and hour", "over": list(R["weekday_hour"]["P"]["over"])},
+         "over": F["quick_over"]},
+        {"reading": "Each service's own hourly count; each incident on the service furthest over its load curve; "
+                    "the export's hours alone", "over": F["careful_over"]},
+        {"reading": "Each service's own hourly count; causes dated; the hours before the export from the span "
+                    "metrics", "over": F["own_over"]},
         {"reading": "Each span at its trace root's keep share; each incident on the service furthest over its load "
-                    "curve; the dropped hours counted at their load", "over": list(R["window"]["P"]["over"])},
-        {"reading": "Each span at its trace root's keep share; causes dated; the dropped hours counted at their load "
-                    "(this review)", "over": over, "golden": True}]
+                    "curve; the hours before the export from the span metrics", "over": F["window_over"]},
+        {"reading": "Each span at its trace root's keep share; causes dated; the export's hours alone",
+         "over": F["export_over"]},
+        {"reading": "Each span at its trace root's keep share; causes dated; the hours before the export from the "
+                    "span metrics (this review)", "over": over, "golden": True}]
     return F
 
 
@@ -245,8 +280,9 @@ def write_docx(path, R, F):
                  "90% interval (%)", "Error budget (%)"],
            [[str(k), s_, F["share_pct"][s_], F["sli"][s_], "%s to %s" % tuple(F["ci"][s_]), F["budget"][s_]]
             for k, s_ in enumerate(F["start_order"], 1)], right=(0, 2, 3, 4, 5))
-    _p(doc, "Source: trace_spans_2026-12.parquet weighted by the load balancer's hourly counts; budgets from PR-SLO-3 "
-            "section 4. The interval is for the trace store's sample of December's requests.",
+    _p(doc, "Source: trace_spans_2026-12.parquet and tracing_span_metrics_2026-12.csv weighted by the load balancer's "
+            "hourly counts; budgets from PR-SLO-3 section 4. The interval is for the trace store's sample of "
+            "December's requests.",
        italic=True, size=8, space=8)
     _p(doc, "Between them the %s served %s%% of the requests over their thresholds that all our services' SLIs count, "
             "about %s more than their budgets allow." % (n.lower(), F["together_pct"], F["beyond_budget"]), space=8)
@@ -277,8 +313,8 @@ def write_docx(path, R, F):
                 x["id"], handling(x["cause"]), x["onset_about"][x["cause"]], handling(x["careful_cause"]),
                 x["onset_about"][x["careful_cause"]]) for x in dec),
             names([x["careful_cause"] for x in dec]), names([x["cause"] for x in dec]),
-            ("%s%% each" % F["rootcareful_sli"][dec[0]["cause"]]) if len({F["rootcareful_sli"][x["cause"]] for x in dec}) == 1
-            else names(["%s%%" % F["rootcareful_sli"][x["cause"]] for x in dec])), space=10)
+            ("%s%% each" % F["window_sli"][dec[0]["cause"]]) if len({F["window_sli"][x["cause"]] for x in dec}) == 1
+            else names(["%s%%" % F["window_sli"][x["cause"]] for x in dec])), space=10)
 
     _p(doc, "How the SLI was read", bold=True, size=12, space=4).paragraph_format.keep_with_next = True
     _p(doc, "The tracing store keeps a trace whole or not at all, and decides where the trace starts: each edge service "
@@ -288,27 +324,34 @@ def write_docx(path, R, F):
             "caller, not to the service: fares, partner-gateway and notifications are called from busy, thinly kept "
             "edge services for their slow operations and from quiet ones for their fast ones, so their own hourly "
             "counts, with the same incident time left out, would put them at %s%%, %s%% and %s%%." % (
-                F["owncount_sli"]["fares"], F["owncount_sli"]["partner-gateway"], F["owncount_sli"]["notifications"]))
-    _p(doc, "The trace export begins at %s: by the day it was pulled the store no longer held December's first %s "
-            "days, %s%% of the month's edge requests, and those requests still count. Each service's requests in each "
-            "of those hours, from the load balancer's counts, are counted at the share over threshold the service's "
-            "held, incident-free hours show in the same band of hourly load. The first weeks were quieter than the "
-            "holiday weeks the export holds, so read on the export's hours alone journey-search would be at %s%% and "
-            "over its budget; across December it is %s%%." % (F["held_from"], F["gone_days"], F["gone_pct"],
-                                                               F["heldonly_sli"]["journey-search"],
-                                                               F["sli"]["journey-search"]), space=8)
+                F["own_sli"]["fares"], F["own_sli"]["partner-gateway"], F["own_sli"]["notifications"]))
+    _p(doc, "The trace export begins at %s: by the day it was pulled the store no longer held the spans of December's "
+            "first %s days, %s%% of the month's edge requests, and those requests still count. The store's span "
+            "metrics do hold them: an hourly duration histogram of every span it ingested, by service and span name. "
+            "For those hours each series' spans over the service's threshold come from the histogram, weighted like "
+            "the spans themselves (an internal operation by the keep shares of the edge services whose traces called "
+            "it that hour). Where the threshold is a histogram boundary nothing is estimated (%s). Where it sits "
+            "inside a bucket (%s), the bucket is split at the share of its spans over the threshold that the "
+            "service's held, incident-free spans show in the same band of hourly load." % (
+                F["held_from"], F["gone_days"], F["gone_pct"], names(F["exact"]), names(F["bridged"])), space=4)
+    _p(doc, "The first weeks were quieter than the holiday weeks the export holds: read on the export's hours alone "
+            "journey-search would be at %s%% and over its budget; across December it is %s%%. Splitting a bucket by "
+            "straight-line interpolation instead would count %s times the over-threshold requests the spans "
+            "themselves show for %s in the hours the export holds, so the review does not use it." % (
+                F["export_sli"]["journey-search"], F["sli"]["journey-search"],
+                F["linear_check"]["places"], "places"), space=8)
     _p(doc, "The interval treats the kept traces as the sample they are: drawn within each edge service's hours, a "
-            "whole trace at a time, so a service's spans in one trace move together and a thinly kept hour weighs more.",
+            "whole trace at a time, so a service's spans in one trace move together and a thinly kept hour weighs more; "
+            "the hours read from the span metrics add their own sampling error and the error of the bucket's split.",
        space=8)
-    _p(doc, "The same spans read other ways give other lists:", space=4).paragraph_format.keep_with_next = True
+    _p(doc, "The same records read other ways give other lists:", space=4).paragraph_format.keep_with_next = True
     _table(doc, ["Reading of the December spans", "Services over budget"],
            [[x["reading"], names(x["over"]) if x["over"] else "none"] for x in F["routes"]])
-    _p(doc, "Source: trace_spans_2026-12.parquet and the load balancer's hourly counts, with the exclusions of PR-SLO-3 "
-            "3.2 under each attribution.", italic=True, size=8, space=10)
-    _p(doc, "Notes: SLIs are per cents to one decimal and are compared with the budget as rounded (PR-SLO-3 3.4); "
-            "intervals are to two decimals. Shares and the requests beyond budget are worked from the unrounded "
-            "figures. December in Lisbon time is UTC throughout, and the trace export's re-sent spans are counted "
-            "once.", italic=True, size=8.5)
+    _p(doc, "Source: trace_spans_2026-12.parquet, tracing_span_metrics_2026-12.csv and the load balancer's hourly "
+            "counts, with the exclusions of PR-SLO-3 3.2 under each attribution.", italic=True, size=8, space=10)
+    _p(doc, "Notes: SLIs are per cents to one decimal; intervals are to two decimals. Shares and the requests beyond "
+            "budget are worked from the unrounded figures. December in Lisbon time is UTC throughout, and the trace "
+            "export's re-sent spans are counted once.", italic=True, size=8.5)
     doc.save(path)
 
 

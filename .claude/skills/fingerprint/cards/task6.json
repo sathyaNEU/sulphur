@@ -6,7 +6,7 @@
   "domain": "general-statistics-data-science",
   "subdomain": "missing-data-censoring-measurement-error",
   "client_domain": "general-statistics-data-science",
-  "niche": "a ticketing marketplace's internal service latency SLIs read from a trace store that keeps whole traces at the edge at an hourly reset keep rate, with December's customer-facing incidents charged to the service whose own handling caused them",
+  "niche": "a ticketing marketplace's internal service latency SLIs read from a trace store that keeps whole traces at the edge at an hourly reset keep rate, with spans kept a month and hourly duration histograms kept a year, and December's customer-facing incidents charged to the service whose own handling caused them",
   "objective": "descriptive-distribution",
   "shape": "14",
   "decision_type": "designation_set",
@@ -21,8 +21,8 @@
     "none"
   ],
   "generators": [
+    "G2",
     "G9",
-    "G6",
     "G13"
   ],
   "gate_g": "method_or_model_selection",
@@ -33,7 +33,7 @@
   "validated_decoy": false,
   "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "A careful run, as the run on file did, reweights each service's own kept spans hour by hour on its own load balancer count over the hours the trace export holds and dates every December cause right: fares 1.2, partner-gateway 1.4, notifications 0.7 and journey-search 1.3, so it files journey-search, fares, places and seat-map. The export begins at 12 December 10:00 (the store keeps 31 days), so a third of December's requests have no spans and still count; with the trace roots' weights alone it files six, with the dropped hours filled alone places and seat-map.",
+  "analyst_test": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count over the hours the trace export holds and puts each December incident on the service furthest over its load curve: partner-gateway 1.3, fares 0.5, notifications 0.6 and journey-search 1.7, so it files places, journey-search and seat-map. With the trace roots' weights alone it files partner-gateway, places, journey-search and seat-map; with the 274 hours before the export counted from the span metrics alone, places, journey-search and seat-map; with the causes dated alone, places, fares, journey-search and seat-map. The span metrics hold the early hours as bucket counts with no trace to join, so their series are weighted by the callers' keep shares and five thresholds are split inside a bucket; every split, interpolation and bound files the same five.",
   "domain_test": "The field's own estimation from a cluster sample with unequal, unrecorded inclusion probabilities (each trace's root edge service and hour), cause against symptom in a call tree separated from load, and intervals that match the design; with a hospital's nouns the trace root, the keep share and the call tree have no meaning.",
   "layer2_family": "estimation_fit",
   "layer2_pattern": "own:cluster-sample-shares-weighted-by-trace-root-with-incident-time-charged-to-the-faulting-service",
@@ -51,7 +51,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "trace_spans_2026-12.parquet",
-    "rows": 723170,
+    "rows": 724000,
     "entity": "one span the trace store kept: a request an edge service handled or a call inside the trace it started",
     "grain": "span",
     "source": "synthetic (the tracing store's span export for December 2026)"
@@ -76,9 +76,9 @@
   ],
   "opening_move": "question-first",
   "question_form": "which",
-  "driver": "Several unit-level rates are estimated from a cluster sample whose inclusion probability is set by the stratum each cluster starts in and which no longer covers the period's first third, so the uncovered period is carried in at the rate its load gives; events are attributed to the unit whose own processing degraded first against its load-matched norm; the event time is removed only from the units that suffered it; and the intervals carry the clusters, the unequal weights and the carried-in period, so the units over their limits need the weighting, the coverage and the attribution together.",
-  "driver_concrete": "Each Rotalinha service's December latency SLI is estimated from the trace store's whole-trace edge sample with each kept span weighted by its root edge service's hourly keep share; the store had dropped December before 12 December 10:00, so those hours' requests are counted at the over-threshold share each service's held, incident-free hours show at the same load; each December customer-facing incident is put on the service whose own handling slowed first against its load-matched norm; journey-search is within budget only with the dropped hours counted, partner-gateway only with the weights, fares and notifications only with the weights and the dated causes.",
-  "stump": "A careful run, as the run on file did, reweights each service's own kept spans hour by hour on its own load balancer count over the hours the trace export holds and dates every December cause right: fares 1.2, partner-gateway 1.4, notifications 0.7 and journey-search 1.3, so it files journey-search, fares, places and seat-map. The export begins at 12 December 10:00 (the store keeps 31 days), so a third of December's requests have no spans and still count; with the trace roots' weights alone it files six, with the dropped hours filled alone places and seat-map.",
+  "driver": "Several unit-level rates are estimated from a cluster sample whose inclusion probability is set by the stratum each cluster starts in; the detailed record of the sample no longer covers the period's first third, which survives only as class counts by unit and operation at a coarser grain, so those hours are counted from the class counts, each series weighted by the strata of the clusters that called it and the class that holds the unit's limit split at the share the detailed record shows at the same load; events are attributed to the unit whose own processing degraded first against its load-matched norm; the event time is removed only from the units that suffered it; and the intervals carry the clusters, the unequal weights and the coarser record's own error, so the units over their limits need the weighting, the second grain and the attribution together.",
+  "driver_concrete": "Each Rotalinha service's December latency SLI is estimated from the trace store's whole-trace edge sample with each kept span weighted by its root edge service's hourly keep share; the span export begins at 12 December 10:00, and the 274 hours before it are counted from the store's hourly span metrics (a duration histogram by service and span name), each series at its callers' keep shares and, for the five services whose threshold sits inside a bucket, the bucket split at the share its held spans show at the same load; each December customer-facing incident is put on the service whose own handling slowed first against its load-matched norm; journey-search is within budget only with the early hours counted and the causes dated, partner-gateway is over only with the weights, fares and notifications only with the weights and the dated causes.",
+  "stump": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count over the hours the trace export holds and puts each December incident on the service furthest over its load curve: partner-gateway 1.3, fares 0.5, notifications 0.6 and journey-search 1.7, so it files places, journey-search and seat-map. With the trace roots' weights alone it files partner-gateway, places, journey-search and seat-map; with the 274 hours before the export counted from the span metrics alone, places, journey-search and seat-map; with the causes dated alone, places, fares, journey-search and seat-map.",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark245": "mark245 rebuilds whole recording periods a failing recorder lost, from each period's driver; here no hour is lost: the store keeps whole traces at a rate each edge service resets hourly, and a span's weight comes from the edge request that started its trace.",
@@ -88,7 +88,9 @@
     "mark270": "mark270 v1 corrects correlations among members picked in rank order of a weighted sum, and v6 joins sales to landings to place items outside their slot; here nothing is selected on the measured values: a span inherits the keep rate of its trace's edge service, recovered from that service's hourly count in a second system.",
     "mark452": "mark452 v2 weights reference points by the preliminary stratum they were drawn from after a reclassification; here the inclusion probability is recorded nowhere, belongs to the unit that started the trace rather than the unit measured, and is recovered hour by hour from the load balancer's count.",
     "mark264": "mark264 weights each sampled person by the inverse of an inclusion probability proportional to their own visit count; here a span's inclusion probability is not its own unit's at all but that of the edge service whose request started its trace, at that service's hourly keep share.",
-    "task6": "v7 keeps v6's world and its root keep-share weighting as one result among six; the services over budget now need the incident attribution as well, and the intervals, the incident minutes and the attribution are graded on their own"
+    "task6": "v7 keeps v6's world and its root keep-share weighting as one result among six; the services over budget now need the incident attribution as well, and the intervals, the incident minutes and the attribution are graded on their own",
+    "task7": "task7 v8 carries a randomised effect to a forward population along a property read from a second record; here nothing is transported and nothing was randomised: a share is estimated from one cluster sample kept at two grains, weighted by the stratum each trace started in, with incident time left out by dated causes.",
+    "mark120": "mark120 v1 assembles a unit no file stores by a two-hop join and cuts percentiles on it; here the unit is the request as recorded, no group is assembled, and the work is the sample's inclusion weight from its trace root and a threshold split inside a histogram bucket."
   },
   "lineage": [
     {
@@ -271,18 +273,20 @@
       "deliverable set": "csv+docx"
     }
   ],
-  "notes": "Architecture 6, re-root 2026-11-07 after architecture 5 landed on the portal (both responses on the golden). Candidates 1 (inherited trace sampling, task452 v2) and 2 (onboarding critical path, task127 v2 and task472 v2) were set aside at the draw. This draw was prototyped on the clean truth before registration (scratch p1.py): the kept spans' own share and a day-by-day reweighting understate the busy services, hourly and minute weighting agree. WARN repeat.decision (designation_set against task156) answered in the note. v7 (2026-11-09): stump_strategy causal_design for the incident attribution against load (the result that, with the weighting, moves the list); population_selection (v6) is blocked by task12 inside the window and v7 is not decided by it. Axes redrawn at v7 against the window task2, task12, task13: context_artifact operations_log to monitoring_export (the load balancer's metrics export and the trace store's span export are what the review reads), org_family software_or_platform to retailer_or_ecommerce (Rotalinha sells bus and ferry tickets online). ban.pairing against task2 is forced: the platform fixed this returned task's domain and analysis type (task 4b456953, task type match passed), so the re-root cannot redraw the pairing. 2026-11-09: heart's ban.pairing BLOCK against task2 v5 accepted by the author for the architecture 7 re-ship (the returned platform task's own subdomain and analysis type).",
+  "notes": "Architecture 6, re-root 2026-11-07 after architecture 5 landed on the portal (both responses on the golden). Candidates 1 (inherited trace sampling, task452 v2) and 2 (onboarding critical path, task127 v2 and task472 v2) were set aside at the draw. This draw was prototyped on the clean truth before registration (scratch p1.py): the kept spans' own share and a day-by-day reweighting understate the busy services, hourly and minute weighting agree. WARN repeat.decision (designation_set against task156) answered in the note. v7 (2026-11-09): stump_strategy causal_design for the incident attribution against load (the result that, with the weighting, moves the list); population_selection (v6) is blocked by task12 inside the window and v7 is not decided by it. Axes redrawn at v7 against the window task2, task12, task13: context_artifact operations_log to monitoring_export (the load balancer's metrics export and the trace store's span export are what the review reads), org_family software_or_platform to retailer_or_ecommerce (Rotalinha sells bus and ferry tickets online). ban.pairing against task2 is forced: the platform fixed this returned task's domain and analysis type (task 4b456953, task type match passed), so the re-root cannot redraw the pairing. 2026-11-09: heart's ban.pairing BLOCK against task2 v5 accepted by the author for the architecture 7 re-ship (the returned platform task's own subdomain and analysis type). 2026-11-25: repair after the determinism return of 2026-11-22 (review sheet of November 22: journey-search's verdict turned on how the 274 untraced hours were filled). The registration of 2026-11-09 stands: same world, decision, members and the two judgments the reviewer asked to keep; the third judgment's record and estimator are redesigned (the store's span metrics hold the early hours at bucket grain), so the driver, stump, results, generators (G2 first: the two grains now carry both the weighting and the early hours) and skeleton lessons are brought up to it.",
   "answer_shape": "flagged-set",
   "weight": "hard-to-measure",
   "chain_signature": [
     "assembly-reconciliation",
     "investigation-loops",
     "missingness-measurement",
+    "data-discovery",
+    "missingness-measurement",
     "uncertainty",
     "synthesis",
     "decomposition-attribution"
   ],
-  "results": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 every service's December latency SLI, the hours the store had dropped counted at their load; R4 a 90 per cent interval on each over-budget service's SLI; R5 the services over budget; R6 the start order, shares, share together and requests beyond budget",
+  "results": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 the service that starts first and payments' SLI (the trace roots' weights); R4 places' and booking's December SLI (the hours before the export from the span metrics); R5 every service's December latency SLI; R6 a 90 per cent interval on each over-budget service's SLI; R7 the services over budget; R8 the start order, shares and requests beyond budget",
   "registered": "2026-11-09T16:23:04Z",
   "shell": {
     "question form": "which",
@@ -296,12 +300,14 @@
     "lessons": [
       "design_weights",
       "observation_window_coverage",
+      "level_and_mix_from_two_sources",
       "dated_cause_by_own_metric",
       "propagation_source_vs_victim"
     ],
     "mechanisms": [
       "edge_head_sampling_keep_share",
       "trace_store_31_day_retention",
+      "span_metrics_outlive_spans_at_bucket_grain",
       "fault_in_own_handling_reaches_callers"
     ],
     "detection": [
@@ -313,7 +319,8 @@
       "inverse_inclusion_weights",
       "impute_by_model_at_own_drivers",
       "changepoint_on_own_metric",
-      "cluster_resample_shared_unit"
+      "cluster_resample_shared_unit",
+      "variant_sweep_holds_call"
     ],
     "file_roles": [
       "governing_standard",

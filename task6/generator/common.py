@@ -17,6 +17,10 @@ REVIEW_HOURS = 31 * 24
 STORE_FROM_H = 11 * 24 + 10
 ASSEMBLED = dt.datetime(2027, 1, 6, 9, 30)          # the pack's file times
 TARGET_PER_HOUR = 60                                # the sampler's server spans per service per hour
+# the tracing store's span metrics: an hourly duration histogram of the spans it ingested, by service, span name and
+# kind, on the OpenTelemetry SDK's default bucket boundaries (ms); the metrics outlive the spans (13 months against 31
+# days), so December's are whole
+HIST_BOUNDS = [0, 5, 10, 25, 50, 75, 100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000]
 
 # service, team, tier, tracing name, LB target group (Jul-Dec), LB target group (Jan-Jun), status page component,
 # cost tag (current), cost tag (before 1 April), threshold ms, budget %
@@ -30,11 +34,11 @@ SERVICES = [
     ("seat-map", "Checkout", 1, "seat-map", "tg-seatmap-prd", "tg-seatmap-prd", "Booking and payments",
      "svc-seat-map", "team-checkout", 500, 1.0),
     ("booking", "Checkout", 1, "booking-core", "tg-booking-prd", "tg-booking-prd", "Booking and payments",
-     "svc-booking", "team-checkout", 3000, 0.5),
+     "svc-booking", "team-checkout", 2500, 0.5),
     ("payments", "Checkout", 1, "payments", "tg-payments-prd", "tg-payments-prd", "Booking and payments",
-     "svc-payments", "team-checkout", 2000, 0.5),
+     "svc-payments", "team-checkout", 1000, 0.5),
     ("tickets", "Customer", 2, "ticketing", "tg-tickets-prd", "tg-tickets-prd", "Tickets and boarding passes",
-     "svc-tickets", "team-customer", 1500, 1.0),
+     "svc-tickets", "team-customer", 2500, 1.0),
     ("accounts", "Customer", 1, "accounts", "tg-accounts-prd", "tg-accounts-prd", "Sign-in and accounts",
      "svc-accounts", "team-customer", 600, 2.0),
     ("partner-gateway", "Marketplace", 2, "partner-gw", "tg-partners-prd", "tg-partners-prd", "Search",
@@ -98,18 +102,18 @@ LAT = {
     ("places", "own"): (None, 0.12, 0.56, 1.326),
     ("seat-map", "own"): (None, 0.16, 0.44, 1.661),
     ("booking", "own"): (None, 0.10, 0.40, 0.332),
-    ("accounts", "own"): (None, 0.08, 0.50, 1.2408),
+    ("accounts", "own"): (None, 0.08, 0.50, 1.15),
     ("tickets", "own"): (None, 0.04, 0.45, 0.6931),
     ("fares", "batch"): (None, 0.05, 0.45, 0.8242),
     ("fares", "quote"): (None, 0.05, 0.40, 0.10),
-    ("partner-gateway", "availability"): (None, 0.38, 0.40, 2.205),
+    ("partner-gateway", "availability"): (None, 0.38, 0.52, 2.26),
     ("partner-gateway", "seats"): (85.0, 0.10, 0.35, None),
     ("partner-gateway", "reserve"): (None, 0.20, 0.45, 0.60),
     ("partner-gateway", "ticket"): (None, 0.04, 0.42, 0.50),
     ("payments", "authorise"): (None, 0.06, 0.38, 0.4584),
     ("payments", "wallet"): (45.0, 0.04, 0.35, None),
     ("notifications", "email"): (None, 0.02, 0.55, 0.30),
-    ("notifications", "verify"): (None, 0.03, 0.45, 0.9315),
+    ("notifications", "verify"): (None, 0.03, 0.45, 1.02),
     ("notifications", "resend"): (None, 0.02, 0.50, 0.50),
 }
 ERR = {"journey-search": 0.002, "places": 0.001, "seat-map": 0.002, "booking": 0.003, "accounts": 0.002,
@@ -168,6 +172,7 @@ PEOPLE = {"head": "Teresa Nogueira", "finops": "Bruno Marques", "sre": "Ivo Pere
 
 FILES = {
     "spans": "trace_spans_2026-12.parquet",
+    "spanmetrics": "tracing_span_metrics_2026-12.csv",
     "lb_h1": "lb_target_group_requests_2026-H1.csv",
     "lb_h2": "lb_target_group_requests_2026-H2.csv",
     "slo": "PR-SLO-3_service_level_objectives_2026.docx",
