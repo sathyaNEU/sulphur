@@ -244,7 +244,8 @@ def test_log(W, PR, inst, ser, r):
         if i in swap:
             Y = int(r.integers(2004, 2016))
             old = serial(Y, Y <= 2015, r, used)
-            rows.append([CM.fmt_date(inst[i]), old, str(PR["no"][i]), "Service visit", "FAIL", "replaced"])
+            found_by = "Annual sample" if inst[i].month in (3, 4, 5) and r.random() < 0.7 else "Service visit"
+            rows.append([CM.fmt_date(inst[i]), old, str(PR["no"][i]), found_by, "FAIL", "replaced"])
         rows.append([CM.fmt_date(inst[i]), ser[i], str(PR["no"][i]), "Install", "PASS", ""])
     for Y in range(2019, 2027):
         cand = [i for i in range(n_s) if inst[i] < dt.date(Y, 3, 1)]

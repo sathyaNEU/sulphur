@@ -1,13 +1,14 @@
 # leak check, task7
 
-**Verdict: REVIEW.** 21 files read, 35 golden figures and 2 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 21 files read, 37 golden figures and 2 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
 Stump terms swept: missed, transmitter, switch, feeder, records, repeater, reconnection, system, appraisal, reflex, single, install, demand, register, listed, funded, generator, conditions, command, find-and-fix, one-way, different, careful, bridge, effort
 
-## 3 answer figures in the pack (REVIEW 2)
+## 3 answer figures in the pack (REVIEW 3)
 - **REVIEW** `load_management_report_2025.pdf`: golden figure 505 appears: ...December 2025 that is 11,938 kW, worth USD 1,019,505 a year at the 2025 summer demand charge of USD 2...
+- **REVIEW** `wholesale_invoices_2026.pdf`: golden figure 385 appears: ...nt 46,820.4 MWh USD 75,849.05 Total due USD 5,566,385.85 Billing demand is the member's metered load in...
 - **REVIEW** `work_plan_2027_load_management.docx`: carries 19 of 21 distinctive words of the committed call: 'Fund the Kettle Ridge VHF repeater, the Larkin find-and-fix round and the reconnection round within 14 km; do not fund t'
 
 ## 4 design-note vocabulary (REVIEW 3)
@@ -67,3 +68,13 @@ them. Harmless.
 Realism tells reported and fixed in the generator: the coverage map's edition month fell before the Pruett site's
 commissioning, a town label collided with a site label and the contours were perfect circles; the four invoice
 numbers stepped by exactly 11.
+
+Re-read on the final cut, 2026-11-25 (a fresh copy; two documents had changed). Questions 1 to 6 as before: only
+filed WHAT sentences (the appraisal footing, the fringe and near band, the bridge's order, the trial's design, the
+scopes), no ranking file, no helper file, no answer figure, no one thing that settles most of the request. The
+earlier tells are gone (the map's August edition after the Pruett commissioning, uneven invoice numbers, permit,
+rebate, work order and switching order numbers in date order, install dates spread through each year). Its notes,
+ruled: AC-10's doubled shed rows are the one group whose switches sit on both paging systems (its commands go out on
+each); the bench checks' annual samples now log the failed switches they found and replaced (the pass share is still
+96 in 100); the coverage contours are wide because each system's published contour reaches past its farthest premise,
+which is what the carrier's map claims.

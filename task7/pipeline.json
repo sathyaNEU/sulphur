@@ -1,17 +1,17 @@
 {
   "task": "task7",
-  "status": "BUILD",
+  "status": "READY",
   "domain": "energy-systems-utilities",
   "subdomain": "tariff-demand-response-evaluation",
   "objective": "experiment-causal",
-  "stage": 3,
-  "stage_name": "build",
+  "stage": 5,
+  "stage_name": "ready",
   "updated": "2026-11-25",
   "doctrine": "throughout",
   "architecture": 13,
   "loops": 0,
   "stump": "level 5 on generator/core.py: three judgments the cooperative's own records wave through, each fitted from the feeder load steps of the 2026 randomised dispatch trial (S1 shed commands received by reach to an on-air transmitter of the switch's own paging system, S2 switches still working by install batch, S3 switches still wired where the air conditioner was replaced)",
-  "call": "Fund the Kettle Ridge VHF repeater, the Larkin find-and-fix round and the reconnection round within 14 km; do not fund the Halverson carrier fill-in, the Medora Flats find-and-fix round or the outlying reconnection round (2,158 kW added for USD 39.7 a kW-year; design-stage figures from generator/core.py)",
+  "call": "Fund the Kettle Ridge VHF repeater (250 kW against a break-even of 185), the Larkin find-and-fix round (505 against 280) and the reconnection round within 14 km (1,402 against 509); do not fund the Halverson carrier fill-in site (185 against 280), the Medora Flats find-and-fix round (264 against 401) or the outlying reconnection round (224 against 345). The funded plan adds 2,157 kW at USD 39.7 a kW-year.",
   "returned": {
     "2026-11-09": "platform preliminary review of architecture 6 (version 17's predecessor): sent back, the answer turned on the service visits in the lottery's passed-over arm (runs/review_2026-11-09.md)",
     "2026-11-11": "platform review of version 17 (architecture 8, the Haldenau retrofit grant round): Stumped failed at reward 80 and Stumped type match failed; the deciding step was one constructed hidden factor (roofer capacity, insulation only) and the runs solved every other piece by reflex (runs/review_2026-11-11.md)",
@@ -24,7 +24,7 @@
     "date": "2026-11-25",
     "checks": "118 checks, 0 FAIL, 2 WARN (R1 upstream of R4 to R7; nearest chains by shape and weight)"
   },
-  "resume": "/build task7 from 4: the leak reader and the determinism judge (determinism mode) on the cut pack; then READY",
+  "resume": "the author rewrites prompt.txt in their own words (re-gated with voice-check.py task7 --rewrite), uploads prompt.txt and target.zip to the platform task 2d026b3c, generates the two runs, then /triage-runs task7",
   "approved": null,
   "delivered": null,
   "portal": null,
@@ -456,5 +456,18 @@
     "pack": "21 files (CSV, XLSX, DOCX, PDF, PNG); 1,255,800 SCADA rows; target.zip 14 MB",
     "pack_against_core": "flag, groups, install years and reach bands identical switch by switch; steps on all 64 windows within 0.08 kW of core's step_win; golden members within 0.02 per cent; the 78-rebuild bands equal the architect's frozen bands",
     "effort": "quick 9.0, careful but hurried 17.8, thorough 100; one stump lost keeps 22 each; level 5 from the factorial"
+  },
+  "judge": {
+    "date": "2026-11-25",
+    "mode": "determinism",
+    "verdict": "DETERMINISTIC",
+    "disposition": "FIX_NOW",
+    "report": "determinism_check_report.md",
+    "fixed": "answer blocks only: the responder rule and a new switch's credit stated in the Step-by-Step, the bridge's 2027 footing in Ask 2, the bands of C2, C3, the two find-and-fix rounds, the bridge's not-received and failed lines and the plan widened to take its rivals (effort_passes.AUDIT_BANDS); no pack byte moved by the fix, so no re-judge"
+  },
+  "leak": {
+    "date": "2026-11-25",
+    "leak_py": "REVIEW (4 lines, ruled in the design note's Pre-ship check)",
+    "reader": "two reads (stage 4 and the final cut): no method sentence, no ranking or helper file, no answer figure, no one thing; realism tells fixed"
   }
 }

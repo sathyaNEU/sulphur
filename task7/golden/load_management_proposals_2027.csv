@@ -1,0 +1,7 @@
+proposal_no,proposal,scope,premises_visited,kw_added_2027,kw_band_low,kw_band_high,break_even_kw,annual_cost_usd,cost_per_kw_year_usd,fund
+LM-27-01,Kettle Ridge VHF repeater,new VHF site at Kettle Ridge,,250,231,262,185,16300,65.1,yes
+LM-27-02,Halverson carrier fill-in site,new FLEX site at the Halverson elevator,,185,150,207,280,24600,133.3,no
+LM-27-03,Larkin find-and-fix round,"A/C switches installed through 2015, Larkin district, not on the reconnection lists",1578,505,385,640,280,24617,48.8,yes
+LM-27-04,Medora Flats find-and-fix round,"A/C switches installed through 2015, Medora Flats district, not on the reconnection lists",1242,264,200,350,401,35273,133.4,no
+LM-27-05,Reconnection round within 14 km,"replaced units after the switch went in, within 14 km of the nearest transmitter serving the switch",3267,1402,1252,1552,509,44758,31.9,yes
+LM-27-06,Outlying reconnection round,"replaced units after the switch went in, more than 14 km from the nearest transmitter serving the switch",1239,224,195,253,345,30356,135.5,no

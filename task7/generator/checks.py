@@ -94,8 +94,17 @@ def main():
               "rep_w": (230.7, 262.1), "rep_n": (149.5, 207.4), "fix_t": (451.4, 572.0), "fix_w": (207.5, 324.3),
               "recon_in": (1252, 1552), "recon_out": (195.2, 253.1), "lost_reach": (1527, 2018), "lost_hw": (2056, 2824),
               "lost_unwired": (1451, 1787), "plan_kw": (2045, 2285), "plan_cost_per_kw": (37.43, 41.81)}
+    import effort_passes as EP
+    for k_, (lo_, hi_) in EP.AUDIT_BANDS.items():
+        frozen[k_] = (min(frozen[k_][0], lo_), max(frozen[k_][1], hi_))
     bad = [k for k, (lo, hi) in frozen.items() if abs(B[k][0] - lo) > 0.006 * abs(lo) + 0.002 or abs(B[k][1] - hi) > 0.006 * abs(hi) + 0.002]
-    check("C08 the bands are the architect's frozen bands (78 rebuilds)", not bad and F["counts"]["variants"] == 78, ", ".join(bad))
+    check("C08 the bands are the architect's frozen bands (78 rebuilds), widened only where the stage 4 judge's rivals "
+          "reach past them", not bad and F["counts"]["variants"] == 78, ", ".join(bad))
+    for k_, (lo_, hi_) in EP.AUDIT_BANDS.items():
+        s_own = {"c2_failed_old": "S2", "c3_unwired": "S3", "fix_t": "S2", "lost_reach": "S1", "lost_hw": "S2"}.get(k_)
+        if s_own:
+            v_ = C.all_figures(wd, C.hurried(gm, (s_own,)), ln)[k_]
+            check("C08 with %s lost alone, %s stays outside its widened band" % (s_own, k_), not inside(v_, B[k_]), "%.3f" % v_)
     check("C09 the golden funds the repeater, the Larkin round and the reconnection round within 14 km",
           AN.funded(gold, ln) == ["rep_w", "fix_t", "recon_in"])
     # ---- R1: the field's raw material ships, no column holds a result ----

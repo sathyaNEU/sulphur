@@ -316,6 +316,21 @@ Written at stage 4, 2026-11-25, on the cut whose target.zip and golden.zip `make
 - Mess neutrality: held readings kept, old premise numbers mapped only before the conversion, permit addresses cleaned without dropping periods and doubled spaces, and the renamed Pruett points left unmapped each leave the call and every graded figure in band. Failing a join outright (no old-number map at all, no address normalisation at all) finds no match for a whole class of records, which a careful run sees at once; it is the reflex hygiene of R01, not a judgment the call rests on.
 - leak.py REVIEW lines, ruled here: the 2025 report's stump-paragraph terms (switch, install, demand) are the programme's own nouns and name no move; the work plan's are the proposals' and the appraisal's nouns, and the reader's question 1 found only filed WHAT sentences in it; the prompt's sentence carrying stump terms is the prompt contract's ask for the three decisive quantities; the work plan names the six candidates without ranking them (the reader agrees).
 - The leak reader (stage 4): no method sentence, no ranking file, no helper file, no answer-reading figure, no one thing that makes most of the request routine. It read "the nearest transmitter serving them" as the nearest on-air site on the system carrying the switch, which is the golden's reading (SF5); S1's remaining work is the reception curve fitted on the pooled steps. Its realism tells (the coverage map's edition month, a label collision, perfectly round contours, invoice numbers stepping by 11) and one found here (install dates evenly spaced within each year) are fixed in the generator; no graded figure moved.
+- The determinism judge (stage 4, determinism mode, the Holistic Audit v4's Step 0, Part A and Part B on this cut;
+  `determinism_check_report.md`): DETERMINISTIC, FIX_NOW. It derived every deciding figure from the shipped files before
+  comparing, and every one lands inside its band; the counts match exactly; 45 variants run in code; every decision
+  point that could move the call is pinned (reach by the switch's own system by the work plan's "nearest transmitter
+  serving them" and the receiver field, ruled again by the fit; the value per kW, the index and the 2027 footing by
+  the work plan; the study homes carried to the fleet refuted by the steps; the call holds for a working switch
+  anywhere from 0.66 to about 0.90 kW). Its figure-level forks, none of which moves the call, are closed in the blocks:
+  the responder rule and a new switch's credit stated in the Step-by-Step, the bridge's 2027 footing stated in Ask 2,
+  and the bands of C2 (60 to 72 in 100), C3 (27 to 41), the Larkin round (385 to 640 kW), the Medora Flats round (200
+  to 350, its break-even 401), the bridge's not-received (1,480 to 2,210) and failed (1,750 to 3,300) lines and the
+  plan (1,990 to 2,330 kW, USD 36.5 to 43.0 a kW-year) widened to take its rivals (effort_passes.AUDIT_BANDS). Each
+  component still falls with its own stump alone and lands outside its band when that stump is lost (checks.py C08);
+  the one new silence is the failed-switch line with S1 lost (2,897 kW), which leaves the bridge result lost on its
+  not-received line; effort.py's pricing is unchanged (careful but hurried 17.8, one stump lost 22). No pack byte
+  moved, so no re-judge (determinism-check, After, determinism mode).
 - Residual risks, the architect's and still true on the cut: the three stumps share one instrument and one fit, so a run that builds the whole fit with reach by system lands all three; the Larkin round is the tightest member under perturbation (the batch term 20 per cent up puts it at 316 against 279.7).
 
 ## Tried and rejected

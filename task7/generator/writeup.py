@@ -73,7 +73,8 @@ def write(path, F):
     w("### %s" % DL.FILES["xlsx"])
     w("The call on the first sheet, then the step record, the fitted model, the bridge, the proposals in full, the "
       "routes each record gives taken as it stands, and the rebuilds.")
-    w("2. How the kW the switches could take off at peak splits, at the coincident-peak index:")
+    w("2. How the kW the switches could take off at peak splits, at the coincident-peak index with every listed "
+      "transmitter on the air (the 2027 footing):")
     w("   a. Lost to commands not received: %s kW (band %s)." % (n(F["lost_reach"]), band(F["lost_reach_band"])))
     w("   b. Lost to switches that received the command and failed: %s kW (band %s)." % (n(F["lost_hw"]), band(F["lost_hw_band"])))
     w("   c. Lost to working switches not connected to the air conditioner: %s kW (band %s)." % (
@@ -103,11 +104,12 @@ def write(path, F):
       "renamed mid-July), duplicate rows dropped and held readings (three or more equal readings in a row) left out. Each "
       "feeder's step at each command is the mean of the five minutes from the transmit minute less the mean of the five "
       "before: %s steps." % (n(C["switches"]), C["events"], n(C["commands"]), n(C["steps"])))
-    w("2. Set the footing: a working switch near a transmitter takes off %.3f kW at index 1 (the %d study homes' "
-      "responders, from `study_meters_hourly_2026.csv` against each day's held-out homes in "
-      "`study_event_assignments_2026.csv`); at the Appraisal's index of %.2f the switches could take off %s kW, and the "
-      "steps hold %s kW delivered." % (fit["working_kw"], C["study_homes"], fit["index"], n(F["could_shed"]),
-                                        n(F["delivered"])))
+    w("2. Set the footing: a working switch near a transmitter takes off %.3f kW at index 1, the mean of the study homes "
+      "that respond (a home responds when its mean response over its shed days is above %.2f kW; %d in 100 of the %d do), "
+      "each home's response read from `study_meters_hourly_2026.csv` against the same day's held-out homes in "
+      "`study_event_assignments_2026.csv`; at the Appraisal's index of %.2f the switches could take off %s kW, and the "
+      "steps hold %s kW delivered." % (fit["working_kw"], fit["responder_cut_kw"], fit["study_share"], C["study_homes"],
+                                        fit["index"], n(F["could_shed"]), n(F["delivered"])))
     w("3. Rejected the records read as they stand: they explain %s kW of a %s kW shortfall and fund nothing (the %s %s kW, "
       "the %s %s, the %s %s). Rejected the study homes carried to the fleet (%.3f kW an enrolled switch): it puts %s kW on "
       "feeders whose steps hold %s, and funds nothing; the study homes are all within 8 km, installed in 2019 and 2020, "
@@ -141,7 +143,9 @@ def write(path, F):
           F["fals"]["calibrated"]))
     w("8. Carried the fit to 2027 on the Appraisal's footing (every listed transmitter on the air, index %.2f, each "
       "proposal alone): the premises in scope are %s (Larkin round), %s (Medora Flats round), %s (within 14 km) and %s "
-      "(outlying); each break-even is the annual cost over USD %d a kW-year. The %s, the %s and the %s clear theirs." % (
+      "(outlying); a find-and-fix round's new switch is credited with what a working switch near a transmitter takes off, "
+      "and a reconnected one with its batch's level; each break-even is the annual cost over USD %d a kW-year. The %s, "
+      "the %s and the %s clear theirs." % (
           fit["index"], n(C["fix_t"]), n(C["fix_w"]), n(C["recon_in"]), n(C["recon_out"]), int(fit["value"]),
           ln(nm("rep_w")), ln(nm("fix_t")), ln(nm("recon_in"))))
     w("9. Totalled the plan: %s kW for %s a year, %s a kW-year; the bridge closes on %s kW delivered of %s." % (
