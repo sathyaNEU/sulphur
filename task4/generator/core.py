@@ -65,10 +65,10 @@ W = {
                 beers=[("PAL", 0.35, 250, 800), ("IPA", 0.25, 165, 550), ("HER", 0.22, 165, 500),
                        ("BLK", 0.18, 125, 400)], new27=[],
                 estate=(450, 1.30), place=2000, lots=[(15, 900), (70, 600)], moq=1500, counts=1800),
-    "K20": dict(S0=640, amp=0.14, k=0.024, g=0.030, L=1800, a=2.0, b=0.50, loss=0.0060, c2=0.60, cover=0.35,
+    "K20": dict(S0=640, amp=0.22, k=0.024, g=0.030, L=1800, a=2.0, b=0.50, loss=0.0060, c2=0.60, cover=0.35,
                 beers=[("F%02d" % i, 1.0 / 8, 120, 200) for i in range(1, 9)],
                 new27=[("F%02d" % i, 200) for i in range(9, 19)],
-                estate=(150, 0.20), place=650, lots=[(15, 650), (70, 650)], moq=1200, counts=900),
+                estate=(150, 0.45), place=650, lots=[(15, 650), (70, 650)], moq=1200, counts=900),
     "FIR": dict(S0=1500, amp=-0.15, k=0.0, g=-0.020, L=1700, a=3.0, b=0.50, loss=0.0150, c2=0.60, cover=0.35,
                 beers=[("BIT", 0.60, 300, 700), ("MLD", 0.20, 150, 270), ("SEA", 0.20, 240, 600)],
                 new27=[("SUM", 300), ("HAR", 300)],
@@ -214,7 +214,7 @@ def lots_of(p, q, rng):
     keep = np.ones(WH + 1)                                       # survival from the start of week i to the count
     for i in range(WH - 1, -1, -1):
         keep[i] = keep[i + 1] * (1.0 - frac[i] - q["scrap"][i] / q["alive"][i])
-    fleet = float(q["alive"][WH - 52:WH + 1].mean())
+    fleet = float(q["alive"][WH - 52])                           # the fleet a year before the count
     rl = float(q["lost"][WH - 52:].sum()) / fleet                 # the share of the fleet the trade loses in a year
     rs = float(q["scrap"][WH - 52:].sum()) / fleet                # the share condemned at the wash and struck off
     rho_y = {y: rl * math.exp(rng.normal(0, 0.05)) for y in LOT_YEARS}
@@ -671,14 +671,22 @@ def main():
         routes.update({k: fig(field, RUN[k]) for k in base})
         figures.append(dict(id=cid, block="component", golden=fig(field), family=[fig(field, o) for _, o in FAMILY],
                             lattice={k: fig(field, o) for k, o in lat_o.items()}, routes=routes))
+    # the asks: the fleet account, one row a pool and one sentence a row (the containers lost over the year to the
+    # count, the trade's rise to its summer peak, the store at its fullest, the largest weekly shortfall in the
+    # planning case and in the hot case), so a pool's row is one criterion and needs all five of its figures
     for p in POOLS:
-        figures.append(dict(id="A-%s" % p, block="ask", member=p, sentence="ask-%s" % p))
-    for p in POOLS:
+        figures.append(dict(id="A-%s" % p, block="ask", member=p, sentence="row-%s" % p))
         routes = {"rigorous": fig("short", RIGOROUS, (p,), True)}
         routes.update({k: fig("short", RUN[k], (p,), True) for k in base})
-        figures.append(dict(id="H-%s" % p, block="ask", sentence="ask-%s" % p, golden=fig("short", None, (p,), True),
+        figures.append(dict(id="H-%s" % p, block="ask", sentence="row-%s" % p, golden=fig("short", None, (p,), True),
                             family=[fig("short", o, (p,), True) for _, o in FAMILY],
                             lattice={k: fig("short", o, (p,), True) for k, o in lat_o.items()}, routes=routes))
+        for tag, field in (("T", "rise"), ("S", "fullest"), ("L", "year_loss")):
+            routes = {"rigorous": fig(field, RIGOROUS, (p,))}
+            routes.update({k: fig(field, RUN[k], (p,)) for k in base})
+            figures.append(dict(id="%s-%s" % (tag, p), block="ask", sentence="row-%s" % p, golden=fig(field, None, (p,)),
+                                family=[fig(field, o, (p,)) for _, o in FAMILY],
+                                lattice={k: fig(field, o, (p,)) for k, o in lat_o.items()}, routes=routes))
     run_routes = {k: {p: chain(R, p, o)["short"] for p in POOLS} for k, o in RUN.items()}
     over = {s: {p: chain(R, p, o)["short"] for p in POOLS} for s, o in OVER.items()}
     # what forces the call between the ways of reading a cellar count: the counts' own fall with the containers a
@@ -739,7 +747,7 @@ def main():
                 f["id"], f["golden"], min(f["family"]), max(f["family"]), f["lattice"]["S1"], f["lattice"]["S2"],
                 f["lattice"]["S3"], f["lattice"][reflex], " ".join("%s %.0f" % kv for kv in sorted(f["routes"].items()))))
         print("hot summer: truth, golden")
-        for f in figures[-5:]:
+        for f in [x for x in figures if x["id"].startswith("H-")]:
             p = f["id"][2:]
             print("  %-4s %7.0f %7.0f | %7.0f %7.0f %7.0f | %7.0f" % (
                 p, truth_hot[p], f["golden"], f["lattice"]["S1"], f["lattice"]["S2"], f["lattice"]["S3"],
