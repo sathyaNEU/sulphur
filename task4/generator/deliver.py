@@ -218,7 +218,7 @@ def account_sheet(wb, f):
              ("Alive at the count (estimated from the lots on site)", "alive"),
              ("At customers at the count, alive", "in_trade_alive"),
              ("On the register and not coming back", "never_coming_back"),
-             ("Lost in the trade in a year", "lost_year"),
+             ("Lost in the trade over the year to the count", "lost_year"),
              ("More held by the trade at its summer peak than at the count", "rise"),
              ("Full in the cold store at its fullest under the 2027 brew plan", "store_fullest"),
              ("Largest weekly shortfall, planning case", "plan"),
@@ -328,7 +328,7 @@ def lots_sheet(wb, f):
     ws.auto_filter.ref = "A4:F%d" % (end - 1)
     r = end + 1
     hdr2 = ["Container type", "Leaving the trade a year (per cent)", "Share of the fleet on site", "Alive at the count",
-            "Lost in the trade in a year"]
+            "Lost in the trade over the year to the count"]
     rows2 = [[f["names"][p].capitalize(), f["account"][p]["leaving_pct"], f["account"][p]["share_on_site"],
               f["account"][p]["alive"], f["account"][p]["lost_year"]] for p in POOLS]
     end2 = _rows(ws, hdr2, rows2, r, [((4, 5), "#,##0"), ((2,), "0.0"), ((3,), "0.00")])
@@ -402,7 +402,7 @@ def routes_sheet(wb, f):
     hdr = ["How the fleets are sized"]
     for p in POOLS:
         hdr += [f["names"][p].capitalize(), "Cover"]
-    hdr += ["Trade's rise", "Store at its fullest", "Lost in a year"]
+    hdr += ["Trade's rise", "Store at its fullest", "Lost over the year to the count"]
     ws.append(hdr)
     _hdr(ws, 4, len(hdr), 34)
     for i, (key, label) in enumerate(ROUTES):
@@ -626,7 +626,7 @@ def deck(path, f, png_cover, png_weeks):
     _heading(s, "Three estimates carry the order: the trade's summer stock, the store and the loss")
     rows = [["Containers"] + [nm(p) for p in POOLS] + ["All five"]]
     for label, key in (("On the register", "register"), ("Counted on site", "on_site"), ("Alive at the count", "alive"),
-                       ("Lost in the trade in a year", "lost_year"), ("Trade's rise to its summer peak", "rise"),
+                       ("Lost in the trade over the year to the count", "lost_year"), ("Trade's rise to its summer peak", "rise"),
                        ("Cold store at its fullest", "store_fullest")):
         v = [f["account"][p][key] for p in POOLS]
         tot = {"rise": f["trade_rise"], "store_fullest": f["store_2027"], "lost_year": f["year_loss"]}.get(key, sum(v))

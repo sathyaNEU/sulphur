@@ -9,23 +9,23 @@
    "independent": "",
    "golden": {
     "K50": {
-     "register": 58809,
+     "register": 56675,
      "on_site": 11767
     },
     "K30": {
-     "register": 27366,
+     "register": 26873,
      "on_site": 6310
     },
     "K20": {
-     "register": 9385,
-     "on_site": 3063
+     "register": 9692,
+     "on_site": 3349
     },
     "FIR": {
-     "register": 23656,
+     "register": 22867,
      "on_site": 2585
     },
     "KIL": {
-     "register": 5701,
+     "register": 5445,
      "on_site": 1056
     }
    },
@@ -33,45 +33,45 @@
     "quick": null,
     "careful": {
      "K50": {
-      "register": 58809,
+      "register": 56675,
       "on_site": 11767
      },
      "K30": {
-      "register": 27366,
+      "register": 26873,
       "on_site": 6310
      },
      "K20": {
-      "register": 9385,
-      "on_site": 3063
+      "register": 9692,
+      "on_site": 3349
      },
      "FIR": {
-      "register": 23656,
+      "register": 22867,
       "on_site": 2585
      },
      "KIL": {
-      "register": 5701,
+      "register": 5445,
       "on_site": 1056
      }
     },
     "thorough": {
      "K50": {
-      "register": 58809,
+      "register": 56675,
       "on_site": 11767
      },
      "K30": {
-      "register": 27366,
+      "register": 26873,
       "on_site": 6310
      },
      "K20": {
-      "register": 9385,
-      "on_site": 3063
+      "register": 9692,
+      "on_site": 3349
      },
      "FIR": {
-      "register": 23656,
+      "register": 22867,
       "on_site": 2585
      },
      "KIL": {
-      "register": 5701,
+      "register": 5445,
       "on_site": 1056
      }
     }
@@ -85,11 +85,11 @@
    "figure": "trade_rise",
    "depends": [],
    "independent": "the cellar checks, the dockets, the route plan and the supply agreement's schedule",
-   "golden": 7883,
+   "golden": 7927,
    "passes": {
     "quick": null,
-    "careful": 4931,
-    "thorough": 7883
+    "careful": 4867,
+    "thorough": 7927
    },
    "precedent": [
     "L56",
@@ -97,22 +97,22 @@
     "L07"
    ],
    "band": [
-    7608,
-    7971
+    7565,
+    8030
    ]
   },
   {
    "id": "R3",
-   "name": "the containers the trade loses in a year over the five pools",
+   "name": "the containers the trade lost over the year to the count over the five pools",
    "graded_as": "Component 3",
    "figure": "year_loss",
    "depends": [],
    "independent": "the count by lot, the register and the dockets",
-   "golden": 5284,
+   "golden": 5083,
    "passes": {
     "quick": null,
     "careful": 0,
-    "thorough": 5284
+    "thorough": 5083
    },
    "precedent": [
     "L53",
@@ -120,8 +120,8 @@
     "N13"
    ],
    "band": [
-    5227,
-    5315
+    5006,
+    5109
    ]
   },
   {
@@ -131,11 +131,11 @@
    "figure": "store_2027",
    "depends": [],
    "independent": "the Monday position, the racking log and the brew plan",
-   "golden": 10654,
+   "golden": 10698,
    "passes": {
     "quick": null,
-    "careful": 6404,
-    "thorough": 10654
+    "careful": 6487,
+    "thorough": 10698
    },
    "precedent": [
     "N17",
@@ -143,14 +143,14 @@
     "L37"
    ],
    "band": [
-    10620,
-    10708
+    10668,
+    10727
    ]
   },
   {
    "id": "R5",
    "name": "each pool's largest weekly shortfall of the 2027 season in the planning case (containers)",
-   "graded_as": "Ask 2",
+   "graded_as": "Ask 1",
    "figure": "plan",
    "depends": [
     "R2",
@@ -159,33 +159,33 @@
    ],
    "independent": "",
    "golden": {
-    "K50": 4610,
-    "K30": 2133,
-    "K20": 687,
-    "FIR": 1614,
-    "KIL": -438
+    "K50": 4544,
+    "K30": 2009,
+    "K20": 699,
+    "FIR": 1578,
+    "KIL": -448
    },
    "passes": {
     "quick": {
-     "K50": -40588,
-     "K30": -15087,
-     "K20": -3363,
-     "FIR": -15533,
-     "KIL": -4797
+     "K50": -38424,
+     "K30": -14657,
+     "K20": -3431,
+     "FIR": -14717,
+     "KIL": -4533
     },
     "careful": {
-     "K50": -706,
-     "K30": -173,
-     "K20": -895,
-     "FIR": -18,
-     "KIL": -753
+     "K50": -718,
+     "K30": -234,
+     "K20": -944,
+     "FIR": -20,
+     "KIL": -754
     },
     "thorough": {
-     "K50": 4610,
-     "K30": 2133,
-     "K20": 687,
-     "FIR": 1614,
-     "KIL": -438
+     "K50": 4544,
+     "K30": 2009,
+     "K20": 699,
+     "FIR": 1578,
+     "KIL": -448
     }
    },
    "precedent": [
@@ -195,24 +195,24 @@
    ],
    "bands": {
     "K50": [
-     4240,
-     4758
+     4179,
+     4687
     ],
     "K30": [
-     1945,
-     2192
+     1826,
+     2066
     ],
     "K20": [
-     589,
-     764
+     544,
+     737
     ],
     "FIR": [
-     1492,
-     1762
+     1457,
+     1728
     ],
     "KIL": [
-     -453,
-     -426
+     -463,
+     -437
     ]
    },
    "partly_share": 0.5
@@ -220,7 +220,7 @@
   {
    "id": "R6",
    "name": "the same in the hot case, the second highest of the ten summers (containers)",
-   "graded_as": "Ask 2",
+   "graded_as": "Ask 1",
    "figure": "hot",
    "depends": [
     "R2",
@@ -229,33 +229,33 @@
    ],
    "independent": "",
    "golden": {
-    "K50": 8651,
-    "K30": 2629,
-    "K20": 1027,
-    "FIR": 1621,
-    "KIL": -438
+    "K50": 8590,
+    "K30": 2486,
+    "K20": 1043,
+    "FIR": 1586,
+    "KIL": -448
    },
    "passes": {
     "quick": {
-     "K50": -37508,
-     "K30": -14707,
-     "K20": -3032,
-     "FIR": -15525,
-     "KIL": -4798
+     "K50": -35362,
+     "K30": -14291,
+     "K20": -3129,
+     "FIR": -14709,
+     "KIL": -4534
     },
     "careful": {
-     "K50": 2373,
-     "K30": 207,
-     "K20": -564,
-     "FIR": -10,
-     "KIL": -754
+     "K50": 2344,
+     "K30": 132,
+     "K20": -642,
+     "FIR": -12,
+     "KIL": -755
     },
     "thorough": {
-     "K50": 8651,
-     "K30": 2629,
-     "K20": 1027,
-     "FIR": 1621,
-     "KIL": -438
+     "K50": 8590,
+     "K30": 2486,
+     "K20": 1043,
+     "FIR": 1586,
+     "KIL": -448
     }
    },
    "precedent": [
@@ -265,24 +265,24 @@
    ],
    "bands": {
     "K50": [
-     7663,
-     9249
+     7603,
+     9187
     ],
     "K30": [
-     2378,
-     2715
+     2240,
+     2570
     ],
     "K20": [
-     843,
-     1128
+     789,
+     1126
     ],
     "FIR": [
-     1504,
-     1755
+     1469,
+     1722
     ],
     "KIL": [
-     -453,
-     -426
+     -463,
+     -437
     ]
    },
    "partly_share": 0.5
@@ -420,7 +420,7 @@
     "dropped": {
      "answer": [
       "50 litre kegs: seasonal hire",
-      "30 litre kegs: purchase",
+      "30 litre kegs: seasonal hire",
       "20 litre kegs: no cover",
       "firkins: seasonal hire",
       "kilderkins: no cover"
@@ -2581,7 +2581,7 @@
     "name": "the store at the same weeks' cover as 2026",
     "answer": [
      "50 litre kegs: seasonal hire",
-     "30 litre kegs: purchase",
+     "30 litre kegs: seasonal hire",
      "20 litre kegs: no cover",
      "firkins: seasonal hire",
      "kilderkins: no cover"
@@ -2681,7 +2681,7 @@
     "name": "the calibrated run route",
     "answer": [
      "50 litre kegs: seasonal hire",
-     "30 litre kegs: seasonal hire",
+     "30 litre kegs: purchase",
      "20 litre kegs: seasonal hire",
      "firkins: purchase",
      "kilderkins: no cover"
@@ -2691,7 +2691,7 @@
     "name": "the cutoff run route",
     "answer": [
      "50 litre kegs: seasonal hire",
-     "30 litre kegs: purchase",
+     "30 litre kegs: seasonal hire",
      "20 litre kegs: seasonal hire",
      "firkins: purchase",
      "kilderkins: no cover"
@@ -2701,7 +2701,7 @@
     "name": "the cutoff:three days run route",
     "answer": [
      "50 litre kegs: seasonal hire",
-     "30 litre kegs: purchase",
+     "30 litre kegs: seasonal hire",
      "20 litre kegs: seasonal hire",
      "firkins: purchase",
      "kilderkins: no cover"
@@ -2857,7 +2857,7 @@
    "name": "the store at the same weeks' cover as 2026",
    "answer": [
     "50 litre kegs: seasonal hire",
-    "30 litre kegs: purchase",
+    "30 litre kegs: seasonal hire",
     "20 litre kegs: no cover",
     "firkins: seasonal hire",
     "kilderkins: no cover"
@@ -2957,7 +2957,7 @@
    "name": "the calibrated run route",
    "answer": [
     "50 litre kegs: seasonal hire",
-    "30 litre kegs: seasonal hire",
+    "30 litre kegs: purchase",
     "20 litre kegs: seasonal hire",
     "firkins: purchase",
     "kilderkins: no cover"
@@ -2967,7 +2967,7 @@
    "name": "the cutoff run route",
    "answer": [
     "50 litre kegs: seasonal hire",
-    "30 litre kegs: purchase",
+    "30 litre kegs: seasonal hire",
     "20 litre kegs: seasonal hire",
     "firkins: purchase",
     "kilderkins: no cover"
@@ -2977,7 +2977,7 @@
    "name": "the cutoff:three days run route",
    "answer": [
     "50 litre kegs: seasonal hire",
-    "30 litre kegs: purchase",
+    "30 litre kegs: seasonal hire",
     "20 litre kegs: seasonal hire",
     "firkins: purchase",
     "kilderkins: no cover"

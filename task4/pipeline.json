@@ -11,13 +11,13 @@
  "doctrine": "throughout",
  "architecture": 14,
  "loops": 1,
- "call": "buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (cut pack: largest weekly shortfall in the 2027 summer season, planning case 4,578, 2,426, 841, 1,543 and -430; hot case 8,701, 2,940, 1,220, 1,551 and -430; lines nil and the maker's minimum order run 3,500, 1,500, 1,200, 1,200, 600)",
+ "call": "buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (cut pack: planning case 4,544, 2,009, 699, 1,578, -448; hot case 8,590, 2,486, 1,043, 1,586, -448; lines nil and 3,500, 1,500, 1,200, 1,200, 600)",
  "chain": "R1 each pool's account at the count of 30 November 2026 (register and count by purchase lot) and its deliveries; R2 the rise in the trade's stock from the count to its summer peak, from full-only cellar counts rebuilt on each line's delivery cycle; R3 the containers the trade loses in a year, from the share of each purchase lot found on site against its age; R4 the store at its fullest under the 2027 brew plan; R5 each pool's largest weekly shortfall in the planning case; R6 the same in the hot case; R7 the cover per pool",
- "stump": "cut pack: the reflex route (the reps' checks as they stand, the store at 2026's weeks of cover, the register less the condemned as the fleet) files -729, 54, -770, -74, -748: nothing for the 50 and 20 litre kegs and the firkins, a hire of 30 litre kegs; S1 lost alone files 2,604 fifty-litre (a hire), S2 lost alone -410 twenty-litre (nothing) and 778 firkins (a hire), S3 lost alone 623 firkins and 2,907 fifty-litre (a hire each); each stump pushed past its fit files a wrong cover too, and the four run routes (hedge, generous, calibrated, cut-off and its three further settings) each file a wrong call",
+ "stump": "cut pack: the reflex route files -718, -234, -944, -20, -754 (nothing for every pool); S1 lost alone 2,564 fifty-litre and 1,199 thirty-litre (hires), S2 lost alone -488 twenty-litre (nothing), S3 lost alone 693 firkins (a hire); each stump pushed past its fit files a wrong cover, and the four run routes and the cut-off's three settings each file a wrong call",
  "precut": {
   "exit": 0,
   "date": "2026-11-25",
-  "checks": "precut.py task4 on the cut pack: 0 FAIL, 1 WARN (nearest chains task8, task19 and task22, answered in the Template check); generator/core.py CORE PASS level 5 (draw); generator/results.py CORE PASS level 5 on the cut pack with every row PASS"
+  "checks": "precut.py task4 on the cut pack: 117 checks, 0 FAIL, 1 WARN (nearest chains, answered in the Template check); core.py and results.py CORE PASS level 5"
  },
  "leak": {
   "leak_py": "REVIEW on the cut pack (FS-04 and the hire terms' vocabulary, plan dates after the setting), each ruled in the note's ## Leak rulings; no LEAK",
@@ -38,9 +38,9 @@
   "careful": 26.7,
   "thorough": 100.0,
   "factorial": "cut pack, corelib level 5: S1 a cellar check is of full containers, the holding rebuilt from the dray's last call at the account (opens the 50 litre kegs), S2 the store under the 2027 brew plan (opens the 20 litre kegs), S3 the loss from the lots' age structure on site (opens the firkins); each necessary alone, none sufficient alone on the reflex route, each two-sided; 7 distinct wrong sets of covers on the lattice",
-  "rubric": "corelib on the cut pack: one stump lost S1 44, S2 22, S3 33; one fixed alone 16, 16, 16; the reflex route 9; the rigorous standard route 9; run routes hedge 9, generous 9, calibrated 44, cut-off 44",
+  "rubric": "corelib on the cut pack: one stump lost S1 33, S2 22, S3 22; one fixed alone 16 each; the reflex route 9; the rigorous standard route 9; run routes hedge 9, generous 9, calibrated 33, cut-off 33",
   "largest_hint": "a rep's cellar count is of the full containers of a line on its order day, and the empties wait there for the dray: rescues 1 of 7",
-  "forcing": "cut pack: 23 band-setting rebuilds and the build's 205 (every fork-table convention alone and every two together) on the golden's covers; each fitted input moved 20 per cent (deliveries 5) and all four by two measured spreads: same covers"
+  "forcing": "cut pack: the battery's 201 rebuilds and the refused readings on the golden's covers; each fitted input moved 20 per cent (deliveries 5) and all four by two measured spreads: same covers"
  },
  "returned": [
   {
@@ -111,7 +111,7 @@
    "commit": ""
   }
  ],
- "resume": "back to the architect: on the cut pack rebuilt to a6e04d1 (golden share rate and fitted level, estate 720, placement 4,800, C3 over the year to the count, the lots battery widened with the binomial log-link fit, the delivery-year age and the record's own lots left out), with bands from the whole battery less the readings refused with a pack figure (four and thirteen weeks of own dockets, the count's own week, one harmonic for every type, the estate's volume level through the year, the four- and eight-week levels), corelib passes every row but the calibrated run route at 54: it files 2,964, 1,468, 559, 1,668, -422 and lands the 20 litre pool's planning and hot figures (559 and 818) inside the near-miss stretch of their bands (589 to 764; 843 to 1,128) beside the firkins' and kilderkins'. With the whole battery unrefused, S1's worth is 2.7 times the 50 litre spread and the calibrated and cut-off routes earn 75 and 65. Once the architect rules: finish the note (SF14, SF16, SF17, SF19, SF20, Pinning list, closure axis 8, Frozen line, Prompt contract), re-run gates.py --full, then stage 4",
+ "resume": "stage 4: spawn the leak reader and the determinism judge (determinism mode: the Holistic Audit v4, Step 0, Part A and Part B) together in the background on target.zip of this cut (target digest 60760947b5f46954); fix every finding in the generator in one pass and re-run gates.py --full; then stage 5 (pre-ship check in the note, READY with both zips and golden/ force-added)",
  "approved": "",
  "delivered": "",
  "portal": {
@@ -218,6 +218,10 @@
   {
    "date": "2026-11-25",
    "event": "stage 3 rebuilt on the architect's rulings (a6e04d1); STOPPED: the calibrated run route earns 54 on the cut pack"
+  },
+  {
+   "date": "2026-11-25",
+   "event": "stage 3 rebuilt on the architect's second rulings (1070cb8): the fleet account as one row a pool, the lots' history on the fleet a year before the count, the 20 litre season and estate, the schedule's volume filed as a twelve-month average; the joint fit refused; results.py CORE PASS level 5 with every row PASS; gates.py --full 0 FAIL"
   }
  ],
  "runs": {
@@ -298,7 +302,7 @@
    }
   ]
  },
- "gates": "STOPPED at results.py on the rebuilt cut (target digest f1c537fd93b40f08): CORE FAIL, one row: the calibrated run route earns 54 (bar 50); every other corelib row PASS; gates.py not re-run on this cut",
+ "gates": "gates.py task4 --full on the cut pack (target digest 60760947b5f46954), 2026-11-25: precut WARN (nearest chains, answered), effort PASS (quick 9.0, careful 26.7, thorough 100), voice PASS, leak REVIEW (ruled in the note), figures PASS, stump PASS, containers PASS, heart WARN (answered), surface PASS, checks PASS, verify PASS (43 of 43), rebuild PASS; 0 FAIL, 3 WARN; core.py and results.py CORE PASS level 5 with every row PASS; core.py --forcing same call; audit_containers exit 0",
  "zip_sha256_16": "",
  "golden_zip_sha256_16": "",
  "migrated_from": {
@@ -317,6 +321,6 @@
  },
  "final_cut": {
   "date": "2026-11-25",
-  "note": "cut pack of architecture 14 loop 1 (target digest bf27139f134520a6); target.zip and golden.zip built, force-added at READY"
+  "note": "cut pack on the architect's second rulings (target digest 60760947b5f46954); zips built, force-added at READY"
  }
 }

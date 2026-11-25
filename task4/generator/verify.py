@@ -147,7 +147,13 @@ def rebuild(target):
     a1 = a1.sort_values("edge")
     a2 = pd.merge_asof(a1, ld[["line", "date", "cum"]].rename(columns={"date": "d0", "cum": "cum0", "line": "line0"}),
                        left_on="edge", right_on="d0", left_by="line_key", right_by="line0")
-    a2["rate"] = (a2["cum"] - a2["cum0"].fillna(0.0)) / 4.0
+    # a line's weekly sales at a check: its share of its type's deliveries over the record times the type's deliveries
+    # in the week of the check (own dockets are lumpy: a line takes whole containers)
+    line_tot = dk.groupby("line")["qty"].sum()
+    type_tot = dk.groupby("type")["qty"].sum()
+    a2["wk"] = d0 + pd.to_timedelta((a2["date"] - d0).dt.days // 7 * 7, unit="D")
+    a2["rate"] = [line_tot.get(l, 0.0) / type_tot[t] * weekly[t].get(w, weekly[t].iloc[-1])
+                  for l, t, w in zip(a2["line_key"], a2["type"], a2["wk"])]
     a2["iv"] = a2["acct"].map(lambda a: 0.5 if calls[a] == 2 else 1.0)
     out["n_checks"] = len(a2)
     # what the line holds: the count plus the containers sold since the dray, on the line's sales and interval
@@ -205,7 +211,7 @@ def rebuild(target):
         iv = lines["account_no"].map(lambda x: 0.5 if calls[x] == 2 else 1.0).to_numpy()
         per_sale = float(((b1 + b2 * iv) * tot).sum() / tot.sum())        # per container delivered a week, weighted
         b_est = (b1 + b2) / 2.0
-        lev = float(fl[-1])
+        lev = float(np.exp(design(idx[-1:], mondays[-1:], tt[-1:], h0) @ b)[0])   # the fit's value for the count's week
         on_site = float(site[site["type"] == t]["n"].sum())
         other = float(site[(site["type"] == t) & (site["area"] != "Cold store") & (site["state"] != "clean empty")]["n"].sum())
         st = store[store["type"] == t].set_index("date")["full_containers"]
@@ -262,6 +268,11 @@ def main(target):
         ok("verify: %s planning case inside its band" % t, lo <= r["plan"] <= hi, "%.0f in [%d, %d]" % (r["plan"], lo, hi))
         lo, hi = fig["hot_band"][t]
         ok("verify: %s hot case inside its band" % t, lo <= r["hot"] <= hi, "%.0f in [%d, %d]" % (r["hot"], lo, hi))
+    for key, field in (("trade_rise", "rise"), ("store_2027", "full"), ("year_loss", "loss")):
+        for t in TYPES:
+            lo, hi = fig[key + "_band_by_pool"][t]
+            ok("verify: %s %s inside its band" % (t, key), lo <= res[t][field] <= hi,
+               "%.0f in [%d, %d]" % (res[t][field], lo, hi))
     for key, field in (("trade_rise", "rise"), ("store_2027", "full"), ("year_loss", "loss")):
         v = sum(res[t][field] for t in TYPES)
         lo, hi = fig[key + "_band"]

@@ -324,7 +324,8 @@ def write_schedule(target):
     ws2.append(["Schedule B: committed volumes"])
     ws2["A1"].font = Font(bold=True, size=12)
     ws2.append([])
-    _sheet(ws2, ["container", "lines at full listing", "average weekly volume per line over the contract year, containers"],
+    _sheet(ws2, ["container", "lines at full listing",
+                 "average weekly volume per line over the twelve months to September 2026, containers"],
            [[{"K50": "50 litre keg", "K30": "30 litre keg", "K20": "20 litre keg", "FIR": "firkin"}[p],
              C.W[p]["estate"][0], C.W[p]["estate"][1]] for p in ("K50", "K30", "K20", "FIR")], [24, 16, 34])
     ws2.append([])

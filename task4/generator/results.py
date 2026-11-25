@@ -157,6 +157,16 @@ def figures(X):
                          for k in X["allowances"]}
     fig["joint"] = {p: r0(X["joint"][p]["short"]) for p in POOLS}
     fig["joint_coef"] = {p: round(X["joint"][p]["days_coef"], 2) for p in POOLS}
+    fig["slope_se"] = {p: {k: round(v, 3) for k, v in X["slope_se"][p].items()} for p in POOLS}
+    fig["refused"] = {name: {p: r0(v[p]) for p in POOLS} for name, v in X["refused"].items()}
+    fig["refused_cover"] = {name: {p: A.cover_of(v[p], p) for p in POOLS} for name, v in X["refused"].items()}
+    fig["rate_diag"] = {k: {"slope": {p: round(v["slope"][p], 2) for p in POOLS}, "fall": round(-v["fall"][0], 3)}
+                        for k, v in X["rate_diag"].items()}
+    fig["level_diag"] = {p: {k: round(v, 3) if k in ("scatter", "count_week") else r0(v) for k, v in d.items()}
+                         for p, d in X["level_diag"].items()}
+    for p in POOLS:
+        fig["level_diag"][p]["count_week_pct"] = round(100.0 * X["level_diag"][p]["count_week"], 1)
+        fig["level_diag"][p]["scatter_pct"] = round(100.0 * X["level_diag"][p]["scatter"], 1)
     fig["level4"] = {p: r0(X["level4"][p]) for p in POOLS}
     dc, se, nn = X["days_check"]
     fig["falsification"] = dict(fall=round(-dc, 2), se=round(se, 2), checks=nn)
@@ -227,14 +237,21 @@ def spec_of(X, fig, Rr, truth):
         routes.update({k: c["runs"][k] for k in BASE_RUNS})
         figs.append(dict(id=cid, block="component", golden=c["golden"], family=c["family"], band=fig[key + "_band"],
                          lattice=dict(c["lattice"]), routes=routes))
+    # the asks: the fleet account, one row a pool and one sentence a row (lost over the year to the count, the trade's
+    # rise to its summer peak, the store at its fullest, the planning and the hot case's largest weekly shortfall)
     for p in POOLS:
-        figs.append(dict(id="A-%s" % p, block="ask", member=p, sentence="ask-%s" % p, band=fig["plan_band"][p]))
-    for p in POOLS:
+        figs.append(dict(id="A-%s" % p, block="ask", member=p, sentence="row-%s" % p, band=fig["plan_band"][p]))
         routes = {"rigorous": float(X["hot_rigorous"][p])}
         routes.update({k: float(Rr["hruns"][k][p]) for k in BASE_RUNS})
-        figs.append(dict(id="H-%s" % p, block="ask", sentence="ask-%s" % p, golden=float(Rr["hot"][p]),
+        figs.append(dict(id="H-%s" % p, block="ask", sentence="row-%s" % p, golden=float(Rr["hot"][p]),
                          family=[float(x) for x in Rr["hfam"][p]], band=fig["hot_band"][p],
                          lattice={k: float(Rr["hlat"][k][p]) for k in KEYS}, routes=routes))
+        for tag, field, key in (("T", "rise", "trade_rise"), ("S", "fullest", "store_2027"), ("L", "year_loss", "year_loss")):
+            routes = {"rigorous": float(X["rigorous"][p][field])}
+            routes.update({k: float(X["runs"][p][k][field]) for k in BASE_RUNS})
+            figs.append(dict(id="%s-%s" % (tag, p), block="ask", sentence="row-%s" % p, golden=float(X["gold"][p][field]),
+                             family=[float(x[field]) for x in X["fam"][p]], band=fig[key + "_band_by_pool"][p],
+                             lattice={k: float(X["lat"][p][k][field]) for k in KEYS}, routes=routes))
     dc, se, nn = X["days_check"]
     falsification = dict(check="across the cellar checks, with a line's weekly sales and delivery interval held, the "
                                "full containers counted fall with each container the line has sold since the dray "
@@ -270,14 +287,14 @@ def effort(X, fig, Rr):
                "the five pools (containers)", "Component 1", "trade_rise", [],
          "the cellar checks, the dockets, the route plan and the supply agreement's schedule",
          dict(band=fig["trade_rise_band"]), ["L56", "L57", "L07"]),
-        ("R3", "the containers the trade loses in a year over the five pools", "Component 3", "year_loss", [],
+        ("R3", "the containers the trade lost over the year to the count over the five pools", "Component 3", "year_loss", [],
          "the count by lot, the register and the dockets", dict(band=fig["year_loss_band"]), ["L53", "L43", "N13"]),
         ("R4", "the full containers in the cold store at its fullest in the 2027 season under the brew plan, over the "
                "five pools", "Component 2", "store_2027", [], "the Monday position, the racking log and the brew plan",
          dict(band=fig["store_2027_band"]), ["N17", "N02", "L37"]),
-        ("R5", "each pool's largest weekly shortfall of the 2027 season in the planning case (containers)", "Ask 2",
+        ("R5", "each pool's largest weekly shortfall of the 2027 season in the planning case (containers)", "Ask 1",
          "plan", ["R2", "R3", "R4"], "", dict(bands=fig["plan_band"], partly_share=0.5), ["L56", "N17", "L53"]),
-        ("R6", "the same in the hot case, the second highest of the ten summers (containers)", "Ask 2", "hot",
+        ("R6", "the same in the hot case, the second highest of the ten summers (containers)", "Ask 1", "hot",
          ["R2", "R3", "R4"], "", dict(bands=fig["hot_band"], partly_share=0.5), ["L56", "N17", "L53"]),
         ("R7", "the cover for each pool", "Recommendation", "call", ["R5"], "", {}, ["L56", "N17", "L53"]),
     ]

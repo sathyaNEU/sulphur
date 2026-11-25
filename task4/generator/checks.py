@@ -147,9 +147,13 @@ def main(target):
     # R5: every factor across the data, and no one factor rescuing more than a third
     for p in POOLS:
         c = R.counts[p]
-        fall = np.linalg.lstsq(np.column_stack([np.ones(len(c["count_full"])), c["count_rate"], c["count_rate"] * c["count_iv"],
-                                                c["count_rate"] * c["count_days"] / 7.0]), c["count_full"], rcond=None)[0][-1]
-        ok("R5 S1's factor on every pool: %s's checks fall with the sales since the dray" % p, fall < -0.4, "%.2f" % fall)
+        rt = c[A.GOLDEN["rate"]]
+        Xf = np.column_stack([np.ones(len(rt)), rt, rt * c["count_iv"], rt * c["count_days"] / 7.0])
+        bf = np.linalg.lstsq(Xf, c["count_full"], rcond=None)[0]
+        rf = c["count_full"] - Xf @ bf
+        se = float(np.sqrt(np.linalg.inv(Xf.T @ Xf)[-1, -1] * (rf @ rf) / (len(rt) - 4)))
+        ok("R5 S1's factor on every pool: %s's checks fall with the sales since the dray (point estimate below nil; the "
+           "pooled fall is the falsification check)" % p, bf[-1] < 0, "%.2f (se %.2f)" % (bf[-1], se))
         ok("R5 S2's factor on every pool: %s's store saws with its runs" % p,
            R.store[p][52:].max() - R.store[p][52:].min() > 0.5 * max(A.runs_of(R, p).values()))
         ok("R5 S3's factor on every pool: %s's lots thin with age" % p, gold[p]["lam_y"] > 0.01, "%.4f" % gold[p]["lam_y"])
@@ -164,8 +168,10 @@ def main(target):
     bat = {p: [x["short"] for x in X["bat"][p]] for p in POOLS}
     ok("R7 the build's battery files one cover for every pool", fig["battery_calls_all_golden"],
        "%d rebuilds (every fork-table convention alone and every two together)" % (len(A.BATTERY) - 1))
-    ok("R7 the band-setting variants file one cover and sit in every band", fig["family_calls_all_golden"] and
+    ok("R7 the battery sets every band and sits in it", fig["family_calls_all_golden"] and
        all(inband(x["short"], fig["plan_band"][p]) for p in POOLS for x in X["fam"][p]))
+    for name, v in X["refused"].items():
+        ok("R7 refused, files the same covers: %s" % name, same(v), " ".join("%.0f" % v[p] for p in POOLS))
     for name, v in X["forcing"].items():
         ok("R7 forcing: %s, same call" % name, same(v), " ".join("%.0f" % v[p] for p in POOLS))
     for side, v in X["corners"].items():
@@ -193,17 +199,31 @@ def main(target):
        and "minimum order run" in std)
     single = {name: o for name, o in A.SINGLES}
     sc = lambda o: same({p: A.chain(R, p, o)["short"] for p in POOLS})
-    ok("SF12 the estate's volume level through the year, same call", sc({"estate": "flat"}))
+    sch = T[F["schedule"]]
+    ok("SF12 the schedule files the estate's volume as a twelve-month average; the flat reading is refused and files the "
+       "same covers", "average weekly volume per line over the twelve months to September 2026" in sch and
+       sc({"estate": "flat"}))
     ok("SF13 the count covers every site, full and empty", set(R.count_sites) == {"Brighouse", "Leeds", "York", "Sheffield"})
-    ok("SF14 deliveries at the count over two weeks or from the fit, same call", sc({"level": 2}) and sc({"level": "fit"}))
-    ok("SF14 four weeks refused by figure, the covers it files", same(X["level4"]), fig["level4"])
+    ok("SF14 the fitted value the golden; two weeks in the battery, same call", A.GOLDEN["level"] == "fit" and sc({"level": 2}))
+    ld = fig["level_diag"]
+    ok("SF14 the count's own week refused: its week sits off the fit by about a week's scatter, same covers",
+       abs(ld["K50"]["count_week"]) > 0.5 * ld["K50"]["scatter"] and sc({"level": 1}), ld["K50"])
+    ok("SF14 four and eight weeks refused, the covers they file", same(X["level4"]) and
+       same(X["refused"]["deliveries at the count as the mean of its last eight weeks"]), fig["level4"])
     ok("SF15 the form has two count boxes and the counts fall with the sales since the dray",
        "Full in cellar" in form and "On dispense" in form and fig["falsification"]["fall"] > 0.5,
        fig["falsification"])
-    ok("SF16 thirteen weeks of dockets, same call", sc({"rate": "count_rate13"}))
+    rd = fig["rate_diag"]
+    ok("SF16 the share the golden; own dockets over thirteen and four weeks refused: the fitted holding rises as the "
+       "window shortens and the falsification statistic falls", A.GOLDEN["rate"] == "count_rate_share" and
+       rd["count_rate_share"]["slope"]["K20"] < rd["count_rate13"]["slope"]["K20"] < rd["count_rate"]["slope"]["K20"] and
+       rd["count_rate_share"]["fall"] >= rd["count_rate"]["fall"] and sc({"rate": "count_rate13"}) and sc({"rate": "count_rate"}),
+       {k: (v["slope"]["K20"], v["fall"]) for k, v in rd.items()})
     ok("SF17 the line's own last docket, same call", sc({"last": "line"}))
     ok("SF18 by interval and the summer's checks, same call", sc({"fit": "byclass"}) and sc({"count_months": "summer"}))
-    ok("SF19 the fall left free files the same covers", same({p: X["joint"][p]["short"] for p in POOLS}), fig["joint"])
+    ok("SF19 the fall left free refused: its slope's standard error over twice the rebuild's, same covers",
+       same({p: X["joint"][p]["short"] for p in POOLS}) and
+       all(fig["slope_se"][p]["joint"] > 2.0 * fig["slope_se"][p]["rebuild"] for p in POOLS), fig["slope_se"])
     ok("SF20 an allowance in place of the rebuild puts C1 outside its band",
        all(not inband(fig["allowances"][k]["C1"], fig["trade_rise_band"]) for k in ("half", "whole")),
        {k: fig["allowances"][k]["C1"] for k in ("half", "whole")})
@@ -219,7 +239,9 @@ def main(target):
     ok("SF27 a beer's run as the mean of its rackings, same call", sc({"run_stat": "mean"}))
     ok("SF28 the brew plan files each beer's on-sale dates", all(len(R.plan[p]) > 0 for p in POOLS))
     ok("SF29 the bend a degree either way, same call", sc({"hinge": -1.0}) and sc({"hinge": 1.0}))
-    ok("SF30 one or three harmonics, same call", sc({"harmonics": 1}) and sc({"harmonics": 3}))
+    ok("SF30 one harmonic where the F test allows and three, same call; one for every type refused by the 50 litre "
+       "pool's F", sc({"harmonics": "test"}) and sc({"harmonics": 3}) and sc({"harmonics": 1}) and A.harmonic_F(R, "K50") > A.F_CRIT,
+       "%.1f" % A.harmonic_F(R, "K50"))
     dp = {}
     for line in open(os.path.join(target, F["depots"])).readlines()[1:]:
         w, d, c, x = line.strip().split(",")
@@ -249,6 +271,11 @@ def main(target):
         for key, band in (("plan", fig["plan_band"][p]), ("hot", fig["hot_band"][p])):
             REPORT.append("world %s %-4s %6d against the band %s: %s" % (key, p, W[p][key], band,
                                                                        "inside" if inband(W[p][key], band) else "OUTSIDE"))
+    for p in POOLS:
+        for key, field in (("year_loss", "year_loss"), ("trade_rise", "rise"), ("store_2027", "store")):
+            band = fig[key + "_band_by_pool"][p]
+            REPORT.append("world %s %-4s %6d against the band %s: %s" % (key, p, W[p][field], band,
+                                                                       "inside" if inband(W[p][field], band) else "OUTSIDE"))
     for key, field in (("trade_rise", "rise"), ("store_2027", "store"), ("year_loss", "year_loss")):
         v = sum(W[p][field] for p in POOLS)
         band = fig[key + "_band"]

@@ -73,20 +73,16 @@ def write(path, f):
           "hot case, the worst week, the maker's minimum order run, the cover, with a chart against the runs); the second "
           "is the fleet account by type; behind them the routes, the weekly path, the cellar checks rebuilt, the lots, the "
           "cold store and the ten summers.", "",
-          "1. The fleet account's three lines for each container type, in containers:"]
+          "1. The fleet account for each container type under FS-04, in containers, one row a type:"]
     for j, p in enumerate(POOLS):
-        L.append("   %s. %s: lost in the trade in a year %s (band %s); %s more held by the trade at its summer peak than "
-                 "at the November count (band %s); %s full in the cold store at its fullest under the 2027 brew plan "
-                 "(band %s)." % (
+        L.append("   %s. %s: lost in the trade over the year to the November count %s (band %s); %s more held by the "
+                 "trade at its summer peak than at that count (band %s); %s full in the cold store at its fullest under "
+                 "the 2027 brew plan (band %s); largest weekly shortfall of the 2027 season %s in the planning case (band "
+                 "%s, week beginning %s) and %s in the hot case (band %s); cover: %s." % (
                      "abcde"[j], pl[p].capitalize(), k(f["year_loss_by_pool"][p]), _b(f["year_loss_band_by_pool"][p]),
                      k(f["trade_rise_by_pool"][p]), _b(f["trade_rise_band_by_pool"][p]), k(f["store_2027_by_pool"][p]),
-                     _b(f["store_2027_band_by_pool"][p])))
-    L.append("2. Each container type's largest weekly shortfall of the 2027 summer season, in containers, with the cover "
-             "the standard puts on it:")
-    for j, p in enumerate(POOLS):
-        L.append("   %s. %s: %s in the planning case (band %s, week beginning %s) and %s in the hot case (band %s); %s." % (
-            "abcde"[j], pl[p].capitalize(), k(f["plan"][p]), _b(f["plan_band"][p]), day(f["plan_week"][p]), k(f["hot"][p]),
-            _b(f["hot_band"][p]), COVER[f["cover"][p]]))
+                     _b(f["store_2027_band_by_pool"][p]), k(f["plan"][p]), _b(f["plan_band"][p]), day(f["plan_week"][p]),
+                     k(f["hot"][p]), _b(f["hot_band"][p]), COVER[f["cover"][p]]))
     L += ["", "### %s" % deliver.FILES["deck"], "",
           "Four slides for the order meeting: the cover for each type with the chart, the fleet account, the season week by "
           "week with the hot case, and what the records read as they stand would have ordered; the workbook's figures.", "",
@@ -96,8 +92,8 @@ def write(path, f):
                                  _b(f["trade_rise_band"])))
     L.append("2. The cold store at its fullest in the 2027 season holds **%s** full containers over the five types (%s; "
              "band %s)." % (k(f["store_2027"]), each(f, lambda p: k(f["store_2027_by_pool"][p])), _b(f["store_2027_band"])))
-    L.append("3. The trade loses **%s** containers a year over the five types (%s; band %s)." % (
-        k(f["year_loss"]), each(f, lambda p: k(f["year_loss_by_pool"][p])), _b(f["year_loss_band"])))
+    L.append("3. The trade lost **%s** containers over the year to the count of %s over the five types (%s; band %s)." % (
+        k(f["year_loss"]), count, each(f, lambda p: k(f["year_loss_by_pool"][p])), _b(f["year_loss_band"])))
     L += ["", "## Step-by-Step", ""]
     st = [
         "Put the dockets on one footing (`%s`, %s rows): a docket line a handheld sent twice counted once (%s rows), a "
@@ -114,13 +110,16 @@ def write(path, f):
                               five(f, {p: f["routes"]["direct"][p]["plan"] for p in POOLS})),
         "Fitted each type's weekly deliveries by least squares on logs: a level, a trend, two yearly harmonics and the "
         "week's mean daily maximum at Calder Vale (`%s`) with a slope either side of a bend set on a half-degree grid "
-        "(%s degrees); the 2027 weeks run at the normal (planning case) or a summer's recorded weeks (hot case), the "
-        "Maplestead outlets added from their listing dates in `%s` at the scheduled volume, shaped by the season." % (
-            F["weather"], five(f, {p: P[p]["bend_c"] for p in POOLS}, "%.1f"), F["schedule"]),
+        "(%s degrees); the fit's value for the count's own week is the level at the count (a single week's dockets scatter %s per "
+        "cent about the fit on 50 litre kegs); the 2027 weeks run at the normal (planning case) or a summer's recorded "
+        "weeks (hot case), the Maplestead outlets added from their listing dates in `%s` at the schedule's average weekly "
+        "volume over the twelve months to September 2026, shaped by the season." % (
+            F["weather"], five(f, {p: P[p]["bend_c"] for p in POOLS}, "%.1f"),
+            "%.1f" % (100 * f["level_diag"]["K50"]["scatter"]), F["schedule"]),
         "Rebuilt what each checked line held (`%s`, %s line checks on %s calls, a line entered twice taken once): the "
         "TQ-02 form (`%s`) records the full containers and the one on dispense on the account's order day, and the empties "
-        "wait for the dray (FS-04 5.1), so each check gets back the line's weekly sales over four weeks of its dockets "
-        "times the days since the dray last called at the account over seven (on average %s days and %s containers a "
+        "wait for the dray (FS-04 5.1), so each check gets back the line's weekly sales (its share of its type's deliveries over the "
+        "record times the type's deliveries that week) times the days since the dray last called at the account over seven (on average %s days and %s containers a "
         "check for 50 litre kegs). Read as they stand the checks give 50 litre kegs %s containers per container sold a "
         "week on a weekly delivery; rebuilt, %s. The counts' own fall is the check: with sales and interval held, the "
         "full containers counted fall by %s (standard error %s) for each container sold since the dray called, where a "
@@ -136,7 +135,8 @@ def write(path, f):
         "Read the loss from the lots (`%s` tally against `%s` by lot and purchase date): the share of each lot found on "
         "site, weighted by the containers found, falls with the lot's age at %s per cent of the fleet a year by type, "
         "with %s of the fleet on site. Each lot on the register times its survival gives %s alive at the count, and the "
-        "trade loses %s a year, **%s** (Component 3); the fleet carried forward with the condemnations only loses none." % (
+        "trade lost %s over the year to the count, **%s** (Component 3); the fleet carried forward with the "
+        "condemnations only loses none." % (
             F["count"], F["register"], five(f, {p: A[p]["leaving_pct"] for p in POOLS}, "%.1f"),
             ", ".join("%.2f" % A[p]["share_on_site"] for p in POOLS), five(f, {p: A[p]["alive"] for p in POOLS}),
             five(f, f["year_loss_by_pool"]), k(f["year_loss"])),
@@ -151,14 +151,19 @@ def write(path, f):
         "site at the count, plus the containers lost and condemned since. The planning case's largest week (3.1, 3.2) is "
         "%s; the hot case, the second highest of the ten summers %s to %s run week by week (3.3), is %s." % (
             day(f["season"][1]), five(f, f["plan"]), min(f["summers"]["K50"]), max(f["summers"]["K50"]), five(f, f["hot"])),
-        "Read the cover on the planning case (4.1) against the minimum runs of `%s`: %s. Rebuilt on %d other conventions "
-        "(the bands: other fits of the checks, the weather's bend and the harmonics, the store's median week, the count's "
-        "level over two weeks or from the fit, the lots unweighted, without an end lot or ends against ends, the fleet "
-        "from the share on site, the loss on the calendar) every cover holds, the nearest %s containers from a line; so "
-        "it does on %s rebuilds taking each convention of the fork table alone and every two together, and with each "
-        "fitted input moved 20 per cent (deliveries 5) or all four by two measured spreads." % (
-            F["quotation"], each(f, lambda p: COVER[f["cover"][p]]), f["variants"] - 1, k(f["nearest_variant"]["distance"]),
-            k(f["battery"] - 1)),
+        "Read the cover on the planning case (4.1) against the minimum runs of `%s`: %s. Rebuilt on %s other "
+        "conventions, each alone and every two together (the bands), every cover holds, the nearest %s containers from "
+        "a line, and so it does with each fitted input moved 20 per cent (deliveries 5) or all four by two measured "
+        "spreads. Not used: a line's own dockets over thirteen or four weeks for its sales (the fitted holding per "
+        "container sold on 20 litre kegs rises from %s on the share to %s and %s, as a line's whole containers lump its "
+        "own dockets), the count's own week for its level (%s per cent off the fit, a week's scatter), the fall per "
+        "container sold left free (its slope's standard error %s against the rebuild's %s on 50 litre kegs) and the "
+        "estate's volume flat through the season (the schedule files it as a twelve-month average); each files the "
+        "same covers." % (
+            F["quotation"], each(f, lambda p: COVER[f["cover"][p]]), k(f["variants"] - 1), k(f["nearest_variant"]["distance"]),
+            "%.2f" % f["rate_diag"]["count_rate_share"]["slope"]["K20"], "%.2f" % f["rate_diag"]["count_rate13"]["slope"]["K20"],
+            "%.2f" % f["rate_diag"]["count_rate"]["slope"]["K20"], "%.1f" % (100 * f["level_diag"]["K50"]["count_week"]),
+            "%.3f" % f["slope_se"]["K50"]["joint"], "%.3f" % f["slope_se"]["K50"]["rebuild"]),
     ]
     for i, s in enumerate(st):
         L.append("%d. %s" % (i + 1, s))

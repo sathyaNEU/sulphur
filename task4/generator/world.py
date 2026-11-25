@@ -415,7 +415,7 @@ def lots(WD, p, rng):
     register, the losses and condemnations inside the record are drawn container by container, and the count of
     30 November 2026 finds on site a random draw of what is alive"""
     w, P = C.W[p], WD.pools[p]
-    fleet = float(P.alive[WH - 52:WH + 1].mean())
+    fleet = float(P.alive[WH - 52])                              # the fleet a year before the count
     rl = float(P.lost_w[WH - 52:].sum()) / fleet
     rs = float(P.scrap[WH - 52:].sum()) / fleet
     years = list(C.LOT_YEARS)

@@ -93,11 +93,12 @@ BATTERY = family()
 FAMILY = BATTERY
 # readings the files rule out, each by a figure the note states; they file the same covers and set no band
 REFUSED = [
+    ("the fall per container sold left free in the fit of the checks", {"recon": "joint"}),
     ("a line's weekly sales from four weeks of its own dockets", {"rate": "count_rate"}),
     ("a line's weekly sales from thirteen weeks of its own dockets", {"rate": "count_rate13"}),
     ("deliveries at the count as its own week's", {"level": 1}),
     ("one seasonal harmonic in the deliveries fit for every type", {"harmonics": 1}),
-    ("the estate's scheduled volume level through the year", {"estate": "flat"}),
+    ("the estate's scheduled volume level through the 2027 season", {"estate": "flat"}),
     ("deliveries at the count as the mean of its last four weeks", {"level": 4}),
     ("deliveries at the count as the mean of its last eight weeks", {"level": 8}),
 ]
@@ -614,6 +615,26 @@ def chain(R, p, opt=None, temps=None):
                 slope_half=slope(0.5) if 0.5 in ivs else None)
 
 
+def slope_se(R, p, recon):
+    """the standard error of a weekly-delivery line's holding per container sold a week (b1 + b2), on the golden's
+    rebuild of each check or with the fall per container sold left free in the fit"""
+    rec = R.counts[p]
+    rate, iv, full, days = rec[GOLDEN["rate"]], rec["count_iv"], rec["count_full"], rec["count_days"]
+    sold = rate * days / 7.0
+    if recon == "joint":
+        X = np.column_stack([np.ones(len(rate)), rate, rate * iv, sold])
+        y = full
+    else:
+        X = np.column_stack([np.ones(len(rate)), rate, rate * iv])
+        y = full + sold
+    beta = np.linalg.lstsq(X, y, rcond=None)[0]
+    res = y - X @ beta
+    cov = np.linalg.inv(X.T @ X) * float(res @ res) / (len(y) - X.shape[1])
+    c = np.zeros(X.shape[1])
+    c[1] = c[2] = 1.0
+    return float(math.sqrt(c @ cov @ c))
+
+
 def direct(R, p, temps=None):
     """the register read as the fleet: the requirement built from the records as they stand (the cellar checks
     carried to every line, the store at its weeks of cover) less every container the register holds"""
@@ -745,6 +766,7 @@ def run(target):
         g = dict(GOLDEN, rate=rate)
         X["rate_diag"][rate] = dict(slope={p: fit_cellar(R, p, g)[1](1.0) for p in POOLS},
                                     fall=days_check(R, rate)[:2])
+    X["slope_se"] = {p: dict(rebuild=slope_se(R, p, "days"), joint=slope_se(R, p, "joint")) for p in POOLS}
     X["level_diag"] = {}
     for p in POOLS:
         predict = fit_sales(R, p, 2)[0]
