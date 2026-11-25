@@ -294,7 +294,8 @@ def load(target, mess=None):
     for p in POOLS:
         x = ck[ck["pool"] == p]
         d = x["day"].to_numpy()
-        days, days_l, r4, r13 = [], [], [], []
+        days, days_l, r4, r13, rs = [], [], [], [], []
+        ptot = float(R.flow[p].sum())
         for k, a, c in zip(x["key"], x["acct"], d):
             ld, lq = R.line_days[k]
             j = int(np.searchsorted(ld, c)) - 1                     # the line's own last docket before the call
@@ -304,7 +305,9 @@ def load(target, mess=None):
             q = lambda lo: float(lq[j] - (lq[int(np.searchsorted(ld, lo)) - 1] if np.searchsorted(ld, lo) > 0 else 0.0))
             r4.append(q(c - 28) / 4.0)
             r13.append(q(c - 91) / 13.0)
-        R.counts[p] = dict(count_rate=np.array(r4), count_rate13=np.array(r13),
+            # the line's share of its type's deliveries over the record, times the type's deliveries in the week of the call
+            rs.append(float(R.line_total[p].get(k, 0.0)) / ptot * float(R.flow[p][min(int(c // 7), WH - 1)]))
+        R.counts[p] = dict(count_rate=np.array(r4), count_rate13=np.array(r13), count_rate_share=np.array(rs),
                            count_iv=np.array([R.interval[a] for a in x["acct"]]), count_full=x["full"].to_numpy(),
                            count_days=np.array(days), count_days_line=np.array(days_l),
                            count_month=x["month"].to_numpy(), count_day=d)

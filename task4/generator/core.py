@@ -60,7 +60,7 @@ LOT_YEARS = tuple(range(2011, 2024))  # the purchase lots older than the docket 
 W = {
     "K50": dict(S0=4300, amp=0.20, k=0.045, g=0.000, L=2700, a=2.2, b=0.50, loss=0.0100, c2=0.55, cover=0.35,
                 beers=[("PIL", 0.62, 400, 2400), ("GLD", 0.38, 300, 1400)], new27=[],
-                estate=(600, 0.90), place=4300, lots=[(15, 1800), (70, 1200)], moq=3500, counts=1800),
+                estate=(720, 0.90), place=4800, lots=[(15, 1800), (70, 1200)], moq=3500, counts=1800),
     "K30": dict(S0=2400, amp=0.10, k=0.012, g=0.005, L=2600, a=2.1, b=0.50, loss=0.0085, c2=0.55, cover=0.35,
                 beers=[("PAL", 0.35, 250, 800), ("IPA", 0.25, 165, 550), ("HER", 0.22, 165, 500),
                        ("BLK", 0.18, 125, 400)], new27=[],
@@ -155,9 +155,10 @@ def simulate(seed=SEED):
         r, iv = lines_of(p, rng)
         m = float((r * (iv + 1.0)).sum() / r.sum())              # the cellars' weeks of interval and cover, by sales
         q = dict(r=r, iv=iv, m=m)
-        S = np.array([w["S0"] * (1 + w["g"]) ** (i / 52.0) * seas(i, w["amp"]) * warm(normal_temp(i) + anom[i], w["k"])
-                      * math.exp(rng.normal(0, 0.03)) for i in range(WH)])
-        cellar = w["a"] * w["L"] + w["b"] * m * S
+        level = np.array([w["S0"] * (1 + w["g"]) ** (i / 52.0) * seas(i, w["amp"]) *
+                          warm(normal_temp(i) + anom[i], w["k"]) for i in range(WH)])
+        S = level * np.exp(rng.normal(0, 0.03, WH))               # the week's deliveries, lumpy about the level
+        cellar = w["a"] * w["L"] + w["b"] * m * level             # a line stocks to what it sells, not to a week's dockets
         store = np.zeros(WH)
         stock = {}
         for i in range(WH):
@@ -281,8 +282,12 @@ def records(world, seed=SEED + 1):
         sold = np.minimum(np.floor(rate * days / 7.0 * np.exp(rng.normal(0, 0.08, n)) + rng.random(n)), held - 1.0)
         full = held - sold                                       # the count: full containers and the one on dispense
         R["pool"][p] = dict(take=take, flow=q["S"].copy(), store=q["store"].copy(),
-                            count_rate=rate * np.exp(rng.normal(0, 0.10, n)),      # four weeks of the line's dockets
-                            count_rate13=rate * np.exp(rng.normal(0, 0.06, n)),    # thirteen weeks of them
+                            # a line's weekly sales at the call: its share of its type's deliveries over the record
+                            # times the type's deliveries that week; or its own dockets over thirteen or four weeks,
+                            # lumpier because a line takes whole containers
+                            count_rate_share=rate * np.exp(rng.normal(0, 0.03, n)),
+                            count_rate13=rate * np.exp(rng.normal(0, 0.06, n)),
+                            count_rate=rate * np.exp(rng.normal(0, 0.10, n)),
                             count_iv=iv, count_full=full, count_days=days, count_week=wk,
                             line_rate=q["r"], line_iv=q["iv"], estate=w["estate"], beers26=beers_at(p, 0),
                             lot_age=q["lot_age"].copy(), lot_reg=q["lot_reg"].copy(), lot_ons=q["lot_ons"].copy())
@@ -290,8 +295,8 @@ def records(world, seed=SEED + 1):
 
 
 # ------------------------------------------------------------------------------------------------- the estimators
-GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate",
-              count_months="all", harmonics=2, hinge=0.0, cover="mean", level=1, age_fit="wls", age_drop=0,
+GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
+              count_months="all", harmonics=2, hinge=0.0, cover="mean", level="fit", age_fit="wls", age_drop=0,
               alive="lots", clock="deliveries",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)   # the forcing battery's multipliers on the fitted inputs
 # the hurried choice at each stump, and the same stump pushed past its fitted value to the far end a run might set
@@ -503,22 +508,22 @@ def hot(fn):
 FAMILY = [
     ("the golden's conventions", {}),
     ("the cellar counts fitted one line for each delivery interval", {"fit": "byclass"}),
-    ("a line's weekly sales from thirteen weeks of its dockets, not four", {"rate": "count_rate13"}),
+    ("a line's weekly sales from thirteen weeks of its own dockets, not its share of the type's", {"rate": "count_rate13"}),
     ("the summer's cellar counts only", {"count_months": "summer"}),
     ("the bend in the weather response a degree lower", {"hinge": -1.0}),
     ("the bend in the weather response a degree higher", {"hinge": 1.0}),
     ("one seasonal harmonic in the deliveries fit", {"harmonics": 1}),
     ("three seasonal harmonics in the deliveries fit", {"harmonics": 3}),
     ("the store's cover as the median week's, not the mean's", {"cover": "median"}),
-    ("deliveries at the count over its last two weeks, not its own week's", {"level": 2}),
-    ("deliveries at the count as the fit's value for its week", {"level": "fit"}),
+    ("deliveries at the count over its last two weeks, not the fit's value for its week", {"level": 2}),
+    ("deliveries at the count as its own week's", {"level": 1}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
     ("the lots fitted without the newest lot", {"age_drop": "newest"}),
     ("the lots fitted without the oldest lot", {"age_drop": "oldest"}),
     ("the oldest four lots against the newest four", {"age_fit": "ends"}),
     ("the fleet alive as the count over the fitted share on site", {"alive": "share"}),
     ("the loss carried on the calendar, not on deliveries", {"clock": "calendar"}),
-    ("thirteen weeks of dockets and the lines by interval together", {"rate": "count_rate13", "fit": "byclass"}),
+    ("thirteen weeks of own dockets and the lines by interval together", {"rate": "count_rate13", "fit": "byclass"}),
     ("the summer counts and the two-week level together", {"count_months": "summer", "level": 2}),
     ("the unweighted lots and the calendar loss together", {"age_fit": "ols", "clock": "calendar"}),
 ]
@@ -549,7 +554,7 @@ def spreads(R, p, reps=120, seed=11):
     for _ in range(reps):
         idx = rng.integers(0, n, n)
         r2 = dict(rec)
-        for k in ("count_rate", "count_rate13", "count_iv", "count_full", "count_days", "count_week"):
+        for k in ("count_rate_share", "count_rate", "count_rate13", "count_iv", "count_full", "count_days", "count_week"):
             r2[k] = rec[k][idx]
         sl = fit_cellar(r2, GOLDEN)[1]
         bm.append(sum(sl(x) * float(lr[li == x].sum()) for x in set(li.tolist())) / float(lr.sum()))
@@ -604,7 +609,7 @@ def days_check(R):
     X, y = [], []
     for k, p in enumerate(POOLS):
         rec = R["pool"][p]
-        rate, iv, full, days = rec["count_rate"], rec["count_iv"], rec["count_full"], rec["count_days"]
+        rate, iv, full, days = rec[GOLDEN["rate"]], rec["count_iv"], rec["count_full"], rec["count_days"]
         blk = np.zeros((len(rate), 3 * len(POOLS) + 1))
         blk[:, 3 * k], blk[:, 3 * k + 1], blk[:, 3 * k + 2], blk[:, -1] = 1.0, rate, rate * iv, rate * days / 7.0
         X.append(blk)
