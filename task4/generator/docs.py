@@ -1,6 +1,7 @@
-"""Wrenfold's own documents and its suppliers': the fleet standard FS-04, the maker's quotation and the pooling
-company's seasonal hire terms (each exported from a word processor through the house writer), the 2027 brew plan,
-the Maplestead supply agreement's schedule, the route plan and the trade price list."""
+"""Wrenfold's own documents and its suppliers': the fleet standard FS-04, the trade quality cellar check form TQ-02,
+the maker's quotation and the pooling company's seasonal hire terms (each exported from a word processor through the
+house writer), the 2027 brew plan, the Maplestead supply agreement's schedule, the route plan and the trade price
+list."""
 import datetime as dt
 import os
 import sys
@@ -28,6 +29,7 @@ BST = dt.timezone(dt.timedelta(hours=1))
 CET = dt.timezone(dt.timedelta(hours=1))
 FILES = {
     "standard": "FS-04_returnable_container_fleet_issue3.pdf",
+    "form": "TQ-02_cellar_quality_check.pdf",
     "quotation": "lindqvist_quotation_Q26-1187.pdf",
     "hire": "pennine_seasonal_hire_terms_2027.pdf",
     "plan": "brew_plan_2027.xlsx",
@@ -76,13 +78,15 @@ STANDARD = [
         "summer season, and the cover that is put in place. It applies to the five container types Wrenfold fills: "
         "the 50 litre keg (K50), the 30 litre keg (K30), the 20 litre keg (K20), the firkin (FIR) and the kilderkin "
         "(KIL). Each type is reviewed on its own.",
-        "1.2 The review follows the annual container count and is reported to the order meeting in December, so that "
-        "an order placed with the maker in January is delivered before the season opens.",
+        "1.2 The review follows the count of every Wrenfold site at the end of November and is reported to the order "
+        "meeting in December, so that an order placed with the maker in January is delivered before the season "
+        "opens.",
     ]),
     ("2. Definitions", [
         "2.1 Requirement. A container type's requirement in a week is the number of its containers that are, in that "
-        "week, at customers, full in the cold store, at the depots, and in wash and repair (empties awaiting wash are "
-        "counted under wash), together with a float of two sevenths of the containers delivered in the week.",
+        "week, at customers (full, on dispense, or empty and awaiting collection), full in the cold store, at the "
+        "depots, and in wash and repair (empties awaiting wash are counted under wash), together with a float of two "
+        "sevenths of the containers delivered in the week.",
         "2.2 Fleet. A container type's fleet in a week is the number of its containers that are on Wrenfold's sites or "
         "at its customers in that week.",
         "2.3 Shortfall. The shortfall in a week is the requirement less the fleet, taken with no purchase and no hire "
@@ -107,15 +111,22 @@ STANDARD = [
         "purchase. The hot case is reported beside the planning case and does not change the cover.",
         "4.2 The maker's minimum order run for each type is taken from the maker's quotation in force at the review.",
     ]),
-    ("5. Report", [
-        "5.1 The review reports, for each container type, the largest weekly shortfall of the season in the planning "
-        "case and in the hot case, in containers, the week in which the planning case's figure falls, and the cover.",
-        "5.2 The report is kept with the count sheets of the year it follows.",
+    ("5. Collection", [
+        "5.1 Empty containers are collected by the dray at its next delivery to the account. The driver takes every "
+        "Wrenfold empty on the premises, of every type.",
+        "5.2 Containers are returned through the depot that serves the account and trunked to Brighouse for washing.",
     ]),
-    ("6. Changes from issue 2", [
-        "6.1 The float is restated as two sevenths of the week's deliveries (issue 2 gave it as two days' deliveries, "
+    ("6. Report", [
+        "6.1 The review reports, for each container type, the largest weekly shortfall of the season in the planning "
+        "case and in the hot case, in containers, the week in which the planning case's figure falls, and the cover.",
+        "6.2 The report is kept with the count sheets of the year it follows.",
+    ]),
+    ("7. Changes from issue 2", [
+        "7.1 The float is restated as two sevenths of the week's deliveries (issue 2 gave it as two days' deliveries, "
         "which was read both as two of seven days and as two of five delivery days).",
-        "6.2 The hot case is defined on the ten most recent summers; issue 2 used the single hottest summer on record.",
+        "7.2 The hot case is defined on the ten most recent summers; issue 2 used the single hottest summer on record.",
+        "7.3 The review follows the count of every site in the last week of November, which replaces the annual "
+        "count of early December.",
     ]),
 ]
 
@@ -138,6 +149,31 @@ def write_standard(target):
             font="Liberation Sans")
 
 
+def write_form(target):
+    """the blank cellar quality check the trade quality reps carry, one form a call"""
+    body, h1, h2, cell = _styles()
+    title = "TQ-02 Cellar quality check"
+    head = [["Account no.", "", "Date of call", ""], ["Account name", "", "Rep", ""],
+            ["Cellar temperature, C", "", "Licensee present", "Yes / No"]]
+    rows = [["Line", "Beer", "Container", "Full in cellar", "On dispense", "Oldest date code", "Condition / comments"]]
+    rows += [["", "", "", "", "", "", ""] for _ in range(12)]
+    story = [Paragraph(title, h1), _grid(head, [34, 50, 34, 50], cell), Spacer(1, 6),
+             Paragraph("One form for each call. Enter each Wrenfold line you check, by the line number on the account's "
+                       "line list.", body),
+             _grid(rows, [12, 40, 20, 20, 20, 26, 44], cell), Spacer(1, 6),
+             Paragraph("Full in cellar: unbroached Wrenfold containers of the line's beer in the cellar. On dispense: "
+                       "1 where a Wrenfold container is coupled to the line, 0 where none is.", body),
+             Paragraph("Oldest date code: the earliest best-before date on a full container of the line's beer.", body),
+             Paragraph("Condition: report any container past its date, any line due for cleaning, gas below the "
+                       "reserve mark, or a cellar above 13 C, on the account's quality record.", body),
+             Spacer(1, 10),
+             _grid([["Rep signature", "", "Licensee signature", ""]], [30, 54, 30, 54], cell)]
+    O.build(os.path.join(target, FILES["form"]), story, title=title, author="Trade Quality",
+            subject="Cellar quality check", footer="%s, Trade Quality, form TQ-02 rev. 4 (03/24)" % ORG,
+            created=dt.datetime(2024, 3, 11, 10, 4, tzinfo=GMT), modified=dt.datetime(2024, 3, 11, 10, 9, tzinfo=GMT),
+            font="Liberation Sans")
+
+
 def write_quotation(target):
     body, h1, h2, cell = _styles()
     title = "Quotation Q26-1187: stainless steel kegs and casks"
@@ -146,7 +182,7 @@ def write_quotation(target):
             ["Date", "9 November 2026"], ["Valid until", "29 January 2027"]]
     price = {"K50": 64.90, "K30": 55.70, "K20": 62.30, "FIR": 78.40, "KIL": 101.20}
     spec = {"K50": "50 l keg, DIN, flat fitting, embossed chime", "K30": "30 l keg, DIN, flat fitting, embossed chime",
-            "K20": "20 l keg, slim, flat fitting, tag pocket in the top chime", "FIR": "Firkin, 40.9 l, stainless, shive and keystone bushes",
+            "K20": "20 l keg, slim, flat fitting, embossed chime", "FIR": "Firkin, 40.9 l, stainless, shive and keystone bushes",
             "KIL": "Kilderkin, 81.8 l, stainless, shive and keystone bushes"}
     lead = {"K50": 12, "K30": 12, "K20": 13, "FIR": 14, "KIL": 14}
     rows = [["Item", "Description", "Unit price, EUR", "Minimum order run, units", "Lead time, weeks from order"]]
@@ -163,8 +199,8 @@ def write_quotation(target):
                        "30 per cent with order, the balance 30 days from delivery.", body),
              Paragraph("Lead times run from receipt of order and deposit. An order received by 15 January 2027 will be "
                        "delivered complete by 23 April 2027.", body),
-             Paragraph("Tooling for the embossing is held at our works and is not charged. Tag pockets on item 3 are "
-                       "to your sample of March 2022.", body),
+             Paragraph("Tooling for the embossing is held at our works and is not charged. Each container is stamped "
+                       "on the chime with your lot reference and serial.", body),
              Paragraph("Yours faithfully, Henrik Brandt, Export Sales", body)]
     O.build(os.path.join(target, FILES["quotation"]), story, title=title, author="Henrik Brandt",
             subject="Quotation Q26-1187", footer="%s, quotation Q26-1187" % WL.MAKER,
@@ -250,13 +286,14 @@ def write_plan(target):
 def estate_rows(seed=WL.SEED):
     """the Maplestead pubs: listing date, delivery day and lines by container type; 300 pubs in three tranches"""
     rng = np.random.default_rng([seed, 200])
-    n = C.W["K50"]["estate"][0]
+    n = 300                                                      # the estate's pubs
     lines = {p: C.W[p]["estate"][0] for p in WL.POOLS}
     cut = {p: [int(round(lines[p] * (k + 1) / 3.0)) for k in range(3)] for p in WL.POOLS}
     pubs = []
     seen = set()
     per = n // 3
     for k in range(3):
+        alloc = {p: WL.split(cut[p][k] - (cut[p][k - 1] if k else 0), rng.gamma(2.5, 1.0, per)) for p in WL.POOLS}
         for j in range(per):
             while True:
                 name = "The %s, %s" % (EST_NAMES[int(rng.integers(0, len(EST_NAMES)))], EST_TOWNS[int(rng.integers(0, len(EST_TOWNS)))])
@@ -265,9 +302,7 @@ def estate_rows(seed=WL.SEED):
                     break
             row = {"name": name, "tranche": k, "day": PK.DAYNAME[int(rng.integers(0, 5))]}
             for p in ("K50", "K30", "K20", "FIR"):
-                tot = cut[p][k] - (cut[p][k - 1] if k else 0)
-                base, extra = divmod(tot, per)
-                row[p] = base + (1 if j < extra else 0)
+                row[p] = int(alloc[p][j])
             pubs.append(row)
     order = rng.permutation(len(pubs))
     return [pubs[int(i)] for i in order]
@@ -333,6 +368,7 @@ def write_prices(target, WD):
 
 def write_all(target, WD):
     write_standard(target)
+    write_form(target)
     write_quotation(target)
     write_hire(target)
     write_plan(target)

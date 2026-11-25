@@ -1,9 +1,11 @@
-"""The simulated brewery behind the pack: Wrenfold's accounts and their dispense lines, each line's sales by the
-season and the week's temperature, what each cellar holds and is delivered, the drivers' visits, the containers the
-trade loses, the cold store racked a run at a time, the depots, the wash line, the fleet and its register, the
-stocktakes, the reps' cellar audits and the tags of the 20 litre kegs. The dials are the core's (`core.W`); this
-module lays the process out line by line and day by day, and carries the same process through the 2027 season at
-expected sales, which is the truth the checks hold the golden to.
+"""The simulated brewery behind the pack: Wrenfold's accounts and their dispense lines, each line drawing steadily
+by the season and the week's temperature, what each cellar holds and is delivered, the drivers' visits (the empties
+wait in the cellar for the dray's next call), the containers the trade loses, the cold store racked a run at a time,
+the depots, the wash line, the fleet by purchase lot since 2011 and a register that strikes off only what the wash
+line condemns, the one count of every site on 30 November 2026, and the reps' cellar counts of the full containers
+of a line on the account's order day. The dials are the core's (`core.W`); this module lays the process out line by
+line and day by day, and carries the same process through the 2027 season at expected sales, which is the truth the
+checks hold the golden to.
 
 Nothing here is read by the analysis: `analysis.py` reads the shipped files only."""
 import datetime as dt
@@ -19,18 +21,18 @@ ORG = "Wrenfold Brewery Ltd"
 ESTATE = "Maplestead Inns"
 MAKER = "Lindqvist Fass GmbH"
 HIRER = "Pennine Container Pool Ltd"
-RECOVERY = "KegTrace Recovery Services"
+OLD_MAKER = "Calder Coopers Ltd"
 PEOPLE = {"head": "Kim Taylor", "analyst": "Justin Francis", "fleet": "Edward Moss", "sales": "Louise White",
           "brewer": "Amelia Hodgson", "depot": "Toby Morley"}
 POOLS = C.POOLS
 WH, WF = C.WH, C.WF
 D0 = C.D0
-ASOF = D0 + dt.timedelta(days=7 * WH)                 # Monday 30 November 2026, the stocktake
-STOCKTAKES = (0, 52, 104, 156)
+ASOF = D0 + dt.timedelta(days=7 * WH)                 # Monday 30 November 2026, the count of every site
 WX0 = -361                                            # the weather record starts on Monday 2 January 2017
 N_ACCOUNTS = 2300
-AUDIT_FROM = 60                                       # the reps' cellar audits start in late January 2025
-N_AUDITS = 860
+COUNT_FROM = 60                                       # the reps' cellar counts start in late January 2025
+DRAW_SD = 0.12                                        # a line's week-to-week wobble about its steady draw
+CALL_DAYS = {1.0: ([3, 4, 5, 6], [0.15, 0.27, 0.33, 0.25]), 0.5: ([2, 3], [0.40, 0.60])}   # dray to the order day
 RUN_SHORT = 0.008                                     # containers a racking fails to fill, as a share of the run
 SPLIT = dict(depot_full=0.45, depot_empty=0.15, awaiting=0.22, wash=0.05, repair=0.13)   # of depots, wash and repair
 DEPOTS = {"LDS": ("Leeds", 0.40), "YRK": ("York", 0.28), "SHF": ("Sheffield", 0.32)}
@@ -49,15 +51,9 @@ BEER_NAMES = {
     "F09": "Foundry DDH Pale", "F10": "Foundry Gose", "F11": "Foundry Pilsner", "F12": "Foundry Brown",
     "F13": "Foundry Amber", "F14": "Foundry Hefe", "F15": "Foundry Grisette", "F16": "Foundry Citra Single Hop",
     "F17": "Foundry Lime Lager", "F18": "Foundry Harvest Pale"}
-OLD_LOTS = {"K50": [("50-2009", 2009, 0.30), ("50-2013", 2013, 0.33), ("50-2018", 2018, 0.37)],
-            "K30": [("30-2011", 2011, 0.34), ("30-2016", 2016, 0.36), ("30-2021", 2021, 0.30)],
-            "K20": [("20-2019", 2019, 0.45), ("20-2022", 2022, 0.55)],
-            "FIR": [("F9-2008", 2008, 0.38), ("F9-2014", 2014, 0.36), ("F9-2019", 2019, 0.26)],
-            "KIL": [("K18-2010", 2010, 0.55), ("K18-2017", 2017, 0.45)]}
-READ_MISS = {"FILL": 0.005, "DELIVER": 0.03, "WASH": 0.01}
-READ_DOUBLE = 0.01
-TAG_SWAP = 0.004                                      # share of washes at which a damaged tag is replaced
-OVERDUE_DAYS = 182
+LOT_CODE = {"K50": "50", "K30": "30", "K20": "20", "FIR": "F9", "KIL": "K18"}
+MAKER_FROM = 2014                                     # Lindqvist has made every lot since 2014
+RINGS = ["red", "yellow", "green", "blue", "white", "orange", "black", "grey", "brown", "purple"]
 HOLIDAYS = set(dt.date(*d) for d in [
     (2023, 12, 25), (2023, 12, 26), (2024, 1, 1), (2024, 3, 29), (2024, 4, 1), (2024, 5, 6), (2024, 5, 27),
     (2024, 8, 26), (2024, 12, 25), (2024, 12, 26), (2025, 1, 1), (2025, 4, 18), (2025, 4, 21), (2025, 5, 5),
@@ -213,9 +209,9 @@ def build(seed=SEED, light=False):
     visits(WD, rs(30))
     for k, p in enumerate(POOLS):
         racking_days(WD, p, rs(40 + k))
-    kegs(WD, rs(50))
-    audits(WD, rs(60))
-    register(WD, rs(70))
+    for k, p in enumerate(POOLS):
+        lots(WD, p, rs(70 + k))
+    cellar_counts(WD, rs(60))
     return WD
 
 
@@ -239,7 +235,12 @@ def simulate_pool(WD, p, rng):
     P.iv = np.where(WD.twice[P.acct], 0.5, 1.0)
     G = np.array([fwd_factor(p, i, WD.temp[i]) for i in range(WH)])
     mu = P.r[:, None] * G[None, :]
-    s = rng.poisson(mu * np.exp(rng.normal(0, 0.03, WH))[None, :])
+    # a line draws steadily: the beer it pours in a week is its expected trade with the week's common shock and its
+    # own wobble, and the containers it empties are the whole containers that beer runs through
+    inc = mu * np.exp(rng.normal(0, 0.03, WH))[None, :] * np.exp(rng.normal(0, DRAW_SD, (L, WH)))
+    cum = rng.random(L)[:, None] + np.cumsum(np.column_stack([np.zeros(L), inc]), axis=1)   # by the start of week i
+    s = np.diff(np.floor(cum), axis=1).astype(int)
+    P.cum, P.inc = cum, inc
     H = holding(P, w, mu)
     Hprev = np.column_stack([H[:, 0], H[:, :-1]])
     lost = rng.binomial(s, w["loss"])
@@ -335,12 +336,10 @@ def forward(WD, p, rng):
     hist = float(P.lost_w.sum() + P.scrap.sum())
     alive0 = round((need[pk] - w["place"] + drain[pk] + hist - P.bought[:WH].sum()) / 10.0) * 10.0
     alive = np.zeros(WH + 1)
-    reg = np.zeros(WH + 1)
-    alive[0] = reg[0] = alive0
+    alive[0] = alive0
     for i in range(WH):
         alive[i + 1] = alive[i] - P.lost_w[i] - P.scrap[i] + P.bought[i]
-        reg[i + 1] = reg[i] - P.scrap[i] + P.bought[i]
-    P.alive, P.register, P.alive0 = alive, reg, int(alive0)
+    P.alive, P.alive0 = alive, int(alive0)
     P.onsite = alive - P.trade
     P.idle = P.onsite - P.store - P.other
     assert P.idle.min() >= 0, (p, P.idle.min())
@@ -370,18 +369,14 @@ def truth_hot(WD, p):
 
 # ------------------------------------------------------------------------------------------- the drivers' visits
 def visits(WD, rng):
-    """each line's weekly delivery and collection laid on its account's delivery day or days"""
-    E = np.zeros((2, N_ACCOUNTS, WH), dtype=int)                 # empties collected at each visit, every type
+    """each line's weekly delivery laid on its account's delivery day or days: on a twice-weekly round the second
+    call of the week brings at least one of the line's containers whenever it has any"""
     for p in POOLS:
         P = WD.pools[p]
         tw = WD.twice[P.acct][:, None]
-        P.d1 = np.where(tw, rng.binomial(P.dlv, 0.5), P.dlv)
+        first = np.where(P.dlv > 0, rng.binomial(np.maximum(P.dlv - 1, 0), 0.5), 0)
+        P.d1 = np.where(tw, first, P.dlv)
         P.d2 = P.dlv - P.d1
-        P.c1 = np.where(tw, rng.binomial(P.col, 0.5), P.col)
-        P.c2 = P.col - P.c1
-        for v, c in ((0, P.c1), (1, P.c2)):
-            np.add.at(E[v], P.acct, c)
-    WD.empties = E
 
 
 def racking_days(WD, p, rng):
@@ -412,214 +407,149 @@ def racking_days(WD, p, rng):
     P.rackings = sorted(out)
 
 
-# ----------------------------------------------------------------------------------- the 20 litre kegs, one by one
-def kegs(WD, rng):
-    """every 20 litre keg through fill, delivery and wash: the reads its tag makes, the kegs the trade loses and the
-    kegs the recovery agent is sent after"""
-    p = "K20"
+# ------------------------------------------------------------------------------------------- the fleet by lot
+def lots(WD, p, rng):
+    """the fleet by purchase lot: a lot a year from 2011 to 2023 and the lots bought inside the docket record. Every
+    lot loses the same share of what is alive each year (a lost container is any container; the share is the last
+    year's loss over the fleet with a year-to-year spread), the wash line's condemnations alone are struck off the
+    register, the losses and condemnations inside the record are drawn container by container, and the count of
+    30 November 2026 finds on site a random draw of what is alive"""
     w, P = C.W[p], WD.pools[p]
-    L = len(P.r)
-    n0 = P.alive0
-    lots = [(wk, int(n)) for wk, n in w["lots"]]
-    idle = deque(rng.permutation(n0).tolist())
-    queue = [deque() for _ in range(L)]
-    empt = [deque() for _ in range(L)]
-    fifo = [deque() for _ in P.beers26]
-    for l in range(L):
-        for _ in range(int(P.H[l, 0])):
-            queue[l].append((idle.popleft(), None))
-    for b in range(len(fifo)):
-        for _ in range(int(P.stock_b[b, 0] + P.depot_b[b, 0])):
-            fifo[b].append(idle.popleft())
-    trips = []                 # keg, beer, fill day, line, deliver day, wash day (day numbers from D0; None if not seen)
-    open_trip = {}             # keg -> index in trips of its trip in progress
-    lost_kegs = []             # keg, deliver day, week lost
-    scrapped = []              # keg, day
-    racks, deliv = {}, {}
-    for i, dd, bi, n in P.rackings:
-        racks.setdefault(i, []).append((dd, bi, n))
-    acct = P.acct
-    for v, d, c in ((0, P.d1, P.c1), (1, P.d2, P.c2)):
-        ls, ws = np.nonzero((d > 0) | (c > 0))
-        for l, i in zip(ls.tolist(), ws.tolist()):
-            deliv.setdefault(i, []).append((int(WD.day1[acct[l]]) + 3 * v, l, int(d[l, i]), int(c[l, i])))
-    owed = np.zeros(L, dtype=int)
-    due = np.zeros(L, dtype=int)
-    back = {}                  # day number -> kegs read at the wash that day
-    next_lot = 0
-    gone_for_good = set()
-    for i in range(WH):
-        while next_lot < len(lots) and lots[next_lot][0] == i:
-            first = n0 + sum(n for wk, n in lots[:next_lot])
-            idle.extend(range(first, first + lots[next_lot][1]))
-            next_lot += 1
-        wk_racks = sorted(racks.get(i, []))
-        wk_del = sorted(deliv.get(i, []))
-        sold = set()
-        washed_now = []
-        for dd in range(7):
-            day = 7 * i + dd
-            for k in back.pop(day, []):
-                washed_now.append(k)
-                idle.append(k)
-            while wk_racks and wk_racks[0][0] == dd:
-                _, bi, n = wk_racks.pop(0)
-                for _ in range(n):
-                    k = idle.popleft()
-                    open_trip[k] = len(trips)
-                    trips.append([k, bi, day, -1, None, None])
-                    fifo[bi].append(k)
-            while wk_del and wk_del[0][0] == dd:
-                _, l, q, c = wk_del.pop(0)
-                if l not in sold:                                # what the line sold since the last call
-                    sold.add(l)
-                    n_s, n_l = int(P.s[l, i]) + int(owed[l]), int(P.lost[l, i])
-                    take = min(n_s, len(queue[l]))
-                    owed[l] = n_s - take
-                    gone = [queue[l].popleft() for _ in range(take)]
-                    for k, dday in gone[:min(n_l, take)]:
-                        lost_kegs.append((k, dday, i))
-                        gone_for_good.add(k)
-                        open_trip.pop(k, None)
-                    empt[l].extend(gone[min(n_l, take):])
-                want, due[l] = c + int(due[l]), 0
-                for n_c in range(want):                          # the empties that are there
-                    if empt[l]:
-                        k, dday = empt[l].popleft()
-                    elif len(queue[l]) > int(P.H[l, i]):
-                        k, dday = queue[l].pop()
-                    else:
-                        due[l] = want - n_c
-                        break
-                    wd = day + (1 if WD.accounts[acct[l]]["depot"] != "BRG" else 0) + (1 if rng.random() < 0.12 else 0)
-                    if k in open_trip:
-                        trips[open_trip.pop(k)][5] = wd
-                    else:                                        # delivered before the record opens
-                        trips.append([k, -1, None, l, dday, wd])
-                    back.setdefault(max(wd, day + 1), []).append(k)   # clean and ready for filling the day after
-                bi = int(P.guest[l, i])
-                for _ in range(q):
-                    src = fifo[bi] if fifo[bi] else max(fifo, key=len)
-                    k = src.popleft()
-                    if k in open_trip:
-                        trips[open_trip[k]][3] = l
-                        trips[open_trip[k]][4] = day
-                    else:                                        # filled before the record opens
-                        open_trip[k] = len(trips)
-                        trips.append([k, bi, None, l, day, None])
-                    queue[l].append((k, day))
-        for l in range(L):                                       # a line with no call this week
-            if l not in sold and P.s[l, i]:
-                owed[l] += int(P.s[l, i])
-        for _ in range(int(P.scrap[i])):
-            cand = [k for k in washed_now if k in idle]
-            if cand:
-                k = cand[int(rng.integers(0, len(cand)))]
-                washed_now.remove(k)
-                idle.remove(k)
-                scrapped.append((k, 7 * i + int(rng.integers(0, 5))))
-    P.keg_total = n0 + sum(n for wk, n in lots)
-    P.trips, P.lost_kegs, P.scrapped = trips, lost_kegs, scrapped
-    P.keg_trade = sum(len(q) for q in queue) + sum(len(e) for e in empt)
-    # the kegs the recovery agent is sent after: unread 26 weeks after a delivery
-    end = 7 * WH
-    chase = []
-    for k, dday, wk in lost_kegs:
-        if dday is not None and dday + OVERDUE_DAYS < end:
-            ref = dday + OVERDUE_DAYS + int(rng.integers(0, 6))
-            closed = ref + int(rng.integers(12, 40))
-            if ref < end:
-                chase.append((k, dday, ref, closed if closed < end else None, "NOT TRACED" if closed < end else None))
-    for k, bi, fday, l, dday, wday in trips:
-        if dday is None or k in gone_for_good and wday is None:
-            continue
-        if (wday is None and dday + OVERDUE_DAYS < end) or (wday is not None and wday - dday > OVERDUE_DAYS + 5):
-            ref = dday + OVERDUE_DAYS + int(rng.integers(0, 6))
-            closed = ref + int(rng.integers(5, 25))
-            if ref < end:
-                chase.append((k, dday, ref, closed if closed < end else None, "AT ACCOUNT" if closed < end else None))
-    P.chase = sorted(chase, key=lambda x: (x[2], x[0]))
+    fleet = float(P.alive[WH - 52:WH + 1].mean())
+    rl = float(P.lost_w[WH - 52:].sum()) / fleet
+    rs = float(P.scrap[WH - 52:].sum()) / fleet
+    years = list(C.LOT_YEARS)
+    rho = {y: rl * math.exp(rng.normal(0, 0.05)) for y in years}
+    size = rng.uniform(0.6, 1.4, len(years)) * np.linspace(1.25, 0.85, len(years))
+    late = int(rng.integers(1, 9))                                # this lot's last part came in the January after
+    info, surv0, cshare = [], [], []
+    for k, y in enumerate(years):
+        d = dt.date(y, int(rng.integers(2, 11)), int(rng.integers(1, 28)))
+        parts = [d + dt.timedelta(days=int(x)) for x in sorted(rng.choice(np.arange(0, 70, 7), int(rng.integers(1, 4)),
+                                                                          replace=False))]
+        if k == late:
+            parts[-1] = dt.date(y + 1, 1, int(rng.integers(8, 27)))
+        s, c = 1.0, 0.0
+        for z in range(y, 2024):                                   # from the first part to the record's opening
+            lo, hi = max(parts[0], dt.date(z, 1, 1)), min(D0, dt.date(z + 1, 1, 1))
+            f = (hi - lo).days / 365.25
+            if f > 0:
+                c += s * rs * f
+                s *= (1.0 - rho[z] - rs) ** f
+        surv0.append(s)
+        cshare.append(c)
+        info.append(dict(year=y, parts=parts, maker=OLD_MAKER if y < MAKER_FROM else MAKER))
+    alive0 = split(P.alive0, size * np.array(surv0))
+    serial_lot, serial_date, cond, lost = [], [], {}, set()
+    for k, x in enumerate(info):
+        n_alive = int(alive0[k])
+        n = int(round(n_alive / surv0[k]))
+        n_cond = int(round(n * cshare[k]))
+        first = len(serial_lot)
+        per = split(n, np.ones(len(x["parts"])))
+        for d, m in zip(x["parts"], per):
+            serial_lot += [k] * int(m)
+            serial_date += [d] * int(m)
+        ids = rng.permutation(np.arange(first, first + n))
+        for j in ids[:n_cond]:                                    # condemned at the wash before the record opens
+            d0 = serial_date[j] + dt.timedelta(days=120)
+            span = max((D0 - d0).days, 1)
+            cond[int(j)] = d0 + dt.timedelta(days=int(rng.integers(0, span)))
+        lost |= set(int(j) for j in ids[n_cond:n - n_alive])       # lost in the trade before the record opens
+        x["bought"], x["alive0"] = n, n_alive
+    for wk, n in w["lots"]:                                        # the lots bought inside the record
+        d = week_start(wk) + dt.timedelta(days=2)
+        info.append(dict(year=d.year, parts=[d], maker=MAKER, bought=int(n), alive0=0, week=wk))
+        serial_lot += [len(info) - 1] * int(n)
+        serial_date += [d] * int(n)
+    serial_lot = np.array(serial_lot)
+    alive = np.ones(len(serial_lot), dtype=bool)
+    for j in list(cond) + list(lost):
+        alive[j] = False
+    for k, x in enumerate(info):
+        if "week" in x:
+            alive[serial_lot == k] = False                         # not yet bought at the record's opening
+    assert int(alive.sum()) == P.alive0, (p, int(alive.sum()), P.alive0)
+    for i in range(WH):                                            # the record, week by week
+        live = np.nonzero(alive)[0]
+        pick = rng.choice(len(live), int(P.lost_w[i] + P.scrap[i]), replace=False)
+        gone = live[pick]
+        for j in gone[:int(P.lost_w[i])]:
+            lost.add(int(j))
+        worked = [week_start(i) + dt.timedelta(days=d) for d in range(5)]
+        worked = [d for d in worked if d not in HOLIDAYS]
+        for j in gone[int(P.lost_w[i]):]:
+            cond[int(j)] = worked[int(rng.integers(0, len(worked)))]
+        alive[gone] = False
+        for k, x in enumerate(info):
+            if x.get("week") == i:
+                alive[serial_lot == k] = True
+    assert int(alive.sum()) == int(P.alive[WH]), (p, int(alive.sum()), P.alive[WH])
+    live = np.nonzero(alive)[0]
+    onsite = np.zeros(len(serial_lot), dtype=bool)
+    onsite[live[rng.choice(len(live), int(P.onsite[WH]), replace=False)]] = True
+    P.lots = info
+    P.reg = dict(lot=serial_lot, bought=serial_date, condemned=cond, lost=lost, alive=alive, onsite=onsite,
+                 total=len(serial_lot), rho=rl, rs=rs)
+    before = lambda d: sum(1 for x in serial_date if x < d) - sum(1 for x in cond.values() if x < d)
+    P.register_at_count = before(ASOF)
+    P.lot_tally = np.bincount(serial_lot[onsite], minlength=len(info))
 
 
-# ------------------------------------------------------------------------------------------- the reps' audits
-def audits(WD, rng):
-    """trade quality reps count a cellar line by line on their rounds: full, on dispense and empty"""
+# ------------------------------------------------------------------------------------------- the reps' counts
+def cellar_counts(WD, rng):
+    """trade quality reps call on an account on its order day, a few days after the dray, and count the full
+    containers of each line they check and the one on dispense; the containers the line has emptied since the dray
+    called wait in the cellar for its next delivery and are not on the form"""
     lines_of = {}
     for p in POOLS:
         for l, a in enumerate(WD.pools[p].acct.tolist()):
             lines_of.setdefault(a, []).append((p, l))
     accts = sorted(lines_of)
-    wgt = np.array([1.0 + 1.6 * any(p == "KIL" for p, l in lines_of[a]) + 0.5 * any(p == "FIR" for p, l in lines_of[a])
-                    for a in accts])
+    visited = np.zeros((N_ACCOUNTS, WH), dtype=bool)
+    for p in POOLS:
+        P = WD.pools[p]
+        np.logical_or.at(visited, (np.repeat(P.acct, WH), np.tile(np.arange(WH), len(P.acct))), (P.dlv > 0).ravel())
+    off = {}
+    for a in accts:                                               # the account's order day, so many days after the dray
+        days, wts = CALL_DAYS[0.5 if WD.twice[a] else 1.0]
+        off[a] = int(rng.choice(days, p=wts))
+    has = lambda a, q: any(p == q for p, l in lines_of[a])
+    wgt = np.array([1.0 + 9.0 * has(a, "KIL") + 0.6 * has(a, "FIR") + 0.4 * has(a, "K20") for a in accts])
     near_holiday = lambda i: any((week_start(i) + dt.timedelta(days=d)) in HOLIDAYS for d in range(-3, 8))
-    weeks = [i for i in range(AUDIT_FROM, WH) if not near_holiday(i) and not (
+    weeks = [i for i in range(COUNT_FROM, WH - 1) if not near_holiday(i) and not (
         week_start(i).month == 12 and week_start(i).day >= 15)]
-    rows = []
-    for n in range(N_AUDITS):
+    quota = {p: C.W[p]["counts"] for p in POOLS}
+    done = {p: 0 for p in POOLS}
+    rep_of = {dk: k for k, dk in enumerate(["BRG", "LDS", "YRK", "SHF"])}
+    rows, n = [], 0
+    while any(done[p] < quota[p] for p in POOLS):
         a = accts[int(rng.choice(len(accts), p=wgt / wgt.sum()))]
         i = weeks[int(rng.integers(0, len(weeks)))]
-        dd = int(rng.integers(0, 5))
-        d1 = int(WD.day1[a])
-        tw = bool(WD.twice[a])
-        last = [x for x in ([d1, d1 + 3] if tw else [d1]) if x <= dd]
-        i_eff = i if last else i - 1
-        gap = (dd - last[-1]) if last else (dd + 7 - (d1 + 3 if tw else d1))
-        frac = min(1.0, (gap + rng.random()) / (3.5 if tw else 7.0))
-        rep = int(rng.integers(0, 6))
+        todo = [(p, l) for p, l in lines_of[a] if done[p] < quota[p]]
+        if not visited[a, i] or not todo:
+            continue
+        dray = workday(i, int(WD.day1[a]) + (3 if WD.twice[a] else 0))
+        day = dray + dt.timedelta(days=off[a])
+        if day >= ASOF:
+            continue
+        rep = (rep_of[WD.accounts[a]["depot"]] + (2 if rng.random() < 0.15 else 0)) % 6
         keyed = int(rng.integers(0, 4)) if rng.random() > 0.12 else int(rng.integers(9, 45))
-        for p, l in lines_of[a]:
+        for p, l in todo:
             P = WD.pools[p]
-            tot = int(P.H[l, i_eff])
-            nxt = int(P.s[l, min(i_eff + 1, WH - 1)])
-            emp = min(max(tot - 1, 0), int(rng.binomial(nxt, frac)) if nxt else 0)
-            on = 1 if tot >= 1 else 0
-            full = tot - on - emp
+            tot = int(P.H[l, i])
+            c0 = P.cum[l, i + 1]
+            emp = int(min(max(tot - 1, 0), math.floor(c0 + off[a] / 7.0 * P.inc[l, i + 1]) - math.floor(c0)))
+            full = tot - emp
             if rng.random() < 0.02:
-                full = max(0, full + (1 if rng.random() < 0.5 else -1))
-            rows.append(dict(visit=n, week=i, day=dd, acct=a, pool=p, line=l, full=full, on=on, empty=emp,
-                             foreign=int(rng.poisson(0.35)), rep=rep, keyed=keyed))
-    WD.audits = rows
-
-
-# ------------------------------------------------------------------------------------------- the register
-def register(WD, rng):
-    """every container by serial: its lot and purchase date, and the day it was condemned if it was"""
-    for p in POOLS:
-        w, P = C.W[p], WD.pools[p]
-        n0 = P.alive0
-        lot, bought = [], []
-        for (name, year, sh), n in zip(OLD_LOTS[p], split(n0, [sh for _, _, sh in OLD_LOTS[p]])):
-            base = dt.date(year, int(rng.integers(2, 11)), int(rng.integers(1, 28)))
-            for part in range(3):
-                m = int(n) // 3 + (1 if part < int(n) % 3 else 0)
-                lot += [name] * m
-                bought += [base + dt.timedelta(days=21 * part)] * m
-        for wk, n in w["lots"]:
-            d = week_start(wk) + dt.timedelta(days=2)
-            lot += ["%s-%d" % (OLD_LOTS[p][0][0].rsplit("-", 1)[0], d.year)] * int(n)
-            bought += [d] * int(n)
-        total = len(lot)
-        condemned = {}
-        lost = set()
-        done = np.zeros(WH, dtype=int)
-        if p == "K20":
-            for k, day in P.scrapped:
-                condemned[int(k)] = D0 + dt.timedelta(days=int(day))
-                done[min(int(day) // 7, WH - 1)] += 1
-            lost = {int(k) for k, _, _ in P.lost_kegs}
-        avail = n0 + np.cumsum(P.bought[:WH]) - P.bought[:WH]
-        for i in range(WH):
-            for _ in range(int(P.scrap[i] - done[i])):
-                while True:
-                    k = int(rng.integers(0, int(avail[i])))
-                    if k not in condemned and k not in lost:
-                        break
-                condemned[k] = week_start(i) + dt.timedelta(days=int(rng.integers(0, 5)))
-        P.reg = dict(lot=lot, bought=bought, condemned=condemned, total=total)
-        for b in STOCKTAKES:                                     # the register holds what the fleet account says
-            d = week_start(b)
-            n = sum(1 for x in bought if x < d) - sum(1 for x in condemned.values() if x < d)
-            assert n == int(P.register[b]), (p, b, n, P.register[b])
+                full = max(1, full + (1 if rng.random() < 0.5 else -1))
+            rows.append(dict(visit=n, week=i, date=day, dray=dray, acct=a, pool=p, line=l, held=tot, empties=emp,
+                             full=full - 1, on=1, rep=rep, keyed=keyed, temp=round(float(rng.normal(11.8, 0.9)), 1)))
+            done[p] += 1
+        n += 1
+    for r in [r for r in rows if rng.random() < 0.004]:            # a line counted twice on one call
+        rows.append(dict(r, full=max(0, r["full"] + int(rng.choice([-1, 0, 0, 1])))))
+    WD.counts = rows
 
 
 if __name__ == "__main__":
@@ -629,15 +559,11 @@ if __name__ == "__main__":
         P = WD.pools[p]
         b, fut = truth(WD, p)
         print("%s lines %5d  D mean %6.0f  trade %6.0f..%6.0f  store mean %5.0f  other %5.0f  alive0 %6.0f now %6.0f "
-              "register %6.0f  idle min %5.0f  truth %6.0f wk %s  hot %6.0f  lost/yr %5.0f  twice %.2f" % (
+              "idle min %5.0f  truth %6.0f wk %s  hot %6.0f  lost/yr %5.0f  twice %.2f" % (
                   p, len(P.r), P.D.mean(), P.trade.min(), P.trade.max(), P.store.mean(), P.other.mean(), P.alive0,
-                  P.alive[WH], P.register[WH], P.idle.min(), b["short"], week_start(b["i"]), truth_hot(WD, p)[0],
+                  P.alive[WH], P.idle.min(), b["short"], week_start(b["i"]), truth_hot(WD, p)[0],
                   P.lost_w[104:].sum(), (P.iv == 0.5).mean()))
-    if "--light" not in sys.argv:
-        P = WD.pools["K20"]
-        seen = sum(1 for t in P.trips if t[4] is not None)
-        print("K20 kegs %d trips %d delivered %d (dockets %d) lost %d (%d) scrapped %d (%d) chase %d keg-level trade %d "
-              "(%d) audits %d rackings %s" % (
-                  P.keg_total, len(P.trips), seen, P.dlv.sum(), len(P.lost_kegs), P.lost_w.sum(), len(P.scrapped),
-                  P.scrap.sum(), len(P.chase), P.keg_trade, P.trade[WH], len(WD.audits),
-                  {q: len(WD.pools[q].rackings) for q in POOLS}))
+        if "--light" not in sys.argv:
+            print("     register at the count %6d, serials %6d, on site %6d, lots %d, rate of leaving %.3f, condemned %.4f, "
+                  "counts %d" % (P.register_at_count, P.reg["total"], int(P.reg["onsite"].sum()), len(P.lots),
+                                 P.reg["rho"], P.reg["rs"], sum(1 for r in WD.counts if r["pool"] == p)))

@@ -1,11 +1,10 @@
 """The exports of Wrenfold's systems, written the way each system writes them: the drivers' handheld dockets, the
-tag reads of the 20 litre kegs, the container register, the annual counts, the cold store's Monday position, the
-racking log, the reps' cellar audits, the accounts and their dispense lines, the depots' stock, the wash line's log,
-the purchases, the recovery agent's cases, the weather station's weeks, and two exports of other departments."""
+container register, the count of 30 November 2026, the cold store's Monday position, the racking log, the trade
+quality reps' cellar checks, the accounts and their dispense lines, the depots' stock, the wash line's log, the
+purchases, the weather station's weeks, and an export of another department."""
 import csv
 import datetime as dt
 import os
-import sqlite3
 
 import numpy as np
 import pandas as pd
@@ -19,12 +18,11 @@ POOLS = WL.POOLS
 WH = WL.WH
 FILES = {
     "dockets": "delivery_dockets_dec2023_nov2026.csv",
-    "tags": "foundry_keg_tag_reads.sqlite",
     "register": "container_register.csv",
-    "stocktake": "annual_container_counts.xlsx",
+    "count": "container_count_30nov2026.xlsx",
     "store": "cold_store_monday_position.csv",
     "racking": "racking_log.csv",
-    "audits": "cellar_audits_2025_2026.csv",
+    "checks": "cellar_quality_checks_2025_2026.csv",
     "accounts": "trade_accounts.csv",
     "lines": "dispense_lines.csv",
     "products": "products.csv",
@@ -33,7 +31,6 @@ FILES = {
     "depots": "depot_stock_weekly.csv",
     "wash": "wash_line_daily_log.csv",
     "purchases": "container_purchases.csv",
-    "recovery": "kegtrace_cases.csv",
     "packaging": "packaging_line_shift_log.csv",
 }
 CODE = {"docket": {"K50": "50L", "K30": "30L", "K20": "20L", "FIR": "9G", "KIL": "18G"},
@@ -50,8 +47,13 @@ def sku(p, code):
     return "%s-%s" % ("BIT" if code == "BIK" else code, CODE["docket"][p])
 
 
-def serial(p, k, prefix=True):
-    return "%s%s-%06d" % ("LF" if prefix else "", CODE["register"][p], SERIAL0[p] + int(k))
+def serial(p, k):
+    return "%s-%06d" % (CODE["register"][p], SERIAL0[p] + int(k))
+
+
+def lot_code(p, x, prefix=True):
+    """a lot as the maker stamps it on the chime: the maker's prefix, the container code and the lot's year"""
+    return "%s%s-%d" % (("CC" if x["maker"] == WL.OLD_MAKER else "LF") if prefix else "", WL.LOT_CODE[p], x["year"])
 
 
 def acct_ids(WD):
@@ -157,107 +159,27 @@ def write_dockets(target, WD, rng):
                 del_rows=len(sk), skus=skus, sku_pool=sku_pool)
 
 
-def day_date(day, kind):
-    i, dd = divmod(int(day), 7)
-    if kind == "FILL":
-        return WL.workday(i, dd, back=True)
-    if kind == "DELIVER":
-        return WL.workday(i, dd)
-    d = WL.D0 + dt.timedelta(days=int(day))
-    while d in WL.HOLIDAYS or d.weekday() == 6:
-        d += dt.timedelta(days=1)
-    return d
-
-
-def write_tags(target, WD, rng):
-    P = WD.pools["K20"]
-    path = os.path.join(target, FILES["tags"])
-    if os.path.exists(path):
-        os.remove(path)
-    n = P.keg_total
-    tag_no = rng.permutation(16 ** 6)[:n + 1200]
-    new_tag = iter(["E28%07X" % (0x1100000 + int(x)) for x in tag_no])
-    tag = [next(new_tag) for _ in range(n)]
-    reg = P.reg
-    fitted = [[serial("K20", k, prefix=False), tag[k],
-               (max(reg["bought"][k], dt.date(2023, 3, 6)) + dt.timedelta(days=int(rng.integers(0, 30)))
-                if reg["bought"][k] < WL.D0 else reg["bought"][k]).isoformat(), ""] for k in range(n)]
-    cur = list(range(n))                                             # each keg's row in `fitted`
-    win = {"FILL": (5 * 3600 + 1800, 7 * 3600 + 1800), "DELIVER": (8 * 3600, 16 * 3600 + 1800),
-           "WASH": (7 * 3600, 18 * 3600)}
-    reads = []
-    last = {}                                                         # keg -> its last read (stamp, point, where, tag)
-    for k, bi, fday, l, dday, wday in P.trips:
-        a = int(P.acct[l]) if l >= 0 else None
-        for point, day, where in (("FILL", fday, "BRG-RACK2"), ("DELIVER", dday, None), ("WASH", wday, "BRG-WASH1")):
-            if day is None or (point == "WASH" and int(day) >= 7 * WH):
-                continue
-            d = day_date(day, point)
-            if d >= WL.ASOF:
-                continue
-            lo, hi = win[point]
-            ts = dt.datetime.combine(d, dt.time()) + dt.timedelta(seconds=int(rng.integers(lo, hi)))
-            loc = where or aid(WD, a, int(day) // 7)
-            t = fitted[cur[k]][1]
-            miss = rng.random() < WL.READ_MISS[point]
-            if not miss:
-                reads.append((ts, t, point, loc))
-                if rng.random() < WL.READ_DOUBLE:
-                    reads.append((ts + dt.timedelta(seconds=int(rng.integers(2, 40))), t, point, loc))
-                last[k] = (ts, point, loc, t)
-            if point == "WASH" and rng.random() < WL.TAG_SWAP:       # a damaged tag replaced at the wash
-                fitted[cur[k]][3] = d.isoformat()
-                cur[k] = len(fitted)
-                fitted.append([serial("K20", k, prefix=False), next(new_tag), d.isoformat(), ""])
-    reads.sort(key=lambda r: (r[0], r[1], r[2]))
-    con = sqlite3.connect(path)
-    con.execute("PRAGMA journal_mode=OFF")
-    con.execute("CREATE TABLE tag_reads (read_id INTEGER PRIMARY KEY, tag_id TEXT NOT NULL, read_at TEXT NOT NULL, "
-                "read_point TEXT NOT NULL, location TEXT NOT NULL)")
-    con.execute("CREATE TABLE tag_fittings (serial TEXT NOT NULL, tag_id TEXT NOT NULL, fitted_on TEXT NOT NULL, "
-                "removed_on TEXT)")
-    con.executemany("INSERT INTO tag_reads VALUES (?,?,?,?,?)",
-                    [(j + 1, t, ts.strftime("%Y-%m-%d %H:%M:%S"), pt, loc) for j, (ts, t, pt, loc) in enumerate(reads)])
-    con.executemany("INSERT INTO tag_fittings VALUES (?,?,?,?)",
-                    [(s, t, f, r or None) for s, t, f, r in sorted(fitted, key=lambda x: (x[0], x[2]))])
-    con.execute("CREATE INDEX ix_reads_tag ON tag_reads (tag_id, read_at)")
-    con.commit()
-    con.execute("VACUUM")
-    con.close()
-    # the recovery agent's cases
-    where = {}
-    for k, bi, fday, l, dday, wday in P.trips:
-        if dday is not None:
-            where[(k, dday)] = l
-    out = []
-    for j, (k, dday, ref, closed, outcome) in enumerate(P.chase):
-        l = where.get((k, dday))
-        if l is None:
-            continue
-        a = aid(WD, int(P.acct[l]), int(dday) // 7)
-        d = day_date(dday, "DELIVER")
-        out.append([serial("K20", k, prefix=False), d.isoformat(), a,
-                    (WL.D0 + dt.timedelta(days=int(ref))).isoformat(),
-                    (WL.D0 + dt.timedelta(days=int(closed))).isoformat() if closed is not None else "",
-                    outcome or "OPEN"])
-    out.sort(key=lambda r: (r[3], r[0]))
-    out = [["KT-%05d" % (41207 + j)] + r for j, r in enumerate(out)]
-    write_csv(os.path.join(target, FILES["recovery"]),
-              ["case_no", "keg_serial", "last_delivered_on", "account_no", "referred_on", "closed_on", "outcome"], out)
-    return dict(reads=len(reads), fittings=len(fitted), cases=len(out),
-                not_traced=sum(1 for r in out if r[-1] == "NOT TRACED"))
-
-
 def write_register(target, WD):
+    """one row a serial since 2011: its lot, maker and purchase date, and the day the wash line condemned it if it
+    did; a batch of serials re-keyed after the 2019 system change lost the maker's prefix from its lot"""
     rows = []
-    for p in POOLS:
-        reg = WD.pools[p].reg
+    for j, p in enumerate(POOLS):
+        P = WD.pools[p]
+        reg = P.reg
+        rng = np.random.default_rng([WL.SEED, 150 + j])
+        rekeyed = set()
+        for lot in rng.choice([k for k, x in enumerate(P.lots) if x["year"] < 2019], 1, replace=False):
+            ids = np.nonzero(reg["lot"] == lot)[0]
+            s = int(rng.integers(0, max(len(ids) - 20, 1)))
+            rekeyed |= set(ids[s:s + int(rng.integers(5, 15))].tolist())
         for k in range(reg["total"]):
+            lot = int(reg["lot"][k])
+            x = P.lots[lot]
             c = reg["condemned"].get(k)
             if c is not None and c >= WL.ASOF:
                 c = None
-            rows.append([serial(p, k), CODE["register"][p],
-                         "Calder Coopers Ltd" if reg["bought"][k].year < 2012 else WL.MAKER, reg["lot"][k],
+            bare = k in rekeyed
+            rows.append([serial(p, k), CODE["register"][p], x["maker"], lot_code(p, x, prefix=not bare),
                          reg["bought"][k].isoformat(), "CONDEMNED" if c else "ACTIVE", c.isoformat() if c else ""])
     rows.sort(key=lambda r: r[0])
     return write_csv(os.path.join(target, FILES["register"]),
@@ -284,34 +206,51 @@ def sheet(ws, header, rows, widths):
         ws.column_dimensions[chr(65 + i)].width = w
 
 
-def write_stocktake(target, WD, DS):
+def write_count(target, WD, DS):
+    """the count of every site on Monday 30 November 2026 before the first loads: a sheet a site, by area, container
+    and state, and the tally of every container found by the lot stamped on its chime"""
     wb = Workbook()
     wb.remove(wb.active)
-    counted = {0: ("Mon 4 Dec 2023", "E. Moss, T. Morley"), 52: ("Mon 2 Dec 2024", "E. Moss, T. Morley"),
-               104: ("Mon 1 Dec 2025", "E. Moss, T. Morley"), 156: ("Mon 30 Nov 2026", "E. Moss, T. Morley")}
-    names = {0: "Dec 2023", 52: "Dec 2024", 104: "Dec 2025", 156: "Nov 2026"}
-    for b in WL.STOCKTAKES:
-        ws = wb.create_sheet(names[b])
-        ws.append(["Annual container count"])
+    b = WH
+    sites = [("Brighouse", None)] + [(WL.DEPOTS[dk][0], j) for j, dk in enumerate(WL.DEPOTS)]
+    for site, j in sites:
+        ws = wb.create_sheet(site)
+        ws.append(["Container count, %s" % (site if j is None else site + " depot")])
         ws["A1"].font = Font(bold=True, size=12)
-        ws.append(["Counted", counted[b][0], "before the first loads", "", "Signed", counted[b][1]])
+        ws.append(["Counted", "Mon 30 Nov 2026", "before the first loads", "", "Signed",
+                   "E. Moss, T. Morley" if j is None else "T. Morley, %s" % ["R. Ackroyd", "P. Dyson", "K. Senior"][j]])
         ws.append([])
         rows = []
         for p in POOLS:
             P = WD.pools[p]
-            full, empty = DS[p]
-            rows += [["Brighouse", "Cold store", p, "full", int(P.store[b])],
-                     ["Brighouse", "Packaging hall", p, "clean empty", int(P.idle[b])],
-                     ["Brighouse", "Wash line", p, "awaiting wash", int(P.parts["awaiting"][b])],
-                     ["Brighouse", "Wash line", p, "in wash", int(P.parts["wash"][b])],
-                     ["Brighouse", "Repair bay", p, "in repair", int(P.parts["repair"][b])]]
-            for j, dk in enumerate(WL.DEPOTS):
-                rows += [[WL.DEPOTS[dk][0] + " depot", "Full store", p, "full", int(full[b, j])],
-                         [WL.DEPOTS[dk][0] + " depot", "Empties bay", p, "empty", int(empty[b, j])]]
-        rows.sort(key=lambda r: (r[0] != "Brighouse", r[0], r[1], POOLS.index(r[2])))
-        sheet(ws, ["site", "area", "container", "state", "count"], rows, [18, 16, 11, 14, 9])
+            code = CODE["register"][p]
+            if j is None:
+                rows += [["Cold store", code, "full", int(P.store[b])],
+                         ["Packaging hall", code, "clean empty", int(P.idle[b])],
+                         ["Wash line", code, "awaiting wash", int(P.parts["awaiting"][b])],
+                         ["Wash line", code, "in wash", int(P.parts["wash"][b])],
+                         ["Repair bay", code, "in repair", int(P.parts["repair"][b])]]
+            else:
+                full, empty = DS[p]
+                rows += [["Full store", code, "full", int(full[b, j])], ["Empties bay", code, "empty", int(empty[b, j])]]
+        rows.sort(key=lambda r: (r[0], [CODE["register"][q] for q in POOLS].index(r[1])))
+        sheet(ws, ["area", "container", "state", "count"], rows, [18, 11, 14, 9])
         ws.freeze_panes = "A5"
-    wb.save(os.path.join(target, FILES["stocktake"]))
+    ws = wb.create_sheet("Lots")
+    ws.append(["Containers counted by lot (all sites), from the stamp on the chime"])
+    ws["A1"].font = Font(bold=True, size=12)
+    ws.append(["Counted", "Mon 30 Nov 2026", "", "", "Tallied", "E. Moss"])
+    ws.append([])
+    rows = []
+    for p in POOLS:
+        P = WD.pools[p]
+        for k, x in enumerate(P.lots):
+            n = int(P.lot_tally[k])
+            if n:
+                rows.append([CODE["register"][p], lot_code(p, x), WL.RINGS[x["year"] % 10], n])
+    sheet(ws, ["container", "lot", "neck ring", "counted"], rows, [11, 13, 11, 9])
+    ws.freeze_panes = "A5"
+    wb.save(os.path.join(target, FILES["count"]))
 
 
 def write_store(target, WD):
@@ -339,31 +278,38 @@ def write_racking(target, WD, rng):
                      ["racking_no", "racked_on", "start", "sku", "container", "containers_filled", "tank"], out)
 
 
-AUDITS_PULLED = dt.date(2026, 12, 1)       # the audits export of 2 December holds the forms keyed to the day before
+CHECKS_PULLED = dt.date(2026, 12, 1)       # the checks export of 2 December holds the forms keyed to the day before
 
 
-def write_audits(target, WD, rng):
+def write_checks(target, WD, line_no):
+    """the reps' TQ-02 forms as the quality system keys them: one row a line checked, its full containers in the
+    cellar and the one on dispense, with the cellar's temperature"""
     style = {0: "docket", 1: "docket", 2: "docket", 3: "pool", 4: "docket", 5: "pool"}
     rows = []
-    for r in WD.audits:
+    for r in WD.counts:
         p, P = r["pool"], WD.pools[r["pool"]]
-        d = WL.week_start(r["week"]) + dt.timedelta(days=r["day"])
+        d = r["date"]
         code = CODE["docket"][p] if style[r["rep"]] == "docket" else p
         prod = "GUEST-20L" if p == "K20" else sku(p, P.prod[r["line"]])
         keyed = d + dt.timedelta(days=r["keyed"])
-        if keyed > AUDITS_PULLED:                                     # a form not keyed yet is not in the export
+        if keyed > CHECKS_PULLED:                                     # a form not keyed yet is not in the export
             continue
-        rows.append([r["visit"], d, aid(WD, r["acct"], r["week"]), prod, code, r["full"], r["on"], r["empty"],
-                     r["foreign"], REPS[r["rep"]], keyed])
+        now = WD.accounts[int(r["acct"])]["id"]
+        rows.append([r["visit"], d, aid(WD, r["acct"], r["week"]), line_no[(now, prod)], prod, code, r["full"], r["on"],
+                     "%.1f" % r["temp"], REPS[r["rep"]], keyed])
     rows.sort(key=lambda r: (r[10], r[0], r[3]))                      # in the order the forms were keyed
-    first = {}
-    for r in sorted(rows, key=lambda r: (r[1], r[0])):
-        first.setdefault(r[0], len(first))
-    out = [["CA-%04d" % (2101 + first[r[0]]), r[1].isoformat(), r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9],
-            r[10].isoformat()] for r in rows]
-    return write_csv(os.path.join(target, FILES["audits"]),
-                     ["audit_ref", "audit_date", "account_no", "product", "container", "full", "on_dispense", "empty",
-                      "other_brewers", "rep", "keyed_on"], out)
+    rng = np.random.default_rng([WL.SEED, 160])
+    pad, ref = {}, {}
+    for r in sorted(rows, key=lambda r: (r[1], r[0])):                # each rep's pad, used in the order of the calls
+        if r[0] not in ref:
+            n = pad.get(r[9], 1000 + 700 * REPS.index(r[9]) + int(rng.integers(0, 40)))
+            n += 1 + (int(rng.integers(1, 3)) if rng.random() < 0.04 else 0)    # a spoiled form is torn out
+            pad[r[9]] = n
+            ref[r[0]] = "TQ%d-%05d" % (REPS.index(r[9]) + 1, n)
+    out = [[ref[r[0]], r[1].isoformat(), r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10].isoformat()] for r in rows]
+    return write_csv(os.path.join(target, FILES["checks"]),
+                     ["check_ref", "check_date", "account_no", "line", "product", "container", "full_in_cellar",
+                      "on_dispense", "cellar_temperature_c", "rep", "keyed_on"], out)
 
 
 def write_accounts(target, WD):
@@ -379,13 +325,14 @@ def write_accounts(target, WD):
         for l, a in enumerate(P.acct.tolist()):
             lines.append([WD.accounts[a]["id"], "GUEST-20L" if p == "K20" else sku(p, P.prod[l]), CODE["docket"][p]])
     lines.sort()
-    seq = {}
+    seq, line_no = {}, {}
     out = []
     for a, s, c in lines:
         seq[a] = seq.get(a, 0) + 1
+        line_no[(a, s)] = seq[a]
         out.append([a, seq[a], s, c])
     write_csv(os.path.join(target, FILES["lines"]), ["account_no", "line", "product", "container"], out)
-    return len(rows), len(out)
+    return len(rows), len(out), line_no
 
 
 def write_small(target, WD, DS, rng, D):
@@ -412,8 +359,8 @@ def write_small(target, WD, DS, rng, D):
     for i in range(WH + 1):
         for j, dk in enumerate(WL.DEPOTS):
             for p in POOLS:
-                rows.append([WL.week_start(i).isoformat(), dk, p, int(DS[p][0][i, j]), int(DS[p][1][i, j])])
-    write_csv(os.path.join(target, FILES["depots"]), ["week_beginning", "depot", "container", "full", "empty"], rows)
+                rows.append([WL.week_start(i).isoformat(), dk, p, int(DS[p][0][i, j])])
+    write_csv(os.path.join(target, FILES["depots"]), ["week_beginning", "depot", "container", "full_containers"], rows)
     # the wash line, day by day: the backlog at close, and what the inspection sent to repair, took back or condemned
     rows = []
     wgt = np.array([0.19, 0.19, 0.18, 0.18, 0.17, 0.09])
@@ -446,12 +393,18 @@ def write_small(target, WD, DS, rng, D):
     price = {"K50": 61.40, "K30": 52.80, "K20": 58.90, "FIR": 74.50, "KIL": 96.00}
     rows = []
     for p in POOLS:
-        for wk, n in C.W[p]["lots"]:
-            d = WL.week_start(wk) + dt.timedelta(days=2)
-            rows.append(["PO-%d" % (7300 + wk * 3 + POOLS.index(p)), (d - dt.timedelta(days=int(rng.integers(84, 120)))).isoformat(),
-                         d.isoformat(), CODE["register"][p], "%s-%d" % (WL.OLD_LOTS[p][0][0].rsplit("-", 1)[0], d.year),
-                         int(n), WL.MAKER, "%.2f" % (price[p] * (1.0 + 0.03 * (d.year - 2024))), "EUR"])
-    rows.sort(key=lambda r: r[2])
+        P = WD.pools[p]
+        n_of = np.bincount(P.reg["lot"], minlength=len(P.lots))
+        for k, x in enumerate(P.lots):
+            parts = sorted(set(x["parts"]))
+            per = [sum(1 for j in np.nonzero(P.reg["lot"] == k)[0] if P.reg["bought"][j] == d) for d in parts]
+            o = dt.date(x["year"], 1, 1) if parts[0].month < 4 else parts[0] - dt.timedelta(days=int(rng.integers(70, 120)))
+            for d, m in zip(parts, per):
+                rows.append(["PO-%d" % (5100 + 37 * (x["year"] - 2010) + POOLS.index(p) * 7 + int(rng.integers(0, 5))),
+                             o.isoformat(), d.isoformat(), CODE["register"][p], lot_code(p, x), int(m), x["maker"],
+                             "%.2f" % (price[p] * (1.0 + 0.028 * (x["year"] - 2024)) * (1.12 if x["maker"] == WL.OLD_MAKER else 1.0)),
+                             "GBP" if x["maker"] == WL.OLD_MAKER else "EUR"])
+    rows.sort(key=lambda r: (r[2], r[0]))
     write_csv(os.path.join(target, FILES["purchases"]),
               ["order_no", "ordered", "received", "container", "lot", "quantity", "supplier", "unit_price", "currency"], rows)
     # another department's export: the packaging lines, shift by shift
@@ -481,16 +434,14 @@ def build(WD, target):
     rs = lambda k: np.random.default_rng([WL.SEED, 100 + k])
     DS = {p: depot_split(WD.pools[p], rs(1 + j)) for j, p in enumerate(POOLS)}
     D = write_dockets(target, WD, rs(10))
-    T = write_tags(target, WD, rs(11))
     n_reg = write_register(target, WD)
-    write_stocktake(target, WD, DS)
+    write_count(target, WD, DS)
     n_store = write_store(target, WD)
     n_rack = write_racking(target, WD, rs(12))
-    n_aud = write_audits(target, WD, rs(13))
-    n_acc, n_lines = write_accounts(target, WD)
+    n_acc, n_lines, line_no = write_accounts(target, WD)
+    n_chk = write_checks(target, WD, line_no)
     write_small(target, WD, DS, rs(14), D)
     counts = dict(docket_rows=D["rows"], dockets=D["dockets"], resent=D["resent"], resent_rows=D["resent_rows"],
-                  blank_codes=D["blank"], tag_reads=T["reads"], tag_fittings=T["fittings"], cases=T["cases"],
-                  not_traced=T["not_traced"], register=n_reg, store_rows=n_store, rackings=n_rack, audits=n_aud,
+                  blank_codes=D["blank"], register=n_reg, store_rows=n_store, rackings=n_rack, checks=n_chk,
                   accounts=n_acc, lines=n_lines)
     return counts, dict(DS=DS, routes=routes(WD))

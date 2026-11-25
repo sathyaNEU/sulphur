@@ -63,7 +63,8 @@ def main(argv):
     WU.write(os.path.join(TASK, "submission.md"), fig)
     metadata.write(os.path.join(TASK, "metadata.json"))
     first = digest(TARGET)
-    print("target", first, "golden", digest(GOLDEN), "rubric", fig["rubric"])
+    print("target", first, "golden", digest(GOLDEN), "rubric", fig["rubric"]["one_lost"], fig["rubric"]["reflex"],
+          "level", fig["rubric"]["level"], "fails", fig["rubric"]["fails"])
     if "--once" in argv or "--keep" in argv:
         return
     tmp = tempfile.mkdtemp()

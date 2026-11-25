@@ -1,5 +1,6 @@
 """The two golden files: the workbook the head of supply chain opens (the cover for each container type on its first
-sheet, the working behind it) and the slides for the order meeting. Every number comes from figures.json."""
+sheet, the fleet account second, the working behind them, and a routes sheet) and the slides for the order meeting.
+Every number comes from figures.json."""
 import datetime as dt
 import os
 
@@ -24,13 +25,18 @@ INK, INK2, RULE, BG = "#0b0b0b", "#52514e", "#c9c8c2", "#fcfcfb"
 BLUE, ORANGE, GREY = "#2a78d6", "#eb6834", "#8a8f98"
 COVER = {"buy": "Purchase", "hire": "Seasonal hire", "nothing": "No cover"}
 COLOR = {"buy": BLUE, "hire": ORANGE, "nothing": GREY}
+STEP = {"S1": "cellar checks as they stand", "S2": "store at 2026's weeks of cover", "S3": "no loss in the trade"}
 ROUTES = [("golden", "This review"),
-          ("S1", "Stock at customers moved in step with deliveries"),
+          ("S1", "Cellar checks read as what a line holds"),
           ("S2", "Cold store at summer 2026's weeks of cover"),
-          ("S3", "Tagged kegs' loss rate used for every type"),
+          ("S3", "Register less condemned read as the fleet (no loss in the trade)"),
+          ("S1+S2", "First two together"), ("S1+S3", "First and third together"), ("S2+S3", "Second and third together"),
           ("S1+S2+S3", "All three together"),
-          ("direct", "Register as the fleet, scaled to the busiest week"),
-          ("rigorous", "Tagged kegs' own stock response, store regressed on deliveries, tagged loss rate")]
+          ("direct", "Every container on the register counted as fleet"),
+          ("rigorous", "Checks and store regressed as they stand, no loss"),
+          ("run calibrated", "Checks as they stand, scaled to the trade's stock the lots imply"),
+          ("run cutoff", "Checks within four days of the dray, as they stand"),
+          ("run generous", "A whole delivery added to each check, a whole run per beer, every missing container written off")]
 
 
 def k(x):
@@ -62,15 +68,15 @@ def headline(f, cap=True):
     if by["buy"]:
         parts.append("buy %s" % _short(by["buy"]))
     if by["hire"]:
-        parts.append("hire %s for the summer" % _short(by["hire"]))
+        parts.append("hire %s for the season" % _short(by["hire"]))
     if by["nothing"]:
         parts.append("leave %s alone" % _short(by["nothing"]))
     s = ", ".join(parts)
     return s[0].upper() + s[1:] if cap else s
 
 
-def rejected(f):
-    r = f["routes"]["S1+S2+S3"]
+def rejected(f, key="S1+S2+S3"):
+    r = f["routes"][key]
     moved = [p for p in POOLS if r[p]["cover"] != f["cover"][p]]
     return _list("%s for %s (%s)" % ({"buy": "a purchase", "hire": "a seasonal hire", "nothing": "no cover"}[r[p]["cover"]],
                                      f["plural"][p], k(r[p]["plan"])) for p in moved)
@@ -86,7 +92,7 @@ def _hdr(ws, row, n, height=44):
 
 
 def _widths(ws, ws_):
-    for col, w in zip("ABCDEFGHIJKLMNOPQRST", ws_):
+    for col, w in zip("ABCDEFGHIJKLMNOPQRSTU", ws_):
         ws.column_dimensions[col].width = w
 
 
@@ -111,75 +117,147 @@ def _num(ws, row, cols, fmt="#,##0"):
         ws.cell(row=row, column=c).number_format = fmt
 
 
+def _rows(ws, hdr, rows, top, fmts, height=46):
+    for j, h in enumerate(hdr):
+        ws.cell(row=top, column=1 + j, value=h)
+    _hdr(ws, top, len(hdr), height)
+    for i, r in enumerate(rows):
+        for j, v in enumerate(r):
+            ws.cell(row=top + 1 + i, column=1 + j, value=v)
+        for cols, fmt in fmts:
+            _num(ws, top + 1 + i, cols, fmt)
+    return top + 1 + len(rows)
+
+
 def first_sheet(wb, f):
     ws = wb.active
     ws.title = "Cover 2027"
     c = f["counts"]
     _title(ws, "Container fleets for summer 2027: " + headline(f, cap=False),
-           "Fleet standard FS-04 issue 3, sections 3 and 4. Annual count of %s. %s, %s." % (day(c["count_dates"][-1]), AUTHOR, DATED))
-    ws["A3"] = ("This is not what the usual sizing gives. With the stock at customers moved in step with deliveries, the cold "
-                "store held at summer 2026's weeks of cover and the tagged kegs' loss rate used for every type, the same "
-                "records give %s. The Routes sheet sets each of those three choices beside this review." % rejected(f))
+           "Fleet standard FS-04 issue 3, sections 2 to 4. Count of every site on %s. %s, %s." % (
+               day(c["count_date"]), AUTHOR, DATED))
+    ws["A3"] = ("Not what the records give read as they stand. Taking the reps' cellar checks as what a line holds, the cold "
+                "store at summer 2026's weeks of cover and the register less the condemned as the fleet, the same files "
+                "give %s. The Routes sheet sets each of those readings beside this review, alone and in pairs." % rejected(f))
     ws["A3"].alignment = Alignment(wrap_text=True, vertical="top")
-    ws.merge_cells("A3:H3")
-    ws.row_dimensions[3].height = 46
+    ws.merge_cells("A3:G3")
+    ws.row_dimensions[3].height = 48
+    hdr = ["Container type", "Largest weekly shortfall, planning case (containers)", "Range on other conventions",
+           "Hot case (containers)", "Week of the planning case's figure (week beginning)",
+           "Maker's minimum order run (containers)", "Cover"]
     ws.append([])
-    hdr = ["Container type", "Largest weekly shortfall, planning case (containers)", "Hot case (containers)",
-           "Maker's minimum order run (containers)", "Cover", "Week of the planning case's figure (week beginning)",
-           "Planning case across the conventions tried, low", "Planning case across the conventions tried, high"]
     ws.append(hdr)
     _hdr(ws, 5, len(hdr), 60)
     for i, p in enumerate(POOLS):
-        ws.append([f["names"][p].capitalize(), f["plan"][p], f["hot"][p], f["min_run"][p], COVER[f["cover"][p]],
-                   dt.date.fromisoformat(f["plan_week"][p]), f["variant_range"][p][0], f["variant_range"][p][1]])
+        lo, hi = f["plan_band"][p]
+        ws.append([f["names"][p].capitalize(), f["plan"][p], "%s to %s" % (k(lo), k(hi)), f["hot"][p],
+                   dt.date.fromisoformat(f["plan_week"][p]), f["min_run"][p], COVER[f["cover"][p]]])
         row = 6 + i
-        _num(ws, row, (2, 3, 4, 7, 8))
-        ws.cell(row=row, column=6).number_format = "dd mmm yyyy"
-        ws.cell(row=row, column=5).fill = PatternFill("solid", fgColor=FILL[f["cover"][p]])
-        ws.cell(row=row, column=5).alignment = Alignment(horizontal="center")
+        _num(ws, row, (2, 4, 6))
+        ws.cell(row=row, column=5).number_format = "dd mmm yyyy"
+        ws.cell(row=row, column=7).fill = PatternFill("solid", fgColor=FILL[f["cover"][p]])
+        ws.cell(row=row, column=7).alignment = Alignment(horizontal="center")
+        ws.cell(row=row, column=3).alignment = Alignment(horizontal="right")
     last = 5 + len(POOLS)
     notes = [
         "Cover is read on the planning case (FS-04 4.1): nil or negative, no cover; above nil and below the maker's minimum "
-        "order run, a seasonal hire; the minimum order run or more, a purchase. Minimum order runs from quotation %s. A "
-        "negative figure is a surplus (2.3)." % f["stated"]["quotation"],
+        "order run (quotation Q26-1187), a seasonal hire; the minimum order run or more, a purchase. A negative figure is a "
+        "surplus (2.3). The hot case is reported beside it and does not change the cover.",
         "The season is the %d weeks beginning %s to %s (3.1). The planning case takes every week at the Calder Vale normal "
-        "(3.2); the hot case is the second highest of the ten summers %d to %d (3.3) and does not change the cover."
-        % (c["season_weeks"], day(f["season"][0]), day(f["season"][1]), c["summers"][0], c["summers"][1]),
-        "Nobody counts the containers at customers or the ones lost there, so each figure is an estimate: the sheets behind "
-        "this one give the stock account, what a cellar holds, the cold store under the 2027 brew plan and the weekly path. "
-        "The last two columns are the lowest and highest planning-case figure across %s rebuilds on other reasonable "
-        "conventions (sheet Sensitivity); the cover is the same in every one." % k(f["variants"] - 1)]
+        "(3.2); the hot case is the second highest of the ten summers %s to %s, each run week by week on its own recorded "
+        "temperatures (3.3)." % (len([x for x in f["path"]["K50"] if x["in_season"]]), day(f["season"][0]),
+                                 day(f["season"][1]), min(f["summers"]["K50"]), max(f["summers"]["K50"])),
+        "Nobody counts what is out in the trade or what has been lost there, so every line of this is an estimate: the "
+        "Fleet account sheet gives the three estimates each figure stands on, and the range is the lowest and highest "
+        "planning-case figure over %d rebuilds on other reasonable conventions (the cover is the same in every one)."
+        % (f["variants"] - 1)]
     for i, t in enumerate(notes):
-        _note(ws, last + 2 + i, t, 8, 40)
-    _widths(ws, (17, 17, 13, 15, 15, 17, 15, 15))
+        _note(ws, last + 2 + i, t, 7, 40)
+    _widths(ws, (17, 17, 17, 13, 17, 15, 15))
     ws.freeze_panes = "B6"
+    ch = 5 + len(POOLS) + 2 + len(notes) + 2
+    ws.cell(row=ch, column=1, value="Chart data").font = Font(bold=True, size=9, color="555555")
+    ws.cell(row=ch + 1, column=1, value="Container type")
+    ws.cell(row=ch + 1, column=2, value="Planning case")
+    ws.cell(row=ch + 1, column=3, value="Minimum order run")
+    for i, p in enumerate(POOLS):
+        ws.cell(row=ch + 2 + i, column=1, value=f["plural"][p].capitalize())
+        ws.cell(row=ch + 2 + i, column=2, value=f["plan"][p])
+        ws.cell(row=ch + 2 + i, column=3, value=f["min_run"][p])
+        _num(ws, ch + 2 + i, (2, 3))
     bar = BarChart()
     bar.type = "col"
     bar.title = "Largest weekly shortfall of summer 2027 against the maker's minimum order run"
     bar.y_axis.title = "Containers"
-    bar.add_data(Reference(ws, min_col=2, max_col=4, min_row=5, max_row=last), titles_from_data=True)
-    bar.set_categories(Reference(ws, min_col=1, min_row=6, max_row=last))
+    bar.add_data(Reference(ws, min_col=2, max_col=3, min_row=ch + 1, max_row=ch + 1 + len(POOLS)), titles_from_data=True)
+    bar.set_categories(Reference(ws, min_col=1, min_row=ch + 2, max_row=ch + 1 + len(POOLS)))
     bar.y_axis.number_format = "#,##0"
     bar.y_axis.delete = False
     bar.x_axis.delete = False
     bar.x_axis.tickLblPos = "low"
-    for s, col in zip(bar.series, ("2A78D6", "EB6834", "8A8F98")):
+    for s, col in zip(bar.series, ("2A78D6", "8A8F98")):
         s.graphicalProperties.solidFill = col
         s.graphicalProperties.line.solidFill = col
     bar.gapWidth = 80
-    bar.overlap = -10
     bar.height, bar.width = 8.6, 19.5
     bar.legend.position = "b"
-    ws.add_chart(bar, "A%d" % (last + 6))
-    ws.print_area = "A1:H%d" % (last + 24)
+    ws.add_chart(bar, "A%d" % (ch + 9))
+    ws.print_area = "A1:G%d" % (ch + 26)
     ws.page_setup.orientation = "landscape"
+
+
+def account_sheet(wb, f):
+    ws = wb.create_sheet("Fleet account")
+    _title(ws, "Fleet account by container type for the 2027 summer season",
+           "Count of every site on %s against the register; the trade's stock, the store and the loss each estimated."
+           % day(f["counts"]["count_date"]))
+    ws.append([])
+    rows = []
+    lines = [("On the register at the count (bought, not condemned)", "register"),
+             ("Counted on Wrenfold's sites", "on_site"),
+             ("Alive at the count (estimated from the lots on site)", "alive"),
+             ("At customers at the count, alive", "in_trade_alive"),
+             ("On the register and not coming back", "never_coming_back"),
+             ("Lost in the trade in a year", "lost_year"),
+             ("More held by the trade at its summer peak than at the count", "rise"),
+             ("Full in the cold store at its fullest under the 2027 brew plan", "store_fullest"),
+             ("Largest weekly shortfall, planning case", "plan"),
+             ("Largest weekly shortfall, hot case", "hot")]
+    hdr = ["Containers"] + [f["names"][p].capitalize() for p in POOLS] + ["All five"]
+    whole = {"rise": f["trade_rise"], "store_fullest": f["store_2027"], "lost_year": f["year_loss"]}
+    for label, key in lines:
+        v = [f["account"][p][key] for p in POOLS]
+        rows.append([label] + v + ([whole.get(key, sum(v))] if key not in ("plan", "hot") else [None]))
+    end = _rows(ws, hdr, rows, 4, [(range(2, 8), "#,##0")])
+    for r in (4 + 1 + 5, 4 + 1 + 6, 4 + 1 + 7):                  # the three estimates: lost, rise, store
+        for col in range(1, 8):
+            ws.cell(row=r, column=col).font = Font(bold=True)
+    r = end + 1
+    hdr2 = ["Rates and inputs"] + [f["names"][p].capitalize() for p in POOLS]
+    rows2 = [["Share of the fleet leaving the trade a year (per cent)"] + [f["account"][p]["leaving_pct"] for p in POOLS],
+             ["Share of the fleet alive on site at the count"] + [f["account"][p]["share_on_site"] for p in POOLS],
+             ["Purchase lots on the register"] + [f["account"][p]["lots"] for p in POOLS],
+             ["Condemned at the wash in the year to the count"] + [f["account"][p]["condemned_year"] for p in POOLS],
+             ["Delivered in the year to the count"] + [f["account"][p]["deliveries_year"] for p in POOLS],
+             ["Dispense lines supplied at the count"] + [f["account"][p]["lines"] for p in POOLS],
+             ["Maplestead lines from April 2027"] + [f["account"][p]["estate_lines"] for p in POOLS]]
+    _rows(ws, hdr2, rows2, r, [(range(2, 7), "#,##0")])
+    for i in (0, 1):
+        _num(ws, r + 1 + i, range(2, 7), "0.0" if i == 0 else "0.00")
+    _note(ws, r + len(rows2) + 2,
+          "The register keeps every container bought until the wash line condemns it, so it still carries every container "
+          "lost in the trade since 2011. The trade's rise is from the count to its largest week of the season, the "
+          "Maplestead cellars included; the store is at its largest week of the season. Each sheet behind this one gives "
+          "the working.", 7, 44)
+    _widths(ws, (58, 13, 13, 13, 13, 13, 13))
+    ws.freeze_panes = "B5"
 
 
 def path_sheet(wb, f):
     ws = wb.create_sheet("Weekly path")
     _title(ws, "Requirement, fleet and shortfall by week, planning case",
-           "FS-04 2.1 to 2.3. Weeks from the count of %s to the end of the season; the fleet is the count's, with no purchase and no hire."
-           % day(f["counts"]["count_dates"][-1]))
+           "FS-04 2.1 to 2.3. Weeks from the count of %s to the end of the season; the fleet is the count's, with no "
+           "purchase and no hire." % day(f["counts"]["count_date"]))
     ws.append([])
     hdr = ["Container type", "Week beginning", "In the season", "Containers delivered in the week", "At customers",
            "Full in the cold store", "Depots, wash and repair", "Float", "Requirement", "Fleet", "Shortfall"]
@@ -204,130 +282,96 @@ def path_sheet(wb, f):
 
 
 def cellars_sheet(wb, f):
-    ws = wb.create_sheet("Cellars")
-    _title(ws, "What a cellar holds: a fixed stock for each line and cover for its delivery interval",
-           "Reps' cellar counts by line (full, on dispense and empty) against the line's deliveries and its account's delivery interval.")
+    ws = wb.create_sheet("Cellar checks")
+    _title(ws, "What a dispense line holds, rebuilt from the reps' checks and the dockets",
+           "TQ-02 checks of 2025 and 2026: full containers and the one on dispense, with the line's sales since the dray "
+           "last called at the account added back.")
     ws.append([])
-    hdr = ["Container type", "Line counts used", "Held per line whatever it sells", "Held per container sold a week, weekly call",
-           "Held per container sold a week, two calls a week", "Type average per container delivered a week",
-           "Deliveries a week at the count", "Deliveries in the worst week", "of which the new estate",
-           "New estate's cellars at the worst week", "Rise in stock at customers, count to worst week"]
-    ws.append(hdr)
-    _hdr(ws, 4, len(hdr), 62)
-    for i, p in enumerate(POOLS):
+    hdr = ["Container type", "Line checks used", "Full and on dispense, mean per check", "Days since the dray, mean",
+           "Sold since the dray, mean per check", "Held per line whatever it sells",
+           "Held per container sold a week, weekly delivery", "Held per container sold a week, twice weekly",
+           "Same, from the checks as they stand (weekly)", "Trade's stock per container delivered a week",
+           "Rise to the summer peak"]
+    rows = []
+    for p in POOLS:
         d = f["pool"][p]
-        ws.append([f["names"][p].capitalize(), d["audit_counts"], d["fixed_per_line"], d["per_sale_weekly"], d["per_sale_twice"],
-                   d["per_sale_pool"], d["level_at_count"], d["deliveries_at_week"], d["estate_at_week"], d["estate_cellars"],
-                   d["swing"]])
-        row = 5 + i
-        _num(ws, row, (2, 7, 8, 9, 10, 11))
-        _num(ws, row, (3, 4, 5), "0.00")
-        _num(ws, row, (6,), "0.000")
-    row = 5 + len(POOLS)
-    ws.cell(row=row, column=1, value="All five types").font = Font(bold=True)
-    ws.cell(row=row, column=11, value=f["trade_rise"]).font = Font(bold=True)
-    _num(ws, row, (11,))
-    rf = f["referee"]
-    e = f["estate"]
-    notes = [
-        "The rise is the type average times the change in weekly deliveries of the accounts supplied today, plus the new "
-        "estate's cellars (%s outlets under the supply agreement signed 23 October 2026: its lines at the fixed stock, and "
-        "its scheduled volume at the weekly-call figure)." % k(e["pubs"]),
-        "Deliveries at the count are the fitted season's value for the count's own week. The mean of the four weeks before "
-        "the count is one of the conventions on the Sensitivity sheet.",
-        "Check on the tagged 20 litre kegs, the one type whose stock at customers can be counted: from the count of "
-        "December 2025 to the busiest three weeks of summer 2026 (around the week of %s) the tags show %s more kegs at "
-        "customers (%s to %s). The line relation gives %s for the same weeks; stock moved in step with deliveries would "
-        "have been %s." % (day(rf["week"]), k(rf["seen"]), k(rf["start"]), k(rf["top"]), k(rf["golden"]), k(rf["proportional"]))]
-    for i, t in enumerate(notes):
-        _note(ws, row + 2 + i, t, 11, 34)
-    _widths(ws, (16, 10, 12, 13, 13, 13, 12, 12, 11, 13, 14))
+        rows.append([f["names"][p].capitalize(), d["checks"], d["mean_full"], d["mean_days"], d["mean_added_back"],
+                     d["fixed_per_line"], d["per_sale_weekly"], d["per_sale_twice"], d["face_per_sale_weekly"],
+                     d["trade_per_sale"], f["trade_rise_by_pool"][p]])
+    end = _rows(ws, hdr, rows, 4, [((2, 11), "#,##0"), ((3, 5, 6, 7, 8, 9, 10), "0.00"), ((4,), "0.0")], 62)
+    ws.cell(row=end, column=1, value="All five types").font = Font(bold=True)
+    ws.cell(row=end, column=11, value=f["trade_rise"]).font = Font(bold=True)
+    _num(ws, end, (11,))
+    fs = f["falsification"]
+    _note(ws, end + 2,
+          "Check on the rebuild: across %s line checks, with each line's weekly sales and delivery interval held, the full "
+          "containers counted fall by %.2f (standard error %.2f) for each container the line has sold since the dray last "
+          "called, where the checks read as the whole holding would fall by none. The rise carries the fitted relation "
+          "from the count's week to each 2027 week, the Maplestead lines added from their listing dates." % (
+              k(fs["checks"]), fs["fall"], fs["se"]), 11, 46)
+    _widths(ws, (16, 10, 12, 11, 12, 12, 13, 13, 13, 13, 12))
     ws.freeze_panes = "B5"
 
 
-def account_sheet(wb, f):
-    ws = wb.create_sheet("Stock account")
-    _title(ws, "The register never loses a container: what went missing at customers comes from the counts",
-           "Register (bought and not condemned) less the annual count on Wrenfold's sites, by count.")
+def lots_sheet(wb, f):
+    ws = wb.create_sheet("Lots")
+    _title(ws, "Containers found on site by purchase lot against the register",
+           "Count of %s, tally by the lot stamped on the chime; register rows not condemned by the count." %
+           day(f["counts"]["count_date"]))
     ws.append([])
-    hdr = ["Container type", "Count", "On the register", "Counted on site", "Off site", "Delivered in the year to the count",
-           "Rise in off site over the year", "Change in stock at customers over the year", "Lost at customers in the year",
-           "Lost, per cent of deliveries", "Condemned at the wash in the year"]
-    ws.append(hdr)
-    _hdr(ws, 4, len(hdr), 58)
-    r = 5
+    hdr = ["Container type", "Lot", "Age at the count (years)", "On the register", "Found on site", "Share found on site"]
+    rows = []
     for p in POOLS:
-        d = f["pool"][p]
-        dates = sorted(f["account"][p])
-        for j, iso in enumerate(dates):
-            a = f["account"][p][iso]
-            row = [f["names"][p].capitalize(), dt.date.fromisoformat(iso), a["register"], a["on_site"], a["off_site"]]
-            if j == len(dates) - 1:
-                row += [f["deliveries"][p]["last_year"], d["off_site_gain"], d["trade_change"],
-                        f["year_loss_by_pool"][p], d["loss_pct"] / 100.0, d["condemned_last_year"]]
-            ws.append(row)
-            ws.cell(row=r, column=2).number_format = "dd mmm yyyy"
-            _num(ws, r, (3, 4, 5, 6, 7, 8, 9, 11))
-            _num(ws, r, (10,), "0.00%")
-            r += 1
-    t = f["tags"]
-    notes = [
-        "Lost at customers in the year is the rise in off site less the change in the stock customers hold (the Cellars "
-        "relation on the change in deliveries between the two counts). Over the four types without tags it comes to %s "
-        "containers." % k(f["year_loss"]),
-        "The 20 litre kegs carry tags, so their loss is read from the recovery agent's cases: %s kegs not traced of %s "
-        "delivered in the 52 weeks to %s (the latest whose cases have all closed), %s per cent. That rate applied to the "
-        "other four types would put their year's loss at %s." % (
-            k(t["not_traced"]), k(t["delivered"]), day(t["window"][1]), "%.2f" % t["loss_pct"],
-            k(f["route_components"]["S3"]["C3"])),
-        "Containers condemned at the wash leave the register and are taken forward at last year's rate per delivery."]
-    for i, x in enumerate(notes):
-        _note(ws, r + 1 + i, x, 11, 34)
-    _widths(ws, (16, 12, 12, 11, 10, 13, 12, 14, 13, 11, 13))
+        for x in f["lots"][p]:
+            rows.append([f["names"][p].capitalize(), x["lot"], x["age"], x["register"], x["on_site"], x["share"]])
+    end = _rows(ws, hdr, rows, 4, [((4, 5), "#,##0"), ((3,), "0.0"), ((6,), "0.000")])
+    ws.auto_filter.ref = "A4:F%d" % (end - 1)
+    r = end + 1
+    hdr2 = ["Container type", "Leaving the trade a year (per cent)", "Share of the fleet on site", "Alive at the count",
+            "Lost in the trade in a year"]
+    rows2 = [[f["names"][p].capitalize(), f["account"][p]["leaving_pct"], f["account"][p]["share_on_site"],
+              f["account"][p]["alive"], f["account"][p]["lost_year"]] for p in POOLS]
+    end2 = _rows(ws, hdr2, rows2, r, [((4, 5), "#,##0"), ((2,), "0.0"), ((3,), "0.00")])
+    ws.cell(row=end2, column=1, value="All five types").font = Font(bold=True)
+    ws.cell(row=end2, column=5, value=f["year_loss"]).font = Font(bold=True)
+    _num(ws, end2, (5,))
+    _note(ws, end2 + 2, "Each lot's share on site falls with its age at one rate a year for its container type; the fit "
+                        "weights each lot by the containers found. The fleet alive is each lot on the register times its "
+                        "fitted survival.", 6, 34)
+    _widths(ws, (16, 12, 12, 12, 12, 12))
     ws.freeze_panes = "C5"
 
 
 def store_sheet(wb, f):
     ws = wb.create_sheet("Cold store")
-    _title(ws, "The cold store holds each beer a racking run at a time, and the 2027 plan changes the runs and the range",
+    _title(ws, "The cold store under the 2027 brew plan",
            "Monday position against the racking log, December 2024 to November 2026; brew plan 2027 issue 1.")
     ws.append([])
-    hdr = ["Container type", "Cover beside the runs (weeks of deliveries)", "Beers racked in 2026", "Half a run per beer, 2026",
-           "Beers on sale in the worst week of 2027", "Half a run per beer, 2027 plan", "Deliveries in the worst week",
-           "Full in the cold store, worst week", "Same week on summer 2026's weeks of cover"]
-    ws.append(hdr)
-    _hdr(ws, 4, len(hdr), 62)
-    for i, p in enumerate(POOLS):
-        d = f["pool"][p]
-        ws.append([f["names"][p].capitalize(), d["store_cover_weeks"], d["beers_2026"], d["half_runs_2026"], d["beers_at_week"],
-                   f["half_runs_at_week"][p], d["deliveries_at_week"], d["store"], f["store_cover_route"][p]])
-        _num(ws, 5 + i, (3, 4, 5, 6, 7, 8, 9))
-        _num(ws, 5 + i, (2,), "0.00")
-    row = 5 + len(POOLS)
-    ws.cell(row=row, column=1, value="All five types").font = Font(bold=True)
-    ws.cell(row=row, column=8, value=f["store_2027"]).font = Font(bold=True)
-    ws.cell(row=row, column=9, value=f["route_components"]["S2"]["C2"])
-    _num(ws, row, (8, 9))
-    _note(ws, row + 2, "A beer racked a run at a time sits, on average, at half a run above its cover, so the store's stock "
-                       "follows the runs and the number of beers on sale as well as the deliveries. The last column carries "
-                       "each type's weeks of cover in the same weeks of 2026 to 2027's deliveries (for each type's own "
-                       "worst week on that reading).", 9, 34)
-    r = row + 5
-    hdr2 = ["Container type", "Product", "Racking run in 2026 (median filled)", "Racking run in the 2027 plan, worst week",
-            "On sale in the worst week"]
-    for j, h in enumerate(hdr2):
-        ws.cell(row=r, column=1 + j, value=h)
-    _hdr(ws, r, len(hdr2), 46)
-    r += 1
+    hdr = ["Container type", "Cover beside the runs (weeks of deliveries)", "Beers racked in 2025 and 2026",
+           "Half a run per beer, 2026", "Beers on sale at the store's fullest, 2027", "Runs on sale then, 2027 plan",
+           "Full in the cold store at its fullest", "Same on 2026's weeks of cover", "2026 stock over deliveries (weeks)"]
+    rows = []
     for p in POOLS:
-        skus = sorted({b["sku"] for b in f["beers"][p]} | set(f["runs_2026"][p]))
-        for s in skus:
-            now = [b for b in f["beers"][p] if b["sku"] == s and b["on_sale_at_week"]]
-            ws.append([f["names"][p].capitalize(), s, f["runs_2026"][p].get(s), now[0]["run"] if now else None,
-                       "yes" if now else "no"])
-            _num(ws, r, (3, 4))
-            r += 1
-    _widths(ws, (16, 14, 14, 14, 14, 13, 12, 13, 14))
+        d = f["pool"][p]
+        rows.append([f["names"][p].capitalize(), d["store_cover_weeks"], d["beers_2026"], d["half_runs_2026"],
+                     d["beers_at_fullest"], d["runs_on_sale_at_fullest"], f["store_2027_by_pool"][p],
+                     d["store_cover_route"], d["cover_weeks_2026"]])
+    end = _rows(ws, hdr, rows, 4, [((3, 4, 5, 6, 7, 8), "#,##0"), ((2,), "0.000"), ((9,), "0.00")], 62)
+    ws.cell(row=end, column=1, value="All five types").font = Font(bold=True)
+    ws.cell(row=end, column=7, value=f["store_2027"]).font = Font(bold=True)
+    ws.cell(row=end, column=8, value=f["route_components"]["S2"]["C2"])
+    _num(ws, end, (7, 8))
+    r = end + 2
+    hdr2 = ["Container type", "Product", "Racking run 2025 and 2026 (median filled)", "2027 plan period", "First on sale",
+            "Last on sale", "2027 racking run"]
+    rows2 = []
+    for p in POOLS:
+        for b in f["beers"][p]:
+            rows2.append([f["names"][p].capitalize(), b["sku"], f["runs_2026"][p].get(b["sku"]), None,
+                          dt.date.fromisoformat(b["first"]), dt.date.fromisoformat(b["last"]), b["run"]])
+            rows2[-1][3] = "from 3 May" if b["first"] >= "2027-05-03" else "to 2 May"
+    end2 = _rows(ws, hdr2, rows2, r, [((3, 7), "#,##0"), ((5, 6), "dd mmm yyyy")])
+    _widths(ws, (16, 14, 14, 13, 14, 13, 13, 13, 13))
     ws.freeze_panes = "B5"
 
 
@@ -341,7 +385,8 @@ def summers_sheet(wb, f):
     ws.append(hdr)
     _hdr(ws, 4, len(hdr), 34)
     for i, p in enumerate(POOLS):
-        ws.append([f["names"][p].capitalize()] + [f["summers"][p][y] for y in yrs] + [f["hot"][p], f["hot_year"][p], f["plan"][p]])
+        ws.append([f["names"][p].capitalize()] + [f["summers"][p][y] for y in yrs] + [f["hot"][p], f["hot_year"][p],
+                                                                                       f["plan"][p]])
         _num(ws, 5 + i, list(range(2, 12)) + [12, 14])
         j = yrs.index(str(f["hot_year"][p]))
         ws.cell(row=5 + i, column=2 + j).font = Font(bold=True)
@@ -352,91 +397,35 @@ def summers_sheet(wb, f):
 def routes_sheet(wb, f):
     ws = wb.create_sheet("Routes")
     _title(ws, "What each shortcut would have ordered",
-           "Largest weekly shortfall, planning case, with the cover it implies. One choice changed at a time, then all three.")
+           "Largest weekly shortfall, planning case, and the cover it implies; then the three estimates on each route.")
     ws.append([])
     hdr = ["How the fleets are sized"]
     for p in POOLS:
         hdr += [f["names"][p].capitalize(), "Cover"]
+    hdr += ["Trade's rise", "Store at its fullest", "Lost in a year"]
     ws.append(hdr)
     _hdr(ws, 4, len(hdr), 34)
     for i, (key, label) in enumerate(ROUTES):
         row = [label]
         for p in POOLS:
             row += [f["routes"][key][p]["plan"], COVER[f["routes"][key][p]["cover"]]]
+        rc = f["route_components"].get(key) or ({"C1": f["trade_rise"], "C2": f["store_2027"], "C3": f["year_loss"]}
+                                                if key == "golden" else {})
+        row += [rc.get("C1"), rc.get("C2"), rc.get("C3")]
         ws.append(row)
         for j, p in enumerate(POOLS):
             _num(ws, 5 + i, (2 + 2 * j,))
             if f["routes"][key][p]["cover"] != f["cover"][p]:
                 ws.cell(row=5 + i, column=3 + 2 * j).fill = PatternFill("solid", fgColor="F6D5D2")
+        _num(ws, 5 + i, (12, 13, 14))
         if key == "golden":
             for col in range(1, len(hdr) + 1):
                 ws.cell(row=5 + i, column=col).font = Font(bold=True)
     r = 5 + len(ROUTES) + 1
-    rc = f["route_components"]
-    _note(ws, r, "Shaded covers differ from this review's. Stock at customers moved in step with deliveries puts the rise to the "
-                 "worst week at %s containers over the five types against %s; summer 2026's weeks of cover put the cold "
-                 "store at %s against %s; the tagged kegs' loss rate puts the year's loss on the other four types at %s "
-                 "against %s." % (k(rc["S1"]["C1"]), k(f["trade_rise"]), k(rc["S2"]["C2"]), k(f["store_2027"]),
-                                  k(rc["S3"]["C3"]), k(f["year_loss"])), 11, 40)
-    _widths(ws, (54, 12, 13, 12, 13, 12, 13, 12, 13, 12, 13))
-    ws.freeze_panes = "B5"
-
-
-def sensitivity_sheet(wb, f):
-    ws = wb.create_sheet("Sensitivity")
-    n1 = f["singles"]
-    _title(ws, "The cover is the same on every reasonable convention",
-           "Largest weekly shortfall, planning case, rebuilt with each convention changed alone and with every two together.")
-    ws.append([])
-    hdr = ["Convention"] + [f["names"][p].capitalize() for p in POOLS] + ["Cover unchanged"]
-    ws.append(hdr)
-    _hdr(ws, 4, len(hdr), 30)
-    r = 5
-    for i, name in enumerate(f["variant_names"][:1 + n1]):
-        ws.append([("As used" if i == 0 else name[0].upper() + name[1:])] + [f["variant_plan"][p][i] for p in POOLS] + ["yes"])
-        _num(ws, r, range(2, 7))
-        r += 1
-    for label, j in (("lowest", 0), ("highest", 1)):
-        ws.append(["Any two of these together (%s rebuilds), %s" % (k(f["variants"] - 1 - n1), label)] +
-                  [f["variant_range"][p][j] for p in POOLS] + ["yes" if f["family_calls_all_golden"] else "no"])
-        _num(ws, r, range(2, 7))
-        for col in range(1, 8):
-            ws.cell(row=r, column=col).font = Font(bold=True)
-        r += 1
-    r += 1
-    ws.cell(row=r, column=1, value="Readings not used").font = Font(bold=True)
-    r += 1
-    for name, v in f["refused"].items():
-        ws.cell(row=r, column=1, value=name[0].upper() + name[1:])
-        for j, p in enumerate(POOLS):
-            ws.cell(row=r, column=2 + j, value=v[p])
-        ws.cell(row=r, column=7, value="yes" if all(f["refused_cover"][name][p] == f["cover"][p] for p in POOLS) else "no")
-        _num(ws, r, range(2, 7))
-        r += 1
-    r += 1
-    ws.cell(row=r, column=1, value="Fitted inputs moved").font = Font(bold=True)
-    r += 1
-    for x in f["perturbations"]:
-        ws.cell(row=r, column=1, value=x["input"][0].upper() + x["input"][1:])
-        for j, p in enumerate(POOLS):
-            ws.cell(row=r, column=2 + j, value=x["plan"][p])
-        ws.cell(row=r, column=7, value="yes" if x["call_holds"] else "no")
-        _num(ws, r, range(2, 7))
-        r += 1
-    lv, ts = f["levels"]["K50"], f["tests"]["K50"]
-    _note(ws, r + 1, "Deliveries at a count are read on the fitted season for the count's own week. Trailing means beyond four "
-                     "weeks are not used: for 50 litre kegs the eight weeks before the count average %s a week and the thirteen "
-                     "weeks %s, against %s in the count's week (%s and %s per cent above), because the season is falling into "
-                     "the count. A single slope in temperature is not used: against it the bend's F statistic for 50 litre kegs "
-                     "is %s on 2 and %d degrees of freedom. The trend is not dropped for every type: its t statistic is %s for 20 "
-                     "litre kegs, %s for firkins and %s for kilderkins. The store's split is not fitted on 52 Mondays alone: "
-                     "the fixed part's standard error is then %s to %s containers. Condemned containers leave the fleet "
-                     "(FS-04 2.2)." % (
-                         k(lv["eight_weeks"]), k(lv["thirteen_weeks"]), k(lv["fit"]), lv["eight_over_fit_pct"],
-                         lv["thirteen_over_fit_pct"], ts["bend_F"], ts["df"], f["tests"]["K20"]["trend_t"],
-                         f["tests"]["FIR"]["trend_t"], f["tests"]["KIL"]["trend_t"],
-                         k(min(f["split"][p]["se_52"] for p in POOLS)), k(max(f["split"][p]["se_52"] for p in POOLS))), 7, 68)
-    _widths(ws, (70, 13, 13, 13, 11, 11, 11))
+    _note(ws, r, "Shaded covers differ from this review's. The second to eighth rows leave out one, two or all three of "
+                 "the estimates this review makes and take the records as they stand there instead; every other step is "
+                 "this review's.", 14, 34)
+    _widths(ws, (58, 10, 12, 10, 12, 10, 12, 10, 12, 10, 12, 11, 11, 11))
     ws.freeze_panes = "B5"
 
 
@@ -445,20 +434,20 @@ def notes_sheet(wb, f):
     c = f["counts"]
     _title(ws, "Sources and conventions")
     rows = [
-        ("As of", "Annual count of %s; records to that date." % day(c["count_dates"][-1])),
-        ("Requirement, fleet, shortfall", "FS-04 issue 3, 2.1 to 2.3: at customers, full in the cold store, at the depots, in wash "
-                                          "and repair, plus a float of two sevenths of the week's deliveries; the fleet with no "
-                                          "purchase and no hire after the count."),
-        ("Season and cases", "FS-04 3.1 to 3.4. The season as contracted and planned at the review: accounts supplied, the "
-                             "Maplestead agreement's outlets from their listing dates, the range and brew plan as issued."),
-        ("Deliveries", "%s docket lines over %s weeks from %s; %s lines re-sent by a handheld counted once; %s lines with no "
+        ("As of", "Count of every site on %s; records to that date." % day(c["count_date"])),
+        ("Requirement, fleet, shortfall", "FS-04 issue 3, 2.1 to 2.3: at customers (full, on dispense, or empty and awaiting "
+                                          "collection), full in the cold store, at the depots, in wash and repair, plus a "
+                                          "float of two sevenths of the week's deliveries; the fleet with no purchase and no "
+                                          "hire after the count."),
+        ("Deliveries", "%s docket lines over %d weeks from %s; %s lines re-sent by a handheld counted once; %s lines with no "
                        "container code read from the product; %s renumbered accounts under their current number."
-         % (k(c["delivery_lines"]), c["weeks"], day(c["first_week"]), k(c["resent_rows"]), k(c["blank_codes"]), k(c["renumbered"]))),
-        ("Forecast", "Weekly deliveries by type fitted on the season, the trend and the week's mean daily maximum temperature at Calder Vale, "
-                     "with the estate's scheduled volume added from each outlet's listing date."),
-        ("Tagged kegs", "%s tag reads; %s repeated reads within two minutes dropped; delivery reads cover %s per cent of the "
-                        "dockets' 20 litre deliveries and the count of kegs at customers is scaled for that."
-         % (k(f["tags"]["reads"]), k(f["tags"]["double_reads"]), f["tags"]["read_share_pct"])),
+         % (k(c["delivery_lines"]), c["weeks"], day(c["first_week"]), k(c["resent_rows"]), k(c["blank_codes"]),
+            k(c["renumbered"]))),
+        ("Cellar checks", "%s TQ-02 line checks on %s calls; %s lines entered twice on one call taken once."
+         % (k(c["checks"]), k(c["check_calls"]), k(c["check_doubles"]))),
+        ("Forecast", "Weekly deliveries by type fitted on the season, the trend and the week's mean daily maximum "
+                     "temperature at Calder Vale; the Maplestead outlets added from their listing dates at the scheduled "
+                     "volume, shaped by the season."),
         ("Rounding", "Whole containers. A negative shortfall is a surplus."),
     ]
     ws.append([])
@@ -473,13 +462,13 @@ def notes_sheet(wb, f):
 def workbook(path, f):
     wb = Workbook()
     first_sheet(wb, f)
+    account_sheet(wb, f)
+    routes_sheet(wb, f)
     path_sheet(wb, f)
     cellars_sheet(wb, f)
-    account_sheet(wb, f)
+    lots_sheet(wb, f)
     store_sheet(wb, f)
     summers_sheet(wb, f)
-    routes_sheet(wb, f)
-    sensitivity_sheet(wb, f)
     notes_sheet(wb, f)
     wb.save(path)
 
@@ -618,7 +607,7 @@ def _table(slide, left, top, width, rows, widths, size=13, row_h=380000):
 
 
 def deck(path, f, png_cover, png_weeks):
-    total = 5
+    total = 4
     prs = Presentation()
     prs.slide_width, prs.slide_height = Emu(SW), Emu(SH)
     lay = prs.slide_layouts[5]
@@ -628,72 +617,54 @@ def deck(path, f, png_cover, png_weeks):
     _heading(s, headline(f))
     s.shapes.add_picture(png_cover, Emu(560000), Emu(1250000), width=Emu(7200000))
     lines = ["Largest weekly shortfall of the 2027 season, planning case, against the maker's minimum order run:"]
-    lines += ["%s: %s against %s, %s" % (nm(p), k(f["plan"][p]), k(f["min_run"][p]), COVER[f["cover"][p]].lower()) for p in POOLS]
-    lines += ["The usual sizing would have given %s." % rejected(f)]
+    lines += ["%s: %s against %s, %s" % (nm(p), k(f["plan"][p]), k(f["min_run"][p]), COVER[f["cover"][p]].lower())
+              for p in POOLS]
     _box(s, 7950000, 1300000, SW - 7950000 - 500000, 4800000, lines, size=14, bold_first=True)
     _foot(s, 1, total)
-    # 2: the weeks
+    # 2: the fleet account
     s = prs.slides.add_slide(lay)
-    kegs = [p for p in POOLS if p.startswith("K") and p != "KIL"]
-    wk = lambda p: dt.date.fromisoformat(f["plan_week"][p])
-    _heading(s, "The keg fleets are shortest in %s, the cask fleets at the end of the season" % _list(
-        sorted({wk(p).strftime("%B") for p in kegs}, key=lambda m: dt.datetime.strptime(m, "%B").month)))
-    s.shapes.add_picture(png_weeks, Emu(380000), Emu(1350000), width=Emu(SW - 760000))
-    _box(s, 560000, 4450000, SW - 1120000, 1700000, [
-        "Shortfall by week of the season, planning case (requirement less the fleet counted on %s, no purchase and no hire). "
-        "Worst weeks: %s." % (day(f["counts"]["count_dates"][-1]),
-                              "; ".join("%s, week of %s" % (f["plural"][p], day(f["plan_week"][p])) for p in POOLS)),
-        "The Maplestead outlets join from April and the summer range and racking plan start on 3 May; containers lost at "
-        "customers and condemned at the wash come off the fleet week by week."], size=14)
+    _heading(s, "Three estimates carry the order: the trade's summer stock, the store and the loss")
+    rows = [["Containers"] + [nm(p) for p in POOLS] + ["All five"]]
+    for label, key in (("On the register", "register"), ("Counted on site", "on_site"), ("Alive at the count", "alive"),
+                       ("Lost in the trade in a year", "lost_year"), ("Trade's rise to its summer peak", "rise"),
+                       ("Cold store at its fullest", "store_fullest")):
+        v = [f["account"][p][key] for p in POOLS]
+        tot = {"rise": f["trade_rise"], "store_fullest": f["store_2027"], "lost_year": f["year_loss"]}.get(key, sum(v))
+        rows.append([label] + [k(x) for x in v] + [k(tot)])
+    _table(s, 480000, 1350000, SW - 960000, rows, [0.28, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12], size=13)
+    _box(s, 560000, 4500000, SW - 1120000, 1700000, [
+        "The register still holds every container lost in the trade since 2011: %s of its %s are not coming back. The reps' "
+        "checks count only full containers, so the trade holds more than they show and rises by %s to its summer peak. The "
+        "2027 brew plan's longer runs and wider range fill the store to %s." % (
+            k(sum(f["account"][p]["never_coming_back"] for p in POOLS)), k(f["counts"]["register"]), k(f["trade_rise"]),
+            k(f["store_2027"]))], size=14)
     _foot(s, 2, total)
-    # 3: what it is made of
+    # 3: the weeks and the hot case
     s = prs.slides.add_slide(lay)
-    _heading(s, "Most of the requirement is out of sight: at customers and in the cold store")
-    rows = [["Worst week, planning case"] + [nm(p) for p in POOLS]]
-    pick = {p: [x for x in f["path"][p] if x["week"] == f["plan_week"][p]][0] for p in POOLS}
-    for label, key in (("At customers", "at_customers"), ("Full in the cold store", "store"), ("Depots, wash and repair", "other"),
-                       ("Float", "float"), ("Requirement", "requirement"), ("Fleet", "fleet"), ("Shortfall", "shortfall")):
-        rows.append([label] + [k(pick[p][key]) for p in POOLS])
-    _table(s, 700000, 1350000, SW - 1400000, rows, [0.30, 0.14, 0.14, 0.14, 0.14, 0.14], size=13)
-    _box(s, 700000, 4600000, SW - 1400000, 1500000, [
-        "From the count to the worst week the stock at customers rises by %s containers over the five types, the new "
-        "estate's cellars included. The cold store holds %s under the 2027 brew plan. The four types without tags lost "
-        "%s containers at customers in the year to the count." % (k(f["trade_rise"]), k(f["store_2027"]), k(f["year_loss"]))], size=14)
-    _foot(s, 3, total)
-    # 4: the hot case
-    s = prs.slides.add_slide(lay)
-    over = [p for p in POOLS if f["cover"][p] == "hire" and f["hot"][p] >= f["min_run"][p]]
-    _heading(s, "A hot summer mostly hits the 50 litre kegs" if "K50" in over or f["hot"]["K50"] - f["plan"]["K50"] == max(
-        f["hot"][p] - f["plan"][p] for p in POOLS) else "The hot case moves the keg fleets most")
-    rows = [["Largest weekly shortfall", "Planning case", "Hot case", "Summer it comes from", "Minimum order run", "Cover"]]
+    _heading(s, "In a hot summer the 50 litre fleet is short by %s in its worst week" % k(f["hot"]["K50"]))
+    s.shapes.add_picture(png_weeks, Emu(1096000), Emu(1150000), width=Emu(10000000))
+    rows = [["Largest weekly shortfall", "Planning case", "Hot case", "Summer it comes from", "Cover"]]
     for p in POOLS:
-        rows.append([nm(p), k(f["plan"][p]), k(f["hot"][p]), str(f["hot_year"][p]), k(f["min_run"][p]), COVER[f["cover"][p]]])
-    _table(s, 700000, 1350000, SW - 1400000, rows, [0.24, 0.15, 0.15, 0.17, 0.15, 0.14], size=13)
-    extra = []
-    if over:
-        extra.append("In the hot case %s would be short by more than a minimum order run. The standard reads the cover on the "
-                     "planning case (4.1), so the hire stands; the hire terms have no upper limit on a booking made by "
-                     "26 February 2027." % _short([f["plural"][p] for p in over]))
-    _box(s, 700000, 3900000, SW - 1400000, 2000000, [
-        "The hot case is the second highest of the season's largest weekly shortfall over the ten summers %d to %d, each "
-        "run on its recorded weekly temperatures." % (f["counts"]["summers"][0], f["counts"]["summers"][1])] + extra, size=14)
-    _foot(s, 4, total)
-    # 5: the routes
+        rows.append([nm(p), k(f["plan"][p]), k(f["hot"][p]), str(f["hot_year"][p]), COVER[f["cover"][p]]])
+    _table(s, 700000, 3800000, SW - 1400000, rows, [0.28, 0.17, 0.17, 0.2, 0.18], size=12, row_h=300000)
+    _box(s, 700000, 5720000, SW - 1400000, 500000, [
+        "The hot case is the second highest of the ten summers %s to %s run week by week; the cover is read on the planning "
+        "case (FS-04 4.1)." % (min(f["summers"]["K50"]), max(f["summers"]["K50"]))], size=12)
+    _foot(s, 3, total)
+    # 4: the routes
     s = prs.slides.add_slide(lay)
-    _heading(s, "The usual sizing would have ordered the wrong fleets")
+    _heading(s, "The records read as they stand would have ordered the wrong fleets")
     rows = [["How the fleets are sized"] + [nm(p) for p in POOLS]]
-    for key, label in ROUTES[:5]:
+    for key, label in [ROUTES[0], ROUTES[1], ROUTES[2], ROUTES[3], ROUTES[7]]:
         rows.append([label] + ["%s, %s" % (k(f["routes"][key][p]["plan"]),
-                                           {"buy": "buy", "hire": "hire", "nothing": "none"}[f["routes"][key][p]["cover"]]) for p in POOLS])
+                                           {"buy": "buy", "hire": "hire", "nothing": "none"}[f["routes"][key][p]["cover"]])
+                               for p in POOLS])
     _table(s, 480000, 1350000, SW - 960000, rows, [0.35, 0.13, 0.13, 0.13, 0.13, 0.13], size=12)
-    rf = f["referee"]
-    _box(s, 560000, 4250000, SW - 1120000, 1900000, [
-        "Check on the tagged 20 litre kegs: from the December 2025 count to the busiest weeks of summer 2026 the tags show "
-        "%s more kegs at customers. What a cellar holds line by line gives %s; stock moved in step with deliveries would "
-        "have been %s." % (k(rf["seen"]), k(rf["golden"]), k(rf["proportional"])),
-        "The cover is the same on all %s rebuilds with other conventions and when each fitted input is moved "
-        "(Sensitivity sheet)." % k(f["variants"] - 1)], size=14)
-    _foot(s, 5, total)
+    _box(s, 560000, 4350000, SW - 1120000, 1800000, [
+        "Each of the three readings alone files a wrong cover on at least one fleet, and together they order nothing for "
+        "the 50 and 20 litre kegs or the firkins and only a hire of 30 litre kegs. The cover holds on all %d rebuilds with other reasonable conventions and with each fitted input "
+        "moved by twice its measured spread (workbook, Routes sheet)." % (f["variants"] - 1)], size=14)
+    _foot(s, 4, total)
     prs.save(path)
 
 

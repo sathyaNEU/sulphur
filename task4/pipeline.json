@@ -1,46 +1,46 @@
 {
  "task": "task4",
- "status": "DESIGN",
+ "status": "BUILD",
  "domain": "supply-chain-logistics",
  "subdomain": "regression-classification-model-diagnostics",
  "client_domain": "general-statistics-data-science",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 3,
+ "stage_name": "build",
  "updated": "2026-11-25",
  "doctrine": "throughout",
  "architecture": 14,
  "loops": 1,
- "call": "(from generator/core.py at the draw; the cut pack's figures replace them) buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (largest weekly shortfall in the 2027 summer season, planning case: 50 litre 4,417, 30 litre 1,907, 20 litre 657, firkins 1,684, kilderkins -457; lines nil and the maker's minimum order run 3,500, 1,500, 1,200, 1,200, 600)",
+ "call": "buy 50 litre kegs, 30 litre kegs and firkins, hire 20 litre kegs for the season, nothing for kilderkins (cut pack: largest weekly shortfall in the 2027 summer season, planning case 4,578, 2,426, 841, 1,543 and -430; hot case 8,701, 2,940, 1,220, 1,551 and -430; lines nil and the maker's minimum order run 3,500, 1,500, 1,200, 1,200, 600)",
  "chain": "R1 each pool's account at the count of 30 November 2026 (register and count by purchase lot) and its deliveries; R2 the rise in the trade's stock from the count to its summer peak, from full-only cellar counts rebuilt on each line's delivery cycle; R3 the containers the trade loses in a year, from the share of each purchase lot found on site against its age; R4 the store at its fullest under the 2027 brew plan; R5 each pool's largest weekly shortfall in the planning case; R6 the same in the hot case; R7 the cover per pool",
- "stump": "the reflex route (the reps' counts fitted as they stand, the store's weeks of cover carried from 2026, the counted fleet carried forward with no loss) files -471, -222, -839, 102, -767: nothing for the three keg pools and a hire of firkins; S1 lost alone files 2,675 fifty-litre and 1,182 thirty-litre (a hire each), S2 lost alone -510 twenty-litre (nothing), S3 lost alone 768 firkins (a hire); each stump pushed past its fit files a wrong cover too, and the four run routes (hedge, generous, calibrated, cut-off) each file a wrong call",
+ "stump": "cut pack: the reflex route (the reps' checks as they stand, the store at 2026's weeks of cover, the register less the condemned as the fleet) files -729, 54, -770, -74, -748: nothing for the 50 and 20 litre kegs and the firkins, a hire of 30 litre kegs; S1 lost alone files 2,604 fifty-litre (a hire), S2 lost alone -410 twenty-litre (nothing) and 778 firkins (a hire), S3 lost alone 623 firkins and 2,907 fifty-litre (a hire each); each stump pushed past its fit files a wrong cover too, and the four run routes (hedge, generous, calibrated, cut-off and its three further settings) each file a wrong call",
  "precut": {
   "exit": 0,
   "date": "2026-11-25",
-  "checks": "precut.py task4: 117 checks, 0 FAIL, 4 WARN (nearest chains task8, task19 and task22 answered in the Template check; checks.py and effort.json owed at stage 3; the build's wider battery owed at stage 3); generator/core.py CORE PASS level 5 with every row PASS on a card re-registered today (seeds 1 to 16: fifteen pass, seed 5 fails the world's own consistency check); core.py --forcing exit 0; prompt gate PASS"
+  "checks": "precut.py task4 on the cut pack: 0 FAIL, 1 WARN (nearest chains task8, task19 and task22, answered in the Template check); generator/core.py CORE PASS level 5 (draw); generator/results.py CORE PASS level 5 on the cut pack with every row PASS"
  },
  "leak": {
-  "leak_py": "owed on the new cut (stage 3)",
-  "reader": "owed at stage 4: the pack and the prompt change"
+  "leak_py": "REVIEW on the cut pack (FS-04 and the hire terms' vocabulary, plan dates after the setting), each ruled in the note's ## Leak rulings; no LEAK",
+  "reader": "owed at stage 4"
  },
  "duplicate_check": {
-  "heart": "owed on the new cut",
+  "heart": "WARN on the cut pack (template.chain_near and overuse.weight against task8, repeat.gate_g against task1), each answered in the note's Template check; surface PASS",
   "nearest": "guard.py check task4 on 2026-11-25: WARN only (template.chain_near task8, overuse.weight task8, repeat.gate_g task1, repeat.deliverables task9, NOTE driver.near 0.18 against this slot's architecture 13), each answered in the note's Template check; skeleton.py check PASS, severity none; registered 2026-11-25"
  },
  "judge": {
   "verdict": "",
-  "disposition": "owed at stage 4 on the new cut (determinism mode: the Holistic Audit v4, Step 0, Part A and Part B)",
+  "disposition": "owed at stage 4 on the cut pack (determinism mode: the Holistic Audit v4, Step 0, Part A and Part B)",
   "report": ""
  },
- "paper_pair": 9.0,
+ "paper_pair": 26.7,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "factorial": "corelib level 5 at the draw: S1 a cellar count is of full containers, the holding rebuilt from the line's delivery cycle (opens the 50 litre kegs), S2 the store under the 2027 brew plan (opens the 20 litre kegs), S3 the loss from the lots' age structure on site (opens the firkins); each necessary alone, none sufficient alone on the reflex route, each two-sided; 4 distinct wrong sets of covers on the lattice",
-  "rubric": "corelib at the draw: one stump lost S1 33, S2 22, S3 22; one fixed alone 16, 16, 16; the reflex route 9; the rigorous standard route 9; run routes hedge 9, generous 9, calibrated 33, cut-off 33",
+  "quick": 9.0,
+  "careful": 26.7,
+  "thorough": 100.0,
+  "factorial": "cut pack, corelib level 5: S1 a cellar check is of full containers, the holding rebuilt from the dray's last call at the account (opens the 50 litre kegs), S2 the store under the 2027 brew plan (opens the 20 litre kegs), S3 the loss from the lots' age structure on site (opens the firkins); each necessary alone, none sufficient alone on the reflex route, each two-sided; 7 distinct wrong sets of covers on the lattice",
+  "rubric": "corelib on the cut pack: one stump lost S1 44, S2 22, S3 33; one fixed alone 16, 16, 16; the reflex route 9; the rigorous standard route 9; run routes hedge 9, generous 9, calibrated 44, cut-off 44",
   "largest_hint": "a rep's cellar count is of the full containers of a line on its order day, and the empties wait there for the dray: rescues 1 of 7",
-  "forcing": "twenty variants on the golden's covers at the draw; each fitted input moved 20 per cent (deliveries 5) and all four by two measured spreads: same covers"
+  "forcing": "cut pack: 23 band-setting rebuilds and the build's 205 (every fork-table convention alone and every two together) on the golden's covers; each fitted input moved 20 per cent (deliveries 5) and all four by two measured spreads: same covers"
  },
  "returned": [
   {
@@ -85,13 +85,13 @@
    "source": "platform runs (the author's paste)",
    "repair": "design",
    "portal": "architecture 11: the run landed the call and three of the four judgments (congestion on a logged density, the acquired brand at its own mix, the 53-week re-key), losing only the growth-conditioned overstatement and the agency hours",
-   "moves": "re-rooted in a new world as architecture 12: Havørn Regional's 2027 rotable spares, each line diagnosed; every priced judgment a relation between records at different grains that a correct reading of each file does not reveal"
+   "moves": "re-rooted in a new world as architecture 12: Hav\u00f8rn Regional's 2027 rotable spares, each line diagnosed; every priced judgment a relation between records at different grains that a correct reading of each file does not reveal"
   },
   {
    "date": "2026-11-12",
    "source": "holistic audit",
    "repair": "determinism",
-   "portal": "holdings not forced: the in-house lines rode a Bodø shop turnaround calibrated near saturation with no 2027 roster shipped (the audit's replay 12 to 17 days in the summer against the golden's 29; the starter-generator 6, 9 or 13 spares by reading); the VHF transceiver's 25 removals rested on an unfiled four-year window and an unfiled reading of repeat removals traced to one aircraft; fix: ship the 2027 roster and absence plan, file the capacity basis, the rate window and the repeat-removal treatment, re-derive the holdings and the saving",
+   "portal": "holdings not forced: the in-house lines rode a Bod\u00f8 shop turnaround calibrated near saturation with no 2027 roster shipped (the audit's replay 12 to 17 days in the summer against the golden's 29; the starter-generator 6, 9 or 13 spares by reading); the VHF transceiver's 25 removals rested on an unfiled four-year window and an unfiled reading of repeat removals traced to one aircraft; fix: ship the 2027 roster and absence plan, file the capacity basis, the rate window and the repeat-removal treatment, re-derive the holdings and the saving",
    "runs": "runs/arch12/runs.md (both platform runs pasted, scores not supplied): both found the landings driver and the watch list's aircraft-driven removals; pools 90 and 71 against the golden's 78"
   },
   {
@@ -111,7 +111,7 @@
    "commit": ""
   }
  ],
- "resume": "/build task4 from 3: execute the note's Build brief (the first cut's generator modules world.py, pack.py, analysis.py, results.py, docs.py, deliver.py, writeup.py, verify.py, metadata.py, build.py and make.py are the starting point and are stale against the new core; checks.py, effort.json, figures.json, target.zip, golden.zip, golden/, submission.md, metadata.json and the two reports of the first cut are in git at 458d644), re-prove the core on the cut pack, then stage 4 (leak reader and the determinism judge in determinism mode), READY",
+ "resume": "stage 4: spawn the leak reader (Sonnet, medium) and the determinism judge (determinism mode: the Holistic Audit v4, Step 0, Part A and Part B) together in the background on target.zip of this cut (target digest bf27139f134520a6); fix every finding in the generator in one pass and re-run gates.py --full; then stage 5 (pre-ship check in the note, READY with both zips and golden/ force-added). Flags for the architect before READY: the golden's clock of a check is the dray's last call at the account (FS-04 5.1), reversing the draw's SF17 reading (the line's own docket reads the falsification check at 0.67, a factor of 2.0); bands from the core's twenty rebuilds and the build's four conventions alone; C3's band is narrow (5,252 to 5,303) against the world's 4,982",
  "approved": "",
  "delivered": "",
  "portal": {
@@ -149,7 +149,7 @@
   },
   {
    "date": "2026-11-10",
-   "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittylä depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
+   "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittyl\u00e4 depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
   },
   {
    "date": "2026-11-10",
@@ -165,7 +165,7 @@
   },
   {
    "date": "2026-11-11",
-   "event": "architecture 10 landed by both platform runs (runs/arch10/, REDESIGN); the world and its scaffold left; architecture 11 drawn: Saarnela fulfilment centre's 2027 peak plan (Telkkä Logistics Oy, Kotikaari Oy and its acquired brand Huippu Sport), card registered, skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added"
+   "event": "architecture 10 landed by both platform runs (runs/arch10/, REDESIGN); the world and its scaffold left; architecture 11 drawn: Saarnela fulfilment centre's 2027 peak plan (Telkk\u00e4 Logistics Oy, Kotikaari Oy and its acquired brand Huippu Sport), card registered, skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added"
   },
   {
    "date": "2026-11-11",
@@ -173,11 +173,11 @@
   },
   {
    "date": "2026-11-11",
-   "event": "architecture 11 landed on the platform (runs/arch11/run1.md, REDESIGN); architecture 12 drawn in a new world (Norway, Havørn Regional AS, 30 twin turboprops, the Bodø component shop, the Helgeland routes from April 2027): which rotables will be short of spares in 2027 and which over-stocked, card registered with skeleton keys exposure_basis_decoupled, staggered_conversion_at_renewal and rate_on_driver_exposure added"
+   "event": "architecture 11 landed on the platform (runs/arch11/run1.md, REDESIGN); architecture 12 drawn in a new world (Norway, Hav\u00f8rn Regional AS, 30 twin turboprops, the Bod\u00f8 component shop, the Helgeland routes from April 2027): which rotables will be short of spares in 2027 and which over-stocked, card registered with skeleton keys exposure_basis_decoupled, staggered_conversion_at_renewal and rate_on_driver_exposure added"
   },
   {
    "date": "2026-11-12",
-   "event": "architecture 12 built (seed 41239, the Bodø shop at 52 per cent other work with staggered summer holidays, the avionics pools sized on 2026's flying): checks 66 of 66, verify 9 of 9, effort quick 20.8 / careful 40.6 / thorough 100 with every careful loss cited, 7 golden-family members and 8 perturbations holding the 15-line call; stage 4 next"
+   "event": "architecture 12 built (seed 41239, the Bod\u00f8 shop at 52 per cent other work with staggered summer holidays, the avionics pools sized on 2026's flying): checks 66 of 66, verify 9 of 9, effort quick 20.8 / careful 40.6 / thorough 100 with every careful loss cited, 7 golden-family members and 8 perturbations holding the 15-line call; stage 4 next"
   },
   {
    "date": "2026-11-12",
@@ -199,7 +199,7 @@
    "architecture": 12,
    "status": "READY",
    "call": "buy 12 rotable spares on 6 lines (starter-generators 3, brake assemblies 2, bleed air shutoff valves 2, nose wheel steering actuators 2, main batteries 2, cabin pressure controllers 1) and cut 18 on 9; withdraw 8 of the 23 watch-list serials; the whole list saves about 34 removals",
-   "chain": "R2 the starter-generator, brake and bleed valve 2027 removals on landings; R3 the watch-list serials worth withdrawing; R3b the removals withdrawing the whole list saves; R4 the propeller control's 2027 removals and spares through SB 61-0042's conversion; R5 every part number's 2027 removals; R6 the in-house lines' spares through the Bodø shop's 2027 queue; R7 the 80 per cent ranges; R8 the spares each line needs; R9 the lines to buy and to cut with how many",
+   "chain": "R2 the starter-generator, brake and bleed valve 2027 removals on landings; R3 the watch-list serials worth withdrawing; R3b the removals withdrawing the whole list saves; R4 the propeller control's 2027 removals and spares through SB 61-0042's conversion; R5 every part number's 2027 removals; R6 the in-house lines' spares through the Bod\u00f8 shop's 2027 queue; R7 the 80 per cent ranges; R8 the spares each line needs; R9 the lines to buy and to cut with how many",
    "zip_sha256_16": "684dc3d10c44f52e",
    "fate": "spent 2026-11-12 on the author's word after the second holistic audit (holdings not forced)"
   },
@@ -210,6 +210,10 @@
   {
    "date": "2026-11-25",
    "event": "the author re-pasted the review of 8 November 2026 (architecture 5) and asked for the latest rules, the Holistic Audit v4 and three or more decisive steps; architecture 14's first cut failed three free gates and today's core rules; redrawn as loop 1 in the same world (full-only cellar counts, one count by purchase lot, no tags), CORE PASS level 5 with every row PASS, card re-registered, precut 117 checks 0 FAIL; status DESIGN, the build owed from stage 3"
+  },
+  {
+   "date": "2026-11-25",
+   "event": "stage 3 BUILD of architecture 14 loop 1: world.py realised with a steady line draw, full-only cellar checks on the account's order day, one count of every site by state and lot, a register from 2011 that strikes off only the condemned; pack, analysis, results, checks, verify, goldens, submission and metadata rewritten; results.py CORE PASS level 5 with every row PASS on the cut pack; gates.py --full 0 FAIL, 3 WARN; two byte-identical builds"
   }
  ],
  "runs": {
@@ -290,7 +294,7 @@
    }
   ]
  },
- "gates": "owed on the new cut; on the first cut gates.py of 2026-11-25 gave 3 FAIL (the golden workbook's style table at leak and containers, heart BLOCK on weight and artifact) and precut WARNs on the Decisive steps, Run routes and Validation handles lines, all answered by this redraw",
+ "gates": "gates.py task4 --full on the cut pack, 2026-11-25: precut WARN (nearest chains, answered), effort PASS (quick 9.0, careful 26.7, thorough 100), voice PASS, leak REVIEW (ruled in the note), figures PASS (0 of 269 absent), stump PASS, containers PASS, heart WARN (answered), surface PASS, checks PASS (100 of 100), verify PASS (28 of 28), rebuild PASS (two byte-identical builds); 0 FAIL, 3 WARN; core.py and results.py CORE PASS level 5",
  "zip_sha256_16": "",
  "golden_zip_sha256_16": "",
  "migrated_from": {
@@ -308,7 +312,7 @@
   "world": "Wrenfold Brewery Ltd (invented), West Yorkshire: five returnable container fleets read against the fleet standard's lines for the 2027 summer season"
  },
  "final_cut": {
-  "date": "",
-  "note": "the first cut of 2026-11-17 (target digest c2dd65b140fc0d05) is superseded and out of the tree"
+  "date": "2026-11-25",
+  "note": "cut pack of architecture 14 loop 1 (target digest bf27139f134520a6); target.zip and golden.zip built, force-added at READY"
  }
 }
