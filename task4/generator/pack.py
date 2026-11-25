@@ -254,11 +254,15 @@ def write_count(target, WD, DS):
 
 
 def write_store(target, WD):
+    """the stock system's Monday position: full containers in the cold store by product and container type"""
     rows = []
     for i in range(WH + 1):
         for p in POOLS:
-            rows.append([WL.week_start(i).isoformat(), p, int(WD.pools[p].store[i])])
-    return write_csv(os.path.join(target, FILES["store"]), ["position_date", "container", "full_containers"], rows)
+            P = WD.pools[p]
+            for bi, (code, sh, run) in enumerate(P.beers26):
+                rows.append([WL.week_start(i).isoformat(), sku(p, code), p, int(P.stock_b[bi, i])])
+    return write_csv(os.path.join(target, FILES["store"]), ["position_date", "product", "container", "full_containers"],
+                     rows)
 
 
 def write_racking(target, WD, rng):

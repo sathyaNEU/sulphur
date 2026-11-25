@@ -28,9 +28,9 @@
   "nearest": "guard.py check task4 on 2026-11-25: WARN only (template.chain_near task8, overuse.weight task8, repeat.gate_g task1, repeat.deliverables task9, NOTE driver.near 0.18 against this slot's architecture 13), each answered in the note's Template check; skeleton.py check PASS, severity none; registered 2026-11-25"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "owed at stage 4 on the cut pack (determinism mode: the Holistic Audit v4, Step 0, Part A and Part B)",
-  "report": ""
+  "verdict": "NOT_DETERMINISTIC (pass 1, 2026-11-25)",
+  "disposition": "SEND_BACK: the cold store's run share (half a run) was a constant no file holds; FIX_NOW block edits a to g",
+  "report": "determinism_check_report.md"
  },
  "paper_pair": 26.7,
  "effort": {
@@ -111,7 +111,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: spawn the leak reader and the determinism judge (determinism mode: the Holistic Audit v4, Step 0, Part A and Part B) together in the background on target.zip of this cut (target digest 60760947b5f46954); fix every finding in the generator in one pass and re-run gates.py --full; then stage 5 (pre-ship check in the note, READY with both zips and golden/ force-added)",
+ "resume": "back to the architect: the Monday position now ships by product and the golden measures the run share on the beer panel (core.py fit_store mirrored); on the cut pack the panel gives 0.422 (se 0.026, 1,872 beer-weeks) against the world's 0.50 (the world's beers 0.42 to 0.54, mean 0.4995); the between-beers fit gives 0.508 (se 0.019), one cover for every type 0.506 (se 0.012), every Monday 0.449 (se 0.021). corelib passes every row and the battery holds every cover, but C2 is 10,088 against the world's 10,661. Once ruled: finish the block edits a to g of the coordinator's message, the note (SF26, Pinning list, Hidden factor record, Stump core, Files and Frozen lines, pre-ship check, Tried and rejected), checks and verify for the measured share, gates.py --full, then the second judge pass and READY",
  "approved": "",
  "delivered": "",
  "portal": {
@@ -222,6 +222,10 @@
   {
    "date": "2026-11-25",
    "event": "stage 3 rebuilt on the architect's second rulings (1070cb8): the fleet account as one row a pool, the lots' history on the fleet a year before the count, the 20 litre season and estate, the schedule's volume filed as a twelve-month average; the joint fit refused; results.py CORE PASS level 5 with every row PASS; gates.py --full 0 FAIL"
+  },
+  {
+   "date": "2026-11-25",
+   "event": "judge pass 1 NOT_DETERMINISTIC (the store's run share); repair started: position by product, the share measured on the beer panel; stopped, the panel's share 0.42 against the world's 0.50"
   }
  ],
  "runs": {
@@ -302,7 +306,7 @@
    }
   ]
  },
- "gates": "gates.py task4 --full on the cut pack (target digest 60760947b5f46954), 2026-11-25: precut WARN (nearest chains, answered), effort PASS (quick 9.0, careful 26.7, thorough 100), voice PASS, leak REVIEW (ruled in the note), figures PASS, stump PASS, containers PASS, heart WARN (answered), surface PASS, checks PASS, verify PASS (43 of 43), rebuild PASS; 0 FAIL, 3 WARN; core.py and results.py CORE PASS level 5 with every row PASS; core.py --forcing same call; audit_containers exit 0",
+ "gates": "STOPPED in the repair of judge pass 1: the beer-panel run share measures 0.422 (se 0.026) on the cut pack against the world's 0.50; corelib CORE PASS level 5 with every row PASS; gates.py not re-run on this cut (target digest a0d909151c31dc3b)",
  "zip_sha256_16": "",
  "golden_zip_sha256_16": "",
  "migrated_from": {

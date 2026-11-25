@@ -35,7 +35,7 @@ FILES = {
 
 # the golden's conventions (the core's GOLDEN), with the build's own four conventions at their golden readings
 GOLDEN = dict(swing="lines", recon="days", store="runs", loss="age", fit="ols", rate="count_rate_share",
-              count_months="all", harmonics=2, hinge=0.0, cover="mean", level="fit", age_fit="wls", age_drop=0,
+              count_months="all", harmonics=2, hinge=0.0, share_fit="panel", level="fit", age_fit="wls", age_drop=0,
               alive="lots", clock="deliveries", last="account", age_from="purchase", run_stat="median", estate="shaped",
               x_b=1.0, x_cov=1.0, x_lam=1.0, x_del=1.0)
 HURRIED = {"S1": {"recon": "face"}, "S2": {"store": "cover"}, "S3": {"loss": "none"}}
@@ -59,8 +59,11 @@ SINGLES = [
     ("the bend in the weather response a degree higher", {"hinge": 1.0}),
     ("one seasonal harmonic where the F test does not ask for two", {"harmonics": "test"}),
     ("three seasonal harmonics in the deliveries fit", {"harmonics": 3}),
-    ("the store's cover as the median week's, not the mean's", {"cover": "median"}),
+    ("the store's stock fitted with one cover for every container type", {"share_fit": "one_cover"}),
+    ("the store's stock fitted between beers, on each beer's mean stock and mean deliveries", {"share_fit": "between"}),
+    ("the store's stock fitted on every Monday of the record, not the last 104", {"share_fit": "all"}),
     ("deliveries at the count over its last two weeks", {"level": 2}),
+    ("deliveries at the count as the fit's value for the week beginning 30 November 2026 at its normal", {"level": "next"}),
     ("the lots fitted unweighted", {"age_fit": "ols"}),
     ("the lots fitted by a binomial model with a log link on the counts found out of registered", {"age_fit": "binom"}),
     ("the oldest four lots against the newest four", {"age_fit": "ends"}),
@@ -93,6 +96,7 @@ BATTERY = family()
 FAMILY = BATTERY
 # readings the files rule out, each by a figure the note states; they file the same covers and set no band
 REFUSED = [
+    ("each type's own regression of its Monday total on deliveries, the intercept read as the run share", {"store": "typeown"}),
     ("the fall per container sold left free in the fit of the checks", {"recon": "joint"}),
     ("a line's weekly sales from four weeks of its own dockets", {"rate": "count_rate"}),
     ("a line's weekly sales from thirteen weeks of its own dockets", {"rate": "count_rate13"}),
@@ -273,14 +277,19 @@ def load(target, mess=None):
                          age_d=np.array([r[6] for r in rows]))
         R.record_years = (R.asof - R.D0).days / 365.25
     # the cold store's Monday position: the stock at the close of week i is the next Monday's
-    st = pd.read_csv(f("store"), dtype={"container": str})
-    R.store = {}
+    st = pd.read_csv(f("store"), dtype={"container": str, "product": str})
+    st["week"] = (pd.to_datetime(st["position_date"]) - pd.Timestamp(R.D0)).dt.days // 7
+    R.store, R.store_beer = {}, {}
     for p in POOLS:
         x = st[st["container"].map(to_pool) == p]
-        i = ((pd.to_datetime(x["position_date"]) - pd.Timestamp(R.D0)).dt.days // 7).to_numpy()
-        v = np.zeros(WH + 1)
-        v[i] = x["full_containers"].to_numpy(dtype=float)
-        R.store[p] = v[1:WH + 1]
+        tot = x.groupby("week")["full_containers"].sum().reindex(range(WH + 1)).fillna(0.0).to_numpy(dtype=float)
+        R.store[p] = tot[1:WH + 1]                                  # the stock at the close of week i is the next Monday's
+        R.store_beer[p] = {s: y.set_index("week")["full_containers"].reindex(range(WH + 1)).fillna(0.0).to_numpy(
+            dtype=float)[1:WH + 1] for s, y in x.groupby("product")}
+    # each product's weekly deliveries from the dockets
+    gp = pd.DataFrame({"pool": pool, "sku": dk["sku"].to_numpy(), "week": week, "qty": qty})
+    R.flow_beer = {p: {s: np.bincount(y["week"], weights=y["qty"], minlength=WH)[:WH]
+                       for s, y in gp[gp["pool"] == p].groupby("sku")} for p in POOLS}
     rk = pd.read_csv(f("racking"), dtype={"container": str})
     rk["pool"] = rk["container"].map(to_pool)
     rk["week"] = (pd.to_datetime(rk["racked_on"]) - pd.Timestamp(R.D0)).dt.days // 7
@@ -343,7 +352,9 @@ def load(target, mess=None):
     R.estate_pubs = len(list(wb.worksheets[0].iter_rows(values_only=True))) - 4
     R.season = season_of(R)
     # by 2027 week: the estate's lines listed by its Monday, and the racking runs of the beers on sale
-    R.n_live, R.runs_on, R.beers_on = {}, {}, {}
+    R.n_live, R.runs_on, R.beers_on, R.plan_on = {}, {}, {}, {}
+    R.beer_share = {p: {s: float(v[WH - 52:].sum()) / float(R.flow[p][WH - 52:].sum()) for s, v in R.flow_beer[p].items()}
+                    for p in POOLS}
     for p in POOLS:
         R.n_live[p], R.runs_on[p], R.beers_on[p] = {}, {}, {}
         for i in range(WH, R.season[-1] + 1):
@@ -351,6 +362,7 @@ def load(target, mess=None):
             R.n_live[p][i] = sum(n for day, n in R.estate[p] if day <= d)
             on = beers_on_sale(R, p, d)
             R.runs_on[p][i], R.beers_on[p][i] = float(sum(run for s, run in on)), len(on)
+            R.plan_on.setdefault(p, {})[i] = on
     return R
 
 
@@ -518,6 +530,38 @@ def runs_of(R, p, stat="median", start=52):
     return cached("runs", R, p, dict(stat=stat, start=start), ("stat", "start"), go)
 
 
+def fit_store(R, o):
+    """the cold store's stock beer by beer: each beer's Monday stock on its deliveries that week (a cover in weeks of
+    deliveries, one for each container type) and on its racking run (the share of a run a beer holds beyond its
+    cover, one for every beer), by ordinary least squares with no intercept; or with one cover for every type, between
+    beers on each beer's means, or on every Monday of the record. Returns the share, each type's cover and the share's
+    standard error"""
+    first = 0 if o["share_fit"] == "all" else 52
+    one = o["share_fit"] in ("one_cover", "between")
+    rows, ys = [], []
+    for k, p in enumerate(POOLS):
+        runs = runs_of(R, p, o["run_stat"])
+        for s, run in runs.items():
+            st, fl = R.store_beer[p][s][first:], R.flow_beer[p][s][first:]
+            if o["share_fit"] == "between":
+                st, fl = np.array([st.mean()]), np.array([fl.mean()])
+            for a, b in zip(st, fl):
+                x = np.zeros(len(POOLS) + 1)
+                x[0 if one else k] = b
+                x[-1] = run
+                rows.append(x)
+                ys.append(a)
+    X, y = np.array(rows), np.array(ys)
+    use = [j for j in range(X.shape[1]) if np.abs(X[:, j]).sum() > 0]
+    beta = np.zeros(X.shape[1])
+    Xu = X[:, use]
+    beta[use] = np.linalg.lstsq(Xu, y, rcond=None)[0]
+    res = y - Xu @ beta[use]
+    cv = np.linalg.inv(Xu.T @ Xu) * float(res @ res) / max(len(y) - len(use), 1)
+    return dict(theta=float(beta[-1]), cov={p: float(beta[0 if one else k]) for k, p in enumerate(POOLS)},
+                se=float(np.sqrt(cv[-1, -1])), n=int(len(y)))
+
+
 def beers_on_sale(R, p, d):
     return [(s, run) for s, a, b, run in R.plan[p] if a <= d <= b]
 
@@ -539,8 +583,10 @@ def chain(R, p, opt=None, temps=None):
     nh = o["harmonics"] if o["harmonics"] != "test" else (2 if harmonic_F(R, p) > F_CRIT else 1)
     predict, shape, ys, h0, _ = cached("sales", R, p, dict(o, harmonics=nh), ("harmonics", "hinge"),
                                        lambda: fit_sales(R, p, nh, o["hinge"]))
-    if o["level"] == "fit":
+    if o["level"] == "fit":                                       # the week beginning 23 November 2026, as recorded
         lev = predict(WH - 1, R.temp_hist[WH - 1])
+    elif o["level"] == "next":                                    # the week beginning 30 November 2026, at its normal
+        lev = predict(WH, R.normal[R.week_dates[WH]])
     else:
         lev = float(flow[WH - o["level"]:WH].mean())
     year = float(flow[WH - 52:WH].sum())
@@ -569,14 +615,21 @@ def chain(R, p, opt=None, temps=None):
     if o["swing"] == "level":                                     # the counts as they stand, scaled to that level
         scale = alive_out / (a * L + b * m * lev)
         a, b = a * scale, b * scale
-    # the store: its cover in weeks of deliveries, beside the half run each beer on sale holds on average
+    # the store: its cover in weeks of deliveries, beside the share of a racking run each beer on sale holds beyond
+    # it, both measured on the beers' own Monday stocks; or a whole run for each beer (the far end); or each type's
+    # own regression with its intercept read as the share (refused)
     runs26 = runs_of(R, p, o["run_stat"])
     full26 = float(sum(runs26.values()))
-    part = 1.0 if o["store"] == "wholerun" else 0.5               # a whole run for each beer, or half of one
     st = R.store[p]
     reg = np.polyfit(flow[52:], st[52:], 1)
-    cov = (float(st[52:].mean()) - part * full26) / float(flow[52:].mean()) if o["cover"] == "mean" else \
-        float(np.median((st[52:] - part * full26) / flow[52:]))
+    if o["store"] == "wholerun":
+        part = 1.0
+        cov = (float(st[52:].mean()) - full26) / float(flow[52:].mean())
+    elif o["store"] == "typeown":
+        part, cov = float(reg[1]) / full26, float(reg[0])
+    else:
+        fs = cached("store", R, "all", o, ("share_fit", "run_stat"), lambda: fit_store(R, o))
+        part, cov = fs["theta"], fs["cov"][p]
     cov *= o["x_cov"]
     c2 = T["other"] / lev
     vol = R.estate_volume[p]
@@ -596,8 +649,21 @@ def chain(R, p, opt=None, temps=None):
             swing = b * m * (F - lev) + est
         if o["store"] in ("runs", "wholerun"):
             store = cov * D + part * R.runs_on[p][i]
+        elif o["store"] in ("typeown",):
+            store = cov * D + part * R.runs_on[p][i]
         elif o["store"] == "cover":
             store = float(st[j - 2:j + 3].mean() / flow[j - 2:j + 3].mean()) * D
+        elif o["store"] == "beer_cover":                          # each beer's own weeks of cover, same weeks of 2026
+            store = 0.0
+            on = R.plan_on[p][i]
+            sh = {s: R.beer_share[p].get(s, np.mean(list(R.beer_share[p].values()))) for s, run in on}
+            tot = sum(sh.values())
+            wc_type = float(st[j - 2:j + 3].mean() / flow[j - 2:j + 3].mean())
+            for s, run in on:
+                sb, fb = R.store_beer[p].get(s), R.flow_beer[p].get(s)
+                wc = float(sb[j - 2:j + 3].mean() / fb[j - 2:j + 3].mean()) if sb is not None and fb is not None and \
+                    fb[j - 2:j + 3].mean() > 0 else wc_type
+                store += wc * sh[s] / tot * D
         else:
             store = float(reg[1] + reg[0] * D)
         cum += (lam * D if o["clock"] == "deliveries" else year_loss / 52.18) + scrap * D
@@ -610,7 +676,7 @@ def chain(R, p, opt=None, temps=None):
     return dict(short=pick["short"], week=pick["i"], date=pick["date"], swing=pick["swing"], store=pick["store"],
                 year_loss=year_loss, rise=max(x["swing"] for x in season), fullest=max(x["store"] for x in season),
                 lam=lam, a=a, b=b, m=m, alive=alive, alive_out=alive_out, days_coef=bd, cov=cov, c2=c2,
-                half26=full26 / 2.0, scrap=scrap, lev=lev, hinge=h0, n_counts=n_counts, lam_y=lam_y,
+                theta=part, full26=full26, half26=part * full26, scrap=scrap, lev=lev, hinge=h0, n_counts=n_counts, lam_y=lam_y,
                 share_on=share_on, path=path, pick=pick, onsite=T["onsite"], L=L, slope1=slope(1.0),
                 slope_half=slope(0.5) if 0.5 in ivs else None)
 
@@ -702,7 +768,7 @@ def spreads(R, p, reps=120, seed=11):
         sl = fit_cellar(R, p, GOLDEN)[1]
         bm.append(sum(sl(x) * float(lr[li == x].sum()) for x in set(li.tolist())) / float(lr.sum()))
     R.counts[p] = keep
-    half = sum(runs_of(R, p).values()) / 2.0
+    half = sum(runs_of(R, p).values()) * fit_store(R, GOLDEN)["theta"]
     st, fl = R.store[p][52:], R.flow[p][52:]
     cv = []
     for _ in range(reps):
@@ -759,6 +825,15 @@ def run(target):
     X["allowances"] = {k: {p: chain(R, p, {"recon": k}) for p in POOLS} for k in ("half", "whole")}
     X["bat"], X["hot_bat"] = X["fam"], X["hot_fam"]
     X["level4"] = {p: chain(R, p, {"level": 4})["short"] for p in POOLS}
+    X["beer_cover"] = {p: chain(R, p, {"store": "beer_cover"}) for p in POOLS}
+    X["store_fits"] = {name: fit_store(R, dict(GOLDEN, **o)) for name, o in (
+        ("panel", {}), ("one_cover", {"share_fit": "one_cover"}), ("between", {"share_fit": "between"}),
+        ("all", {"share_fit": "all"}), ("mean_run", {"run_stat": "mean"}))}
+    X["typeown"] = {}
+    for p in POOLS:
+        full26 = float(sum(runs_of(R, p).values()))
+        X["typeown"][p] = {w: float(np.polyfit(R.flow[p][R.WH - w:], R.store[p][R.WH - w:], 1)[1]) / full26
+                           for w in (52, 104, 156)}
     X["refused"] = {name: {p: chain(R, p, o)["short"] for p in POOLS} for name, o in REFUSED}
     # the figures that rule between the ways of measuring a line's sales and the level at the count
     X["rate_diag"] = {}

@@ -157,6 +157,14 @@ def figures(X):
                          for k in X["allowances"]}
     fig["joint"] = {p: r0(X["joint"][p]["short"]) for p in POOLS}
     fig["joint_coef"] = {p: round(X["joint"][p]["days_coef"], 2) for p in POOLS}
+    fig["store_fit"] = {k: {"share": round(v["theta"], 3), "se": round(v["se"], 3), "n": v["n"],
+                            "cover": {p: round(c, 3) for p, c in v["cov"].items()}} for k, v in X["store_fits"].items()}
+    fig["typeown"] = {p: {str(w): round(v, 2) for w, v in d.items()} for p, d in X["typeown"].items()}
+    fig["typeown_range"] = [round(min(v for d in X["typeown"].values() for v in d.values()), 2),
+                            round(max(v for d in X["typeown"].values() for v in d.values()), 2)]
+    fig["beer_cover"] = {p: {"plan": r0(X["beer_cover"][p]["short"]), "cover": A.cover_of(X["beer_cover"][p]["short"], p),
+                             "store": r0(X["beer_cover"][p]["fullest"])} for p in POOLS}
+    fig["beer_cover_C2"] = r0(sum(X["beer_cover"][p]["fullest"] for p in POOLS))
     fig["slope_se"] = {p: {k: round(v, 3) for k, v in X["slope_se"][p].items()} for p in POOLS}
     fig["refused"] = {name: {p: r0(v[p]) for p in POOLS} for name, v in X["refused"].items()}
     fig["refused_cover"] = {name: {p: A.cover_of(v[p], p) for p in POOLS} for name, v in X["refused"].items()}
